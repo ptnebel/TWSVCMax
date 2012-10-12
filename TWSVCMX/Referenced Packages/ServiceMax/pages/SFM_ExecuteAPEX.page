@@ -1,0 +1,148 @@
+<apex:page controller="SVMXC.SFM_ExecuteAPEX" action="{!onloadfun}">
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery-1.6.2.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMX_resources, 'SVMXC_resources/SearchUtil2/jquery.tipTip.js')}" />
+    <!-- <apex:stylesheet value="{!URLFOR($Resource.SVMXC_resources, 'SVMXC_resources/APL/css/dataTables_2-11-2011.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.SVMXC_resources, 'SVMXC_resources/APL/css/jquery.ajaxLoader.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.SVMX_resources, 'SVMXC_resources/SearchUtil2/tipTip.css')}" /> -->
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.inherit-1.3.2.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Ajax.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_UIParser.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Utils.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_XMLParser.js')}" />
+    
+    
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery-1.6.2.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.inherit-1.3.2.js')}"/>      
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Ajax.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_XMLParser.js')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/fullResolution.css')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Utils.js')}"/>
+        
+        
+    <script src="/soap/ajax/15.0/connection.js" type="text/javascript"></script>
+    <script src="/soap/ajax/15.0/apex.js" type="text/javascript"></script>
+    <apex:form >
+        
+        <apex:pageblock id="pgblk" title="{!ActionTitl} : {!RecodNmFld}" >
+            <apex:pageBlockButtons location="Bottom"  style="padding-left:10%;">
+                <apex:commandButton action="{!goBack}" value="{!TAG002}" rendered="{!isFail1}"/>
+                <apex:commandButton action="{!doContinue}" value="{!TAG003}" rendered="{!isFail2}"/>
+            </apex:pageBlockButtons>
+        <apex:outputPanel rendered="{!isShowMsg}">
+            <div id="SVMXloader" class="SVMXloader" >
+                <span id="SVMXloaderMessage" style="font-weight:bold;color:black">{!strProcessinMsg}</span>
+            </div>
+        </apex:outputPanel>
+        <apex:pagemessages id="PGMSG1" rendered="{!Msgg1}" ></apex:pagemessages>
+        <apex:pagemessages id="PGMSG12" showDetail="true" rendered="{!Msgg2}"></apex:pagemessages>
+        </apex:pageblock>
+        
+        
+        
+        <apex:actionFunction action="{!shoErrConfMsg}" name="shoErrConfMsg" reRender="pgblk">
+            <apex:param name="second1" assignTo="{!strRespoMsg}" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction action="{!callMethWOMsg}" name="callMethWOMsg" reRender="pgblk"/>
+        <apex:actionFunction action="{!showWarnMsg}" name="showWarnMsg" reRender="pgblk" >
+            <apex:param name="second" assignTo="{!strRespoMsg}" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction action="{!showInfoMsg}" name="showInfoMsg" reRender="pgblk">
+            <apex:param name="first" assignTo="{!strRespoMsg}" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction action="{!webServiceFailWM}" name="webServiceFailWM" reRender="pgblk"/>
+        <apex:actionFunction action="{!webServiceFailWM}" name="webServiceFail" reRender="pgblk">
+            <apex:param name="second1" assignTo="{!strRespoMsg}" value=""/>
+        </apex:actionFunction>
+
+    </apex:form>
+  <script>
+    var __sfdcSessionId = '{!GETSESSIONID()}';
+    function trim(s)
+    {
+        var l=0; var r=s.length -1;
+        while(l < s.length && s[l] == ' ')
+        {   l++; }
+        while(r > l && s[r] == ' ')
+        {   r-=1;   }
+        return s.substring(l, r+1);
+    }
+        
+    callWebService();
+       
+   function callWebService()
+  {
+    var clsNm = "{!strClssNm}";
+    var MthedNm = "{!strMethDNm}";
+    var Nmsps = "{!strNmSpace}";
+    var keyVal = new Array();
+    keyVal = "{!lstKeyValPair}";
+    var lngh = keyVal.length;
+    var finalkeyval = keyVal.substring( 1 ,  lngh - 1);
+    var valueMap = new Array();
+    var keyv = finalkeyval.split(",");
+    var isSucss  = "false";
+    var MsgTyp;
+    var Msg = '';
+    debugger;
+    try
+    {
+        for(i = 0; i < keyv.length ; i++)
+        {
+            var keyVal1 = trim(keyv[i]);
+            var spliKeyVal = keyVal1.split(":");
+            var nn = new SVMXMap(spliKeyVal[0], spliKeyVal[1]);
+            valueMap[i] = nn;
+        }
+        var request = new INTF_Request(valueMap);
+        var sopReq = new SOAPRequest({orgNameSpace: Nmsps, sessionId : __sfdcSessionId, endPointName: clsNm});
+        
+        sopReq.errorHandler = {handler : function(e, me)
+        {
+            shoErrConfMsg(me.responseText);
+        }}
+        sopReq.responseHandler = {handler : function(e, me)
+        {
+            var result = sopReq.__getResponse(me);
+            isSucss = result[0].success;
+            Msg = result[0].message;
+            MsgTyp = result[0].messageType
+            if(isSucss == "true")
+            {
+                if(Msg == null || Msg == '')
+                {
+                    callMethWOMsg();
+                }
+                else
+                {
+                    if(MsgTyp == 'WARN')
+                        showWarnMsg(Msg);
+                    else if(MsgTyp == 'INFO')
+                        showInfoMsg(Msg);
+                    else
+                        showInfoMsg(Msg);
+                }
+            }
+            else
+            {
+                if(Msg == null || Msg == '')
+                    webServiceFailWM();
+                else
+                    webServiceFail(Msg);
+            }
+            
+            
+        }}
+        sopReq.invoke(MthedNm, request,{async : false});
+    }
+    catch(e)
+    {
+        shoErrConfMsg();
+        //isSucss = "false";
+    }
+    
+
+  }
+  
+ 
+  </script> 
+</apex:page>

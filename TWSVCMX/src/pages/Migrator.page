@@ -1,0 +1,113 @@
+<apex:page controller="Migrator" sidebar="false">
+	<apex:form >
+		<apex:pageBlock title="Migrator" id="MigratorBlock">
+			<apex:pageBlockSection columns="1" title="Source" id="SourceSection">	
+				<apex:pageBlockSectionItem > 
+		        	<apex:outputLabel value="Source"/>
+		        </apex:pageBlockSectionItem>	
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Environment"/>
+					<apex:selectList value="{!endpt1}" size="1">
+		            	<apex:selectOptions value="{!EnvironmentType}"/>
+		        	</apex:selectList>
+		        </apex:pageBlockSectionItem>		         
+		        <apex:pageBlockSectionItem >
+		        	<apex:outputLabel value="Username"/>
+		        	<apex:inputText value="{!SourceUsername}" style="width:250px;"/>
+		        </apex:pageBlockSectionItem>	
+		        <apex:pageBlockSectionItem >
+		        	<apex:outputLabel value="Password"/>
+		        	<apex:inputSecret value="{!SourcePassword}" style="width:250px;"/> 
+		        </apex:pageBlockSectionItem>	
+		        	<apex:pageBlockSectionItem >
+		        <apex:commandButton action="{!verifySession1}" value="Login to Source Org"></apex:commandButton>
+		        </apex:pageBlockSectionItem>
+		        <!-- 
+		        <apex:outputText value="Source Session Id: {!SessionId1}"></apex:outputText>
+		        
+		        <apex:outputText value="Account Size: {!Acc1Size}"></apex:outputText>	
+		        
+				<apex:pageBlockTable value="{!acc1}" var="acct" id="acc1Table"> 
+		        	<apex:column >
+		        		<apex:facet name="header">Name</apex:facet>
+		        		<apex:outputText value="{!acct.name}"/>		        		
+		        	</apex:column>
+		        </apex:pageBlockTable>	
+		         --> 	        
+			</apex:pageBlockSection>   
+			<!-- 
+			<apex:pageBlockSection >
+				<apex:pageBlockTable value="{!smprocesses}" var="proc">
+		        	<apex:column >
+		        		<apex:facet name="header">Name</apex:facet>
+		        		<apex:outputText value="{!proc.RecordType.Name}"/>		        		
+		        	</apex:column>
+		        	<apex:column >
+		        		<apex:facet name="header">Source Object</apex:facet>
+		        		<apex:outputText value="{!proc.SVMXC__Source_Object_Name__c}"/>		        		
+		        	</apex:column>
+		        	<apex:column >
+		        		<apex:facet name="header">Target Object</apex:facet>
+		        		<apex:outputText value="{!proc.SVMXC__Target_Object_Name__c}"/>		        		
+		        	</apex:column>
+		        	
+		        	
+		        </apex:pageBlockTable>
+			</apex:pageBlockSection>
+			-->
+			   
+			<!-- 			
+			<apex:pageBlockSection columns="1" title="Destination" id="DestinationSection">		               
+		        <apex:pageBlockSectionItem >
+		        	<apex:outputLabel value="Destination"/>
+		        </apex:pageBlockSectionItem>
+		        <apex:pageBlockSectionItem >
+		        	<apex:outputLabel value="Environment"/>	
+		        	<apex:selectList value="{!endpt2}" size="1">
+		            	<apex:selectOptions value="{!EnvironmentType}"/>
+		        	</apex:selectList>
+		        </apex:pageBlockSectionItem>	
+		        <apex:pageBlockSectionItem >
+		        	<apex:outputLabel value="Username"/>
+		        	<apex:inputText value="{!DestinationUsername}"/>
+		        </apex:pageBlockSectionItem>
+		        <apex:pageBlockSectionItem >
+		        	<apex:outputLabel value="Password"/>
+		        	<apex:inputSecret value="{!DestinationPassword}"/>
+		        </apex:pageBlockSectionItem>
+		        <apex:commandButton action="{!verifySession2}" value="Login to Destination Org"></apex:commandButton>
+		        <apex:outputText value="Destination Session Id: {!SessionId2}"></apex:outputText>
+		        <apex:outputText value="Account Size: {!Acc2Size}"></apex:outputText>
+		        <apex:pageBlockTable value="{!acc2}" var="acct2" id="acc2Table">
+		        	<apex:column >
+		        		<apex:facet name="header">Name</apex:facet>
+		        		<apex:outputText value="{!acct2.name}"/>		        		
+		        	</apex:column>
+		        </apex:pageBlockTable>
+        	</apex:pageBlockSection> 
+        	 -->
+		</apex:pageBlock>
+		
+		<apex:pageBlock rendered="{!SessionId1!=''}">
+			<apex:inputHidden value="{!smprocesses}"/>
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!SaveDestinationAccounts}" value="Save Accounts - Test"></apex:commandButton>
+			</apex:pageBlockButtons>
+			<apex:pageBlockTable value="{!odata}" var="d"> 
+	        	<apex:column >
+	        		<apex:facet name="header">Select</apex:facet>
+	        		<apex:outputText value="{!d.OSelected}"/>	       		
+	        	</apex:column>
+	        	<apex:column >
+	        		<apex:facet name="header">Source Object</apex:facet>
+	        		<!-- <apex:outputText value="{!d.sourceprocess.SVMXC__Source_Object_Name__c}" rendered=""/>	  -->       		
+	        	</apex:column>
+	        	<apex:column >
+	        		<apex:facet name="header">Target Object</apex:facet>
+	        			        		
+	        	</apex:column>        	
+	        </apex:pageBlockTable>
+		</apex:pageBlock>
+		
+	</apex:form>
+</apex:page>

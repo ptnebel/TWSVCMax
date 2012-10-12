@@ -1,0 +1,276 @@
+<apex:page id="IBTREE" standardcontroller="SVMXC__Installed_Product__c" extensions="SVMXC.IPRD_IBTree" showHeader="false" sidebar="false">
+    <style type="text/css">
+      .customPopup{
+           background-color: white;
+           border-style: solid;
+           border-width: 2px;
+           left: 30%;
+           padding:10px;
+           position: absolute;
+           z-index: 999;
+           /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set            margin-left to negative half of what the width is. You can also add            the height property for a fixed size pop up.*/
+           width: 700px;
+           margin-left: -250px;
+           top:50px;
+       }
+       BODY{
+       background-color: transparent;
+       }
+   </style> 
+<link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.SVMX_GridTree, 'global.css')}"/> 
+<link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxgrid.css')}"/> 
+<link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxgrid_dhx_skyblue.css')}"/> 
+<link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxgrid_dhx_black.css')}"/> 
+<link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxgrid_dhx_blue.css')}"/> 
+<script src="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxcommon.js')}" type="text/javascript"></script> 
+<script src="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxgrid.js')}" type="text/javascript"></script>
+<script src="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxgridcell.js')}" type="text/javascript"></script>
+<script src="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxgrid_excell_link.js')}" type="text/javascript"></script>
+<script src="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxgrid_selection.js')}" type="text/javascript"></script>
+<script src="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxgrid_nxml.js')}" type="text/javascript"></script>
+<script src="{!URLFOR($Resource.SVMX_GridTree, 'dhtmlxtreegrid.js')}" type="text/javascript"></script>
+<script>
+var isSet='false';
+var XMLString;
+var CookieString;
+var activeTheme="dhx_skyblue";
+
+function setCookie( cookieName, cookieValue, lifeTime, path, domain, isSecure ){
+    var date = new Date();
+    date.setTime(date.getTime()+(lifeTime*24*60*60*1000));
+    var expires = "; expires=" + date.toGMTString();
+    document.cookie = cookieName + "=" + cookieValue+expires+"; path=/";
+    return false;
+}
+function initiate(){
+retrieveTheame( 'SVMXIBTreeTheame' );
+retrieveCookie( 'SVMXIBTree' );
+isSet='true';
+}
+</script>
+<body>
+<apex:form id="selected_LIST">
+<apex:inputhidden id="Getselected_List" value="{!SelectedList}"/> 
+<apex:inputhidden id="ERR_Messages" value="{!ErrMsg}"/> 
+<apex:commandButton value="" id="SELECTEDLIST"  action="{!loadCookie}" reRender="selected_LIST" style="display:none"/>
+<script>
+/*Cookies*/
+CookieString = document.getElementById('{!$Component.Getselected_List}').value;
+
+function eraseCookie(name) {
+        var value="";
+        var date = new Date();
+        date.setTime(date.getTime()+(-1*24*60*60*1000));
+        var expires = "; expires="+date.toGMTString();
+        document.cookie = name+"="+value+expires+"; path=/";
+        return null;
+}
+function retrieveCookie( cookieName ){
+    var btnMove;
+    var cookieJar = document.cookie.split( "; " );
+    for( var x = 0; x < cookieJar.length; x++ ){
+        var oneCookie = cookieJar[x].split( "=" );
+        if( oneCookie[0] == escape( cookieName ) ){
+             if(oneCookie[1]!=""){
+                document.getElementById('{!$Component.Getselected_List}').value=oneCookie[1];
+                //alert(oneCookie[1]);
+                //eraseCookie(cookieName);
+                btnMove = document.getElementById("{!$Component.SELECTEDLIST}");
+                btnMove.click();
+                return null;
+                }
+        }
+    }
+    btnMove = document.getElementById("{!$Component.SELECTEDLIST}");
+    btnMove.click();
+    return null;
+}
+
+function retrieveTheame( cookieName ){
+    var cookieJar = document.cookie.split( "; " );
+    for( var x = 0; x < cookieJar.length; x++ ){
+        var oneCookie = cookieJar[x].split( "=" );
+        if( oneCookie[0] == escape( cookieName ) ){
+             if(oneCookie[1]!=""){
+                //setSkin(oneCookie[1]);
+                activeTheme=oneCookie[1];
+             }
+        }
+    }
+}
+
+if(isSet=='true'){
+if(CookieString!='')
+setCookie( 'SVMXIBTree', CookieString, 50, '', false);
+XMLString = '{!XMLResult}';
+jr();
+}
+
+function SetTheame(Theame){
+setCookie( 'SVMXIBTreeTheame', Theame, 50, '', false);
+}
+
+/*DHTMLX*/
+var mygrid;
+var ErrMSg;
+
+function jr(){ErrMSg=document.getElementById('{!$Component.ERR_Messages}').value;if(ErrMSg==''){mygrid=new D('gridbox');mygrid.eP=jD;buildGrid();}else{document.getElementById('IBTreeGrid').style.display="none";alert(ErrMSg);}};
+
+function dynamicDHTMLXinit(){
+mygrid.setHeader("{!$ObjectType.SVMXC__Installed_Product__c.Label}{!JSENCODE(DHTMLX_Header)}");
+mygrid.setInitWidths("300{!JSENCODE(DHTMLX_InitWidths)}");
+mygrid.setColAlign("left{!JSENCODE(DHTMLX_ColAlign)}");
+mygrid.setColTypes("tree{!JSENCODE(DHTMLX_ColTypes)}");
+mygrid.setColSorting("str{!JSENCODE(DHTMLX_ColSorting)}");
+mygrid.setSkin(activeTheme);
+mygrid.init();
+}
+
+function buildGrid(){
+mygrid.gN=true;
+mygrid.eg="{!URLFOR($Resource.SVMX_GridTree, 'images/images')}";
+
+dynamicDHTMLXinit();
+
+mygrid.bE(XMLString);
+mygrid.xa();};
+
+function setSkin(skinName){
+if(skinName==activeTheme)return;
+var cTh=document.getElementById(activeTheme);
+var nTh=document.getElementById(skinName);
+cTh.className="skinbutton sb_inactive";
+nTh.className="skinbutton sb_active";
+activeTheme=skinName;
+mygrid.setSkin(skinName);
+mygrid.eP("");
+mygrid.setSizes();
+mygrid.ahx();
+return true;};
+
+function jD(colorsList){
+this.setColumnColor(colorsList);
+var colsNum=this.So();
+for(var i=0;i<this.P.length;i++){
+for(var j=0;j<colsNum;j++){
+this.P[i].cells[j].bgColor=this.columnColor[j]||"";
+}
+}
+};
+
+function jA(code,ctrl,shift){
+if(code==67&&ctrl){
+mygrid.lW("\t");
+mygrid.wO()
+}
+if(code==86&&ctrl){
+mygrid.ug()
+}
+return true;
+};
+dE(window,"load",initiate);
+                function sleep(naptime)
+                {
+                      naptime = naptime * 1000;
+                      var sleeping = true;
+                      var now = new Date();
+                      var alarm;
+                      var startingMSeconds = now.getTime();
+                      while(sleeping)
+                      { 
+                         alarm = new Date();
+                         alarmMSeconds = alarm.getTime();
+                         if(alarmMSeconds - startingMSeconds > naptime){ sleeping = false; }
+                      }
+                } 
+</script>
+</apex:form>
+
+<apex:pageMessages rendered="true" showDetail="true" /> 
+
+<div id="IBTreeGrid" style="position:relative;margin:2px;"> 
+<div id="gridbox" style="width:99%;height:280px;"></div>
+<div style="position:relative;margin:5px;text-align:center;"> 
+<div class="skinslabel">{!TAG010}</div> 
+<div class="skinbutton sb_inactive" id="dhx_skyblue" onclick="setSkin(this.id);SetTheame(this.id);">{!TAG011}</div> 
+<div class="skinbutton sb_inactive" id="dhx_blue" onclick="setSkin(this.id);SetTheame(this.id);">{!TAG012}</div> 
+<div class="skinbutton sb_inactive" id="modern" onclick="setSkin(this.id);SetTheame(this.id);">{!TAG013}</div> 
+<div class="skinbutton sb_inactive" id="dhx_black " onclick="setSkin(this.id);SetTheame(this.id);">{!TAG014}</div> 
+<div class="skinbutton sb_inactive" id="light" onclick="setSkin(this.id);SetTheame(this.id);">{!TAG015}</div> 
+<div class="skinslabel"> </div> 
+<div class="skinbutton sb_inactive" style="float:right" onclick="ShowPopUp();">{!TAG017}</div>
+<div style="clear:left;"></div> 
+</div> 
+</div>
+<apex:form id="IBList">
+<apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayIBPopup}"> 
+<apex:pageBlock id="IBFieldList">
+        <apex:pageMessages rendered="true" showDetail="false" /> 
+        <apex:pageBlockSection title="{!TAG001}" columns="1" collapsible="false">
+        <apex:actionStatus id="LodingPPStatus"  startText="{!TAG008}" />
+            <apex:pageBlockSectionItem dataStyleClass="centerTA"   labelStyleClass="centerTA" >
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" >
+                        <apex:outputText > 
+                           <td> 
+                           <div><b>{!TAG005}</b></div>
+                           <apex:selectList title="{!TAG005}" value="{!AFields}" size="8" id="AFields" multiselect="true" style="width:250px" >
+                           <apex:selectOptions value="{!AvailFields}" />
+                           </apex:selectList>
+                           </td> 
+                              <td style="width:17px;height:100%;vertical-align:middle">
+                              <apex:panelGrid cellspacing="7" cellpadding="0" width="40%" columns="1" style="text-align: center;">
+                                  <div>
+                                      <apex:commandButton action="{!OnAddFields}" id="Add" rerender="IBFieldList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Right_Bttn.JPG')}" alt="{!TAG003}" title="{!TAG003}" status="LodingPPStatus"/>
+                                      <apex:commandButton action="{!onRemFields}" id="remove" rerender="IBFieldList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Left_Bttn.JPG')}" alt="{!TAG004}" title="{!TAG004}" status="LodingPPStatus"/>
+                                  </div>
+                              </apex:panelGrid> 
+                              </td>
+                           <td>
+                           <div><b>{!TAG006}</b></div>
+                           <apex:selectList title="{!TAG006}" value="{!SFields}" size="8" id="SFields" multiselect="true" style="width:250px">
+                           <apex:selectOptions value="{!SelectedFields}" />
+                           </apex:selectList>
+                           </td>
+                           <td style="width:17px;height:100%;vertical-align:middle"> 
+                             <apex:panelGrid cellspacing="7" cellpadding="0" width="40%" columns="1" style="text-align: center;">
+                            
+                                <div>
+                                <apex:commandButton action="{!Top}" id="top" rerender="IBFieldList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Top_Bttn.JPG')}" alt="TOP" title="top" status="LodingPPStatus"/>
+                                <apex:commandButton action="{!Up}" id="up" rerender="IBFieldList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Up_Bttn.JPG')}" alt="UP" title="up" status="LodingPPStatus"/>
+                                <apex:commandButton action="{!Down}" id="down" rerender="IBFieldList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Down_Bttn.JPG')}" alt="DOWN" title="down" status="LodingPPStatus"/>
+                                <apex:commandButton action="{!Bottom}" id="Bottom" rerender="IBFieldList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Bottom_Bttn.JPG')}" alt="BOTTOM" title="bottom" status="LodingPPStatus"/>
+                                </div>
+                            </apex:panelGrid>
+                           </td>
+                        </apex:outputText> 
+                    </apex:panelGrid>
+            </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons location="bottom">
+            <apex:commandButton title="{!TAG007}"  value="{!TAG007}"  action="{!SaveListPP}" reRender="selected_LIST,IBList" status="LodingPPStatus"/>
+            <apex:commandButton title="{!TAG009}"  value="{!TAG009}"  action="{!ClosePP}" reRender="IBList" status="LodingPPStatus"/>
+            </apex:pageBlockButtons>
+</apex:pageBlock>
+</apex:outputPanel>
+
+<apex:actionFunction name="ShowPopUp" action="{!ShowPopUp}" rerender="IBList" status="LodingStdStatus"/>
+<apex:actionStatus id="LodingStdStatus"  startText="{!TAG008}" />
+
+<script>
+function Reset_IB()
+{
+mygrid.clearAll(true);
+mygrid.setHeader("Installed Product,Product{!JSENCODE(DHTMLX_Header)}");
+mygrid.setInitWidths("*,*{!JSENCODE(DHTMLX_InitWidths)}");
+mygrid.setColAlign("left,right{!JSENCODE(DHTMLX_ColAlign)}");
+mygrid.setColTypes("tree,ro{!JSENCODE(DHTMLX_ColTypes)}");
+mygrid.setColSorting("str,str{!JSENCODE(DHTMLX_ColSorting)}");
+mygrid.setSkin(activeTheme);
+mygrid.init();
+mygrid.bE('{!XMLResult}');
+}
+</script>
+
+</apex:form>
+</body>
+</apex:page>

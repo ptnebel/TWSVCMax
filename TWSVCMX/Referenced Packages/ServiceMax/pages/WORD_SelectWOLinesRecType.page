@@ -1,0 +1,39 @@
+<apex:page title="{!TAG001}" standardcontroller="SVMXC__Service_Order__c" extensions="SVMXC.WORD_SelectWOLinesRecType" sidebar="true" showHeader="true" tabStyle="SVMXC__Service_Order__c"> 
+   
+    <apex:stylesheet value="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXP_Resources/css/SVMXP_resources.css')}" />
+    <apex:pageMessages rendered="{!NOT(DisplayBlockLevelMessage)}" showDetail="true" />
+
+    <apex:form id="createwo" rendered="{!ShowValidData}">
+       <apex:actionFunction action="{!LaunchAddLines}" name="GoPage"/>
+        <apex:variable value="{!WOrderHeader}" var="wohdr"/>
+        <apex:pageBlock id="block" title="{!TAG002} {!wohdr.Name}" helpTitle="{!TAG003}" helpUrl="{!HLPURL}" >
+
+            <apex:pageBlockButtons location="top" style="text-align:center;">   
+            
+                <apex:commandButton action="{!LaunchAddLines}" value="{!TAG004}" id="createchildbutton"/>
+                <apex:commandButton action="{!Cancel}" value="{!TAG005}"/>
+                
+            </apex:pageBlockButtons><br/>
+            
+            <!-- <apex:outputLink value="{!URLFOR($Action.SVMXC__Service_Order_Line__c.New,null, [RecordType='012E000000059yrAAI',SVMXC__Service_Order__c='SVO-001569', save=2])}">Create Work Detail</apex:outputLink>  -->
+
+            <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" width="100%" border="0" columnClasses="colspan50,colspan50" rowClasses="line">
+                <apex:outputText >
+                    <apex:outputText styleClass="labelCol" style="margin:0px 5px;" value="{!TAG006}"/>
+                    <apex:selectList style="width:20%" value="{!SelectedRecordType}" size="" multiselect="false"> 
+                        <apex:selectOptions value="{!ObjectRecordTypes}"/>  
+                    </apex:selectList>
+
+                </apex:outputText> 
+            </apex:panelGrid>
+            
+        </apex:pageBlock> 
+        
+    </apex:form>
+	<script type="text/javascript">
+        if({!GoToPage})
+        {
+            GoPage();
+        }
+    </script>
+</apex:page>

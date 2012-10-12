@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object stores Calendar events for technicians that are not Salesforce users as well as equipment whose calendars are tracked for dispatching.</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>ActivityDateTime__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Event start date/time</description>
+        <externalId>false</externalId>
+        <label>ActivityDateTime</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>ActivityDate__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Event start date</description>
+        <externalId>false</externalId>
+        <label>ActivityDate</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Event description</description>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>DurationInMinutes__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Event duration</description>
+        <externalId>false</externalId>
+        <label>DurationInMinutes</label>
+        <precision>8</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EndDateTime__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Event end date/time</description>
+        <externalId>false</externalId>
+        <label>EndDateTime</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Location of the event</description>
+        <externalId>false</externalId>
+        <label>Location</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Team__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Service team that owns the event. Reference to an existing service team record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Service Team</label>
+        <referenceTo>Service_Group__c</referenceTo>
+        <relationshipLabel>ServiceMax Events</relationshipLabel>
+        <relationshipName>SVMX_Event</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>StartDateTime__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Event start date/time</description>
+        <externalId>false</externalId>
+        <label>StartDateTime</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Technician__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Technician that owns the event. Reference to an existing technician record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Technician</label>
+        <referenceTo>Service_Group_Members__c</referenceTo>
+        <relationshipLabel>ServiceMax Events</relationshipLabel>
+        <relationshipName>SVMX_Event</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>WhatId__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The source record related to the event</description>
+        <externalId>false</externalId>
+        <label>WhatId</label>
+        <length>24</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>WhoId__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Not used</description>
+        <externalId>false</externalId>
+        <label>WhoId</label>
+        <length>24</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>ServiceMax Event</label>
+    <nameField>
+        <label>Subject</label>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>ServiceMax Events</pluralLabel>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>ActivityDate__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>ActivityDateTime__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>StartDateTime__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>EndDateTime__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>DurationInMinutes__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Description__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>ActivityDate__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>ActivityDateTime__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>StartDateTime__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>EndDateTime__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>DurationInMinutes__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Description__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>DurationInMinutes__c</searchFilterFields>
+        <searchFilterFields>EndDateTime__c</searchFilterFields>
+        <searchFilterFields>StartDateTime__c</searchFilterFields>
+        <searchFilterFields>ActivityDate__c</searchFilterFields>
+        <searchFilterFields>ActivityDateTime__c</searchFilterFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

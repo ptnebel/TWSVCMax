@@ -1,0 +1,28 @@
+<apex:page showHeader="false" sidebar="false" controller="DemoHomePage">
+	<apex:pageBlock >
+		<apex:pageblockSection title="Users" columns="2">
+			<apex:pageblockSectionItem >
+			Manage Users
+			<apex:outputLink value="/005?setupid=ManageUsers" target="_parent">
+				<img src="{!$Resource.demo_ManageUsersIcon}" width="70" height="70" alt="Select different user." />
+			</apex:outputLink>
+			</apex:pageblockSectionItem>
+			<apex:pageblockSectionItem >
+			Login As Technician		
+			<apex:outputLink value="/servlet/servlet.su?oid={!$Organization.Id}&suportaluserid={!PartnerUser.Id}" target="_blank">
+				<img src="{!$Resource.demo_ManageUsersIcon}" width="70" height="70" alt="Select different user." />
+			</apex:outputLink>
+			</apex:pageblockSectionItem>	
+		</apex:pageblockSection>
+		
+		<apex:pageblockSection title="Help Guides" columns="2">
+			<apex:pageblockSectionItem >
+			Trial Walkthrough Guide 
+			<apex:outputLink value="{!$Resource.demo_TrialGuide32}" target="_parent">
+				<img src="{!$Resource.demo_Guideicon}" width="70" height="70" alt="Select different user." />
+			</apex:outputLink>
+			</apex:pageblockSectionItem>	
+		</apex:pageblockSection>
+	</apex:pageBlock>
+	
+</apex:page>

@@ -1,0 +1,339 @@
+<apex:page id="Page" controller="SVMXC.CASE_SelectBookingWindow" tabStyle="Case">
+    <style type="text/css">
+        .activeTab {background-color: #6699CC; color:white; background-image:none; font-size:13Px}
+        .inactiveTab {background-color: #B0C4DE; color:black; background-image:none; font-Size:12px}
+        .disabledTab {background-color: Grey; color:black; background-image:none}
+    </style>
+    <link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/dhtmlxGrid/codebase/dhtmlxgrid.css')}"/> 
+    <link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_skyblue.css')}"/> 
+    <link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/dhtmlxGrid/codebase/skins/dhtmlxgrid_dhx_blue.css')}"/> 
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/dhtmlxGrid/codebase/dhtmlxcommon.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/dhtmlxGrid/codebase/dhtmlxgrid.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/dhtmlxGrid/codebase/dhtmlxgridcell.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/dhtmlxTreeGrid/codebase/dhtmlxtreegrid.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/dhtmlxGrid/codebase/excells/dhtmlxgrid_excell_ra_str.js')}" type="text/javascript"></script>
+
+    <apex:form id="formBookingWindow">  
+    <apex:pageMessages /> 
+        <apex:inputhidden id="Getselected_ID" value="{!TTId}"/>  
+        <apex:actionFunction name="ShowBookingWindow" action="{!SVMX_ShowBookingWindow}" reRender="blockBookingWindows" status="status"/>
+        <apex:actionFunction name="ClearExpertiseANDSpecialization" action="{!SVMX_ClearExpertiseANDSpecialization}" reRender="BlockSearchExpertise" status="status"/>
+        <apex:pageBlock id="blockBookingWindow" helpTitle="{!TAG001}" helpUrl="{!HLPURL}" rendered="true" mode="edit">
+            <apex:pageBlockButtons location="top">
+            <apex:commandButton value="{!TAG026}" action="{!Cancel}" status="status" reRender="blockBookingWindow" style="font-Size:10px"/>
+            </apex:pageBlockButtons>
+            <b><apex:actionStatus id="status" startText="{!TAG002}" style="font-Size:13px"/></b>
+            <apex:tabPanel switchType="client" value="{!selectedTab}" id="tabBookingWindow"  tabClass="activeTab" inactiveTabClass="inactiveTab" disabledTabClass="disabledTab">
+                <apex:tab label="{!TAG003}" name="{!TAG003}" id="tabTerritoryAndSkills"  style="font-Size:12px" status="status">
+                    <apex:panelBar id="tab1PanelBar" rendered="true">
+                        <apex:panelBarItem label="{!TAG005}" headerClass="inactiveTab" Id="PBItem" expanded="true">
+                            <apex:pageBlockSection id="tab1PBlock1" collapsible="false" columns="2">
+                            <div id="treeboxbox_tree" style="width:98%;height:180px;text-align:center;{!TTListStyle}"></div>
+                            <div style="width:100px;height:10px" ></div>
+                                <script>
+                                        /*DHTMLX*/
+                                        var mygrid;
+                                        var activeTheme="dhx_skyblue";
+                            
+                                        function jr(){mygrid = new dhtmlXGridObject('treeboxbox_tree');buildGrid();};
+                            
+                                        function dynamicDHTMLXinit(){
+                                        mygrid.setHeader(",{!TAG016},{!TAG030}");
+                                        mygrid.setInitWidths("20,350,200,*");
+                                        mygrid.setColAlign("center,left,left,left");
+                                        mygrid.setColTypes("ra,tree,ro,ro");
+                                        mygrid.enableMultiline(true);
+                                        mygrid.enableTreeCellEdit(false); 
+                                        //mygrid.setColSorting(",str,str,str");
+                                        mygrid.setSkin(activeTheme);
+                                        mygrid.init();
+                                        }
+                                        
+                                        var selectedId;
+                                                    
+                                        function buildGrid(){
+                                        mygrid.imgURL="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/imgs/')}";
+                                        mygrid.attachEvent("onCheckbox",doOnCheck);
+                                        dynamicDHTMLXinit();
+                                        mygrid.loadXMLString('{!XMLResult}');
+                                        if(document.getElementById('{!$Component.Getselected_ID}')){
+                                        //selectedId=document.getElementById('{!$Component.Getselected_ID}').value;
+                                        //mygrid.setCheck(selectedId,false);
+                                        }
+                                        };
+                            
+                                        function jD(colorsList){
+                                        this.setColumnColor(colorsList);
+                                        var colsNum=this.So();
+                                        for(var i=0;i<this.P.length;i++){
+                                        for(var j=0;j<colsNum;j++){
+                                        this.P[i].cells[j].bgColor=this.columnColor[j]||"";
+                                        }
+                                        }
+                                        };
+                                        
+                                        function jA(code,ctrl,shift){
+                                        if(code==67&&ctrl){
+                                        mygrid.lW("\t");
+                                        mygrid.wO()
+                                        }
+                                        if(code==86&&ctrl){
+                                        mygrid.ug()
+                                        }
+                                        return true;
+                                        };
+                                        //dE(window,"load",jr);
+                                        jr();
+                            
+                                        function doOnCheck(rowId,cellInd,state){
+                                            //alert("User clicked on checkbox or radiobutton on row "+rowId+" and cell with index "+cellInd+".State changed to "+state);
+                                                if(rowId!='undefined'){
+                                                    if(state==true){
+                                                       setId(rowId);
+                                                       ClearExpertiseANDSpecialization();
+                                                       }
+                                                    else{
+                                                        resetid();
+                                                       }
+                                                }
+                                            return true;
+                                        }
+                                                 
+                                       function setId(id){
+                                        document.getElementById('{!$Component.Getselected_ID}').value=id;
+                                        /*btnMove = document.getElementById("{!$Component.LISTATTRIBUTE}");
+                                        btnMove.click();*/
+                                       }
+                                       function resetid(){
+                                        //btnMove = document.getElementById("{!$Component.HIDETTATTRIBUTE}");
+                                        //btnMove.click();
+                                       }
+                                       
+                                       function isttselected(){
+                                       if(document.getElementById('{!$Component.Getselected_ID}').value!='')
+                                       return true;
+                                       else
+                                       return false;
+                                       }
+                                </script>
+                                <apex:pageBlock Id="BlockSearchExpertise">
+                                    <apex:pageMessages />
+                                    <b><apex:actionStatus id="statusSearchExpertise" startText="{!TAG002}" style="font-Size:13px"/></b>
+                                    <apex:pageBlockSection columns="1">
+                                        <apex:pageBlockSectionItem >
+                                            <apex:commandButton value="{!TAG007}" action="{!SVMX_SearchExpertise}" status="statusSearchExpertise" reRender="BlockSearchExpertise" style="font-Size:10px"/>
+                                            <apex:commandButton value="{!TAG008}" action="{!SVMX_SearchProductSpecialization}" status="statusSearchExpertise" reRender="BlockSearchExpertise" style="font-Size:10px"/>
+                                        </apex:pageBlockSectionItem>
+                                        <hr/>
+                                        <apex:pageBlockTable id="TableExpertise" value="{!lstExpertise}" var="Expertise" rendered="{!ShowExpertise}">        
+                                            <apex:column width="10%">       
+                                                <apex:facet name="header"></apex:facet>
+                                                <apex:inputCheckBox value="{!Expertise.selected}"/>
+                                            </apex:column>
+                                            <apex:column width="90%">
+                                                <apex:facet name="header">{!TAG019}</apex:facet>
+                                                <apex:outputText value="{!Expertise.RecName}"/ >
+                                            </apex:column>
+                                        </apex:pageBlockTable>
+                                        <apex:pageBlockTable id="TableProductSpecialization" value="{!lstProductSpecialization}" var="ProductSpecialization" rendered="{!ShowProductSpecialization}">
+                                            <apex:column width="10%">       
+                                                <apex:facet name="header"></apex:facet>
+                                                <apex:inputCheckBox value="{!ProductSpecialization.selected}"/>
+                                            </apex:column>
+                                            <apex:column width="90%">
+                                                <apex:facet name="header">{!TAG020}</apex:facet>
+                                                <apex:outputText value="{!ProductSpecialization.RecName}"/ >
+                                            </apex:column>
+                                        </apex:pageBlockTable>
+                                    </apex:pageBlockSection>
+                                </apex:pageBlock>
+                            </apex:pageBlockSection>
+                        </apex:panelBarItem>
+                    </apex:panelBar>
+                </apex:tab>             
+                <apex:tab label="{!TAG004}" name="{!TAG004}" id="tabBookingWindows"  style="font-Size:12px"  onTabEnter="ShowBookingWindow()"> 
+                    <apex:pageBlock id="blockBookingWindows">                   
+                    <apex:pageMessages /> 
+                    <apex:pageBlockButtons location="top">
+                        <apex:commandButton value="{!TAG009}" action="{!SVMX_ShowBookingWindow}" status="status" reRender="blockBookingWindows" style="font-Size:10px"/>
+                        <apex:commandButton value="{!TAG010}" action="{!SVMX_ConfirmBookingWindow}" status="status" reRender="blockBookingWindows" style="font-Size:10px"/>                     
+                    </apex:pageBlockButtons>
+                     <apex:panelBar id="tab2PanelBar" rendered="true">
+                        <apex:panelBarItem label="{!TAG006}" headerClass="inactiveTab" Id="PBItem" expanded="true"> 
+                            <apex:pageBlockSection >
+                                 <apex:pageBlockSectionItem >
+                                    <apex:outputText value="{!TAG011}" style="font-Size:12px"/>
+                                    <apex:inputfield value="{!tempSVMXList.SVMXC__Date_Required__c}"/>
+                                 </apex:pageBlockSectionItem>
+                                 <apex:pageBlockSectionItem >
+                                    <apex:outputText value="{!TAG012}" style="font-Size:12px"/>
+                                    <apex:inputfield value="{!tempSVMXList.SVMXC__Expected_Ship_Date__c}"/>
+                                 </apex:pageBlockSectionItem>
+                                 <apex:pageBlockSectionItem >
+                                    <apex:outputText value="{!TAG013}" style="font-Size:12px"/>
+                                    <apex:inputCheckBox value="{!tempSVMXList.SVMXC__Chk_Parent_Product__c}" Disabled="{!DisableSLAChkBox}"/>
+                                 </apex:pageBlockSectionItem>
+                                 <apex:pageBlockSectionItem >
+                                    <apex:outputText value="{!TAG029}" style="font-Size:12px"/>
+                                    <apex:inputfield value="{!UserLocale.TimeZoneSidKey}"/> 
+                                 </apex:pageBlockSectionItem>
+                                 <apex:pageBlockSectionItem >
+                                    <apex:outputText value="{!TAG035}" style="font-Size:12px"/>
+                                    <apex:outputText value="{!TrtryName}"/> 
+                                 </apex:pageBlockSectionItem>
+                            </apex:pageBlockSection>
+                            <hr size="4" color="#6699CC"/>
+                            <div id="gridbox22" style="width:100%;height:350px;text-align:center;{!TTListStyle}"></div>
+                            <div style="width:100px;height:10px" ></div>
+                                <script>
+                                    /*DHTMLX*/
+                                    var mygrid2;
+                                    var activeTheme="dhx_skyblue";
+                                    
+                                        
+                                        mygrid2 = new dhtmlXGridObject('gridbox22');
+                                        mygrid2.setHeader("{!JSENCODE(GridTitle)}");
+                                        mygrid2.setInitWidths("{!JSENCODE(GridWidth)}");
+                                        mygrid2.setColAlign("{!JSENCODE(GridAligne)}");
+                                        mygrid2.setColTypes("{!JSENCODE(GridTypes)}");
+                                        mygrid2.getCombo(5).put(2, 2);
+                                        mygrid2.attachEvent("onCheckbox",doOnCheck2);
+                                        mygrid2.setSkin("dhx_skyblue");
+                                        mygrid2.imgURL="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/imgs/')}";
+                                        mygrid2.init();
+                                        var sDataArray = MultiDimensionalArray({!RowSize}+1,{!CollSize}+1);
+                                        var selectedRow;
+                                        var selectedCol;
+                                        
+                                        mygrid2.loadXMLString('{!JSENCODE(XMLResultGrid)}', function() 
+                                        {
+                                            {!strDataArray}
+                                            for(i = 1; i <={!RowSize};i++)
+                                            {
+                                                selectedRow = i;
+                                                for(j = 1; j <={!CollSize};j++)
+                                                {
+                                                    selectedCol = j;
+                                                    mygrid2.setCellExcellType(i, j, "ra_str");
+                                                    if(sDataArray[selectedRow][selectedCol]=='Out of SLA Limit')
+                                                        mygrid2.setCellTextStyle(i, j, "text-align:center;background-color:Grey;");
+                                                    else if(parseInt(sDataArray[selectedRow][selectedCol]) < {!YellowColorStart})
+                                                        mygrid2.setCellTextStyle(i, j, "text-align:center;background-color:red;");
+                                                    else if(parseInt(sDataArray[selectedRow][selectedCol]) > {!YellowColorEnd})
+                                                        mygrid2.setCellTextStyle(i, j, "text-align:center;background-color:green;");
+                                                    else if(sDataArray[selectedRow][selectedCol]!='Out of SLA Limit')                                                   
+                                                        mygrid2.setCellTextStyle(i, j, "text-align:center;background-color:yellow;");
+                                                }
+                                            }
+                                        });
+                                        //buildGrid2();
+                                    
+                                    var selectedId;
+                                    
+                                    function jD2(colorsList)
+                                    {
+                                        this.setColumnColor(colorsList);
+                                        var colsNum=this.So();
+                                        for(var i=0;i<this.P.length;i++)
+                                        {
+                                            for(var j=0;j<colsNum;j++)
+                                            {
+                                                this.P[i].cells[j].bgColor=this.columnColor[j]||"";
+                                            }
+                                        }
+                                    };
+                                    function jA2(code,ctrl,shift)
+                                    {
+                                        if(code==67&&ctrl)
+                                        {
+                                            mygrid2.lW("\t");
+                                            mygrid2.wO()
+                                        }
+                                        if(code==86&&ctrl)
+                                        {
+                                            mygrid2.ug()
+                                        }
+                                        return true;
+                                    };
+                                    //dE(window,"load",jr);
+                                    function doOnCheck2(rowId,cellInd,state)
+                                    {
+                                        var i;
+                                        var j;
+                                        /*for(i = 1; i <= {!RowSize}; i++ )
+                                        {
+                                            selectedRow = i;
+                                            for(j = 1; j <= {!CollSize}; j++ )
+                                            {                        
+                                                selectedCol = j;   
+                                                if(i == rowId && j == cellInd)
+                                                    mygrid2.cellById(i,j).setValue(1);      
+                                                else 
+                                                    mygrid2.cellById(i,j).setValue(0);
+                                            }
+                                        }*/
+                                        selectedRow = rowId;
+                                        selectedCol = cellInd;
+                                        mygrid2.cellById(rowId,cellInd).setValue(1);
+                                        for(i = 1; i <= {!RowSize}; i++ )
+                                        {
+                                            selectedRow = i;
+                                            for(j = 1; j <= {!CollSize}; j++ )
+                                            {                        
+                                                selectedCol = j;   
+                                                if(i == rowId && j == cellInd)
+                                                {}
+                                                else 
+                                                    mygrid2.cellById(i,j).setValue(0);
+
+                                            }
+                                        }
+                                        
+                                        //alert("User clicked on checkbox or radiobutton on row "+rowId+" and cell with index "+cellInd+".State changed to "+state);
+                                        document.getElementById('Page:formBookingWindow:blockBookingWindow:blockBookingWindows:tab2PanelBar:PBItem:RID').value=rowId;
+                                        document.getElementById('Page:formBookingWindow:blockBookingWindow:blockBookingWindows:tab2PanelBar:PBItem:CID').value=cellInd;                                     
+                                        /*if(rowId!='undefined' && cellInd!='undefined')
+                                        {
+                                            if(state==true)
+                                            {
+                                                setId2(rowId+':'+cellInd);
+                                            }
+                                        }*/
+                                        return true;
+                                    }
+                                    function setId2(id)
+                                    {
+                                        document.getElementById('{!$Component.Getselected_ID}').value=id;                                       
+                                    }
+                                    
+                                    function MultiDimensionalArray(iRows,iCols) 
+                                    { 
+                                        var i; 
+                                        var j; 
+                                        var a = new Array(iRows); 
+                                        for (i=0; i < iRows; i++) 
+                                        { 
+                                           a[i] = new Array(iCols); 
+                                           for (j=0; j < iCols; j++) 
+                                           { 
+                                               a[i][j] = ""; 
+                                           } 
+                                        } 
+                                        return(a); 
+                                    } 
+                                </script> 
+                            
+                            <apex:outputText value="{!TAG021}" style="font-Size:12px"/>&nbsp;
+                            <apex:inputText value="{!YellowColorStart}" size="3"/>&nbsp;
+                            <apex:outputText value="{!TAG022}" style="font-Size:12px"/>&nbsp;
+                            <apex:inputText value="{!YellowColorEnd}" size="3"/>
+                            <apex:inputHidden id="RID" value="{!RowId}"/>
+                            <apex:inputHidden id="CID" value="{!ColId}"/>
+                        </apex:panelBarItem>
+                    </apex:panelBar>
+                    </apex:pageBlock>
+                </apex:tab>
+            </apex:tabPanel>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

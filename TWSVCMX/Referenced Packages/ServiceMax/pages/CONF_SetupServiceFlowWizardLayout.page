@@ -1,0 +1,312 @@
+<apex:page controller="SVMXC.CONF_SetupServiceFlowWizardLayout" id="page1">
+<apex:form id="form1">
+<style>
+.previewpopup
+     {
+         background-color: #F8F8F8;
+                border-style: solid;
+                border-width: 2px;
+                left: 50%;
+                padding:10px;
+                position: fixed;
+                z-index: 50;
+                /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set            margin-left to negative half of what the width is. You can also add            the height property for a fixed size pop up.*/
+                width: 70%;
+                height:45%;
+                margin-left: -370px;
+                top:190px;
+                opacity:10;
+                overflow:scroll;
+                text-align:center;
+     }
+.previewpopup1
+     {
+                background-color: none;
+                border-style: none;
+                border-width: 0px;
+                left: 50%;
+                padding:10px;
+                padding-top:0px;
+                position: fixed;
+                z-index: 10;
+                /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set            margin-left to negative half of what the width is. You can also add            the height property for a fixed size pop up.*/
+                width: 74%;
+                height:45%;
+                margin-left: -370px;
+                top:170px;
+                opacity:10;
+                overflow:hidden;
+                text-align:center;
+     }
+table {
+    border: none;
+    font-family: 'Arial', 'Helvetica', sans-serif;
+}
+
+caption {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EDDA74', endColorstr='#FF8040');
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#EDDA74), to(#FF8040));
+    background:-moz-linear-gradient(0% 90% 90deg, #EDDA74, #FF8040);
+    color: black;
+    border-top: none;
+    border-right: none;
+    text-align: center;
+    font-weight: bold;
+    padding: 2px 0.4em 2px 0.4em;
+    
+}
+
+caption.cap_medium {
+    font-size: 100%;
+}
+
+caption.cap_small {
+    font-size: 75%;
+}
+
+caption.cap_large {
+    font-size: 150%;
+}
+
+thead {
+    border-left: none;  
+}
+
+td {    
+    vertical-align:center;
+    font-weight:normal;
+}
+.td1 {  
+    vertical-align:center;
+    font-weight:normal;
+         width:50%;
+}
+
+#mypreview tbody td {
+        background-color: #D9ECFF;
+        padding: 0.2em 0.3em 0.2em 0.3em;
+}
+
+#mypreview tbody tr.odd, #mypreview tbody tr.odd td{
+    background-color: #BDDFFF;
+}
+
+.svmxbtn {
+    font-family:'Arial', 'Helvetica', sans-serif;
+    font-weight:bold;
+    color:#000;
+    text-decoration:none;
+    display:block;
+    border:2px solid #657383;
+    white-space: normal;
+
+    -webkit-transition: all .4s ease-in-out;
+    -moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.disabledbtn {
+    background:#488AC7;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#B7CEEC', endColorstr='#657383');
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#B7CEEC), to(#657383));
+    background:-moz-linear-gradient(0% 90% 90deg, #B7CEEC, #657383);
+}
+
+.enabledbtn {
+    background:#488AC7;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5CB3FF', endColorstr='#488AC7');
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#5CB3FF), to(#488AC7));
+    background:-moz-linear-gradient(0% 90% 90deg, #5CB3FF, #488AC7);
+}
+
+.mediumbtn {
+    font-size:10px;
+    height:50px;
+    width:100px;
+    -moz-border-radius:8px;
+    -webkit-border-radius:8px;
+    -o-border-radius:8px;
+    border-radius:8px;
+}
+
+.smallbtn {
+    font-size:8px;
+    height:30px;
+    width:65px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    -o-border-radius:5px;
+    border-radius:5px;
+}
+
+.largebtn {
+    font-size:14px;
+    height:80px;
+    width:160px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    -o-border-radius:10px;
+    border-radius:10px;
+}
+
+.enabledbtn:hover {
+    color: black;
+    border-color:#C35617;
+
+    background:#FF8040;
+   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF8040', endColorstr='#EDDA74');
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#FF8040), to(#EDDA74));
+    background:-moz-linear-gradient(0% 90% 90deg, #FF8040   , #EDDA74);
+}
+
+.enabledbtn:active {
+    border-style: inset;
+}
+
+</style>
+<script>
+function SVMX_LaunchThis(urlStr, winType, winWidth, winHeight, winScroll)
+{
+
+}
+function PreviewLayout(a, continuepreview){
+    if( continuepreview != 'false' && continuepreview != null && continuepreview != false )
+    {
+        var a123 = a.replace(/`/g,"'");
+        //alert(a);
+        var previewdiv = document.getElementById('mypreview');
+        document.getElementById('mypreview').style.display = "inline";
+        //document.getElementById('mypreviewheader').style.display = "inline";
+        document.getElementById('newpopup').style.display = "inline";
+        document.getElementById('mypreview').style.textAlign = "center";
+        document.getElementById('mypreview').innerHTML = a123;
+        //alert('hello'+'{!PreviewHtml}');
+        //Create an input type dynamically.
+        //create button
+        /*var br = document.createElement('br');
+        previewdiv.appendChild(br);
+        previewdiv.appendChild(br);
+        var element = document.createElement("input");
+        //Assign different attributes to the element.
+        element.setAttribute("type", "submit");
+        element.setAttribute("value", "close");
+        element.setAttribute("name", "close");
+        element.setAttribute("onclick", "EmptyPreviewLayout()");
+        element.setAttribute("class", "btn");
+    
+        previewdiv.appendChild(element);*/
+    }
+}
+function EmptyPreviewLayout()
+{
+    document.getElementById('mypreview').innerHTML = '';
+    document.getElementById('mypreview').style.display = "none";
+    document.getElementById('newpopup').innerHTML = '';
+    document.getElementById('newpopup').style.display = "none";
+}
+</script>
+<apex:actionFunction id="RedrawLayout" name="RedrawLayout" action="{!RedrawLayout}" status="processing" reRender="pblocktable1,pblocktable2,subForm1,form1"/>
+<apex:pageBlock mode="edit" id="pblk001">
+    <apex:pageBlockSection columns="1" collapsible="true"> 
+        <apex:pageBlockSectionItem dataStyle="text-align:center;">
+            <apex:outputLabel value="{!Tag001}" style="font-weight:bold;font-size:18px;"/>
+        </apex:pageblockSectionItem>
+    </apex:pageBlockSection>
+    <br/>
+    <apex:pageBlock mode="edit" >
+    <apex:pageBlock mode="edit" helpTitle="{!Tag013}" helpUrl="{!Tag014}">
+    <apex:pageMessages rendered="true"/>
+    <apex:pageBlockButtons location="top" style="font-weight:bold;font-size:13px;">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <apex:commandButton value="{!Tag002}" action="{!QuickSave}" reRender="form1" status="processing" oncomplete="EmptyPreviewLayout()"/>
+        <apex:commandButton value="{!Tag003}" action="{!SaveNClose}" reRender="form1" status="processing" oncomplete="EmptyPreviewLayout()"/>
+        <apex:commandButton value="{!Tag004}" action="{!Cancel}" immediate="true" status="processing"/>
+        <apex:commandButton value="{!Tag005}" action="{!BackToSetupHome}" immediate="true" status="processing"/>
+        <apex:commandButton value="{!Tag012}" status="processing" action="{!PreviewLayout}" rerender="form1" oncomplete="PreviewLayout('{!PreviewHtml}','{!continueQuickSave}')"/>
+    </apex:pageBlockButtons>
+    <apex:actionStatus id="processing" startText="{!Tag006}"/>
+    <apex:pageBlockSection columns="3">
+<apex:pageBlockSectionItem dataStyle="text-align:left;margin-left:5%;">
+    <apex:pageBlockSection columns="1">
+        <apex:outputLabel value="{!Tag007}" style="font-weight:bold;font-size:13px;text-align:left;margin-left:5%;"/> 
+    </apex:pageBlockSection>
+    <apex:pageBlockSection columns="1">
+            <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                <apex:selectList size="1" value="{!SelectedObject}" onchange="RedrawLayout()" style="width:250px;">
+                    <apex:selectOptions value="{!ObjectsOptns}" />
+                </apex:selectList>
+            </apex:outputPanel>
+    </apex:pageBlockSection>
+</apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem dataStyle="width:75%;">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </apex:pageblockSectionItem>
+    <apex:pageblockSectionItem >
+
+    </apex:pageblockSectionItem> 
+    
+    <apex:pageBlockSectionItem dataStyle="text-align:left;margin-left:5%;">
+        <apex:pageBlockSection columns="1">
+            <apex:outputLabel value="{!Tag010}" style="font-weight:bold;font-size:13px;margin-left:5%;"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="1">
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!ButtonsizeObj.SVMXC__Button_Size__c}" />
+                </apex:outputPanel>
+        </apex:pageBlockSection>
+    </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection id="subForm1" columns="2">
+    <apex:pageBlockSection columns="1">
+    <apex:pageBlockSectionItem dataStyle="text-align:center">
+        <apex:pageBlockTable value="{!sfwLayoutRecs_Column1}" var="sfwLayoutRec" border="0" id="pblocktable1">
+            <apex:column style="border-style:none;">
+            <apex:selectList size="1" value="{!sfwLayoutRec.SVMXC__Dispatch_Process__c}">
+                    <apex:selectOptions value="{!AllsfwOptns}"/>
+            </apex:selectList>
+            </apex:column>
+        </apex:pageBlockTable>
+    </apex:pageBlockSectionItem>
+    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!Tag008}" action="{!AddRow}" Disabled="False" rendered="True" reRender="subForm1" status="processing"/>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection columns="1">
+    <apex:pageBlockSectionItem dataStyle="text-align:center">
+        <apex:pageBlockTable value="{!sfwLayoutRecs_Column2}" var="sfwLayoutRec" id="pblocktable2">
+            <apex:column style="border-style:none;">
+            <apex:selectList size="1" value="{!sfwLayoutRec.SVMXC__Dispatch_Process__c}">
+                    <apex:selectOptions value="{!AllsfwOptns}"/>
+            </apex:selectList>
+        </apex:column>
+        </apex:pageBlockTable> 
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem datastyle="font-Size:10px;width:7px;height:7px;" >
+                
+    </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+     </apex:pageBlock>
+     <!-- <div id="mypreviewheader" class="previewpopup1" style="display:none;"> -->
+        <div id="newpopup" class="previewpopup1" style="display:none;text-align:center;">
+            <!-- <img src="http://icons.iconseeker.com/png/fullsize/boomy/close-2.png" alt="Close" style="float: right; z-index: 3500; position: relative;top:0;right:0;padding-top:0px;" onclick="EmptyPreviewLayout();"/> -->
+            <apex:image url="{!URLFOR($Resource.SVMXC__SVMXC_resources,'SVMXC_resources/images/close_btn.png')}" style="float: right;width:32px;height:34px; z-index: 3500; position: relative;top: 1%; right: 2%;padding-top:0px;" onclick="EmptyPreviewLayout();"/>
+            <div id="mypreview" class="previewpopup" style="padding-top:10px;text-align:center;" /><!-- {!URLFOR($Resource.SVMXC__SVMXC_resources,'SVMXC_resources/images/close_btn.png')} -- >
+            </div><!-- style="display:none;"-->
+        </div>
+        
+       <!-- <div id="mypreviewheader" class="previewpopup1" > style="display:none;" 
+            <img src="http://icons.iconseeker.com/png/fullsize/boomy/close-2.png" alt="Close" style="float: right; z-index: 2500; position: fixed;top:35%;right:4%"/>
+        </div> -->
+     <!-- </div> -->
+</apex:pageBlock>
+
+
+</apex:form>
+<script>
+document.getElementById('mypreview').style.display = "none";
+document.getElementById('newpopup').style.display = "none";
+</script>
+</apex:page>

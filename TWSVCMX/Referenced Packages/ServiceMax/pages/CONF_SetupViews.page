@@ -1,0 +1,271 @@
+<apex:page controller="SVMXC.CONF_SetupViews" >
+    <apex:form >
+        <style type="text/css">
+            table.ExpTable th
+            {
+                padding-left:1% !important;
+                
+            }
+            .disableTab
+            {
+                background-color : Lightgrey ;
+                color:LightGrey;
+                background-image:none;
+                font-size:13px;
+            }
+        </style>
+        <apex:pageBlock helpTitle="{!TAG002}" helpUrl="{!HLPURL}" title="{!TAG001}" id="mainPagBlck" mode="Edit" >
+            <apex:pageblockButtons location="TOP" >
+                <apex:commandButton value="{!TAG003}" disabled="{!isStandrd}" action="{!quickSave}" reRender="mainPagBlck" status="statusMainPageBlck" />
+                <apex:commandButton value="{!TAG004}" disabled="{!isStandrd}" action="{!saveNClose}" reRender="mainPagBlck" status="statusMainPageBlck"  />
+                <apex:commandButton value="{!TAG005}" rendered="{!NOT(isStandrd)}" action="{!saveNAssign}" reRender="mainPagBlck" status="statusMainPageBlck" />
+                <apex:commandButton value="{!TAG037}" rendered="{!isStandrd}" action="{!assign}" reRender="mainPagBlck" status="statusMainPageBlck" />
+                <apex:commandButton value="{!TAG006}" action="{!Cancel}" reRender="mainPagBlck" status="statusMainPageBlck" />
+            </apex:pageblockButtons>
+            <apex:outputPanel id="pgMsg1" >
+                <apex:pageMessages rendered="{!NOT(isErMsgBlk)}"  />
+            </apex:outputPanel>
+            <apex:actionStatus id="statusMainPageBlck" startText="{!TAG031}" style="font-Size:12px"/>
+            <apex:pageBlockSection columns="1" collapsible="false" dir="LTR">
+                <apex:pageblockSectionItem dataStyle="text-align:left;margin-left:0px;">
+                    <apex:pageBlockSection columns="1" >
+                        <apex:outputPanel style="text-align:left;">
+                            <apex:outputText value="{!TAG007}" style="font-Size:12px;"  />
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection >
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputText value="{!objSVMXPrcss.SVMXC__Name__c}" style="width:500px;" disabled="{!isStandrd}"  />
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                </apex:pageblockSectionItem>
+                <apex:pageblockSectionItem dataStyle="text-align:left;margin-left:0px;">
+                    <apex:pageBlockSection columns="1" >
+                        <apex:outputPanel style="text-align:left;">
+                            <apex:outputText value="{!TAG008}" style="font-Size:12px;"  />
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection >
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputText value="{!objSVMXPrcss.SVMXC__ProcessID__c}" style="width:500px;" disabled="{!isStandrd}" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                </apex:pageblockSectionItem>
+                <apex:pageblockSectionItem dataStyle="text-align:left;margin-left:0px;">
+                    <apex:pageBlockSection columns="1" >
+                        <apex:outputPanel style="text-align:left;">
+                            <apex:outputText value="{!TAG009}" style="font-Size:12px;"  />
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection >
+                        <apex:pageblockSectionItem >
+                            <apex:inputTextarea value="{!objSVMXPrcss.SVMXC__Description__c}" style="width:500px;font-Size:12px;" disabled="{!isStandrd}" />
+                        </apex:pageblockSectionItem>
+                    </apex:pageBlockSection>
+                </apex:pageblockSectionItem>
+                <apex:pageblockSectionItem dataStyle="text-align:left;margin-left:0px;">
+                    <apex:pageBlockSection columns="1" >
+                        <apex:outputPanel style="text-align:left;">
+                            <apex:outputText value="{!TAG010}" style="font-Size:12px;"  />
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                        <apex:pageBlockSection >
+                            <apex:pageblockSectionItem >
+                                <apex:selectList value="{!objSVMXPrcss.SVMXC__Source_Object_Name__c}" size="1" disabled="true" style="width:506px;" >
+                                    <apex:selectOptions value="{!lstAllObj}"  />
+                                </apex:selectList>
+                            </apex:pageblockSectionItem>
+                        </apex:pageBlockSection>
+                </apex:pageblockSectionItem>
+                <apex:pageblockSectionItem dataStyle="text-align:left;margin-left:0px;">
+                    <apex:pageBlockSection columns="1" >
+                        <apex:outputPanel style="text-align:left;width:100px;">
+                            <apex:outputText value="{!TAG011}" style="font-Size:12px;"  />
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection >
+                        <apex:pageblockSectionItem >
+                                <apex:selectList value="{!objSVMXPrcss.SVMXC__Ownership_Type__c}" size="1" style="width:506px;" disabled="{!isStandrd}" >
+                                    <apex:selectOptions value="{!ownerType}"  />
+                                </apex:selectList>
+                        </apex:pageblockSectionItem>
+                    </apex:pageBlockSection>
+                </apex:pageblockSectionItem>
+            </apex:pageBlockSection>
+                
+            <apex:pageblockSection title="" collapsible="false" columns="1">
+                <apex:outputpanel id="ExpPageBlock"  style="width:100%;">
+                    <apex:pageBlockSection columns="1">
+                        <apex:pageBlockSectionItem dataStyle="text-align: center; border:1px solid #C0C0C0" datastyleClass="disableTab">
+                            <apex:outputText value="{!TAG012}" style="font-weight: bold;font-Size:13px;color:#000000;"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    <br></br>
+                    <apex:actionStatus id="statusExpPageBlck" startText="{!TAG031}" style="font-Size:12px"/>
+                    <apex:pageBlockTable value="{!lstCfgDta}" var="objCfgDta" styleClass="ExpTable" >
+                        <apex:column style="width:2%" >
+                            {!Round(objCfgDta.SVMXC__Sequence__c, 0)}
+                        </apex:column>
+                        <apex:column style="width:20%;">
+                            <apex:selectList value="{!objCfgDta.SVMXC__Field_Name__c}" size="1" disabled="{!isStandrd}" style="width: 96%;">
+                                <apex:selectOptions value="{!FildSelectLst}"  />
+                            </apex:selectList>
+                            <apex:facet name="header" >{!TAG044}</apex:facet>
+                        </apex:column>
+                        <apex:column style="width:15%;">
+                            <apex:selectList value="{!objCfgDta.SVMXC__Operator__c}" size="1" disabled="{!isStandrd}">
+                                <apex:selectOptions value="{!OperatorsSelectLst}"  />
+                            </apex:selectList>
+                            <apex:facet name="header" >{!TAG015}</apex:facet>
+                        </apex:column>
+                        <apex:column style="width:15%;" >
+                            <apex:inputText value="{!objCfgDta.SVMXC__Operand__c}" disabled="{!isStandrd}" />
+                            <apex:facet name="header" >{!TAG016}</apex:facet>
+                        </apex:column>
+                        <apex:column style="width:8%;" >
+                                <apex:commandButton title="{!TAG043}" image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue; margin-left:1%;" action="{!delExpRow}" reRender="ExpPageBlock" status="statusExpPageBlck" >
+                                <apex:param name="peremeterforDelRow" value="{!Round(objCfgDta.SVMXC__Sequence__c, 0)}"  assignTo="{!selectedObjSerial}"   />
+                                </apex:commandButton>
+                                <apex:commandButton title="{!TAG042}" image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue; margin-left:5%;" action="{!addExpRow}" reRender="ExpPageBlock" status="statusExpPageBlck" rendered="{!if((lstCfgDta.size == Round(objCfgDta.SVMXC__Sequence__c, 0)) ,true,false)}" disabled="{!isStandrd}" />
+                        </apex:column>
+                    </apex:pageBlockTable>
+                    <apex:pageBlockSection >
+                        <apex:commandButton title="{!TAG042}" image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!addExpRow}" reRender="ExpPageBlock" status="statusExpPageBlck" rendered="{!if((lstCfgDta.size == 0 ) ,true,false)}" disabled="{!isStandrd}" />
+                    </apex:pageBlockSection>
+                    <br></br>
+                    <apex:pageBlockSection rendered="{!if(lstCfgDta.size == 0 , false, true)}">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputText value="{!TAG013}" style="font-size: 12px;"/>
+                            <apex:inputText value="{!objSVMXPrcss.SVMXC__Advance_Expression__c}" style="width:500px;" disabled="{!isStandrd}" />
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                </apex:outputpanel>
+            </apex:pageblockSection>
+            
+            <!-- <apex:pageblockSection title="" collapsible="false" columns="1">
+                    <apex:outputpanel id="RefObjPageBlock"  style="width:100%;text-align:center;">
+                        <apex:pageBlockSection columns="1">
+                            <apex:pageBlockSectionItem dataStyle="text-align: center; border:1px solid #C0C0C0" datastyleClass="disableTab">
+                                <apex:outputText value="{!TAG032}" style="font-weight: bold;font-Size:13px;color:#000000;"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        <br></br>   
+                    <apex:actionStatus id="statusRefObjPageBlck" startText="{!TAG031}" style="font-Size:12px"/>
+                    <apex:pageBlockTable value="{!lstWrprClsRefObj}" var="ObjWrpr" styleClass="ExpTable" style="text-align: left;" >
+                        <apex:column style="width:2%;padding-left:1;%" >
+                            {!ObjWrpr.intSecNo}
+                        </apex:column>
+                        <apex:column style="width:20%;padding-left:1%;">
+                            <apex:selectList value="{!ObjWrpr.strRefObj}" size="1" onChange="onSelectRefObj({!ObjWrpr.intSecNo})" disabled="{!if(Round(ObjWrpr.intSecNo, 0) == 1 || isStandrd  , true, false)}" >
+                                <apex:selectOptions value="{!refObjSelectLst}"  />
+                            </apex:selectList>
+                            <apex:facet name="header" >{!TAG033}</apex:facet>
+                        </apex:column>
+                        <apex:column style="width:15%;padding-left:1%;" >
+                            <apex:inputText value="{!ObjWrpr.strRelValue}" disabled="true" />
+                            <apex:facet name="header" >{!TAG034}</apex:facet>
+                        </apex:column>
+                        <apex:column style="width:25%;padding-left:1%;" >
+                            <apex:selectList value="{!ObjWrpr.strRefObjField}" size="1" style="width:250px;" disabled="{!if(Round(ObjWrpr.intSecNo, 0) == 1 || isStandrd  , true, false)}" >
+                                <apex:selectOptions value="{!ObjWrpr.lstSeltObjFild}"  />
+                            </apex:selectList>
+                            <apex:facet name="header" >{!TAG014}</apex:facet>
+                        </apex:column>
+                        <apex:column style="width:8%;padding-left:1%;" >
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue; margin-left:1%;" action="{!delRefObjRow}" reRender="RefObjPageBlock" status="statusRefObjPageBlck" disabled="{!isStandrd}" rendered="{!if(Round(ObjWrpr.intSecNo, 0) == 1 , false, true)}" >
+                                <apex:param name="peremeterforDelRow" value="{!Round(ObjWrpr.intSecNo, 0)}"  assignTo="{!selectedObjSerial}"   />
+                                </apex:commandButton>
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue;margin-left:5%;" action="{!addRefObjRow}" reRender="RefObjPageBlock" status="statusRefObjPageBlck" rendered="{!if(lstWrprClsRefObj[lstWrprClsRefObj.size -1].intSecNo == ObjWrpr.intSecNo , true, false)}" disabled="{!isStandrd}" />
+                        </apex:column>
+                    </apex:pageBlockTable>
+                    <apex:actionFunction name="onSelectRefObj" action="{!onSelectRefObj}" status="statusRefObjPageBlck" reRender="RefObjPageBlock">
+                        <apex:param name="peremeterforRefObj" value=""  assignTo="{!selectedObjSerial}"   />
+                    </apex:actionFunction>
+                    </apex:outputpanel>
+                </apex:pageblockSection> -->
+                
+                <!-- <apex:pageBlockSection id="FlDSlt"  columns="1" >
+                        <apex:actionStatus id="LodingStFlDSlt"  startText="{!TAG031}" />
+                        <apex:pageBlockSectionItem dataStyleClass="centerTA"  labelStyleClass="centerTA"  >
+                        <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" >
+                            <apex:outputText > 
+                            <tr>
+                            <td style="width: 200px;"></td>
+                               <td>
+                               <apex:selectList value="{!strFildOut}" size="10" id="Fldin" multiselect="true" style="width:250px" >
+                               <apex:selectOptions value="{!slctOptnOut}" />
+                               </apex:selectList>
+                               </td>
+                            <td style="width:17px;height:100%;background-color:#AAAAAA;vertical-align:middle"><apex:outputLink value="#" onclick="moveInWOFild()" ><img src="/img/arrow2_picklist_right.gif"  title="{!TAG042}"/></apex:outputLink><br/><br/><apex:outputLink value="#" onclick="moveOutWOFild()" ><img src="/img/arrow2_picklist_left.gif"  title="{!TAG043}"/></apex:outputLink></td>                
+                            <apex:actionFunction name="moveInWOFild" action="{!moveInWOFild}" rerender="FlDSlt" status="LodingStFlDSlt"/>
+                            <apex:actionFunction name="moveOutWOFild" action="{!moveOutWOFild}" rerender="FlDSlt" status="LodingStFlDSlt"/>
+                               <td>
+                               <apex:selectList value="{!strFildIN}" size="10" id="SFldin" multiselect="true" style="width:250px">
+                               <apex:selectOptions value="{!slctOptnIN}" />
+                               </apex:selectList>
+                               </td>
+                             </tr>
+                            </apex:outputText>
+                        </apex:panelGrid>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection> -->
+                
+            <apex:pageblockSection title="" collapsible="false" columns="1">
+                <apex:outputpanel id="WOflds" style="width:100%;">
+                    <apex:pageBlockSection columns="1">
+                        <apex:pageBlockSectionItem dataStyle="text-align: center; border:1px solid #C0C0C0" datastyleClass="disableTab">
+                            <apex:outputText value="{!TAG032}" style="font-weight: bold;font-Size:13px;color:#000000;"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                    <br></br>
+                    <apex:outputPanel id="pgMsg2" >
+                        <apex:pageMessages rendered="{!isErMsgBlk}"  />
+                    </apex:outputPanel>
+                    <apex:actionStatus id="statusWoFld" startText="{!TAG031}" style="font-Size:12px"/>
+                    <apex:pageBlockSectionItem dataStyleClass="centerTA"  labelStyleClass="centerTA" >
+                        <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" >
+                            <apex:outputText >
+                                <td Style="width: 88px;" ></td>
+                                <td>
+                                    <apex:selectList value="{!strFildOut}" size="12" multiselect="true" style="width:250px" disabled="{!isStandrd}" >
+                                        <apex:selectOptions value="{!slctOptnOut}" />
+                                    </apex:selectList>
+                                </td>
+                                <td  style="width:17px;height:100%;vertical-align:middle"> <!-- style="width:17px;height:100%;background-color:#AAAAAA;vertical-align:middle" -->
+                                    <apex:panelGrid cellspacing="7" cellpadding="0" width="40%" columns="1" style="text-align: center;">
+                                        <div>
+                                            <apex:commandButton action="{!moveInWOFild}" rerender="WOflds" title="{!TAG042}" status="statusWoFld" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Right_Bttn.JPG')}" disabled="{!isStandrd}" />
+                                            <apex:commandButton action="{!moveOutWOFild}" rerender="WOflds" title="{!TAG043}" status="statusWoFld" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Left_Bttn.JPG')}" disabled="{!isStandrd}"/>
+                                        </div>
+                                    </apex:panelGrid>
+                                </td>                 
+                                <td id="ablock">
+                                    <apex:selectList value="{!strFildIN}" size="12"  multiselect="true" style="width:250px" disabled="{!isStandrd}" >
+                                        <apex:selectOptions value="{!slctOptnIN}"/>
+                                    </apex:selectList>
+                                </td>
+                                <td>
+                                    <apex:panelGrid cellspacing="7" cellpadding="0" width="35%" columns="1" style="text-align: center;">
+                                        <apex:outputText value="  " /><apex:outputText value="  " /> <apex:outputText value="  "/>  
+                                        <div>
+                                            <apex:commandButton action="{!Top}"  id="top" rerender="WOflds" style="width:18px;height:18px;background:white"  image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Top_Bttn.JPG')}"  title="{!TAG046}" status="statusWoFld"/>
+                                            <apex:commandButton action="{!Up}" id="Up" rerender="WOflds" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Up_Bttn.JPG')}"  title="{!TAG047}" status="statusWoFld"/>
+                                            <apex:commandButton action="{!Down}" id="down" rerender="WOflds" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Down_Bttn.JPG')}"  title="{!TAG048}" status="statusWoFld"/>
+                                            <apex:commandButton action="{!Bottom}" id="Bottom" rerender="WOflds" style="width:18px;height:18px;background:white"  image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Bottom_Bttn.JPG')}" title="{!TAG049}" status="statusWoFld"/>
+                                        </div>
+                                    </apex:panelGrid> 
+                                </td>
+                            </apex:outputText>
+                            <apex:panelGrid cellspacing="7" cellpadding="0" width="35%" columns="1" style="text-align: center;">
+                                <apex:outputText value="  " /><apex:outputText value="  " /> <apex:outputText value="  "/>  <apex:outputText value="  "/><apex:outputText value="  "/><apex:outputText value="  "/>
+                            </apex:panelGrid>
+                            
+                        </apex:panelGrid>
+                    </apex:pageBlockSectionItem>
+                </apex:outputpanel>
+            </apex:pageblockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

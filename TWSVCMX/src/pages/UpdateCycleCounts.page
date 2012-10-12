@@ -1,0 +1,44 @@
+<apex:page controller="CycleCount"> 
+<apex:form >
+	<html>
+		<style>
+			.red { font-weight:bold; color:red; }
+			.green { font-weight:bold; color:green;}
+		</style>
+	</html>
+	<apex:pageBlock title="Cycle Count for {!cycleName}" id="editor">
+		<apex:pageBlockButtons >
+				<apex:commandButton action="{!QuickSave}" value="Quick Save" rerender="editor" status="Savestatus"></apex:commandButton>
+				<apex:commandButton action="{!Save}" value="Save & Close" rerender="editor" status="Savestatus"></apex:commandButton>
+				<apex:commandButton action="{!SaveAndSubmit}" value="Save & Submit" rerender="editor" status="Savestatus"></apex:commandButton>
+				<apex:commandButton action="{!Cancel}" value="Cancel" rerender="editor"></apex:commandButton>
+		</apex:pageBlockButtons>				
+		<apex:pageBlockSection >
+			<apex:actionStatus id="refreshstatus" startstyle="color:green;" startText="Refreshing...." ></apex:actionStatus> 			
+			<apex:actionStatus id="Savestatus" startstyle="color:green;" startText="Saving...." ></apex:actionStatus> 
+		</apex:pageBlockSection>
+		
+		<apex:pageBlockTable value="{!CycleLines}" var="L" >
+			<apex:column style="width:150px" >
+				<apex:facet name="header">
+             		<apex:commandLink rerender="editor" action="{!ViewCycleLines}" value="Name"/>
+             		</apex:facet>       
+                    <a href="/{!L.Id}" target="_new">{!L.Name}</a>
+            </apex:column>
+            <apex:column style="width:200px" >
+            		<apex:facet name="header"><apex:outputText value="Part"></apex:outputText></apex:facet>       
+                    <apex:outputField value="{!L.Part__c}"/>     
+            </apex:column>
+            <apex:column style="width:200px" >
+             		<apex:facet name="header"><apex:outputText value="System Qty"></apex:outputText></apex:facet>       
+                    <apex:outputText value="{!L.System_Qty__c}" styleClass="red" rendered="{!L.System_Qty__c!=L.Counted_Qty__c}"/> 
+                    <apex:outputText value="{!L.System_Qty__c}" styleClass="green" rendered="{!L.System_Qty__c==L.Counted_Qty__c || L.Counted_Qty__c!=null}"/>     
+            </apex:column>
+            <apex:column style="width:200px" > 
+             		<apex:facet name="header"><apex:outputText value="Counted Qty"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!L.Counted_Qty__c}"/>      
+            </apex:column>
+		</apex:pageBlockTable> 
+	</apex:pageBlock>	 
+</apex:form>
+</apex:page>

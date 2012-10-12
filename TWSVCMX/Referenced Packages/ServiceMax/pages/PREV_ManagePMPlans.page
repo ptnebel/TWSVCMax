@@ -1,0 +1,54 @@
+<apex:page Controller="SVMXC.PREV_ManagePMPlans"  tabStyle="SVMXC__PM_Plan__c" >
+    <apex:form id="form1">
+     
+        <apex:pageBlock id="pageblock" title="{!TAG001} {!SContract.name}" helpTitle="{!TAG002}" helpUrl="{!HLPURL}">
+        <apex:pageMessages rendered="{!HdrMsg}"/> 
+        <apex:actionStatus id="status" startText="{!TAG017}"/>  
+       <!--  <apex:actionfunction action="{!SelctCheck}" name="SelctCheck" Rerender="Delbtn" status="status"></apex:actionfunction>  -->
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!SVMX_NewPMPlan}" value="{!TAG003}" status="status"/>
+                <apex:commandButton action="{!SVMX_EditPMPlan}" value="{!TAG004}" status="status"/>
+                <apex:commandButton action="{!SVMX_ClonePMPlan}"  value="{!TAG006}" status="status"/>
+                <apex:commandButton id="Delbtn" action="{!SVMX_DeletePMPlan}"  value="{!TAG005}" status="status" onClick="{if(!confirm('{!TAG019}')){return false}}"/>
+                <apex:commandButton action="{!SVMX_BackToSC}" value="{!TAG007}" status="status"/>
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection columns="1" rendered="{!NOT(DisplayRecord)}">
+                <apex:outputLabel value="{!TAG016}"/> 
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1" rendered="{!DisplayRecord}">
+                <apex:pageBlockTable value="{!PMPlans}" var="item" id="pagetabel">
+                    <apex:column >
+                        <apex:facet name="header">{!TAG008}</apex:facet>
+                        <apex:inputCheckbox value="{!item.SVMXC__Select__c}"  />           <!-- onclick="SelctCheck();" -->   
+                    </apex:column> 
+                    <apex:column >
+                        <apex:facet name="header">{!TAG009}</apex:facet>
+                        <apex:outputField value="{!item.Name}"/>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">{!TAG010}</apex:facet>
+                        <apex:outputField value="{!item.SVMXC__Description__c}"/>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">{!TAG011}</apex:facet>
+                        <apex:outputField value="{!item.SVMXC__Status__c}"/>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">{!TAG012}</apex:facet>
+                        <apex:outputField value="{!item.SVMXC__Start_Date__c}"/>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">{!TAG013}</apex:facet>
+                        <apex:outputField value="{!item.SVMXC__End_Date__c}"/>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">{!TAG014}</apex:facet>
+                        <apex:outputField value="{!item.SVMXC__Next_PM_Date__c}"/>
+                    </apex:column>
+                </apex:pageBlockTable> 
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form> 
+    
+</apex:page>

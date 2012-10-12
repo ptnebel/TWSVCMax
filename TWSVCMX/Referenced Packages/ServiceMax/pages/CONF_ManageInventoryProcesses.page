@@ -1,0 +1,834 @@
+<apex:page id="pageEditInventoryProcess" controller="SVMXC.CONF_ManageInventoryProcesses" tabStyle="SVMXC__ServiceMax_Processes__c">
+  
+  <style type="text/css">
+      	.customPopup
+      	{
+           	background-color: white;
+           	border-style: solid;
+           	border-width: 2px;
+           	left: 50%;
+           	padding:10px;
+           	position: fixed;
+           	z-index: 9999;
+           	/* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set            margin-left to negative half of what the width is. You can also add            the height property for a fixed size pop up.*/
+           	width: 700px;
+           	margin-left: -250px;
+           	top:200px;
+           	opacity:1;
+       	}
+    	.grayscrean
+    	{
+           opacity:.5;
+       	}
+       	.Nograyscrean
+       	{
+           opacity:1;
+       	}
+   .activeTab {background-color: #B26684; color:white; background-image:none; font-size:14Px}
+
+   .inactiveTab {background-color: lightGrey; color:black; background-image:none}
+   .disabledTab {background-color: Grey; color:black; background-image:none}
+    </style>
+    <script type="text/javascript"> 
+		function stopRKey(evt) 
+		{ 
+			var evt = (evt) ? evt : ((event) ? event : null); 
+			var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+			if ((evt.keyCode == 13) && (node.type=="text"))  
+			{
+				return false;
+			} 
+		} 
+		document.onkeypress = stopRKey; 
+	</script>
+    <apex:form id="formEditInvertryProcesses" >
+     <apex:pageMessages rendered="{!NOT(isSearch)}" /> 
+        <apex:pageBlock id="blockEditInvertryProcesses" helpTitle="{!TU.TAG024}" helpUrl="{!TU.HLPURL}" rendered="true">
+            <apex:actionStatus id="status" startText="{!TU.TAG092}" style="font-Size:13px"/>
+            <apex:inputHidden value="{!SelectedIndex}" id="SelectedIndex"/>
+            <apex:inputHidden value="{!SelectedID}" id="SelectedID"/>
+            <apex:inputHidden value="{!SelectedLabel}" id="SelectedLabel"/>
+            <apex:pageBlockButtons location="top"> 
+                <apex:commandButton value="{!TU.TAG080}" tabindex="0" action="{!SVMX_doQuickSave}" Disabled="{!NOT(isSeedDataComplate) || disableValue}" reRender="formEditInvertryProcesses" status="status"/>
+                <apex:commandButton value="{!TU.TAG002}" tabindex="1" action="{!SVMX_doSave}" Disabled="{!NOT(isSeedDataComplate) || disableValue}" reRender="formEditInvertryProcesses" status="status"/>
+                <apex:commandButton value="{!TU.TAG004}" tabindex="2" action="{!SVMX_doCancel}" reRender="formEditInvertryProcesses" status="status"/>
+                
+                
+<!--            <apex:commandButton value="{back to home}" action="{!SVMX_GoHome}"/> -->
+            </apex:pageBlockButtons> 
+            <apex:pageBlockSection columns="1" id="SecEditInvertryProcesse">
+                <apex:tabPanel styleClass="{!graytab}" switchType="client" value="{!selectedTab}" id="tabEditProcess" tabClass="activeTab" inactiveTabClass="inactiveTab" disabledTabClass="disabledTab">
+<!-- TAB1 (Process Information)--------------------------------------------------------------------------------->
+                    <apex:tab label="{!TU.TAG012}" name="{!TU.TAG012}" id="tabInvProcessInfo">
+                        <apex:pageBlock id="tab1pblock1">
+                            <apex:actionStatus id="status1" startText="{!TU.TAG092}" style="font-Size:13px"/>
+                            <apex:pageBlockSection columns="1" >
+                              <apex:pageBlockSectionItem >  
+                                    <apex:outputText value="{!TU.TAG076}" style="font-Size:12px"/>
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock" rendered="true"/>
+                                        <apex:selectList title="Select Module" value="{!objSVMXPro.Module}" Disabled="{!isEditMode || disableValue}"   size="1" id="Modulelist"> <!-- onchange="callSubmodule()" -->
+                                           <!--<apex:actionFunction action="{!onSelectMod}" name="callSubmodule" reRender="formEditInvertryProcesses"  status="status"/> -->
+                                            <apex:selectOptions value="{!Module}" />                                        
+                                        </apex:selectList>
+                                    </apex:outputPanel>
+                               </apex:pageBlockSectionItem>   
+                             <!--  <apex:pageBlockSectionItem />       -->
+                              <apex:pageBlockSectionItem >  
+                                    <apex:outputText value="{!TU.TAG070}" style="font-Size:12px"/>    
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">         
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>                      
+                                        <apex:inputtext Disabled="{!isEditMode || disableValue}" id="ProcessID" value="{!objSVMXPro.ProcessID}" />                               
+                                    </apex:outputPanel>
+                                 </apex:pageBlockSectionItem>     
+                          <!--        <apex:pageBlockSectionItem />    -->
+                                  <apex:pageBlockSectionItem >    
+                                    <apex:outputText value="{!TU.TAG018}" style="font-Size:12px"/>                 
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">         
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                        <apex:inputText Disabled="{!disableValue}" id="ProcessName" value="{!objSVMXPro.Name}" style="width:600px"/>                               
+                                    </apex:outputPanel>
+                                 </apex:pageBlockSectionItem>    
+                           <!--        <apex:pageBlockSectionItem />    -->
+                                   <apex:pageBlockSectionItem >    
+                                    <apex:outputText value="{!TU.TAG097}" style="font-Size:12px"/>   
+                                    <apex:inputtextarea id="Desc" value="{!objSVMXPro.Description}" Disabled="{!disableValue}" style="font-Size:13px;width:600px"/>
+                                   </apex:pageBlockSectionItem>    
+                                  </apex:pageBlockSection>
+                                <apex:pageBlockSection title="" columns="1" collapsible="false">
+                             <b>   <apex:pageBlockSection columns="2">
+                                   <apex:pageblockSectionItem >
+                                    	<apex:outputText value="{!TU.TAG020}" style="font-Size:13px"/>   
+                                    </apex:pageblockSectionItem>    
+                                    <apex:pageblockSectionItem >    
+                                       <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="true"/>                               
+                                        <apex:selectList id="HdrObj" value="{!objSVMXPro.Parent_Object_Name}"  Disabled="{!disableValue}" multiselect="false" size="1" onchange="ChngLnOBj()"> <!-- value="{!objSVMXPro.Parent_Object_Name}" -->
+                                            <apex:selectOptions value="{!lstHdrObjOpt}"/>
+                                            <apex:actionFunction action="{!OnHdrObjSelect}" name="ChngLnOBj" reRender="formEditInvertryProcesses" status="status1"/>                                        
+                                        </apex:selectList>
+                                        </apex:outputPanel>
+                                   </apex:pageblockSectionItem>     
+                                </apex:pageBlockSection> </b>
+                                <apex:pageBlockSection columns="2">                               
+                                    <apex:outputText value="{!TU.TAG019}" style="font-Size:13px"/>  
+                                    <apex:selectList value="{!objSVMXPro.Is_Multiline_Transaction}" Disabled="{!disableValue}" onchange="OnSelectChild();" multiselect="false" size="1">
+                                       <apex:selectOptions value="{!BooleanOptions}" />
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="2">          <!-- rendered="{!objSVMXPro.Is_Multiline_Transaction}"  -->                         
+                                       <apex:outputText value="{!TU.TAG021}" style="font-Size:13px"/>
+                                       <apex:outputPanel id="panel1" layout="block" styleClass="requiredInput">         
+                                       <apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!objSVMXPro.Is_Multiline_Transaction}"/>
+                                        <apex:selectList id="LineObj" value="{!objSVMXPro.Child_Object_Name}"  Disabled="{!NOT(objSVMXPro.Is_Multiline_Transaction) || disableValue}"   multiselect="false" size="1" onchange="accessfields()"> <!--  --> 
+                                            <apex:selectOptions value="{!lstLineObjOpt}"/>
+                                            <apex:actionFunction action="{!getfieldnames}" name="accessfields" reRender="formEditInvertryProcesses" status="status1"/>
+                                        </apex:selectList>   
+                                      </apex:outputPanel> 
+                                </apex:pageBlockSection>  
+                                <apex:pageBlockSection columns="2">  <!-- rendered="{!objSVMXPro.Is_Multiline_Transaction}" -->
+                                     <apex:outputText value="{!TU.TAG074}" style="font-Size:13px"/>  
+                                         <apex:outputPanel layout="block" styleClass="requiredInput">         
+                                         <apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!objSVMXPro.Is_Multiline_Transaction}"/>
+                                             <apex:selectList value="{!objSVMXPro.Lookup_Field_to_Parent}" size="1" Disabled="{!NOT(objSVMXPro.Is_Multiline_Transaction) || disableValue}" multiselect="false">
+                                                <apex:selectOptions value="{!HdrReffldlist}"/>
+                                             </apex:selectList>
+                                         </apex:outputPanel>     
+                                 </apex:pageBlockSection>   
+                                 <apex:pageBlockSection columns="2">  <!-- rendered="{!objSVMXPro.Is_Multiline_Transaction}" -->
+                                      <apex:outputText value="{!TU.TAG079}" style="font-Size:13px"/>  
+                                         <apex:outputPanel layout="block" styleClass="requiredInput">         
+                                   		 <apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!objSVMXPro.Is_Multiline_Transaction && IsChildRecordTypeRequired}"/>
+                                           <apex:selectList value="{!objSVMXPro.Child_Object_RecordType}" size="1" Disabled="{!NOT(objSVMXPro.Is_Multiline_Transaction) || disableValue}" multiselect="false">
+                                             <apex:selectOptions value="{!lstChildRecordType}"/>
+                                        	</apex:selectList>
+                                   		  </apex:outputPanel>
+                           </apex:pageBlockSection> 
+                           </apex:pageBlockSection>
+                           <apex:actionFunction action="{!OnSelectChild}" name="OnSelectChild" reRender="formEditInvertryProcesses" status="status1"/>
+                       	   <apex:pageBlockSection title="" collapsible="false"/>
+                           <apex:pageblockSection columns="1">
+                       	   		<apex:commandButton value="{!TU.TAG032}" action="{!SVMX_EntryCriteria}" id="SVMX_EntryCriteria" reRender="formEditInvertryProcesses" status="status" style="float: right;"/>
+                       	   </apex:pageblockSection>
+                      </apex:pageBlock>		
+                   </apex:tab>
+                   
+<!-- End of TAB1 (Process Information)------------------------------------------------------------------------------>
+<!-- TAB2 (Entry Criteria)--------------------------------------------------------------------------------->
+                    <apex:tab label="{!TU.TAG013}" name="{!TU.TAG013}" id="tabValidationCriteria">
+                        <!-----------------------Page block Section 1(Header Criteria)--------------->
+                        <apex:pageBlock id="tab2pblock1">
+                            <apex:actionStatus id="status2" startText="{!TU.TAG092}" style="font-Size:13px"/>
+                            <apex:pageblockSection id="tab2section1" columns="1"> <!-- title="{!TU.TAG025}" collapsible="false"  -->
+                            <apex:pageBlockSectionItem >
+                                <apex:outputtext value="{!TU.TAG100}" style="font-weight: bold; font-Size:13px"/>
+                            </apex:pageBlockSectionItem>
+                            </apex:pageblockSection>
+                            <apex:pageBlockSection title="" collapsible="false"/>
+                            <apex:pageblockSection >
+                        		<apex:pageBlockSectionItem >
+								    <apex:dataTable id="table1" value="{!HdrExpressions.lstExpressions}" var="item" cellPadding="4">
+                                        <apex:column rendered="{!HdrExpressions.DisplaySequence}">
+                                            <apex:outputtext value="{!item.Sequence}"/>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG152}</apex:facet>
+                                            <apex:selectList value="{!item.FieldName}" Disabled="{!disableValue}" size="1" multiselect="false"><!-- onchange="HdrEntryCriFieldSelect()" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!item.Sequence}" size="1" multiselect="false" -->
+                                                <apex:selectOptions value="{!HdrExpressions.FieldsList}"/>
+                                            </apex:selectList>
+                                            <!--<apex:actionfunction action="{!OnHdrEntryCriFieldSelect}" name="HdrEntryCriFieldSelect" reRender="formEditInvertryProcesses" status="status2"/>-->
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG153}</apex:facet>
+                                            <apex:selectList value="{!item.Operator}" Disabled="{!if(disableValue || NOT(HdrExpressions.AllowSelectOperater),true,false)}" size="1" multiselect="false">
+                                                <apex:selectOptions value="{!HdrExpressions.OperatorSelectList}"/>
+                                            </apex:selectList>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG154}</apex:facet>
+                                            <apex:inputText value="{!item.Operand}" Disabled="{!if(disableValue, true, false)}"/><!-- Disabled="{!if(item.FieldType == 'DATETIME' || item.FieldType == 'DATE' || item.FieldType == 'REFERENCE' || disableValue,true,false)}" rendered="{!if(item.FieldType != 'PICKLIST' && item.FieldType != 'BOOLEAN', true, false)}"  -->
+                                            <!-- <apex:selectList value="{!item.Operand}" size="1" multiselect="false" Disabled="{!disableValue}" rendered="{!if(item.FieldType == 'PICKLIST' ||  item.FieldType == 'BOOLEAN',true,false)}">
+                                                <apex:selectOptions value="{!item.Values}"/>
+                                            </apex:selectList>-->
+                                        </apex:column>
+                                        <!--<apex:column >
+                                            <apex:outputLink value="javascript:void(0);" Disabled="{!disableValue}" rendered="{!if(item.FieldType == 'REFERENCE',true,false)}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!item.Sequence};HdrFind();" Disabled="{!disableValue}">
+                                                <img src="/img/arrow2_picklist_left.gif"  />
+                                            </apex:outputLink>
+											 <apex:outputLink value="javascript:void(0);" Disabled="{!disableValue}" rendered="{!if(item.FieldType == 'DATETIME' || item.FieldType == 'DATE' ,true,false)}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!item.Sequence};HdrFindDate();" Disabled="{!disableValue}">
+                                                <img src="/img/arrow2_picklist_left.gif"  />
+                                            </apex:outputLink> 
+                                            <apex:actionfunction name="HdrFind" action="{!HdrFind}" reRender="formEditInvertryProcesses" status="status2"/>
+                                             <apex:actionfunction name="HdrFindDate" action="{!HdrFindDate}" reRender="formEditInvertryProcesses" status="status2"/> -
+                                        </apex:column> -->
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG063}" action="{!HdrDeleteRow}" Disabled="{!disableValue}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!item.Sequence}" id="hdrdeleterow" status="status2" reRender="formEditInvertryProcesses"/>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" action="{!HdrADDRow}" Disabled="{!disableValue}" rendered="{!if(item.Sequence == HdrExpressions.Size && item.Sequence < 9 , true, false)}" id="hdraddrow" reRender="formEditInvertryProcesses" status="status2"/>
+                                        </apex:column>
+                                    </apex:dataTable>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem />
+                                <apex:pageBlockSectionItem >
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" Disabled="{!disableValue}" action="{!HdrADDRow}" rendered="{!if(0 == HdrExpressions.Size, true, false)}" id="hdraddrow" reRender="formEditInvertryProcesses" status="status2"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem />
+                                </apex:pageblockSection>
+                                <apex:pageblockSection columns="1" rendered="{!HdrExpressions.HasAdvanceOption}">
+                                     <apex:outputText value="{!TU.TAG064}"  style="font-Size:13px"/> <!--  (commented by amar 11/12/09) style="font-weight: bold;font-Size:11px;float:right;" -->
+                                     <apex:inputText id="HdrAdvOption" Disabled="{!disableValue}"  value="{!HdrExpressions.AdvanceOption}" size="80"/>
+                                </apex:pageblockSection>
+                                <!--   <apex:pageblockSection columns="1" rendered="{!HdrExpressions.HasAdvanceOption}"/>-->
+                                    <apex:pageblockSection columns="1" >   <!-- rendered="{!HdrExpressions.HasErrorMessage}" -->
+                                    <apex:outputText value="{!TU.TAG026}" style="font-Size:13px"/> 
+                                    <apex:inputText id="HdrErrorMsg" Disabled="{!disableValue}"  value="{!objSVMXPro.Parent_Error_Msg}" size="80"/> 
+                            </apex:pageBlockSection>
+                        </apex:pageblock>
+                        <!--------------------------Page block Section 2(Line Criteria Page)---------------------> 
+                        <apex:pageBlock id="tab2pblock2" rendered="{!objSVMXPro.Is_Multiline_Transaction}">
+                            <apex:actionStatus id="status2" startText="{!TU.TAG092}" style="font-Size:13px"/>
+                            <apex:pageblockSection id="tab2section2" columns="1" > <!-- title="{!TU.TAG027}" collapsible="false" -->
+                               <apex:outputtext value="{!TU.TAG101}" style="font-weight: bold; font-Size:13px"/>
+                            </apex:pageblockSection>
+                            <apex:pageBlockSection title="" collapsible="false"/>
+                           <apex:pageblockSection >
+                        		<apex:pageBlockSectionItem >
+								    <apex:dataTable id="table1" value="{!LineExpressions.lstExpressions}" var="Lineitem" cellPadding="4">
+                                        <apex:column rendered="{!LineExpressions.DisplaySequence}">
+                                            <apex:outputtext value="{!Lineitem.Sequence}"/>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG152}</apex:facet>
+                                            <apex:selectList value="{!Lineitem.FieldName}" Disabled="{!disableValue}" size="1" multiselect="false"><!--  onchange="LineEntryCriFieldSelect()" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!Lineitem.Sequence}" size="1" multiselect="false" -->
+                                                <apex:selectOptions value="{!LineExpressions.FieldsList}"/>
+                                            </apex:selectList>
+                                            <!-- <apex:actionfunction action="{!OnLineEntryCriFieldSelect}" name="LineEntryCriFieldSelect" reRender="formEditInvertryProcesses" status="status2"/> -->
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG153}</apex:facet>
+                                            <apex:selectList value="{!Lineitem.Operator}" Disabled="{!if(disableValue || NOT(LineExpressions.AllowSelectOperater),true,false)}" size="1" multiselect="false">
+                                                <apex:selectOptions value="{!LineExpressions.OperatorSelectList}"/>
+                                            </apex:selectList>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG154}</apex:facet>
+                                            <apex:inputText value="{!Lineitem.Operand}" Disabled="{!if(disableValue,true,false)}"/><!-- Disabled="{!if(Lineitem.FieldType == 'DATETIME' || Lineitem.FieldType == 'DATE' || Lineitem.FieldType == 'REFERENCE' || disableValue,true,false)}" rendered="{!if(Lineitem.FieldType != 'PICKLIST' && Lineitem.FieldType != 'BOOLEAN', true, false)}" /> -->
+                                            <!-- <apex:selectList value="{!Lineitem.Operand}" size="1" multiselect="false" rendered="{!if(Lineitem.FieldType == 'PICKLIST' ||  Lineitem.FieldType == 'BOOLEAN',true,false)}" Disabled="{!disableValue}">
+                                                <apex:selectOptions value="{!Lineitem.Values}"/>
+                                            </apex:selectList>  -->
+                                        </apex:column>
+                                         <!--  <apex:column >
+                                            <apex:outputLink value="javascript:void(0);" Disabled="{!disableValue}" rendered="{!if(Lineitem.FieldType == 'REFERENCE',true,false)}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!Lineitem.Sequence};Linefind();" Disabled="{!disableValue}">
+                                                <img src="/img/arrow2_picklist_left.gif"  />
+                                            </apex:outputLink>
+                                          <apex:outputLink value="javascript:void(0);" Disabled="{!disableValue}" rendered="{!if(Lineitem.FieldType == 'DATETIME' || Lineitem.FieldType == 'DATE' ,true,false)}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!Lineitem.Sequence};LinefindDate();" Disabled="{!disableValue}">
+                                                <img src="/img/arrow2_picklist_left.gif"  />
+                                            </apex:outputLink>
+                                            <apex:actionfunction name="Linefind" action="{!Linefind}" reRender="formEditInvertryProcesses" status="status2"/>
+                                            <apex:actionfunction name="LinefindDate" action="{!LinefindDate}" reRender="formEditInvertryProcesses" status="status2"/> 
+                                        </apex:column>-->
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG063}" action="{!LineDeleteRow}" Disabled="{!disableValue}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!Lineitem.Sequence}" id="Linedeleterow" status="status2" reRender="formEditInvertryProcesses"/>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" action="{!LineADDRow}" Disabled="{!disableValue}" rendered="{!if(Lineitem.Sequence == LineExpressions.Size && Lineitem.Sequence < 9 , true, false)}" id="Lineaddrow" reRender="formEditInvertryProcesses" status="status2"/>
+                                        </apex:column>
+                                    </apex:dataTable>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem />
+                                <apex:pageBlockSectionItem >
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" Disabled="{!disableValue}" action="{!LineADDRow}" rendered="{!if(0 == LineExpressions.Size, true, false)}" id="Lineaddrow" reRender="formEditInvertryProcesses" status="status2"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem />
+                                </apex:pageblockSection>
+                                <apex:pageblockSection columns="1" rendered="{!LineExpressions.HasAdvanceOption}">
+                               <!--  <apex:pageBlockSectionItem rendered="{!LineExpressions.HasAdvanceOption}">  -->
+                                    <apex:outputText value="{!TU.TAG064}"  style="font-Size:13px"/> <!-- (Commented by amar on 11/12/09) style="font-weight: bold;" style="font-Size:11px;"-->
+                                    <apex:inputText id="LineAdvOption" Disabled="{!disableValue}"  value="{!LineExpressions.AdvanceOption}" size="80"/>
+                                </apex:pageblockSection>
+                                <apex:pageblockSection rendered="{!LineExpressions.HasAdvanceOption}"/>
+                              <!--   </apex:pageBlockSectionItem>  -->
+                             <!--    <apex:pageBlockSectionItem rendered="{!LineExpressions.HasAdvanceOption}"/> -->
+                            <!--     <apex:pageBlockSectionItem rendered="{!LineExpressions.HasErrorMessage}" > -->
+                         	  <apex:pageblockSection columns="1" > <!-- rendered="{!LineExpressions.HasErrorMessage}" -->
+                                    <apex:outputText value="{!TU.TAG157}" style="font-Size:13px" /> 
+                                    <apex:inputText id="LineErrorMsg" Disabled="{!disableValue}"  value="{!objSVMXPro.Child_Error_Msg}" size="80"/>
+                          </apex:pageBlockSection>
+                          </apex:pageblock>
+                          <apex:pageblock > 
+                        	<apex:pageblockSection columns="2">
+                        		<apex:commandButton value="{!TU.TAG031}" action="{!SVMX_ProcessInformation}" id="SVMX_ProcessInformationB" reRender="formEditInvertryProcesses" status="status" style="float: left;"/>
+                        		<apex:commandButton value="{!TU.TAG034}" action="{!SVMX_UserInputs}" id="SVMX_UserInputsF" reRender="formEditInvertryProcesses" status="status" style="float: right;"/>
+                        	</apex:pageBlockSection>
+                        </apex:pageblock>
+                    
+                    </apex:tab>
+<!-- End of TAB2 (Entry Criteria)-------------------------------------------------------------------------->
+<!-- TAB3 (User Inputs)--------------------------------------------------------------------------------->
+                <apex:tab label="{!TU.TAG014}" name="{!TU.TAG014}" id="tabDataEntryValidations">
+                        <apex:pageBlock id="tab3pb1" >
+                          <apex:actionStatus id="status3" startText="{!TU.TAG092}" style="font-Size:13px"/>
+                            <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TU.TAG098}" style="font-weight: bold; font-Size:13px"/>
+                              </apex:pageBlockSection>
+                              <apex:pageBlockSection title="" collapsible="false"/>
+                              <apex:pageBlockSection >
+                                  	<apex:Outputtext value="{!TU.TAG041}" style="font-Size:13px"/>  
+                                  	<apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                 	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="true"/>
+	                                    <apex:selectList value="{!objSVMXPro.Product_Field_API_Name}"  Disabled="{!disableValue}"  size="1" multiselect="false" >
+	                                        <apex:selectOptions value="{!ProReffldlist}"/>
+	                                    </apex:selectList>
+                                    </apex:outputPanel>
+                                    <apex:Outputtext value="{!TU.TAG075}" style="font-Size:13px"/>
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                    <apex:outputPanel layout="block" styleClass="requiredBlock" rendered="true"/>
+                                    	<apex:selectList value="{!objSVMXPro.Related_Product_Field}"  Disabled="{!disableValue}"  size="1" multiselect="false">
+                                        	<apex:selectOptions value="{!lstProduct2Fields}"/>
+                                    	</apex:selectList>
+                                    </apex:outputPanel>
+                                    <apex:Outputtext value="{!TU.TAG042}" style="font-Size:13px"/>
+                                   <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                    <apex:outputPanel layout="block" styleClass="requiredBlock" rendered="true"/>
+	                                    <apex:selectList value="{!objSVMXPro.Original_Qty_API_Name}" Disabled="{!disableValue}"  size="1" multiselect="false" >
+	                                        <apex:selectOptions value="{!Qtyfldlist}"/>
+	                                    </apex:selectList>
+                                    </apex:outputPanel>
+                              </apex:pageBlockSection>
+                              <apex:pageBlockSection title="" collapsible="false"/>
+                              <apex:pageBlockSection >
+                                  <apex:outputText value="{!TU.TAG043}" style="font-Size:13px"/>      
+                                  <apex:selectList value="{!objSVMXPro.Is_User_Enter_Qty}" Disabled="{!disableValue}" multiselect="false" size="1" onchange="QtyUpdate();" >
+                                       <apex:selectOptions value="{!BooleanOptions}" />
+                                       <apex:actionFunction action="{!QtyUpdate}" name="QtyUpdate" reRender="formEditInvertryProcesses" status="status3"/>
+                                  </apex:selectList>                    
+                              </apex:pageBlockSection>
+                               <apex:pageBlockSection >
+                                    <apex:Outputtext value="{!TU.TAG078}" style="font-Size:13px"/>
+                                     <apex:outputPanel layout="block" styleClass="requiredInput">   
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!objSVMXPro.Is_User_Enter_Qty}"/>
+                                    <apex:selectList value="{!objSVMXPro.Actual_Qty_API_Name}" Disabled="{!NOT(objSVMXPro.Is_User_Enter_Qty) || disableValue}" size="1" multiselect="false">
+                                         <apex:selectOptions value="{!Qtyfldlist}"/>
+                                    </apex:selectList>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSection>
+                             <apex:pageBlockSection >
+                              <apex:outputText value="{!TU.TAG047}" style="font-Size:13px"/>            
+                               <apex:selectList value="{!objSVMXPro.Allow_Excess_Quantity}" Disabled="{!NOT(objSVMXPro.Is_User_Enter_Qty) || disableValue}" multiselect="false" size="1" >
+                                       <apex:selectOptions value="{!BooleanOptions}" />    
+                              </apex:selectList>
+                              </apex:pageBlockSection>
+                              <apex:pageBlockSection >
+                               <apex:outputText value="{!TU.TAG048}" style="font-Size:13px"/>  
+                               <apex:selectList value="{!objSVMXPro.Allow_Partial_Quantity}" Disabled="{!NOT(objSVMXPro.Is_User_Enter_Qty) || disableValue}" multiselect="false" size="1" >
+                                       <apex:selectOptions value="{!BooleanOptions}" />                            
+                                    </apex:selectList>                        
+                              </apex:pageBlockSection>
+                              <apex:pageBlockSection >
+                                
+                                    <apex:outputText value="{!TU.TAG046}" style="font-Size:13px"/> 
+                                    <apex:selectList value="{!objSVMXPro.Allow_Partial_Closure}" Disabled="{!NOT(objSVMXPro.Is_User_Enter_Qty) || disableValue}" multiselect="false" size="1" >
+                                       <apex:selectOptions value="{!BooleanOptions}" />                           
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection title="" rendered="{!isInventoryEnabled}" collapsible="false"/>
+                               <apex:pageBlockSection rendered="{!isInventoryEnabled}">
+                                     <apex:outputText value="{!TU.TAG058}" style="font-Size:13px"/>                          
+                                    <apex:selectList value="{!objSVMXPro.Enable_Serial_Selection}" Disabled="{!disableValue}" multiselect="false" size="1" onchange="EnableBarcode()">
+                                       <apex:selectOptions value="{!BooleanOptions}" />     
+                                      <apex:actionFunction name="EnableBarcode" action="{!EnableBarcode}" reRender="formEditInvertryProcesses" status="status3"/>  
+                                       </apex:selectList>                                     
+                               </apex:pageBlockSection>
+                              <!-- <apex:pageBlockSection rendered="{!isInventoryEnabled}">
+                                    <apex:outputText value="{!TU.TAG096}" style="font-Size:13px"/>                          
+                                    <apex:selectList value="{!objSVMXPro.Enable_Bar_Code_Entry}" multiselect="false" size="1" Disabled="{!NOT(objSVMXPro.Enable_Serial_Selection) || disableValue}">
+                                        <apex:selectOptions value="{!BooleanOptions}" />      
+                                    </apex:selectList>                         
+                             </apex:pageBlockSection> --> 
+                             <apex:pageBlockSection rendered="{!isInventoryEnabled}">
+                                    <apex:outputText value="{!TU.TAG095}" style="font-Size:13px"/>
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">   
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!objSVMXPro.Enable_Serial_Selection}"/>
+                                	<apex:selectList value="{!objSVMXPro.Enforce_Uniqueness_In_Serial_Selection}" Disabled="{!NOT(objSVMXPro.Enable_Serial_Selection) || disableValue}" multiselect="false" size="1">
+                                	<apex:selectOptions value="{!ListofUniqunes}"/>
+                                	</apex:selectList>
+                                	</apex:outputPanel>
+                             </apex:pageBlockSection>
+                             <apex:pageBlockSection title="" collapsible="false"/>
+                        	 <apex:pageblockSection columns="2">
+                        		<apex:commandButton value="{!TU.TAG033}" action="{!SVMX_EntryCriteria}" id="SVMX_EntryCriteriaB" reRender="formEditInvertryProcesses" status="status"/>
+                        		<apex:commandButton value="{!TU.TAG038}" action="{!SVMX_StockUpdates}" id="SVMX_StockUpdatesF" reRender="formEditInvertryProcesses" status="status" style="float: right;"/>
+                        	 </apex:pageblockSection>	
+                    </apex:pageBlock>
+                    </apex:tab>
+<!-- End of TAB3 (User Inputs)-------------------------------------------------------------------------->
+<!-- TAB4 (Stock Updates)--------------------------------------------------------------------------------->
+                <apex:tab label="{!TU.TAG016}" name="{!TU.TAG016}" id="tabInventoryActions" Disabled="{!NOT(isInventoryEnabled)}">
+                        <apex:actionStatus id="status4" startText="{!TU.TAG092}" style="font-Size:13px"/>
+                        <apex:actionFunction action="{!LocSource}" name="LocSource" reRender="SecEditInvertryProcesse" status="status4"/>
+						<apex:actionFunction action="{!SVMX_OnNoofLocationSelect}" name="OnNoofLocationSelect" reRender="SecEditInvertryProcesse" status="status4"/>
+                        <apex:pageBlock >
+                           <apex:pageBlockSection columns="1">
+                               <apex:outputtext value="{!TU.TAG099}" style="font-weight: bold; font-Size:13px"/>
+                           </apex:pageBlockSection>
+                           <apex:pageBlockSection title="" collapsible="false"/>
+                           <apex:pageBlockSection >
+                              <apex:outputText value="{!TU.TAG050}" style="font-Size:13px"/>
+                                 <apex:outputPanel layout="block" styleClass="requiredInput">   
+                                 <apex:selectList value="{!objSVMXPro.Number_of_locations}" Disabled="{!disableValue}" multiselect="false" size="1" OnChange="OnNoofLocationSelect();">
+                                    <apex:selectOptions value="{!LocationtoConsider}"/>
+                                 </apex:selectList>
+                                 </apex:outputPanel>
+                              <apex:outputText value="{!TU.TAG103}" style="font-Size:13px"/>
+                                 <apex:selectList value="{!objSVMXPro.Is_Source_Location_From_Header}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || disableValue, True, false)}" multiselect="false" size="1" OnChange="LocSource()">
+                                    <apex:selectOptions value="{!BooleanOptions}"/>
+                                 </apex:selectList>
+                        </apex:pageBlockSection> 
+                        <apex:pageBlockSection >
+                              <apex:Outputtext value="{!TU.TAG051}" style="font-Size:13px"/>
+                                 <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!If(objSVMXPro.Number_of_locations == '', false, True)}"/>
+                                 <apex:selectList value="{!objSVMXPro.Source_Location_API_Name}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || disableValue, True, false)}" size="1" multiselect="false">
+                                    <apex:selectOptions value="{!fldSourceLoc}"/>
+                               </apex:selectList>
+                               </apex:outputPanel>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection >
+                              <apex:Outputtext value="{!TU.TAG052}" style="font-Size:13px"/>
+                                 <apex:outputPanel layout="block" styleClass="requiredInput">   
+                               		<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!If(objSVMXPro.Number_of_locations == '', false, True)}"/>
+                                 <apex:selectList value="{!objSVMXPro.Source_Status}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || disableValue, True, false)}"size="1" multiselect="false">
+                                    <apex:selectOptions value="{!lstStatus}"/>
+                                 </apex:selectList>
+                                 </apex:outputPanel>
+                         </apex:pageBlockSection>
+                         <apex:pageBlockSection >
+                              <apex:Outputtext value="{!TU.TAG053}" style="font-Size:13px"/>
+                                 <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!If(objSVMXPro.Number_of_locations == '', false, True)}"/>
+                                 <apex:selectList value="{!objSVMXPro.Source_Action}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || disableValue, True, false)}" size="1" multiselect="false">
+                                   <apex:selectOptions value="{!lstActionOnQty}"/>
+                                 </apex:selectList>
+                                 </apex:outputPanel>
+                         </apex:pageBlockSection>
+                         <apex:pageBlockSection title="" collapsible="false"/>
+                         <apex:pageBlockSection >
+                         <apex:outputText value="{!TU.TAG104}" style="font-Size:13px"/>
+                                 <apex:selectList value="{!objSVMXPro.Is_Target_Location_From_Header}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || objSVMXPro.Number_of_locations == 'One' || disableValue, True, false)}" multiselect="false" size="1" OnChange="LocSource()">
+                                    <apex:selectOptions value="{!BooleanOptions}"/>
+                                 </apex:selectList>
+                              <apex:Outputtext value="{!TU.TAG054}" style="font-Size:13px"/>
+                                 <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!If(objSVMXPro.Number_of_locations == '' || objSVMXPro.Number_of_locations == 'One', false, True)}"/>
+                                 <apex:selectList value="{!objSVMXPro.Target_Location_API_Name}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || objSVMXPro.Number_of_locations == 'One' || disableValue, True, false)}" size="1" multiselect="false">
+                                   <apex:selectOptions value="{!fldTargetLoc}"/>
+                                 </apex:selectList>
+                                 </apex:outputPanel>
+                         </apex:pageBlockSection>
+                         <apex:pageBlockSection >
+                              <apex:Outputtext value="{!TU.TAG055}" style="font-Size:13px"/>
+                                 <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!If(objSVMXPro.Number_of_locations == '' || objSVMXPro.Number_of_locations == 'One', false, True)}"/>
+                                 <apex:selectList value="{!objSVMXPro.Target_Status}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || objSVMXPro.Number_of_locations == 'One' || disableValue, True, false)}" size="1" multiselect="false">
+                                   <apex:selectOptions value="{!lstStatus}"/>
+                               </apex:selectList>
+                               </apex:outputPanel>
+                          </apex:pageBlockSection>
+                          <apex:pageBlockSection >
+                              <apex:Outputtext value="{!TU.TAG056}" style="font-Size:13px"/>
+                                 <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!If(objSVMXPro.Number_of_locations == '' || objSVMXPro.Number_of_locations == 'One', false, True)}"/>
+                                 <apex:selectList value="{!objSVMXPro.Target_Action}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || objSVMXPro.Number_of_locations == 'One' || disableValue, True, false)}" size="1" multiselect="false">
+                                   <apex:selectOptions value="{!lstActionOnQty}"/>
+                                </apex:selectList>
+                                </apex:outputPanel>
+                          </apex:pageBlockSection>
+                          <apex:pageBlockSection title="" collapsible="false"/>
+                          <apex:pageBlockSection >
+                          <apex:Outputtext value="{!TU.TAG102}" style="font-Size:13px"/>
+                             <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<!-- <apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!If(objSVMXPro.Number_of_locations == '', false, True)}"/> -->
+                            	<apex:selectList value="{!SelStockbleLocation}" Disabled="{!If(objSVMXPro.Number_of_locations == '', True, false) || disableValue}" size="1" multiselect="false">
+                            <apex:selectOptions value="{!LstStockbleLocation}"/>
+                            </apex:selectList>
+                            </apex:outputPanel>
+                          </apex:pageBlockSection>
+                          <apex:pageBlockSection title="" collapsible="false"/>
+                          <apex:PageBlockSection >
+                              <apex:outputText value="{!TU.TAG112}" style="font-Size:13px"/>
+                              <apex:inputtext value="{!objSVMXPro.Email_For_Negative_Stock_Alert}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || disableValue, True, false)}" />
+                               <apex:outputText value="{!TU.TAG113}" style="font-Size:13px"/>
+                                  <apex:selectList value="{!objSVMXPro.Is_Email_Sent_To_Location_Owner}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || disableValue, True, false)}" multiselect="false" size="1">
+                                      <apex:selectOptions value="{!BooleanOptions}"/>
+                                  </apex:selectList>
+                         </apex:PageBlockSection>
+                        
+                          <apex:pageBlockSection title="" collapsible="false"/>
+                          <apex:pageBlockSection >
+                             <apex:outputText value="{!TU.TAG057}" style="font-Size:13px"/>
+                               <apex:selectList value="{!MaintainHistory}" Disabled="{!If(objSVMXPro.Number_of_locations == '' || disableValue, True, false)}"  size="1" multiselect="false" onchange="OnSelectStockHistory()">
+                                  <apex:selectOptions value="{!BooleanOptions}"/>
+                               </apex:selectList>                          
+                         </apex:pageBlockSection>
+                        <apex:pageBlockSection >
+                             <apex:Outputtext value="{!TU.TAG071}" style="font-Size:13px"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!If(MaintainHistory, True, false)}"/>
+                                <apex:selectList value="{!Levalofhistorytrack}" size="1" Disabled="{!If(NOT(MaintainHistory) || disableValue, true, false)}" multiselect="false">
+                                  <apex:selectOptions value="{!lstLevalofhistorytrack}"/>
+                              </apex:selectList>
+                              </apex:outputPanel>
+                         </apex:pageBlockSection>
+                         <apex:pageBlockSection >
+                              <apex:Outputtext value="{!TAG072}" style="font-Size:13px"/>
+                                 <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!If(MaintainHistory, True, false)}"/>
+                                <apex:selectList value="{!objSVMXPro.Stock_History_Header_API_Name}" Disabled="{!If(NOT(MaintainHistory) || disableValue, true, false)}"  size="1" multiselect="false">
+                                   <apex:selectOptions value="{!lstHdrStockHistoryFields}"/>
+                              </apex:selectList>
+                              </apex:outputPanel>
+                         </apex:pageBlockSection>
+                         <apex:pageBlockSection >
+                             <apex:Outputtext value="{!TAG073}" style="font-Size:13px"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">   
+	                                	<apex:outputPanel layout="block" styleClass="requiredBlock" rendered="{!IF(objSVMXPro.Is_Multiline_Transaction && MaintainHistory, true, false)}"/>
+                                <apex:selectList value="{!objSVMXPro.Stock_History_Line_API_Name}" Disabled="{!IF((objSVMXPro.Is_Multiline_Transaction && NOT(MaintainHistory)) || disableValue, true, false)}" size="1" multiselect="false">
+                                   <apex:selectOptions value="{!lstLineStockHistoryFields}"/>
+                               </apex:selectList>
+                               </apex:outputPanel>
+                         </apex:pageBlockSection>
+                            <apex:actionFunction action="{!OnSelectStockHistory}" name="OnSelectStockHistory" reRender="formEditInvertryProcesses" status="status4"/>
+                        <apex:pageBlockSection title="" collapsible="false"/>
+                        <apex:pageblockSection columns="2">
+                        	<apex:commandButton value="{!TU.TAG035}" action="{!SVMX_UserInputs}" id="SVMX_UserInputsB" reRender="formEditInvertryProcesses" status="status"/>
+                        	<apex:commandButton value="{!TU.TAG110}" action="{!SVMX_RelatedTranscation}" id="SVMX_RelatedTranscationF" reRender="formEditInvertryProcesses" status="status" style="float: right;"/>
+                        </apex:pageblockSection>
+                      </apex:pageBlock>  	
+                    </apex:tab>
+<!-- End of TAB4 (Stock Updates)-------------------------------------------------------------------------->
+<!-- TAB5 (Related Transcation) -------------------------------------------------------------------------->
+					<apex:tab label="{!TU.TAG108}" name="{!TU.TAG108}" id="tabRelatedTrans">
+					 <apex:pageBlock id="tab5pblock5">
+                           <apex:actionStatus id="status5" startText="{!TU.TAG092}" style="font-Size:13px"/>
+                           <apex:pageBlockSection id="tab5section5"  columns="1" collapsible="false">
+                              <apex:outputtext value="{!TU.TAG109}" style="font-weight: bold; font-Size:13px"/>
+                           </apex:pageblockSection>
+                           <apex:pageblockSection title="" collapsible="false"/>
+                           <apex:pageblocksection >
+                               <apex:pageBlockSectionItem >
+                                    <apex:dataTable id="table1" value="{!RelatedCloserExpressions.lstExpressions}" var="item" cellPadding="4">
+                                        <apex:column rendered="{!RelatedCloserExpressions.DisplaySequence}">
+                                            <apex:outputtext value="{!item.Sequence}"/>
+                                        </apex:column>
+                                        <apex:column >
+	                                        <apex:facet name="header">{!TU.TAG105}</apex:facet>
+	                                        <apex:selectList value="{!item.ObjectNameParentLookUpField}" Disabled="{!disableValue}" size="1" multiselect="false" onchange="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!item.Sequence};RetriveRefFld();">
+			                                	<apex:selectoptions value="{!ReferenceField}" /> 
+			                               	</apex:selectList>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG106}</apex:facet>
+                                            <apex:selectList value="{!item.FieldName}" size="1" Disabled="{!disableValue}"  multiselect="false">
+                                                <apex:selectOptions value="{!item.FieldsList}"/>
+                                            </apex:selectList>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG107}</apex:facet>
+                                            <apex:selectList value="{!item.Operator}" Disabled="{!if(disableValue || NOT(RelatedCloserExpressions.AllowSelectOperater),true,false)}" size="1" multiselect="false">
+                                                <apex:selectOptions value="{!item.OperatorSelectList}"/>
+                                            </apex:selectList>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG063}" Disabled="{!disableValue}" action="{!RelatedCloserDeleteRow}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!item.Sequence};" id="hdrdeleterow" status="status5" reRender="formEditInvertryProcesses"/>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" Disabled="{!disableValue}" action="{!RelatedCloserADDRow}" rendered="{!if(item.Sequence == RelatedCloserExpressions.Size && item.Sequence < 9 , true, false)}" id="hdraddrow" reRender="formEditInvertryProcesses" status="status5"/>
+                                        </apex:column>
+                                    </apex:dataTable>
+									<apex:actionFunction action="{!RetriveRefFld}" name="RetriveRefFld" reRender="formEditInvertryProcesses" status="status5"/>
+			                    </apex:pageBlockSectionItem>
+			                    
+                                <apex:pageBlockSectionItem />
+                                <apex:pageBlockSectionItem >
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" Disabled="{!disableValue}" action="{!RelatedCloserADDRow}" rendered="{!if(0 == RelatedCloserExpressions.Size, true, false)}" id="hdraddrow" reRender="formEditInvertryProcesses" status="status5"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem />
+                                <apex:pageBlockSectionItem rendered="{!RelatedCloserExpressions.HasAdvanceOption}">
+                                    <apex:outputText value="{!TU.TAG064}"  style="font-weight: bold;" style="font-Size:11px"/>
+                                    <apex:inputText id="HdrAdvOption" Disabled="{!disableValue}"  value="{!RelatedCloserExpressions.AdvanceOption}" size="80"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem rendered="{!RelatedCloserExpressions.HasAdvanceOption}"/>
+                                <apex:pageBlockSectionItem rendered="{!RelatedCloserExpressions.HasErrorMessage}" >
+                                    <apex:outputText value="{!TU.TAG026}"  style="font-weight: bold;" style="font-Size:11px"/>
+                                    <apex:inputText id="HdrErrorMsg" Disabled="{!disableValue}"  value="{!RelatedCloserExpressions.ErrorMessage}" size="80"/>
+                                </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection title="" collapsible="false"/>
+                        <apex:pageblockSection columns="2">
+							<apex:commandButton value="{!TU.TAG039}" action="{!SVMX_StockUpdates}" id="SVMX_StockUpdatesB" reRender="formEditInvertryProcesses" status="status"/>
+	                    	<apex:commandButton value="{!TU.TAG036}" action="{!SVMX_ClosureActions}" id="SVMX_ClosureActionsF" reRender="formEditInvertryProcesses" status="status" style="float: right;"/>
+						</apex:pageblockSection>					
+					</apex:pageblock>
+				</apex:tab>
+
+
+
+<!-- End of TAB5(Related Transcation) -------------------------------------------------------------------->
+<!-- TAB6 (Closure Actions)--------------------------------------------------------------------------------->
+                    <apex:tab label="{!TU.TAG015}" name="{!TU.TAG015}" id="tabClosureInfo">
+                        <apex:pageBlock id="tab5pblock1" >
+                            <apex:actionStatus id="status5" startText="{!TU.TAG092}" style="font-Size:13px"/>
+                            <apex:pageblockSection columns="1">
+                              <apex:outputtext value="{!TU.TAG025}" style="font-weight: bold; font-Size:13px"/>
+                            </apex:pageblockSection>
+                            <apex:pageBlockSection title="" collapsible="false"/>
+                            <apex:pageblockSection >
+                        		<apex:pageBlockSectionItem >
+								    <apex:dataTable id="table1" value="{!HdrCloserExpressions.lstExpressions}" var="HdrCloseritem" cellPadding="4">
+                                        <apex:column rendered="{!HdrCloserExpressions.DisplaySequence}">
+                                            <apex:outputtext value="{!HdrCloseritem.Sequence}"/>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG152}</apex:facet>
+                                            <apex:selectList value="{!HdrCloseritem.FieldName}" Disabled="{!disableValue}" size="1" multiselect="false"> <!-- onchange="HdrCloserEntryCriFieldSelect()" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!HdrCloseritem.Sequence}" size="1" multiselect="false"> -->
+                                                <apex:selectOptions value="{!HdrCloserExpressions.FieldsList}"/>
+                                            </apex:selectList>
+                                            <!-- <apex:actionfunction action="{!OnHdrCloserEntryCriFieldSelect}" name="HdrCloserEntryCriFieldSelect" reRender="formEditInvertryProcesses" status="status5"/> -->
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG153}</apex:facet>
+                                            <apex:selectList value="{!HdrCloseritem.Operator}" Disabled="{!if(disableValue || NOT(HdrCloserExpressions.AllowSelectOperater),true,false)}" size="1" multiselect="false" style="">
+                                                <apex:selectOptions value="{!HdrCloserExpressions.OperatorSelectList}"/>
+                                            </apex:selectList>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG154}</apex:facet>
+                                            <apex:inputText value="{!HdrCloseritem.Operand}" Disabled="{!if(disableValue,true,false)}" /><!-- Disabled="{!if(HdrCloseritem.FieldType == 'DATETIME' || HdrCloseritem.FieldType == 'DATE' || HdrCloseritem.FieldType == 'REFERENCE' || disableValue,true,false)}" rendered="{!if(HdrCloseritem.FieldType != 'PICKLIST' && HdrCloseritem.FieldType != 'BOOLEAN', true, false)}"  -->
+                                            <!-- <apex:selectList value="{!HdrCloseritem.Operand}" size="1" multiselect="false" Disabled="{!disableValue}"  rendered="{!if(HdrCloseritem.FieldType == 'PICKLIST' ||  HdrCloseritem.FieldType == 'BOOLEAN',true,false)}">
+                                                <apex:selectOptions value="{!HdrCloseritem.Values}"/>
+                                            </apex:selectList> -->
+                                        </apex:column>
+                                      	<!--<apex:column >
+                                            <apex:outputLink value="javascript:void(0);" Disabled="{!disableValue}" rendered="{!if(HdrCloseritem.FieldType == 'REFERENCE',true,false)}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!HdrCloseritem.Sequence};HdrCloserfind();" >
+                                                <img src="/img/arrow2_picklist_left.gif"  />
+                                            </apex:outputLink>
+	                                        <apex:outputLink value="javascript:void(0);" Disabled="{!disableValue}" rendered="{!if(HdrCloseritem.FieldType == 'DATETIME' || HdrCloseritem.FieldType == 'DATE' ,true,false)}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!HdrCloseritem.Sequence};HdrCloserfindDate();" >
+                                                <img src="/img/arrow2_picklist_left.gif"  />
+                                            </apex:outputLink>
+                                            <apex:actionfunction name="HdrCloserfind" action="{!HdrCloserfind}" reRender="formEditInvertryProcesses" status="status5"/>
+                                            <apex:actionfunction name="HdrCloserfindDate" action="{!HdrCloserfindDate}" reRender="formEditInvertryProcesses" status="status5"/>
+                                        </apex:column> -->
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG063}" action="{!HdrCloserDeleteRow}" Disabled="{!disableValue}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!HdrCloseritem.Sequence}" id="HdrCloserdeleterow" status="status5" reRender="formEditInvertryProcesses"/>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" action="{!HdrCloserADDRow}" Disabled="{!disableValue}" rendered="{!if(HdrCloseritem.Sequence == HdrCloserExpressions.Size && HdrCloseritem.Sequence < 9 , true, false)}" id="HdrCloseraddrow" reRender="formEditInvertryProcesses" status="status5"/>
+                                        </apex:column>
+                                    </apex:dataTable>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem />
+                                <apex:pageBlockSectionItem >
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" Disabled="{!disableValue}" action="{!HdrCloserADDRow}" rendered="{!if(0 == HdrCloserExpressions.Size, true, false)}" id="HdrCloseraddrow" reRender="formEditInvertryProcesses" status="status5"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem />
+                                <apex:pageBlockSectionItem rendered="{!HdrCloserExpressions.HasAdvanceOption}">
+                                    <apex:outputText value="{!TU.TAG064}"  style="font-weight: bold;" style="font-Size:11px;"/>
+                                    <apex:inputText id="HdrCloserAdvOption" Disabled="{!disableValue}"  value="{!HdrCloserExpressions.AdvanceOption}" size="80"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem rendered="{!HdrCloserExpressions.HasAdvanceOption}"/>
+                                <apex:pageBlockSectionItem rendered="{!HdrCloserExpressions.HasErrorMessage}" >
+                                    <apex:outputText value="{!TU.TAG026}"  style="font-weight: bold;" style="font-Size:11px"/>
+                                    <apex:inputText id="HdrCloserErrorMsg" Disabled="{!disableValue}"  value="{!HdrCloserExpressions.ErrorMessage}" size="80"/>
+                                </apex:pageBlockSectionItem>
+                            </apex:pageBlockSection>
+                        </apex:pageblock>
+                        <apex:pageBlock id="tab5pblock2" rendered="{!objSVMXPro.Is_Multiline_Transaction}">
+                            <apex:actionStatus id="status6" startText="{!TU.TAG092}" style="font-Size:13px"/>
+                            <apex:pageblockSection columns="1">
+                               <apex:outputtext value="{!TU.TAG027}" style="font-weight: bold; font-Size:13px"/>
+                            </apex:pageblockSection>
+                            <apex:pageBlockSection title="" collapsible="false"/>
+                            <apex:pageblockSection >
+                        		<apex:pageBlockSectionItem >
+								    <apex:dataTable id="table1" value="{!LineCloserExpressions.lstExpressions}" var="LineCloseritem" cellPadding="4">
+                                        <apex:column rendered="{!LineCloserExpressions.DisplaySequence}">
+                                            <apex:outputtext value="{!LineCloseritem.Sequence}"/>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG152}</apex:facet>
+                                            <apex:selectList value="{!LineCloseritem.FieldName}" Disabled="{!disableValue}" size="1" multiselect="false" > <!-- onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!LineCloseritem.Sequence}"  onchange="LineCloserEntryCriFieldSelect()" -->
+                                                <apex:selectOptions value="{!LineCloserExpressions.FieldsList}"/>
+                                            </apex:selectList>
+                                            <!-- <apex:actionfunction action="{!OnLineCloserEntryCriFieldSelect}" name="LineCloserEntryCriFieldSelect" reRender="formEditInvertryProcesses" status="status6"/> -->
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG153}</apex:facet>
+                                            <apex:selectList value="{!LineCloseritem.Operator}" Disabled="{!if(disableValue || NOT(LineCloserExpressions.AllowSelectOperater),true,false)}" size="1" multiselect="false">
+                                                <apex:selectOptions value="{!LineCloserExpressions.OperatorSelectList}"/>
+                                            </apex:selectList>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:facet name="header">{!TU.TAG154}</apex:facet>
+                                            <apex:inputText value="{!LineCloseritem.Operand}" Disabled="{!if(disableValue,true,false)}" /> <!-- Disabled="{!if(LineCloseritem.FieldType == 'DATETIME' || LineCloseritem.FieldType == 'DATE' || LineCloseritem.FieldType == 'REFERENCE' || disableValue,true,false)}" rendered="{!if(LineCloseritem.FieldType != 'PICKLIST' && LineCloseritem.FieldType != 'BOOLEAN', true, false)}" -->
+                                            <!--<apex:selectList value="{!LineCloseritem.Operand}" size="1" multiselect="false" Disabled="{!disableValue}" rendered="{!if(LineCloseritem.FieldType == 'PICKLIST' ||  LineCloseritem.FieldType == 'BOOLEAN',true,false)}">
+                                                <apex:selectOptions value="{!LineCloseritem.Values}"/>
+                                            </apex:selectList>-->
+                                        </apex:column>
+                                        <!--<apex:column >
+                                            <apex:outputLink value="javascript:void(0);" Disabled="{!disableValue}"  rendered="{!if(LineCloseritem.FieldType == 'REFERENCE',true,false)}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!LineCloseritem.Sequence};LineCloserfind();" Disabled="{!disableValue}">
+                                                <img src="/img/arrow2_picklist_left.gif"  />
+                                            </apex:outputLink>
+	                                        <apex:outputLink value="javascript:void(0);" Disabled="{!disableValue}" rendered="{!if(LineCloseritem.FieldType == 'DATETIME' || LineCloseritem.FieldType == 'DATE' ,true,false)}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!LineCloseritem.Sequence};LineCloserfindDate();" Disabled="{!disableValue}">
+                                                <img src="/img/arrow2_picklist_left.gif"  />
+                                            </apex:outputLink>
+                                            <apex:actionfunction name="LineCloserfind" action="{!LineCloserfind}" reRender="formEditInvertryProcesses" status="status6"/>
+                                            <apex:actionfunction name="LineCloserfindDate" action="{!LineCloserfindDate}" reRender="formEditInvertryProcesses" status="status6"/>
+                                        </apex:column>-->
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG063}" action="{!LineCloserDeleteRow}" Disabled="{!disableValue}" onclick="javascript:document.getElementById('pageEditInventoryProcess:formEditInvertryProcesses:blockEditInvertryProcesses:SelectedIndex').value = {!LineCloseritem.Sequence}" id="LineCloserdeleterow" status="status6" reRender="formEditInvertryProcesses"/>
+                                        </apex:column>
+                                        <apex:column >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" action="{!LineCloserADDRow}" Disabled="{!disableValue}" rendered="{!if(LineCloseritem.Sequence == LineCloserExpressions.Size && LineCloseritem.Sequence < 9 , true, false)}" id="LineCloseraddrow" reRender="formEditInvertryProcesses" status="status6"/>
+                                        </apex:column>
+                                    </apex:dataTable>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem />
+                                <apex:pageBlockSectionItem >
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="{!TU.TAG028}" Disabled="{!disableValue}" action="{!LineCloserADDRow}" rendered="{!if(0 == LineCloserExpressions.Size, true, false)}" id="LineCloseraddrow" reRender="formEditInvertryProcesses" status="status6"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem />
+                                <apex:pageBlockSectionItem rendered="{!LineCloserExpressions.HasAdvanceOption}">
+                                    <apex:outputText value="{!TU.TAG064}"  style="font-weight: bold;" style="font-Size:11px;"/>
+                                    <apex:inputText id="LineCloserAdvOption" Disabled="{!disableValue}"  value="{!LineCloserExpressions.AdvanceOption}" size="80"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem rendered="{!LineCloserExpressions.HasAdvanceOption}"/>
+                                <apex:pageBlockSectionItem rendered="{!LineCloserExpressions.HasErrorMessage}" >
+                                    <apex:outputText value="{!TU.TAG026}"  style="font-weight: bold;" style="font-Size:11px"/>
+                                    <apex:inputText id="LineCloserErrorMsg" Disabled="{!disableValue}"  value="{!LineCloserExpressions.ErrorMessage}" size="80"/>
+                                </apex:pageBlockSectionItem>
+                            </apex:pageBlockSection>
+                        </apex:pageBlock>
+                        <apex:pageBlock >
+                        	<apex:pageblockSection columns="1">
+                				<apex:commandButton value="{!TU.TAG111}" action="{!SVMX_RelatedTranscation}" id="SVMX_RelatedTranscationB" reRender="formEditInvertryProcesses" status="status" style="float: Left;"/>
+                			</apex:pageblockSection>
+                		</apex:pageBlock>
+                	</apex:tab>
+<!-- End of TAB6 (Closure Actions)-------------------------------------------------------------------------->
+            </apex:tabPanel>
+            </apex:pageBlockSection>
+           <apex:outputPanel id="opSearchRecords" styleClass="customPopup" layout="block" rendered="{!isSearch}">
+           		<apex:pageBlock > 
+           			<apex:pageMessages /> 
+                	<apex:actionStatus id="statusSearch" startText="Processing..."/>
+	                    <apex:pageBlocksection >
+	                         <apex:pageBlockSectionItem >
+	                            <apex:outputtext value="Search"/>
+	                            <apex:inputtext value="{!SR.strSearch}" size="60" />
+	                        </apex:pageBlockSectionItem>
+	                        <apex:pageBlockSectionItem >
+	                            <apex:commandButton action="{!Do_Search}" value="Go" reRender="formEditInvertryProcesses" status="statusSearch"/>
+	                            <apex:commandButton action="{!Do_CancelSearch}" value="Cancel" reRender="formEditInvertryProcesses" status="statusSearch"/>
+	                        </apex:pageBlockSectionItem>
+	                    </apex:pageBlocksection>
+	                    <apex:pageBlocksection columns="1"  >
+	                    	<apex:pageBlocksection columns="1" rendered="{!SR.isUserSearch}" >
+	                    			<apex:outputLink value="javascript:void(0);" onclick="selectCurrentUser()" >
+	                                {!TU.TAG155}
+	                                </apex:outputLink>
+	                       	        <apex:outputLink rendered="{!if(SR.ExpressionType != 'CRITERIA', true, false)}" value="javascript:void(0);" onclick="selectRecordOwner()" >
+	                                {!TU.TAG156}
+	                                </apex:outputLink>
+	                    	</apex:pageBlocksection>
+	                    		<apex:pageBlockSectionItem >
+		                            <apex:commandButton action="{!OnselectRecord}" value="Insert Selected" reRender="formEditInvertryProcesses" status="statusSearch"/>
+	                        	</apex:pageBlockSectionItem>
+	                       <apex:datatable value="{!SR.lstSObj}" var="wrp">
+	                            <apex:column width="25%">
+		                            <apex:inputCheckbox value="{!wrp.IsSelected}" /> 
+	                            </apex:column>
+	                            <apex:column >
+	                                <apex:facet name="header" >{!SR.ObjLable}</apex:facet>
+	                                <apex:outputLink value="/{!wrp.RecordID}'" TARGET="_blank">
+	                                {!wrp.RecordName}
+	                                </apex:outputLink>
+	                            </apex:column>
+	                        </apex:datatable>
+	                    </apex:pageBlocksection>
+                    <apex:actionfunction action="{!OnselectCurrentUser}" name="selectCurrentUser" reRender="formEditInvertryProcesses" status="statusSearch"/>
+                    <apex:actionfunction action="{!OnselectRecordOwner}" name="selectRecordOwner" reRender="formEditInvertryProcesses" status="statusSearch"/>
+               	</apex:pageBlock>
+            </apex:outputPanel>
+		    <!-- <apex:outputPanel id="opSelectDate" styleClass="customPopup" layout="block" rendered="{!isDateSearch}"> 
+                <apex:actionStatus id="statusDateSearch" startText="Processing..."/>
+                    <apex:pageBlocksection >
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton action="{!Do_Select}" value="Select" reRender="formEditInvertryProcesses" status="statusDateSearch"/>
+                            <apex:commandButton action="{!Do_CancelSearch}" value="Cancel" reRender="formEditInvertryProcesses" status="statusDateSearch"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlocksection>
+                    <apex:pageBlocksection columns="1" >
+                        <apex:datatable value="{!SR.lstDateOption}" var="wrp">
+                            <apex:column width="25%"></apex:column>
+                            <apex:column >
+                                <apex:facet name="header" ></apex:facet>
+                                <apex:inputCheckbox value="{!wrp.isSelect}" >  
+                                </apex:inputCheckbox>
+              				</apex:column>
+                            <apex:column >
+                                <apex:facet name="header" ></apex:facet>
+                                <apex:outputtext value="{!wrp.dateOperaterLabel}"/>
+                                <apex:actionfunction action="{!OnselectRecord}" name="selectRecord" reRender="formEditInvertryProcesses" status="statusSearch"/>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header" ></apex:facet>
+                                <apex:inputtext value="{!wrp.days}" rendered="{!wrp.isDays}" size="3" />
+                                <apex:inputtext value="{!wrp.sDate}" rendered="{!wrp.isDate}" size="20" />
+                            </apex:column>
+                        </apex:datatable>
+                    </apex:pageBlocksection>
+            </apex:outputPanel> -->
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

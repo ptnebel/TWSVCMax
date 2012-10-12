@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>16.0</apiVersion>
+    <description>Visualforce Page launched from Create Shipment Order button on Case</description>
+    <label>PORD_CreateShipmentFromCase</label>
+</ApexPage>

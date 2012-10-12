@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object is to store details of a page layout ex: Sections, Buttons, Fields etc</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Context_Source_Object__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Context Source Object</label>
+        <picklist>
+            <picklistValues>
+                <fullName>CURRENT_RECORD</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>PARENT_RECORD</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Control_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of control to be used in iPad client to capture data for this field. Applies to numeric fields</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of control to be used in iPad client to capture data for this field. Applies to numeric fields</inlineHelpText>
+        <label>Control Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Standard</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Spin</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Slider</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>DataType__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>DataType</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Detail_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Detail Type</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Detail Type</inlineHelpText>
+        <label>Detail Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Section</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Field</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Button</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Display_Column__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Display Column</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Display Column</inlineHelpText>
+        <label>Display Column</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Display_Row__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Display Row</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Display Row</inlineHelpText>
+        <label>Display Row</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Enable_Chatter__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Based on this flag, chatter icon will be enabled for this lookup field in iPad client</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Based on this flag, chatter icon will be enabled for this lookup field in iPad client</inlineHelpText>
+        <label>Enable Chatter</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Field_API_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Field API Name</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Installation_Key__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Installation key used when seeding default page layout details</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Installation key used when seeding default page layout details</inlineHelpText>
+        <label>Installation Key</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IsStandard__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>IsStandard</description>
+        <externalId>false</externalId>
+        <inlineHelpText>IsStandard</inlineHelpText>
+        <label>Is Standard?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Lookup_Context__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Field Name of Lookup Context</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Field Name of Lookup Context</inlineHelpText>
+        <label>Lookup Context</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lookup_Query_Field__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Lookup Query Field</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup Query Field</inlineHelpText>
+        <label>Lookup Query Field</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Maximum_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Maximum value to be used in slider control on iPad client.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Maximum value to be used in slider control on iPad client.</inlineHelpText>
+        <label>Maximum Value</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Minimum_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Minimum value to be used in slider control on iPad client.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Minimum value to be used in slider control on iPad client.</inlineHelpText>
+        <label>Minimum Value</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Named_Search__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to lookup config definition</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to lookup config definition</inlineHelpText>
+        <label>Lookup Config</label>
+        <referenceTo>ServiceMax_Processes__c</referenceTo>
+        <relationshipLabel>Page Layout Details</relationshipLabel>
+        <relationshipName>Page_Layout_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>No_Of_Columns__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of columns for the section. Applies to header sections only.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of column on page layout detail</inlineHelpText>
+        <label>No Of Columns</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Override_Related_Lookup__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Override Related Lookup</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Override Related Lookup</inlineHelpText>
+        <label>Override Related Lookup</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Page_Layout_Detail_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Text Id for each page layout detail record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Text Id for each page layout detail record.</inlineHelpText>
+        <label>Page Layout Detail Id</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Page_Layout__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Page Layout</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Page Layout</inlineHelpText>
+        <label>Page Layout</label>
+        <referenceTo>Page_Layout__c</referenceTo>
+        <relationshipLabel>Page Layout Details</relationshipLabel>
+        <relationshipName>Page_Layout_Details</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <trackHistory>false</trackHistory>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Readonly__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Readonly</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Readonly</inlineHelpText>
+        <label>Readonly</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Related_Object_Name_Field__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Related Object&apos;s Name Field</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Related Object&apos;s Name Field</inlineHelpText>
+        <label>Related Object Name Field</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Related_Object_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Related Object Name</description>
+        <externalId>false</externalId>
+        <label>Related Object Name</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Required</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Required</inlineHelpText>
+        <label>Required</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Section__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Section</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Section</inlineHelpText>
+        <label>Section</label>
+        <referenceTo>Page_Layout_Detail__c</referenceTo>
+        <relationshipLabel>Section</relationshipLabel>
+        <relationshipName>Page_Layout_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Sequence__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Sequence</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Sequence</inlineHelpText>
+        <label>Sequence</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Title__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Title</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Title</inlineHelpText>
+        <label>Title</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Use_For_SLA_Clock__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if this page layout section must be used for displaying SLA Clock in iPad client. Applies to header sections only.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if this page layout section must be used for displaying SLA Clock in iPad client. Applies to header sections only.</inlineHelpText>
+        <label>Use For SLA Clock</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <label>Page Layout Detail</label>
+    <nameField>
+        <displayFormat>{0000000000}</displayFormat>
+        <label>Record Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Page Layout Details</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

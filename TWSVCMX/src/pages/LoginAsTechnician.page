@@ -1,0 +1,9 @@
+<apex:page standardController="User" extensions="DemoHomePage" action="{!LoginAsTech}" > 
+	<apex:outputPanel >
+		<b><font color="red"><apex:messages /></font></b>
+	</apex:outputPanel> 		
+	<apex:detail ></apex:detail>  
+</apex:page>
+  
+ 
+ <!-- <apex:page ></apex:page>-->

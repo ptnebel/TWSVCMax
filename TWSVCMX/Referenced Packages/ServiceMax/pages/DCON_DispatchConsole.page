@@ -1,0 +1,165 @@
+<apex:page controller="SVMXC.DCON_DispatchConsole"  title=" " standardStylesheets="false">
+     <style type="text/css"> 
+            html, body, table,td { height:100%; }
+            body { margin:0; padding:0; overflow:auto; text-align:center; 
+                   background-color: #869ca7; }   
+            object:focus { outline:none; }
+     </style>
+     
+     <apex:form style="height:100%">
+    
+    <script type="text/javascript">
+    var __sfdcSessionId = '{!JSENCODE(GETSESSIONID())}';
+    var usrTimeFormat = UserContext.timeFormat;
+    </script>
+    
+    <script type="text/javascript">
+        function changeTitle(title) {document.title = title; 
+           }
+    </script>
+    
+    <script src="../../soap/ajax/21.0/connection.js" type="text/javascript"></script>
+    <script type="text/javascript"> var x = screen.height;</script>
+    <script type="text/javascript">
+        function checksession() {
+          //function contains all code to execute after page is rendered
+          var state = {output : document.getElementById("output"), startTime : new Date().getTime()};
+          var callback = {onSuccess: SuccessResult, onFailure: queryFailed, source: state};
+          sforce.connection.query("Select Id from User Limit 1",callback);
+        }
+        function queryFailed(error, source) {
+            alert("{!$Label.DCON001_TAG242}");
+            window.close();
+        }
+        function SuccessResult(queryResult, source){
+        }
+    </script>
+    <center style="height:100%;">
+    <!-- 
+    <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="FlexSalesforce" width="100%" height="100%" codebase="https://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
+    <param name="movie" value="{!$Resource.SVMXC__DCON_Dispatch_Console}" />
+    <param name="quality" value="high" />
+    <param name="play" value="true" />
+    <param name="bgcolor" value="#f3f3ec" />
+    <param name="allowScriptAccess" value="always" />
+    <param name="flashvars" value="sessionId={!$Api.Session_ID}&serverURL={!$Api.Partner_Server_URL_90}&workOrderID={!workorderId}&workOrder={!workorderNo}&mapclientid=gme-servicemaxinc&mapURL=SVMXC__Dcon_DispatchConsole_Map?isdtp=mn" />
+
+
+    
+    <embed src="{!$Resource.SVMXC__DCON_Dispatch_Console}" play="true" bgcolor="#f3f3ec" width="100%" height="580" 
+        name="FlexSalesforce" align="middle" 
+        flashvars="sessionId={!$Api.Session_ID}&serverURL={!$Api.Partner_Server_URL_90}&workOrderID={!workorderId}&workOrder={!workorderNo}&mapclientid=gme-servicemaxinc&mapURL=SVMXC__Dcon_DispatchConsole_Map?isdtp=mn" loop="false" 
+        allowScriptAccess="always" 
+        type="application/x-shockwave-flash" 
+        pluginspage="http://www.adobe.com/go/getflashplayer"></embed>
+
+</object>
+ -->
+    
+        <apex:flash id="DC" src="{!$Resource.SVMXC__DCON_Dispatch_Console}" height="100%" width="100%" flashvars="sessionId={!$Api.Session_ID}&serverURL={!$Api.Partner_Server_URL_90}&workOrderID={!workorderId}&workOrder={!workorderNo}&LTags={!TAG026}&LUISettings={!TAG028}&LFSettings={!TAG029}&LWO={!TAG030}&LTeam={!TAG031}&LTech={!TAG032}&LEvent={!TAG033}&LStatus={!TAG245}&DStatus={!TAG246}&FStatus={!TAG247}&LogText={!TAG252}&CopyClip={!TAG253}&loglevel={!userxml}&mapclientid=gme-servicemaxinc&mapURL=SVMXC__Dcon_DispatchConsole_Map?isdtp=mn&SVMX_UserTimeFormat=usrTimeFormat&eventSubjectLength=80"></apex:flash>
+    
+    </center>
+    <script type="text/javascript">
+        var url;
+        var myWindow;
+        var t;
+        var oldurl = '';
+        
+        function checkParentWindow()
+        {
+            t = setTimeout("checkParentWindow()",120000);
+            checksession();
+            if (window.opener != null && !window.opener.closed)
+            {
+                // Parent exist
+            }
+            else
+            {
+                alert("{!$Label.DCON001_TAG242}");
+                window.close();
+            }
+            
+        }
+        
+        function getTimeFormat()
+        {
+            return usrTimeFormat; 
+        }
+
+        function getStaticResourceURL(name)
+        {
+            var url = "";
+            
+            if(name == "en_US")
+            {
+                url = "{!$Resource.DCON_LANG_Default}";
+            }
+                        
+            return url;
+        }
+        
+        function openPopUp(url)
+        {
+            window.open(url,"_blank","width=800,height=600,0,status=0,scrollbars=1");
+            return false; 
+        }
+        
+        function openMapPopup(url)
+        {
+            myWindow = window.open(url,"_blank","width=800,height=600,resizable=1,status=0,scrollbars=1");
+            checkMyWindow();
+            return false; 
+        }
+          
+        function checkMyWindow()
+        {
+            t = setTimeout("checkMyWindow()",1000);
+            if(myWindow.closed == true)
+            {
+                clearTimeout(t);
+                enableMap();
+            }
+        }
+          
+        function enableMap()
+        {
+            var app = (navigator.appName.indexOf ("Microsoft") !=-1)  ? document.getElementById('j_id0:j_id2:DC:flash') : document['j_id0:j_id2:DC:flash'];
+            app.enableMap();
+        }    
+        
+        function getURL() {
+            return document.location.href;
+        }
+        
+        function setMaxSize(){
+            var swf = document.getElementById('{!$Component.DC}:flash');
+            //alert('A ' + screen.height + ' ' + swf.height);
+            //if(flashObject != null)
+                //flashObject.height = document.height//screen.height-100;
+            //var browserName = whichBrs();
+            /*var agt=navigator.userAgent.toLowerCase();
+
+            if (agt.indexOf("chrome") != -1 || agt.indexOf("msie") != -1)
+            {
+                if(flashObject != null)
+                    flashObject.height = screen.height-100;
+                else if(swf != null)
+                    swf.height = screen.height-100;
+            }*/
+            
+            checkParentWindow();
+        }
+        
+        window.onload=setMaxSize;
+        
+    </script>
+    <div id="output"> </div>
+    <script type="text/javascript">
+    if("{!JSEncode(workorderNo)}" == '')
+    changeTitle("{!$Label.DCON001_TAG183}");
+    else
+    changeTitle("{!$Label.DCON001_TAG183}" + ' - ' +'{!JSENCODE(workorderNo)}');
+    </script>
+  </apex:form>
+ 
+</apex:page>

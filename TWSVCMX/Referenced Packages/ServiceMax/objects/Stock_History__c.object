@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>All ServiceMax transactions such as RMA, Shipment, Parts Receipt etc. that impact inventory are recorded in this object</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Change_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Change Type Indicates if the type of change in product quantity was “Increase” or “Decrease”.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Change Type Indicates if the type of change in product quantity was “Increase” or “Decrease”.</inlineHelpText>
+        <label>Change Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Increase</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Decrease</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Set</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Changed_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the salesforce user that has initiated original transaction which resulted in stock change.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the salesforce user that has initiated original transaction which resulted in stock change.</inlineHelpText>
+        <label>Changed By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Stock_History_Changed_By</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Cost__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Price of the product from the default pricebook at the time of transaction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price of the product from the default pricebook at the time of transaction</inlineHelpText>
+        <label>Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Currency__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Currency of the product price at the time of the transaction, which resulted in stock change.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Currency of the product price at the time of the transaction, which resulted in stock change.</inlineHelpText>
+        <label>Currency</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Date_Changed__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the change in product stock was made.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/time when the change in product stock was made.</inlineHelpText>
+        <label>Date Changed</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>From_Product_Stock__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Source (From) Product Stock record involved in the stock transaction. Reference to an existing Product Stock record in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>From Product Stock</inlineHelpText>
+        <label>From Product Stock</label>
+        <referenceTo>Product_Stock__c</referenceTo>
+        <relationshipLabel>Serial History (From Product Stock)</relationshipLabel>
+        <relationshipName>Stock_History_From</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Inventory_Account__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Inventory account number for this location. Used for costing/accounting purposes.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Inventory account number for this location. Used for costing/accounting purposes.</inlineHelpText>
+        <label>Inventory Account</label>
+        <length>30</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Inventory_Process__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Inventory process that resulted in this stock transaction.</description>
+        <externalId>false</externalId>
+        <label>Inventory Process</label>
+        <referenceTo>ServiceMax_Processes__c</referenceTo>
+        <relationshipLabel>Stock History</relationshipLabel>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>IsPartnerRecord__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if transaction is for/ by a Partner or not.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if transaction is for/ by a Partner or not.</inlineHelpText>
+        <label>IsPartnerRecord</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>IsPartner__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if transaction is for/ by a Partner or not.</description>
+        <externalId>false</externalId>
+        <formula>IF( IsPartnerRecord__c ,&quot;True&quot;, &quot;False&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Flag indicates if transaction is for/ by a Partner or not.</inlineHelpText>
+        <label>Is Partner</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Current physical location of the product. This is a lookup to an existing site record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Current physical location of the product. This is a lookup to an existing site record.</inlineHelpText>
+        <label>Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipName>Location</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Negative_Stock__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if this transaction resulted in negative stock or not.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if this transaction resulted in negative stock or not.</inlineHelpText>
+        <label>Negative Stock</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Notified_User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User notified of negative stock. Reference to an existing Salesforce user record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>User notified of negative stock. Reference to an existing Salesforce user record.</inlineHelpText>
+        <label>Notified User</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Stock_History_Notified_User</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Account, set by trigger.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Account.</inlineHelpText>
+        <label>Partner Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Stock History</relationshipLabel>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Contact, set by trigger.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Contact.</inlineHelpText>
+        <label>Partner Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Stock History</relationshipLabel>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Parts_Request_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the Parts Request line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the Parts Request line.</inlineHelpText>
+        <label>Parts Request Line</label>
+        <referenceTo>Parts_Request_Line__c</referenceTo>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Parts_Request__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the Parts Request.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the Parts Request.</inlineHelpText>
+        <label>Parts Request</label>
+        <referenceTo>Parts_Request__c</referenceTo>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Product_Serial__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Select Product Serial</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Select Product Serial</inlineHelpText>
+        <label>Product Serial</label>
+        <referenceTo>Product_Serial__c</referenceTo>
+        <relationshipLabel>Serial History</relationshipLabel>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Product_Stock__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Product Stock record affected by the stock transaction. Reference to an existing product stock record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Product Stock</label>
+        <referenceTo>Product_Stock__c</referenceTo>
+        <relationshipLabel>Stock History (Product Stock)</relationshipLabel>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the product. This is a lookup to an existing salesforce product record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the product. This is a lookup to an existing salesforce product record.</inlineHelpText>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quantity_after_change2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Stock quantity in the given product+location+status after the transaction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Stock quantity in the given product+location+status after the transaction.</inlineHelpText>
+        <label>Qty after change</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_before_change2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Stock quantity in the given product+location+status before the transaction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Stock quantity in the given product+location+status before the transaction.</inlineHelpText>
+        <label>Qty before change</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>RMA_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the RMA/Shipment Line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the RMA/Shipment Line.</inlineHelpText>
+        <label>RMA Line</label>
+        <referenceTo>RMA_Shipment_Line__c</referenceTo>
+        <relationshipName>Stock_History_RMA_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>RMA__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the RMA/Shipment Order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the RMA/Shipment Order.</inlineHelpText>
+        <label>RMA</label>
+        <referenceTo>RMA_Shipment_Order__c</referenceTo>
+        <relationshipName>Stock_History_RMA</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Order_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the service order line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the service order line.</inlineHelpText>
+        <label>Work Details</label>
+        <referenceTo>Service_Order_Line__c</referenceTo>
+        <relationshipLabel>Stock History</relationshipLabel>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the Service Order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the Service Order.</inlineHelpText>
+        <label>Work Order</label>
+        <referenceTo>Service_Order__c</referenceTo>
+        <relationshipLabel>Stock History</relationshipLabel>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Shipment_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the RMA/Shipment Line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the RMA/Shipment Line.</inlineHelpText>
+        <label>Shipment Line</label>
+        <referenceTo>RMA_Shipment_Line__c</referenceTo>
+        <relationshipName>Stock_History_Shipment_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Shipment__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the RMA/Shipment Order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the RMA/Shipment Order.</inlineHelpText>
+        <label>Shipment</label>
+        <referenceTo>RMA_Shipment_Order__c</referenceTo>
+        <relationshipName>Stock_History_Shipment</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Current status of product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Current status of product.</inlineHelpText>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Available</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>In Transit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Consumed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Returned</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Stock_Adjustment__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the Stock Adjustment.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the Stock Adjustment.</inlineHelpText>
+        <label>Stock Adjustment</label>
+        <referenceTo>Stock_Adjustment__c</referenceTo>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Stock_Transfer_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the Stock Transfer line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the Stock Transfer line.</inlineHelpText>
+        <label>Stock Transfer Line</label>
+        <referenceTo>Stock_Transfer_Line__c</referenceTo>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Stock_Transfer__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the Stock Transfer.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to the Stock Transfer.</inlineHelpText>
+        <label>Stock Transfer</label>
+        <referenceTo>Stock_Transfer__c</referenceTo>
+        <relationshipName>Stock_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Stock_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Value of the stock quantity at the time of transaction</description>
+        <externalId>false</externalId>
+        <formula>Transaction_Quantity2__c *  Cost__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Value of the stock quantity at the time of transaction</inlineHelpText>
+        <label>Stock Value</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>To_Product_Stock__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Target (To) Product Stock record involved in the stock transaction. Reference to an existing Product Stock record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>To Product Stock</label>
+        <referenceTo>Product_Stock__c</referenceTo>
+        <relationshipLabel>Serial History (To Product Stock)</relationshipLabel>
+        <relationshipName>Stock_History_To</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Transaction_Quantity2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Product quantity in the source transaction.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Product quantity in the source transaction.</inlineHelpText>
+        <label>Transaction Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Transaction_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Status should be be assigned based on various original transactions which resulted in stock change.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Status should be be assigned based on various original transactions which resulted in stock change.</inlineHelpText>
+        <label>Transaction Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>RMA Receipt</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shipment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>SVO Receipt</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>SVO Usage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Parts Receipt</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stock Transfer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stock Adjustment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <label>Stock History</label>
+    <nameField>
+        <displayFormat>SHIST-{00000000}</displayFormat>
+        <label>Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Stock History</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Serial_History</fullName>
+        <active>true</active>
+        <description>Serial History</description>
+        <label>Serial History</label>
+        <picklistValues>
+            <picklist>Change_Type__c</picklist>
+            <values>
+                <fullName>Decrease</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Increase</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Set</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Available</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Consumed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Transit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Returned</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Transaction_Type__c</picklist>
+            <values>
+                <fullName>Parts Receipt</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RMA Receipt</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SVO Receipt</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SVO Usage</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stock Adjustment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stock Transfer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Stock_History</fullName>
+        <active>true</active>
+        <description>Stock History</description>
+        <label>Stock History</label>
+        <picklistValues>
+            <picklist>Change_Type__c</picklist>
+            <values>
+                <fullName>Decrease</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Increase</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Set</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Status__c</picklist>
+            <values>
+                <fullName>Available</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Consumed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In Transit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Returned</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Transaction_Type__c</picklist>
+            <values>
+                <fullName>Parts Receipt</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>RMA Receipt</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SVO Receipt</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SVO Usage</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stock Adjustment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stock Transfer</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

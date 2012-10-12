@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HomePageComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <body>&lt;iframe id=&quot;SVMXC__SFM_SearchWidget&quot; src=&quot;/apex/SVMXC__SFM_SearchWidget?isdtp=mn&quot; style=&quot;background: none; height:82px; width:100%;&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;</body>
+    <pageComponentType>htmlArea</pageComponentType>
+    <width>narrow</width>
+</HomePageComponent>

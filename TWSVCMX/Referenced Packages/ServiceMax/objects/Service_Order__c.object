@@ -1,0 +1,3227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Service Order is used to plan, execute and manage Service events for Field and Depot Service activities. Depending upon the service scenario, the order creation can be triggered by many events: When creating a Support Case, when one or more installed products require periodic service or calibration, when troubleshooting a customer problem on the field, if the field service engineer learns that the product requires specialized conditions of a factory/depot to resolve the problem, or when a new/repair shipment to customer requires specialized installation activity.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Actual_Initial_Response__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Actual Initial Response</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Actual_Onsite_Response__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Actual Onsite Response</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Actual_Resolution__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Actual Resolution</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Actual_Restoration__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Actual Restoration</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Age_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Age of the service order grouped in buckets for reporting purposes.</description>
+        <externalId>false</externalId>
+        <formula>IF (Age__c &lt;= 7, &quot;Less Than 8 days&quot;, 
+IF (Age__c &lt;= 15, &quot;8 To 15 days&quot;, 
+IF (Age__c &lt;= 30, &quot;16 to 30 days&quot;, 
+&quot;More Than 30 days&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Age of the service order grouped in buckets for reporting purposes.</inlineHelpText>
+        <label>Age Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Age__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Age of the service order for reporting purposes.</description>
+        <externalId>false</externalId>
+        <formula>NOW() - CreatedDate</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Age of the service order for reporting purposes.</inlineHelpText>
+        <label>Age</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Apply_Business_Hours_For_OptiMax__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag to indicate if Preferred Window for Work Order is based on SLA/Access Hours</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag to indicate if Preferred Window for Work Order is based on SLA/Access Hours</inlineHelpText>
+        <label>Apply Business Hours For OptiMax</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>BatchUpdate__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This is an internal field used to resolve conflicts between immediate work order updates and batch updates done by OptiMax.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is an internal field used to resolve conflicts between immediate work order updates and batch updates done by OptiMax.</inlineHelpText>
+        <label>Batch Update</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Billing_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>How the service order expenses will be accounted for. Agreement, Paid etc.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>How the service order expenses will be accounted for. Agreement, Paid etc.</inlineHelpText>
+        <label>Billing Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Contract</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Credit Card</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Good Will</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Loaner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Purchase Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Warranty</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>true</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Case__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Support Case from which this service order originated. Is a lookup to an existing salesforce case record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Support Case from which this service order originated. Is a lookup to an existing salesforce case record</inlineHelpText>
+        <label>Case</label>
+        <referenceTo>Case</referenceTo>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>City__c</fullName>
+        <deprecated>false</deprecated>
+        <description>“City” part of the work order location.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>“City” part of the work order location.</inlineHelpText>
+        <label>City</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Clock_Paused_Forever__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Clock Paused Forever</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Closed_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that closed this service order. Is a lookup to an existing salesforce user.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>User that closed this service order. Is a lookup to an existing salesforce user.</inlineHelpText>
+        <label>Closed By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Service_Order_Closed_By</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Closed_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when this service order was closed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/time when this service order was closed.</inlineHelpText>
+        <label>Closed On</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Company__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Customer Account initiating this service order. Is a lookup to an existing salesforce account record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Customer Company initiating this service order. Is a lookup to an existing salesforce account record</inlineHelpText>
+        <label>Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Component__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Serial number of the component for which the customer is seeking support. Is a lookup to an existing installed product record in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Serial number of the component for which the customer is seeking support. Is a lookup to an existing installed product record in ServiceMax</inlineHelpText>
+        <label>Component</label>
+        <referenceTo>Installed_Product__c</referenceTo>
+        <relationshipName>Service_Order_Component</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Configuration_After__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Snapshot of the product’s technical details after the engineer(s) resolved/addressed the issue</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Snapshot of the product’s technical details after the engineer(s) resolved/addressed the issue</inlineHelpText>
+        <label>Configuration - After</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Configuration_Before__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Snapshot of the product’s technical details before the engineer(s) started addressing it</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Snapshot of the product’s technical details before the engineer(s) started addressing it</inlineHelpText>
+        <label>Configuration - Before</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the contact person from the customer account for this service order. Is a lookup to an existing salesforce contact record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the contact person from the customer account for this service order. Is a lookup to an existing salesforce contact record</inlineHelpText>
+        <label>Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Corrective_Action__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any corrective action taken by your engineer(s) to address the customer feedback</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Any corrective action taken by your engineer(s) to address the customer feedback</inlineHelpText>
+        <label>Corrective Action</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Country__c</fullName>
+        <deprecated>false</deprecated>
+        <description>“Country” part of the work order location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>“Country” part of the work order location</inlineHelpText>
+        <label>Country</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Afghanistan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Albania</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Algeria</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>American</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Andorra</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Anguilla</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Antarctica</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Antigua And</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Argentina</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Armenia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Aruba</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Australia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Austria</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ayerbaijan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bahamas</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bahrain</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bangladesh</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Barbados</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Belarus</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Belize</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Belgium</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Benin</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bermuda</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bhutan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bolivia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bouvet</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bosnia and Herzegovina</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Botswana</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brazil</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>British Indian Ocean Territory</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Brunei</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bulgaria</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Burkina Faso</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Burundi</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cambodia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cameroon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canada</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cape Verde</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cayman Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Central African Republic</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Chad</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Chile</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>China</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>China (Hong Kong S.A.R.)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>China (Macau S.A.R.)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Christmas Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cocos (Keeling) Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Colombia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Comoros</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cook Islands</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Costa Rica</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cote D&apos;Ivoire (Ivory Coast)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Croatia (Hrvatska)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cyprus</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Czech Republic</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Democratic Republic of the Congo</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Denmark</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dominica</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dominican Republic</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Djibouti</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>East Timor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ecuador</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Egypt</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>El Salvador</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Equatorial Guinea</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Eritrea</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Estonia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ethiopia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Falkland Is (Is Malvinas)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Faroe Islands</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fiji Islands</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Finland</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>France</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>French Guiana</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>French Polynesia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>French Southern Territories</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>F.Y.R.O. Macedonia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Gabon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Gambia, The</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Georgia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Germany</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ghana</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Gibraltar</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Greece</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Greenland</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Grenada</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Guadeloupe</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Guam</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Guatemala</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Guinea</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Guinea-Bissau</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Guyana</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Haiti</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Heard and McDonald Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Honduras</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hungary</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Iceland</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>India</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Indonesia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ireland</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Israel</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Italy</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Jamaica</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Japan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Jordan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Kayakhstan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Kenya</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Kiribati</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Korea, South</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Kuwait</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Kyrgyzstan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Laos</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Latvia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lebanon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lesotho</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Liberia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Liechtenstein</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lithuania</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Luxembourg</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Madagascar</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Malawi</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Malaysia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Maldives</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mali</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Malta</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Marshall Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mauritania</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mauritius</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Martinique</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mayotte</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mexico</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Micronesia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Moldova</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Monaco</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mongolia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Montserrat</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Morocco</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mozambique</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Myanmar</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Namibia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Nauru</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Nepal</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Netherlands, The</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Netherlands Antilles</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>New Caledonia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>New Zealand</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Nicaragua</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Niger</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Nigeria</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Niue</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Norway</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Norfolk Island</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Northern Mariana Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Oman</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pakistan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Palau</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Panama</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Papua new Guinea</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Paraguay</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Peru</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Philippines</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pitcairn Island</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Poland</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Portugal</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Puerto Rico</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Qatar</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Republic of the Congo</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Reunion</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Romania</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Russia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Saint Helena</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Saint Kitts And Nevis</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Saint Lucia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Saint Pierre and Miquelon</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Saint Vincent And The Grenadines</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Samoa</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>San Marino</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sao Tome and Principe</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Saudi Arabia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Senegal</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Seychelles</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sierra Leone</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Singapore</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Slovakia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Slovenia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Solomon Islands</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Somalia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>South Africa</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>South Georgia &amp;amp; The S. Sandwich Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Spain</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sri Lanka</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Suriname</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Svalbard And Jan Mayen Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Swaziland</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sweden</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Switzerland</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Syria</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Taiwan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tajikistan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tanzania</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Thailand</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Timor-Leste</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Togo</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tokelau</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tonga</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trinidad And Tobago</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tunisia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Turkey</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Turks And Caicos Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Turkmenistan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tuvalu</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Uganda</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ukraine</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>United Arab Emirates</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>United Kingdom</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>United States</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>United States Minor Outlying Is</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Uruguay</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Uzbekistan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Vanuatu</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Vatican City State (Holy See)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Venezuela</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Vietnam</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Virgin Islands (British)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Virgin Islands (US)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Wallis And Futuna Islands</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Western Sahara</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Yemen</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Zambia</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Zimbabwe</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Customer_Down_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates as Yes or No if this work order is about a customer down situation.</description>
+        <externalId>false</externalId>
+        <formula>IF (Customer_Down__c = true, &quot;Yes&quot;, &quot;No&quot;)</formula>
+        <inlineHelpText>Indicates as Yes or No if this work order is about a customer down situation.</inlineHelpText>
+        <label>Customer Down Status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Customer_Down__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If the customer situation is critical affecting uptime due to the problem reported</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If the customer situation is critical affecting uptime due to the problem reported</inlineHelpText>
+        <label>Customer Down</label>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Customer_Failure_Feedback__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Feedback given by the customer about the overall failure event and how your organization responded</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Feedback given by the customer about the overall failure event and how your organization responded</inlineHelpText>
+        <label>Customer Failure Feedback</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Dispatch_Now__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Dispatch Now</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Dispatch_Priority__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Work order priority bucket as defined in the dispatch process. Calculated automatically</description>
+        <externalId>false</externalId>
+        <label>Dispatch Priority</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>true</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Dispatch_Process__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Dispatch process using which this work order will be scheduled</description>
+        <externalId>false</externalId>
+        <label>Dispatch Process</label>
+        <referenceTo>ServiceMax_Processes__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Dispatch_Response__c</fullName>
+        <deprecated>false</deprecated>
+        <description>To capture the response of the technician whether he/she accepts or rejects the work order assigned.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>To capture the response of the technician whether he/she accepts or rejects the work order assigned.</inlineHelpText>
+        <label>Dispatch Response</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Accept Assigment</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending Customer Response</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Reject Assignment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Travel Start</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Onsite</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Restored</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resolved</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Dispatch_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates in which stage the work order is in.</description>
+        <externalId>false</externalId>
+        <formula>IF(AND(Service_Group__c=null ,Group_Member__c =null),&quot;New&quot;, IF(AND(Service_Group__c&lt;&gt;null ,Group_Member__c =null),&quot;Queued&quot;,IF(AND(Service_Group__c&lt;&gt;null ,Group_Member__c &lt;&gt;null),&quot;Assigned&quot;,&apos;New&apos;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Indicates in which stage the work order is in.</inlineHelpText>
+        <label>Dispatch Status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Driving_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Driving Time (in Minutes)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>EndpointURL__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Not used</description>
+        <externalId>false</externalId>
+        <formula>$Api.Enterprise_Server_URL_70</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>EndpointURL</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Entitlement_Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Entitlement Notes</description>
+        <externalId>false</externalId>
+        <label>Entitlement Notes</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Failed_Assembly__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The assembly of your product that failed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The assembly of your product that failed.</inlineHelpText>
+        <label>Failed Assembly</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Motherboard</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sound Card</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Graphics Card</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Keyboard</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>LCD Monitor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>USB Interface</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Parallel Port</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pointing Device</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hard Disk</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Disk Array</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Ethernet Card</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Network Switch</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Power Supply</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Battery Unit</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sample Value1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sample Value2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Failure_Location__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Where the product failed, field or depot</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Where the product failed, field or depot</inlineHelpText>
+        <label>Failure Location</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Field</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Floor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>FirstScheduledDateTime__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Datetimestamp the work order was scheduled to a technician for the very first time.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Datetimestamp the work order was scheduled to a technician for the very first time.</inlineHelpText>
+        <label>First Scheduled DateTime</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>First_Assigned_DateTime__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Datetimestamp the work order was assigned to a technician for the very first time.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Datetimestamp the work order was assigned to a technician for the very first time.</inlineHelpText>
+        <label>First Assigned DateTime</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>First_Queued_DateTime__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Datetimestamp the work order was queued to a technician for the very first time.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Datetimestamp the work order was queued to a technician for the very first time.</inlineHelpText>
+        <label>First Queued DateTime</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Group_Email__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Stores the email address associated with the service team. Sends email using workflow rule indicating an work order has been queued to the service team.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Stores the email address associated with the service team. Sends email using workflow rule indicating an work order has been queued to the service team.</inlineHelpText>
+        <label>Group Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Group_Member__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the group member working on the service order. This does not imply that this member has the ownership of service order record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the group member working on the service order. This does not imply that this member has the ownership of service order record</inlineHelpText>
+        <label>Technician</label>
+        <referenceTo>Service_Group_Members__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>How_Fixed__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of fix that was applied to resolve the problem.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of fix that was applied to resolve the problem.</inlineHelpText>
+        <label>How Fixed</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Rewired Network</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Adjusted Hardware</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Removed Hardware</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Replaced Hardware</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Relocated Hardware</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installed Software</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Removed Software</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Reinstalled Software</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Modified H/w Configuration</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Modified S/w Configuration</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Trained Users</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sample Value1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sample Value2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Idle_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Idle Time (in Minutes)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Idle Time (in Minutes)</inlineHelpText>
+        <label>Idle Time (in Minutes)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Initial_Response_Customer_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time by which initial response should be delivered as per customer commitment in SLA. Calculated automatically</description>
+        <externalId>false</externalId>
+        <label>Initial Response Customer By</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Initial_Response_Internal_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time by which initial response should be delivered as per internal commitment in SLA. Calculated automatically</description>
+        <externalId>false</externalId>
+        <label>Initial Response Internal By</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>IsPartnerRecord__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates that this work order is for/by a Partner.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates that this work order is for/by a Partner.</inlineHelpText>
+        <label>IsPartnerRecord</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>IsPartner__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Flag is the indication of Partner Record.</description>
+        <externalId>false</externalId>
+        <formula>IF(  IsPartnerRecord__c  ,&quot;True&quot;, &quot;False&quot;)</formula>
+        <inlineHelpText>Flag is the indication of Partner Record.</inlineHelpText>
+        <label>Is Partner</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Is_PM_Work_Order__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if this is a preventive maintenance work order or not. Set automatically by PM scheduler</description>
+        <externalId>false</externalId>
+        <label>Is PM Work Order</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Is_SLA_Calculated__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Recalculate SLA</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Last_Dispatch_Event__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates various stages of an work order. Used to trigger various dispatch console workflows.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates various stages of an work order. Used to trigger various dispatch console workflows.</inlineHelpText>
+        <label>Last Dispatch Event</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Not Worked</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Queued</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>UnQueued</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Scheduled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>UnScheduled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Assigned</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>UnAssigned</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Latitude__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Latitude for the work order service location</description>
+        <externalId>false</externalId>
+        <label>Latitude</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Locked_By_DC__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Locked By DC</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Locked By DC</inlineHelpText>
+        <label>Locked By DC</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Longitude__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Longitude for the work order service location</description>
+        <externalId>false</externalId>
+        <label>Longitude</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Master_Order_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Master Order Line</label>
+        <referenceTo>RMA_Shipment_Line__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Work_Orders</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Member_Email__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Stores the email address of the technician. Used to send a email through workflow rule indicating an work order has been assigned/scheduled.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Stores the email address of the technician. Used to send a email through workflow rule indicating an work order has been assigned/scheduled.</inlineHelpText>
+        <label>Member Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NoOfTimesAssigned__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicating number of times the work order was assigned</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicating number of times the work order was assigned</inlineHelpText>
+        <label>No Of Times Assigned</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NoOfTimesQueued__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates number of times the work order was queued</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates number of times the work order was queued</inlineHelpText>
+        <label>No Of Times Queued</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>NoOfTimesScheduled__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates number of times the work order was scheduled</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates number of times the work order was scheduled</inlineHelpText>
+        <label>No Of Times Scheduled</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_Of_Times_Assigned_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of times the work order was assigned bucket. This is used for reporting purpose.</description>
+        <externalId>false</externalId>
+        <formula>IF ( NoOfTimesAssigned__c &lt;=2, &quot;Less Than 2 Times&quot;, IF ( NoOfTimesAssigned__c &lt;= 6, &quot;2 To 6 Times&quot;, IF ( NoOfTimesAssigned__c &lt;= 10, &quot;6 to 10 Times&quot;, &quot;Over 10 Times&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Number of times the work order was assigned bucket. This is used for reporting purpose.</inlineHelpText>
+        <label>Number Of Times Assigned Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_Of_Times_Queued_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of times the work order was queued bucket. This is used for reporting purpose.</description>
+        <externalId>false</externalId>
+        <formula>IF ( NoOfTimesQueued__c &lt;=2, &quot;Less Than 2 Times&quot;, IF ( NoOfTimesQueued__c &lt;= 6, &quot;2 To 6 Times&quot;, IF ( NoOfTimesQueued__c &lt;= 10, &quot;6 to 10 Times&quot;, &quot;Over 10 Times&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Number of times the work order was queued bucket. This is used for reporting purpose.</inlineHelpText>
+        <label>Number Of Times Queued Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_Of_Times_Scheduled_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of times the work order was scheduled bucket. This is used for reporting purpose.</description>
+        <externalId>false</externalId>
+        <formula>IF ( NoOfTimesScheduled__c &lt;=2, &quot;Less Than 2 Times&quot;, IF ( NoOfTimesScheduled__c &lt;= 6, &quot;2 To 6 Times&quot;, IF ( NoOfTimesScheduled__c &lt;= 10, &quot;6 to 10 Times&quot;, &quot;Over 10 Times&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Number of times the work order was scheduled bucket. This is used for reporting purpose.</inlineHelpText>
+        <label>Number Of Times Scheduled Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Onsite_Response_Customer_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time by which onsite response should be delivered as per customer commitment in SLA. Calculated automatically</description>
+        <externalId>false</externalId>
+        <label>Onsite Response Customer By</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Onsite_Response_Internal_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time by which onsite response should be delivered as per internal commitment in SLA. Calculated automatically</description>
+        <externalId>false</externalId>
+        <label>Onsite Response Internal By</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>OptiMax_Error_Email1__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Email address copied from global settings. Can be used to send pre-calculation failures</description>
+        <externalId>false</externalId>
+        <label>OptiMax Error Email1</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>OptiMax_Error_Email2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Email address copied from dispatch process. Can be used to send pre-calculation failures</description>
+        <externalId>false</externalId>
+        <label>OptiMax Error Email2</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>OptiMax_Error_Occurred__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if an error occurred when performing pre-calculations for OptiMax</description>
+        <externalId>false</externalId>
+        <label>OptiMax Error Occurred</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>OptiMax_Error_Text__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Details of error occurred when performing pre-calculations for OptiMax</description>
+        <externalId>false</externalId>
+        <label>OptiMax Error Text</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>OptiMax_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>OptiMax dispatch status for the work order</description>
+        <externalId>false</externalId>
+        <label>OptiMax Status</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Order_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Current status of the service order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Current status of the service order</inlineHelpText>
+        <label>Order Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Pending Approval</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Awaiting Invoice</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Order_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of service order: Field Service, Depot repair etc.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of service order: Field Service, Depot repair etc.</inlineHelpText>
+        <label>Order Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Depot Repair</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Field Service</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Integration</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Preventive Maintenance</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Replenishment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Training</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>TroubleShoot</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>true</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>PM_Plan__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The source PM plan that resulted in this preventive maintenance work order. Set by PM scheduler</description>
+        <externalId>false</externalId>
+        <label>Preventive Maintenance Plan</label>
+        <referenceTo>PM_Plan__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>PM_SC__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Service Contract for which this preventive maintenance work order was created.</description>
+        <externalId>false</externalId>
+        <formula>PM_Plan__r.Service_Contract__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>PM Service Contract</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>PM_Tasks_Created__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if PM tasks have been created</description>
+        <externalId>false</externalId>
+        <label>PM Tasks Created</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Account, set by trigger.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Account.</inlineHelpText>
+        <label>Partner Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Work Orders (Partner Account)</relationshipLabel>
+        <relationshipName>Service_Order_Partner</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Contact, set by trigger.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Contact.</inlineHelpText>
+        <label>Partner Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Work Orders (Partner Contact)</relationshipLabel>
+        <relationshipName>Service_Order_Partner</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Preferred_Business_Hours__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Preferred Business Hours</description>
+        <externalId>false</externalId>
+        <label>Preferred Business Hours</label>
+        <referenceTo>BusinessHours</referenceTo>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Preferred_End_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <description>End time before which the work order must be scheduled. Calculated automatically based on booking window, SLA and access hours</description>
+        <externalId>false</externalId>
+        <label>Preferred End Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Preferred_Resource_Priority__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Preferred Resource Priority is used in OptiMax to indicate the priority of assigning the work order to the Preferred Technician.</description>
+        <externalId>false</externalId>
+        <label>Preferred Resource Priority</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Preferred_Start_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Start time for the work order to be scheduled. Calculated automatically based on booking window, SLA and access hours</description>
+        <externalId>false</externalId>
+        <label>Preferred Start Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Preferred_Technician__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the preferred technician for the work order. Calculated from service contract, installed product or account wherever available</description>
+        <externalId>false</externalId>
+        <label>Preferred Technician</label>
+        <referenceTo>Service_Group_Members__c</referenceTo>
+        <relationshipLabel>Work Orders (Preferred Technician)</relationshipLabel>
+        <relationshipName>Service_Order_Pref_Tech</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Previous_Scheduled_Date_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Holds the previous Scheduled Date Time of the work order, if the work order had been scheduled previously.</description>
+        <externalId>false</externalId>
+        <label>Previous Scheduled Date Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Primary_Territory__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Primary territory for the work order. Calculated automatically by OptiMax pre-calculation engine</description>
+        <externalId>false</externalId>
+        <label>Primary Territory</label>
+        <referenceTo>Territory__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Priority__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Priority of the service order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Priority of the service order</inlineHelpText>
+        <label>Priority</label>
+        <picklist>
+            <picklistValues>
+                <fullName>High</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Medium</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Low</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Problem_Description__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Detailed description of the problem as reported by the customer</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Detailed description of the problem as reported by the customer</inlineHelpText>
+        <label>Problem Description</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Product in which specialization would be required to service the work order. Calculated from installed product by OptiMax pre-calculation engine</description>
+        <externalId>false</externalId>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Purpose_of_Visit__c</fullName>
+        <deprecated>false</deprecated>
+        <description>If the Order Type is Field Service, specific reason for the field visit.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If the Order Type is Field Service, specific reason for the field visit.</inlineHelpText>
+        <label>Purpose of Visit</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Installation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Deinstallation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Repair</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Maintenance</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Training</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Courtesy</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Resolution_Customer_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time by which work order should be resolved as per customer commitment in SLA. Calculated automatically</description>
+        <externalId>false</externalId>
+        <label>Resolution Customer By</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Resolution_Internal_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time by which work order should be resolved as per internal commitment in SLA. Calculated automatically</description>
+        <externalId>false</externalId>
+        <label>Resolution Internal By</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Restoration_Customer_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time by which customer should be restored as per customer commitment in SLA. Calculated automatically</description>
+        <externalId>false</externalId>
+        <label>Restoration Customer By</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Restoration_Internal_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time by which customer should be restored as per internal commitment in SLA. Calculated automatically</description>
+        <externalId>false</externalId>
+        <label>Restoration Internal By</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Root_Cause__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Root cause of the failure.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Root cause of the failure.</inlineHelpText>
+        <label>Root Cause</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Faulty Wiring</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Incomplete Installation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Configuration</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Room Temperature</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Power Failure</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>High/Low Voltage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>No Maintenance</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rough Handling</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lack of Training</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sample Value1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sample Value2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>SESSION_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Not used</description>
+        <externalId>false</externalId>
+        <formula>$Api.Session_ID</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>SESSION_ID</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SLA_Clock_Extension_Minutes__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SLA Clock Extension Minutes</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SLA_Clock_Pause_Days__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SLA Clock Pause Days</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SLA_Clock_Pause_Hours__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SLA Clock Pause Hours</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SLA_Clock_Pause_Minutes__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SLA Clock Pause Minutes</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SLA_Clock_Pause_Reason__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SLA Clock Pause Reason</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Customer Not Available</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>SLA_Clock_Pause_Restart_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SLA Clock Pause Restart Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>SLA_Clock_Pause_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SLA Clock Pause Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>SLA_Clock_Paused__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SLA Clock Paused</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>SLA_Terms__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>SLA Terms</description>
+        <externalId>false</externalId>
+        <label>SLA Terms</label>
+        <referenceTo>Service_Level__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Scheduled_Date_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Scheduled Date Time</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Scheduled_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Scheduled date for the Preventive maintenance work order</description>
+        <externalId>false</externalId>
+        <label>Scheduled Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Service_Contract__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Service/Maintenance Contract</description>
+        <externalId>false</externalId>
+        <label>Service Contract</label>
+        <referenceTo>Service_Contract__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Work_Orders1</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Duration__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Duration in minutes required for the work order. Calculated from rules by OptiMax pre-calculation engine</description>
+        <externalId>false</externalId>
+        <label>Service Duration (in Seconds)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Service_Group__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the service group that is working on the service order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the service group that is working on the service order.</inlineHelpText>
+        <label>Service Team</label>
+        <referenceTo>Service_Group__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Skill__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Skill required to service the work order. Calculated by OptiMax pre-calculation engine</description>
+        <externalId>false</externalId>
+        <label>Skill</label>
+        <referenceTo>Skill__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Service_Order</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Special_Instructions__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Relevant instructions for future service events for the same product/customer</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Relevant instructions for future service events for the same product/customer</inlineHelpText>
+        <label>Special Instructions</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>State__c</fullName>
+        <deprecated>false</deprecated>
+        <description>“State” part of the work order location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>“State” part of the work order location</inlineHelpText>
+        <label>State</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Street__c</fullName>
+        <deprecated>false</deprecated>
+        <description>“Street” part of the work order location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>“Street” part of the work order location</inlineHelpText>
+        <label>Street</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Symptom__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Symptom that was noted before the failure.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Symptom that was noted before the failure.</inlineHelpText>
+        <label>Symptom</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Overheating</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fuzzy Display</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Excessive Noise</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>System Slowdown</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Network Slowdown</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Software Hanging</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Auto-shutdown</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Red Indicator Blinking</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sample Value1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sample Value2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>TimeBetweenAssignAndSchedule__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Calculates the time taken for the work order to be scheduled after it was assigned</description>
+        <externalId>false</externalId>
+        <formula>( FirstScheduledDateTime__c - First_Assigned_DateTime__c )*24</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Calculates the time taken for the work order to be scheduled after it was assigned</inlineHelpText>
+        <label>Time Between Assign And Schedule</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>TimeBetweenQueueAndAssign__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the amount of time it took for the work order to be assigned after being queued</description>
+        <externalId>false</externalId>
+        <formula>( First_Assigned_DateTime__c - First_Queued_DateTime__c )*24</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Indicates the amount of time it took for the work order to be assigned after being queued</inlineHelpText>
+        <label>Time Between Queue And Assign</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>TimeBetweenScheduleAndClose__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the amount of time it took for the work order to be closed after being scheduled</description>
+        <externalId>false</externalId>
+        <formula>( Closed_On__c - FirstScheduledDateTime__c )*24</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Indicates the amount of time it took for the work order to be closed after being scheduled</inlineHelpText>
+        <label>Time Between Schedule And Close</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>TimeToAssign__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the amount of time it took for the work order to be assigned after being opened.</description>
+        <externalId>false</externalId>
+        <formula>(First_Assigned_DateTime__c - CreatedDate )*24</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Indicates the amount of time it took for the work order to be assigned after being opened.</inlineHelpText>
+        <label>Time To Assign</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>TimeToQueue__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the amount of time it took for the work order to be queued after being created</description>
+        <externalId>false</externalId>
+        <formula>(First_Queued_DateTime__c- CreatedDate)*24</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Indicates the amount of time it took for the work order to be queued after being created</inlineHelpText>
+        <label>Time To Queue</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>TimeToSchedule__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the amount of time it took for the work order to be scheduled after being opened</description>
+        <externalId>false</externalId>
+        <formula>( FirstScheduledDateTime__c - CreatedDate )*24</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Indicates the amount of time it took for the work order to be scheduled after being opened</inlineHelpText>
+        <label>Time To Schedule</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_Between_Assign_And_Schedule_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Time taken for the work order to be scheduled after it was assigned bucket. Used for reporting purpose</description>
+        <externalId>false</externalId>
+        <formula>IF ( TimeBetweenAssignAndSchedule__c &lt;=2, &quot;Less Than 2 hours&quot;, IF ( TimeBetweenAssignAndSchedule__c &lt;= 6, &quot;2 To 6 hrs&quot;, IF ( TimeBetweenAssignAndSchedule__c &lt;= 10, &quot;6 to 10 hrs&quot;, &quot;Over 10 hrs&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Time taken for the work order to be scheduled after it was assigned bucket. Used for reporting purpose</inlineHelpText>
+        <label>Time Between Assign And Schedule Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_Between_Queue_And_Assign_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Time taken for the work order to be assigned after it was queued bucket. Used for reporting purpose</description>
+        <externalId>false</externalId>
+        <formula>IF (TimeBetweenQueueAndAssign__c &lt;=2, &quot;Less Than 2 hours&quot;, IF (TimeBetweenQueueAndAssign__c &lt;= 6, &quot;2 To 6 hours&quot;, IF (TimeBetweenQueueAndAssign__c &lt;= 10, &quot;6 to 10 hours&quot;, &quot;Over 10 hours&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Time taken for the work order to be assigned after it was queued bucket. Used for reporting purpose</inlineHelpText>
+        <label>Time Between Queue And Assign Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_Between_Schedule_And_Close_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Time taken for the work order to be closed after it was scheduled bucket. Used for reporting purpose</description>
+        <externalId>false</externalId>
+        <formula>IF (TimeBetweenScheduleAndClose__c &lt;=2, &quot;Less Than 2 hours&quot;, IF (TimeBetweenScheduleAndClose__c &lt;= 6, &quot;2 To 6 hours&quot;, IF (TimeBetweenScheduleAndClose__c &lt;= 10, &quot;6 to 10 hours&quot;, &quot;Over 10 hours&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Time taken for the work order to be closed after it was scheduled bucket. Used for reporting purpose</inlineHelpText>
+        <label>Time Between Schedule And Close Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_to_Assign_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Time taken for the work order to be assigned bucket. Used for reporting purpose</description>
+        <externalId>false</externalId>
+        <formula>IF ( TimeToAssign__c &lt;=2, &quot;Less Than 2 hours&quot;, IF ( TimeToAssign__c &lt;= 6, &quot;2 To 6 hrs&quot;, IF ( TimeToAssign__c &lt;= 10, &quot;6 to 10 hrs&quot;, &quot;Over 10 hrs&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Time taken for the work order to be assigned bucket. Used for reporting purpose</inlineHelpText>
+        <label>Time to Assign Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_to_Queue_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Time taken for the work order to be queued after it was opened bucket. Used for reporting purpose</description>
+        <externalId>false</externalId>
+        <formula>IF ( TimeToQueue__c &lt;=2, &quot;Less Than 2 hours&quot;, IF ( TimeToQueue__c &lt;= 6, &quot;2 To 6 hrs&quot;, IF ( TimeToQueue__c &lt;= 10, &quot;6 to 10 hrs&quot;, &quot;Over 10 hrs&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Time taken for the work order to be queued after it was opened bucket. Used for reporting purpose</inlineHelpText>
+        <label>Time to Queue Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_to_Schedule_Bucket__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Time taken for the work order to be scheduled after it was opened bucket. Used for reporting purpose</description>
+        <externalId>false</externalId>
+        <formula>IF (TimeToSchedule__c &lt;=2, &quot;Less Than 2 hours&quot;, IF (TimeToSchedule__c &lt;= 6, &quot;2 To 6 hours&quot;, IF (TimeToSchedule__c &lt;= 10, &quot;6 to 10 hours&quot;, &quot;Over 10 hours&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Time taken for the work order to be scheduled after it was opened bucket. Used for reporting purpose</inlineHelpText>
+        <label>Time to Schedule Bucket</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Top_Level__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Serial number of the top-level installed product to which the component belongs. Is a lookup to an existing installed product record in ServiceMax.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Serial number of the top-level installed product to which the component belongs. Is a lookup to an existing installed product record in ServiceMax.</inlineHelpText>
+        <label>Top-Level</label>
+        <referenceTo>Installed_Product__c</referenceTo>
+        <relationshipName>Service_Order_Top_Level</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Total_Billable_Amount__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Amount which is billed to the customer for the work performed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Total Amount which is billed to the customer for the work performed.</inlineHelpText>
+        <label>Total Billable Amount</label>
+        <summarizedField>Service_Order_Line__c.Total_Line_Price__c</summarizedField>
+        <summaryFilterItems>
+            <field>Service_Order_Line__c.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Usage/Consumption</value>
+        </summaryFilterItems>
+        <summaryFilterItems>
+            <field>Service_Order_Line__c.Is_Billable__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Service_Order_Line__c.Service_Order__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Estimate__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Estimate cost of the work to be performed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Total Estimate cost of the work to be performed.</inlineHelpText>
+        <label>Total Estimate</label>
+        <summarizedField>Service_Order_Line__c.Total_Estimated_Price__c</summarizedField>
+        <summaryFilterItems>
+            <field>Service_Order_Line__c.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Estimate</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Service_Order_Line__c.Service_Order__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Total_Work_Order_Cost__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total cost of the work actual performed on the work order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Total cost of the work actual performed on the work order.</inlineHelpText>
+        <label>Total Work Order Amount</label>
+        <summarizedField>Service_Order_Line__c.Total_Line_Price__c</summarizedField>
+        <summaryFilterItems>
+            <field>Service_Order_Line__c.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Usage/Consumption</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Service_Order_Line__c.Service_Order__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Turnaround_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Turnaround time. Calculated automatically</description>
+        <externalId>false</externalId>
+        <formula>IF ((Closed_On__c - CreatedDate) &lt;= 7, &quot;Less Than 8 days&quot;, 
+IF ((Closed_On__c - CreatedDate) &lt;= 15, &quot;8 To 15 days&quot;, 
+IF ((Closed_On__c - CreatedDate) &lt;= 30, &quot;16 to 30 days&quot;, 
+&quot;More Than 30 days&quot;)))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Turnaround Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Warranty__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Product Warranty</description>
+        <externalId>false</externalId>
+        <label>Warranty</label>
+        <referenceTo>Warranty__c</referenceTo>
+        <relationshipLabel>Work Orders</relationshipLabel>
+        <relationshipName>Work_Orders1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Work_Performed__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Details of work performed to address/resolve the service order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Details of work performed to address/resolve the service order</inlineHelpText>
+        <label>Work Performed</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Zip__c</fullName>
+        <deprecated>false</deprecated>
+        <description>“Zip code” part of the work order location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>“Zip code” part of the work order location</inlineHelpText>
+        <label>Zip</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Work Order</label>
+    <nameField>
+        <displayFormat>WO-{00000000}</displayFormat>
+        <label>Work Order Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Work Orders</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <searchLayouts>
+        <customTabListAdditionalFields>Case__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Company__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Contact__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Order_Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Order_Type__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Group__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Group_Member__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CREATED_DATE</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Contract_Flag__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Case__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Company__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Contact__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Order_Status__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Order_Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Service_Group__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Group_Member__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CREATED_DATE</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>OWNER.ALIAS</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Case__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Company__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Contact__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Order_Status__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Order_Type__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Group__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Group_Member__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CREATED_DATE</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>OWNER.ALIAS</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchResultsAdditionalFields>Case__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Company__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Contact__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Order_Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Order_Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Service_Group__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Group_Member__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CREATED_DATE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>OWNER.ALIAS</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Private</sharingModel>
+    <webLinks>
+        <fullName>Auto_Receive_Parts</fullName>
+        <availability>online</availability>
+        <description>Update the receipt status of all the part requests in the Work Order. No inventory updates are made</description>
+        <displayType>link</displayType>
+        <height>250</height>
+        <linkType>url</linkType>
+        <masterLabel>Auto Receive Parts</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__WORD_AutoReceiveWOReqRec?SVOId={!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Cancel_All_Parts_Requests</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <height>250</height>
+        <linkType>url</linkType>
+        <masterLabel>Cancel All Parts Requests</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__WORD_CancelWOReqRec?SVOId={!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Close_Service_Order</fullName>
+        <availability>online</availability>
+        <description>Close Work Order</description>
+        <displayType>link</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Close Work Order</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__WORD_CloseWO?id={!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_Estimates</fullName>
+        <availability>online</availability>
+        <description>Create/Edit Estimate Lines in the work order</description>
+        <displayType>link</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Create/Edit Estimates</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Service_Order__c.Id}&amp;SVMX_processId=TDM017&amp;SVMX_retURL=/{!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_Lines</fullName>
+        <availability>online</availability>
+        <description>Link to launch WORD_CreateWOLines VF Page</description>
+        <displayType>link</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>T&amp;M Lines</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Service_Order__c.Id}&amp;SVMX_processId=TDM016&amp;SVMX_retURL=/{!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_Quote</fullName>
+        <availability>online</availability>
+        <description>Create Quote from SVO Estimate Lines</description>
+        <displayType>link</displayType>
+        <height>250</height>
+        <linkType>url</linkType>
+        <masterLabel>Create Advanced Quote</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Service_Order__c.Id}&amp;SVMX_processId=TDM009&amp;SVMX_retURL=/{!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_RMA</fullName>
+        <availability>online</availability>
+        <description>Link to Launch create RMA screen</description>
+        <displayType>link</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Create RMA</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Service_Order__c.Id}&amp;SVMX_processId=TDM003&amp;SVMX_retURL=/{!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_Shipment_Order</fullName>
+        <availability>online</availability>
+        <description>Link to launch new shipment screen</description>
+        <displayType>link</displayType>
+        <height>250</height>
+        <linkType>url</linkType>
+        <masterLabel>Create Shipment Order</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Service_Order__c.Id}&amp;SVMX_processId=TDM007&amp;SVMX_retURL=/{!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_Usage_From_Estimates</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Create Usage From Estimates</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Service_Order__c.Id}&amp;SVMX_processId=TDM015&amp;SVMX_retURL=/{!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_WO_Parts_Request</fullName>
+        <availability>online</availability>
+        <description>Create/Edit Parts Request lines in the work order</description>
+        <displayType>link</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Create/Edit Parts Requests</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Service_Order__c.Id}&amp;SVMX_processId=TDM018&amp;SVMX_retURL=/{!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Dispatch_Console</fullName>
+        <availability>online</availability>
+        <description>Launch Dispatch Console wherein the dispatcher can assign a work order to a technician.</description>
+        <displayType>link</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Dispatch Console</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>window.open(&apos;/apex/SVMXC__Dcon_DispatchConsole?isdtp=mn&amp;wid={!Service_Order__c.Id}&amp;wno={!Service_Order__c.Name}&apos;, &apos;&apos;,&apos;resizable=1,status=0,toolbar=0,menubar=0,scrollbars=1&apos;);</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Entitlement</fullName>
+        <availability>online</availability>
+        <description>Entitlement On WorkOrder</description>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Entitlement</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__EVER_CaseEntitlement?cid={!Service_Order__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Post_Usage_To_Inventory</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Post Usage To Inventory</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__INVT_SmartEngine?hdrId={!Service_Order__c.Id}&amp;SMid=WORD010</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Process_Receipts</fullName>
+        <availability>online</availability>
+        <description>Shows screen to capture receipt information for work order parts requests. Performs inventory updates</description>
+        <displayType>link</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Process Receipts - Advanced</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__INVT_SmartEngine?hdrId={!Service_Order__c.Id}&amp;SMid=WORD011</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Validate_Address</fullName>
+        <availability>online</availability>
+        <description>Gets the latitude &amp; longitude coordinates of an valid address.</description>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>200</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Validate Address</masterLabel>
+        <openType>newWindow</openType>
+        <position>topLeft</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>/apex/SVMXC__COMM_validateAddress?objID={! Service_Order__c.Id }&amp;objName=SVMXC__Service_Order__c&amp;street=SVMXC__Street__c&amp;city=SVMXC__City__c&amp;state=SVMXC__State__c&amp;country=SVMXC__Country__c&amp;zip=SVMXC__Zip__c&amp;latitude=SVMXC__Latitude__c&amp;longitude=SVMXC__Longitude__c</url>
+        <width>600</width>
+    </webLinks>
+</CustomObject>

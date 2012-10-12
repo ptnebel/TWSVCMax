@@ -1,0 +1,1882 @@
+<apex:page title="ServiceMax Setup Home" controller="SVMXC.CONF_SetupHome" tabStyle="SVMXC__ServiceMax_Tags__c" action="{!ValidatePage}">    
+<style>
+        
+        .Logo1{
+                float:left;
+                margin: 0;
+                padding-top:0px;
+                padding-left:0px;
+                padding-right:0px;
+                overflow: hidden;
+                width: 319px;
+                /*height:44px;*/
+            }
+            .Logoheader{
+                  width:319px;
+                  height:44px;
+            }
+            .buttonNormalStateSelectedForGroup a.buttonLinkForGroup{
+                outline:0;
+            }
+            .buttonNormalTextWithIcon{
+                padding-top: 5px;
+                height: auto;
+                width:117px;
+                text-decoration:none;
+            }
+            a.buttonLink, a.buttonLink:hover {text-decoration:none;}
+            
+            #outer {display: table; height: 48px; padding:0}
+            #middle {display: table-cell; vertical-align: middle;}
+            #inner {word-wrap: break-word; width:117px;}
+            .buttonNormalTextWithIconGroup {
+                padding: 9px 0 3px 13px;
+                width: 110px;
+                word-wrap: break-word;
+            }      
+            .rightContDescText{min-height:100px;}
+            .buttonNormalTextWithIconGroup{padding: 9px 0 3px 13px; width: 110px; word-wrap: break-word;}
+            
+            a.buttonLinkSelected #inner, a.buttonLinkSelected:hover #inner {color:#fff; text-decoration:none}
+            *:first-child+html .rightContDesc .rightContDescText{  
+                min-height:80px !importants;
+                padding-bottom:40px;
+            }             
+                        
+            *:first-child+html #outer {
+              height: 48px;
+              position: relative;
+            }
+            *:first-child+html #middle {
+              position: absolute;
+              top: 50%;
+            }
+            *:first-child+html #inner {
+              position: relative;
+              top: -50%;
+            }            
+            
+</style>
+
+    <apex:form id="SetupHome">
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__CONF_SetupHome, 'style.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__CONF_SetupHome, 'jquery-1.6.2.min.js')}"/>
+        
+        <script type="text/javascript">
+        
+        $(document).ready(function() {
+            if(navigator.userAgent.indexOf('Mac') > 0) 
+            {
+                $("#macstyle").addClass("macclass");                
+            }
+        });
+        
+        function loadsimgs() {
+
+             // create object
+             imageObj = new Image();
+             // set image list
+             imges = new Array();
+             
+             for(var j=0;j<21;j++){
+                 imges[j]="{!URLFOR($Resource.CONF_SetupHome,'images/S_Icon_"+j+1+".png')}";
+             }
+             // start preloading
+             for(var i=0; i<21; i++) 
+             {
+                  imageObj.src=imges[i];
+             }
+             newimges = new Array();
+             newimges[0]="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/22Availableservices-small.png')}";
+             newimges[1]="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/23SkillHome-small.png')}";
+             newimges[2]="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/24TaskTemplatesHome-small.png')}";
+             newimges[3]="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/25BookingWindowsHome-small.png')}";
+             newimges[4]="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/26iPadAppConfiguration-small.png')}";
+             newimges[5]="{!URLFOR($Resource.CONF_SetupHome,'images/22AvailableServices.png')}";
+             newimges[6]="{!URLFOR($Resource.CONF_SetupHome,'images/23Skillshome.png')}";
+             newimges[7]="{!URLFOR($Resource.CONF_SetupHome,'images/24TaskTemplatesHome.png')}";
+             newimges[8]="{!URLFOR($Resource.CONF_SetupHome,'images/25BookingWindowsHome.png')}";
+             newimges[9]="{!URLFOR($Resource.CONF_SetupHome,'images/26iPadAppConfiguration.png')}";
+             for(var i=0; i<10; i++) 
+             {
+                  imageObj.src=newimges[i];
+             }
+            }
+            loadsimgs();
+            </script>
+            <script type="text/javascript">
+                var i=1;
+                var urlLoc;
+                function GotoUrl()
+                {
+                    return window.location=urlLoc;
+                }
+                
+                function FirstGroup()
+                {
+                    var GroupId=101; 
+                    for(i=1; i<=44; i++)
+                    {
+                        if( document.getElementById(i).className == "buttonNormalStateSelected")
+                        {
+                                document.getElementById(i).className = "buttonNormalState";
+                                document.getElementById("btnLink"+i).className = "buttonLink";
+                                document.getElementById('Name001').innerHTML="";
+                                document.getElementById('Desc001').innerHTML="";
+                                document.getElementById('{!$Component.img}').src="";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        }
+                    
+                        if((i==1) || (i==2) || (i==3) || (i==4)  || (i==6) || (i==7) || (i==5))
+                            document.getElementById(i).style.display  = "block";    
+                        else
+                            document.getElementById(i).style.display  = "none";
+                    }
+                    if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                    {
+                        document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        urlLoc = '#';
+                        document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                        document.getElementById('Name001').innerHTML="{!TagGroupText1}";  
+                        document.getElementById('Desc001').innerHTML="{!TagGroupDes1}";
+                    }
+                    for(j=101; j<=107; j++)
+                    {
+                        if(j==101)
+                        {
+                            if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                            {}
+                            else
+                            {
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                                urlLoc = '#';
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                                document.getElementById('Name001').innerHTML="{!TagGroupText1}";  
+                                document.getElementById('Desc001').innerHTML="{!TagGroupDes1}";
+                            }
+                            document.getElementById(j).className = "buttonNormalStateSelectedForGroup";
+                        }
+                        else
+                            document.getElementById(j).className = "buttonNormalStateForGroup";
+                    }
+                    disableFirstGrp();
+                }
+                
+                /*Added methods to disabled links when setting value is null or empty*/
+                function disableFirstGrp(){
+                    disableGrp('{!TagURL11}','1');
+                    disableGrp('{!TagURL12}','2');
+                    disableGrp('{!TagURL13}','3');
+                    disableGrp('{!TagURL14}','4');
+                    disableGrp('{!TagURL15}','5');
+                    disableGrp('{!TagURL16}','6');
+                    disableGrp('{!TagURL17}','7');
+                }
+                
+                function disableGrp(url,elementId)
+                {
+                    //urlLoc = url;
+                    if(url == null || url =='')
+                    {
+                          url = '#';
+                          document.getElementById(elementId).className = "removeStyles";
+                          document.getElementById('btnLink' + elementId).className = "removeStyles";
+                          document.getElementById(elementId).className = "disableStyle";
+                          document.getElementById(elementId).getElementsByTagName('a')[0].href = "#";
+                    }
+                }
+                
+                function SecondGroup()
+                {
+                    var GroupId=102; 
+                    for(i=1; i<=44; i++)
+                    {
+                        if(document.getElementById(i).className == "buttonNormalStateSelected")
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                            document.getElementById('Name001').innerHTML="";
+                            document.getElementById('Desc001').innerHTML="";
+                            document.getElementById('{!$Component.img}').src="";
+                            document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        }
+                        if((i==8) || (i==9) || (i==23) || (i==22) || (i==24))
+                            document.getElementById(i).style.display  = "block";    
+                        else
+                            document.getElementById(i).style.display  = "none";
+                    }
+                    if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                    {
+                        document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                         urlLoc = '#';
+                        document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                        document.getElementById('Name001').innerHTML="{!TagGroupText2}";  
+                        document.getElementById('Desc001').innerHTML="{!TagGroupDes2}";
+                    }
+                     for(j=101; j<=107; j++)
+                    {
+                        if(j==102)
+                        {
+                            if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                            {}
+                            else
+                            {
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                                 urlLoc = '#';
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                                document.getElementById('Name001').innerHTML="{!TagGroupText2}";  
+                                document.getElementById('Desc001').innerHTML="{!TagGroupDes2}";
+                            }
+                            document.getElementById(j).className = "buttonNormalStateSelectedForGroup";
+                        }
+                        else
+                            document.getElementById(j).className = "buttonNormalStateForGroup";
+                    }
+                    disableSecondGrp();
+                }
+                
+                function disableSecondGrp()
+                {
+                    disableGrp('{!TagURL55}','24');
+                    disableGrp('{!TagURL19}','9');
+                    disableGrp('{!TagURL53}','22');         
+                    disableGrp('{!TagURL18}','8');      
+                    disableGrp('{!TagURL54}','23');     
+                        
+                }
+            
+                function ThirdGroup()
+                {
+                    var GroupId=103; 
+                    for(i=1; i<=44; i++)
+                    {
+                        
+                        if(document.getElementById(i).className == "buttonNormalStateSelected")
+                        {
+                                document.getElementById(i).className = "buttonNormalState";
+                                document.getElementById("btnLink"+i).className = "buttonLink";
+                                document.getElementById('Name001').innerHTML="";
+                                document.getElementById('Desc001').innerHTML="";
+                                document.getElementById('{!$Component.img}').src="";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        }
+                        if((i==17) || (i==16) || (i==14))
+                            document.getElementById(i).style.display  = "block";    
+                        else
+                            document.getElementById(i).style.display  = "none";
+                    }
+                    if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                    {
+                        document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        urlLoc = '#';
+                        document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                        document.getElementById('Name001').innerHTML="{!TagGroupText3}";  
+                        document.getElementById('Desc001').innerHTML="{!TagGroupDes3}";
+                    }
+                    for(j=101; j<=107; j++)
+                    {
+                        if(j==103)
+                        {
+                            if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                            {}
+                            else
+                            {
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                                urlLoc = '#';
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                                document.getElementById('Name001').innerHTML="{!TagGroupText3}";  
+                                document.getElementById('Desc001').innerHTML="{!TagGroupDes3}";
+                            }
+                            document.getElementById(j).className = "buttonNormalStateSelectedForGroup";
+                        }
+                        else
+                            document.getElementById(j).className = "buttonNormalStateForGroup";
+                    }
+                    disableThirdGroup();
+                }
+                
+                function disableThirdGroup(){
+                    disableGrp('{!TagURL27}','17');
+                    disableGrp('{!TagURL24}','14');
+                    disableGrp('{!TagURL26}','16');         
+                }         
+                
+                function FourthGroup()
+                {
+                    var GroupId=104; 
+                    for(i=1; i<=44; i++)
+                    {
+                        
+                        if(document.getElementById(i).className == "buttonNormalStateSelected")
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                            document.getElementById('Name001').innerHTML="";
+                            document.getElementById('Desc001').innerHTML="";
+                            document.getElementById('{!$Component.img}').src="";
+                            document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        }
+                        if((i==25) || (i==11) || (i==12) || (i==13) || (i==15) || (i==20) || (i==19) || (i==31) || (i==37) )
+                            document.getElementById(i).style.display  = "block";    
+                        else
+                            document.getElementById(i).style.display  = "none";
+                    }
+                    if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                    {
+                        document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        urlLoc = '#';
+                        document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                        document.getElementById('Name001').innerHTML="{!TagGroupText4}";
+                        document.getElementById('Desc001').innerHTML="{!TagGroupDes4}";
+                    }
+                     for(j=101; j<=107; j++)
+                    {
+                        if(j==104)
+                        {
+                            if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                            {}
+                            else
+                            {
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                                urlLoc = '#';
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                                document.getElementById('Name001').innerHTML="{!TagGroupText4}";  
+                                document.getElementById('Desc001').innerHTML="{!TagGroupDes4}";
+                            }
+                            document.getElementById(j).className = "buttonNormalStateSelectedForGroup";
+                        }
+                        else
+                            document.getElementById(j).className = "buttonNormalStateForGroup";
+                    }
+                    disableFourthGrp();
+                }
+                
+                function disableFourthGrp(){
+                    disableGrp('{!TagURL21}','11');
+                    disableGrp('{!TagURL56}','25');
+                    disableGrp('{!TagURL22}','12'); 
+                    disableGrp('{!TagURL25}','15'); 
+                    disableGrp('{!TagURL23}','13'); 
+                    disableGrp('{!TagURL28}','19'); 
+                    disableGrp('{!TagURL29}','20'); 
+                    disableGrp('{!TagURL62}','31');
+                    disableGrp('{!TagURL68}','37'); 
+                }
+                
+                function FifthGroup()
+                {
+                    var GroupId=105; 
+                    for(i=1; i<=44; i++)
+                    {
+                        
+                        if(document.getElementById(i).className == "buttonNormalStateSelected")
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                            document.getElementById('Name001').innerHTML="";
+                            document.getElementById('Desc001').innerHTML="";
+                            document.getElementById('{!$Component.img}').src="";
+                            document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        }
+                        if((i==18) || (i==26) || (i==29) || (i==34) )
+                            document.getElementById(i).style.display  = "block";    
+                        else
+                            document.getElementById(i).style.display  = "none";
+                    }
+                    if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                    {
+                        document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        urlLoc = '#';
+                        document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                        document.getElementById('Name001').innerHTML="{!TagGroupText5}";  
+                        document.getElementById('Desc001').innerHTML="{!TagGroupDes5}";
+                    }
+                     for(j=101; j<=107; j++)
+                    {
+                        if(j==105)
+                        {
+                            if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                            {}
+                            else
+                            {
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                                urlLoc = '#';
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                                document.getElementById('Name001').innerHTML="{!TagGroupText5}";  
+                                document.getElementById('Desc001').innerHTML="{!TagGroupDes5}";
+                            }
+                            document.getElementById(j).className = "buttonNormalStateSelectedForGroup";
+                        }
+                        else
+                            document.getElementById(j).className = "buttonNormalStateForGroup";
+                    }
+                    disableFifthGrp();
+                }
+               
+                function disableFifthGrp(){
+                    disableGrp('{!TagURL51}','18'); 
+                    disableGrp('{!TagURL57}','26');
+                    disableGrp('{!TagURL60}','29');
+                    disableGrp('{!TagURL65}','34');
+                }
+                
+                function SixthGroup()
+                {
+                    var GroupId=106; 
+                    for(i=1; i<=44; i++)
+                    {
+                        
+                        if(document.getElementById(i).className == "buttonNormalStateSelected")
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                            document.getElementById('Name001').innerHTML="";
+                            document.getElementById('Desc001').innerHTML="";
+                            document.getElementById('{!$Component.img}').src="";
+                            document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        }
+                        if((i==21) || (i==28) || (i==27) || (i==30) || (i==10) || (i==35))
+                            document.getElementById(i).style.display  = "block";    
+                        else
+                            document.getElementById(i).style.display  = "none";
+                    }
+                    if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                    {
+                        document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        urlLoc = '#';
+                        document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                        document.getElementById('Name001').innerHTML="{!TagGroupText6}";  
+                        document.getElementById('Desc001').innerHTML="{!TagGroupDes6}";
+                    }
+                    for(j=101; j<=107; j++)
+                    {
+                        if(j==106)
+                        {
+                            if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                            {}
+                            else
+                            {
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                                urlLoc = '#';
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                                document.getElementById('Name001').innerHTML="{!TagGroupText6}";  
+                                document.getElementById('Desc001').innerHTML="{!TagGroupDes6}";
+                            }
+                            document.getElementById(j).className = "buttonNormalStateSelectedForGroup";
+                        }
+                        else
+                            document.getElementById(j).className = "buttonNormalStateForGroup";
+                    }
+                    disableSixthGrp();
+                }
+                
+                function disableSixthGrp(){
+                    disableGrp('{!TagURL20}','10');
+                    disableGrp('{!TagURL52}','21');
+                    disableGrp('{!TagURL58}','27');
+                    disableGrp('{!TagURL59}','28');
+                    disableGrp('{!TagURL61}','30');
+                    disableGrp('{!TagURL66}','35');
+                }
+                
+                <!-- Commented for some time|| (i==35)  || (i==37)    -->
+                function SeventhGroup()
+                {
+                    var GroupId=107; 
+                    for(i=1; i<=44; i++)
+                    {
+                        
+                        if(document.getElementById(i).className == "buttonNormalStateSelected")
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                            document.getElementById('Name001').innerHTML="";
+                            document.getElementById('Desc001').innerHTML="";
+                            document.getElementById('{!$Component.img}').src="";
+                            document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        }
+                        if((i==32) || (i==33)  || (i==36)  || (i==38) || (i==39) || (i==40)  || (i==41)  || (i==42) || (i==43)  || (i==44)) 
+                            document.getElementById(i).style.display  = "block";    
+                        else
+                            document.getElementById(i).style.display  = "none";
+                    }
+                    if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                    {
+                        document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                        urlLoc = '#';
+                        document.getElementById('{!$Component.img}').src ="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                        document.getElementById('Name001').innerHTML = "{!TagGroupText7}";  
+                        document.getElementById('Desc001').innerHTML = "{!TagGroupDes7}";
+                    }
+                    for(j=101; j<=107; j++)
+                    {
+                        if(j==107)
+                        {
+                            if(document.getElementById(GroupId).className == "buttonNormalStateSelectedForGroup")
+                            {}
+                            else
+                            {
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                                urlLoc = '#';
+                                document.getElementById('{!$Component.img}').src ="{!URLFOR($Resource.CONF_SetupHome,'images/B_GroupImg1.png')}";
+                                document.getElementById('Name001').innerHTML = "{!TagGroupText7}";  
+                                document.getElementById('Desc001').innerHTML = "{!TagGroupDes7}";
+                            }
+                            document.getElementById(j).className = "buttonNormalStateSelectedForGroup";
+                        }
+                        else
+                            document.getElementById(j).className = "buttonNormalStateForGroup";
+                    }
+                    disableSeventhGrp();
+                }
+                
+                function disableSeventhGrp(){
+                    disableGrp('{!TagURL63}','32');
+                    disableGrp('{!TagURL64}','33');
+                    disableGrp('{!TagURL67}','36');
+                    disableGrp('{!TagURL69}','38');
+                    disableGrp('{!TagURL70}','39');
+                    disableGrp('{!TagURL71}','40');
+                    disableGrp('{!TagURL72}','41');
+                    disableGrp('{!TagURL73}','42');
+                    disableGrp('{!TagURL74}','43');
+                    disableGrp('{!TagURL75}','44');
+                }
+                
+                function Modules()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==1)
+                        {
+                            urlLoc = '{!TagURL11}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME11}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC11}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_1.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL11}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFirstGrp();
+                        
+                }
+                function Submodules()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==2)
+                        {
+                            urlLoc = '{!TagURL12}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME12}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC12}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_2.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL12}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFirstGrp();
+                   
+                }
+                function Settings()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==3)
+                        {
+                            urlLoc = '{!TagURL13}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME13}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC13}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_3.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL13}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFirstGrp();
+                    
+                }
+                function DisplayTags()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==4)
+                        {
+                            urlLoc = '{!TagURL14}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME14}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC14}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_4.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL14}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFirstGrp();
+                  
+                }
+                function Translations()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==5)
+                        {
+                            urlLoc = '{!TagURL15}';
+                            if(urlLoc != null && urlLoc !='')
+                            {
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME15}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC15}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_5.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL15}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFirstGrp();
+                 
+                }
+                function ObjectMapping()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==6)
+                        {
+                            urlLoc = '{!TagURL16}';
+                            if(urlLoc != null && urlLoc !='')
+                            {
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME16}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC16}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_6.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL16}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFirstGrp();
+                   
+                }
+                function ConfigurationProfiles()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==7)
+                        {
+                            urlLoc = '{!TagURL17}';
+                            if(urlLoc != null && urlLoc !='')
+                            {
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME17}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC17}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_7.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL17}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFirstGrp();
+
+                }
+                function ServiceOrg()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==8)
+                        {
+                            urlLoc = '{!TagURL18}'; 
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME18}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC18}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_8.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL18}'; 
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSecondGrp();
+       
+                }
+                function Territories()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==9)
+                        {
+                            urlLoc = '{!TagURL19}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME19}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC19}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_9.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL19}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSecondGrp();
+
+                }
+                function InventoryProcesses()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==10)
+                        {
+                            urlLoc = '{!TagURL20}';
+                            if(urlLoc != null && urlLoc !='')
+                            {
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME20}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC20}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_10.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL20}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSixthGrp();
+    
+                }
+                function MTTSRules()
+                {
+                   for(i=1; i<=44; i++)
+                    {
+                        if(i==11)
+                        {
+                            urlLoc = '{!TagURL21}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME21}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC21}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_11.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL21}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                     disableFourthGrp();
+     
+                }
+                function TerritoryMatchRules()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==12)
+                        {
+                            urlLoc = '{!TagURL22}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME22}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC22}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_12.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL22}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFourthGrp();
+       
+                }
+                function DispatchProcesses()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==13)
+                        {
+                            urlLoc = '{!TagURL23}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME23}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC23}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_13.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL23}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFourthGrp();
+      
+                }
+                function AutoEntitlementRules()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==14)
+                        {
+                           /* document.getElementById(i).className = "buttonNormalStateSelected";
+                            document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                            document.getElementById('Name001').innerHTML="{!TagNAME24}";
+                            document.getElementById('Desc001').innerHTML="{!TagDESC24}";
+                            document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_14.png')}";*/
+                            urlLoc = '{!TagURL24}';
+                            if(urlLoc != null && urlLoc != '')
+                            {
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                document.getElementById('Name001').innerHTML="{!TagNAME24}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC24}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_14.png')}";    
+                            }
+                         /*   else
+                            {
+                                urlLoc = '#';
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.CONF_SetupHome,'images/button_go_disabled.png')}";
+                            }*/
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableThirdGroup();
+          
+                }
+                function OptiMaxSettings()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==15)
+                        {
+                            urlLoc = '{!TagURL25}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME25}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC25}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_15.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL25}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFourthGrp();
+           
+                }
+                function CounterRules()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==16)
+                        {
+                            urlLoc = '{!TagURL26}';
+                            if(urlLoc != null && urlLoc !='')
+                            {
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME26}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC26}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_16.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL26}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableThirdGroup();
+          
+                }
+                function SLATerms()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==17)
+                        {
+                            urlLoc = '{!TagURL27}';
+                            if(urlLoc != null && urlLoc !='')
+                            {
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME27}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC27}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_17.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL27}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableThirdGroup();
+          
+                }
+                function OfflineProfiles()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==18)
+                        {
+                            urlLoc = '{!TagURL51}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME51}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC51}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_18.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL51}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFifthGrp();
+           
+                }
+                function EventSubjectRules()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==19)
+                        {
+                            urlLoc = '{!TagURL28}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME28}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC28}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_19.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL28}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFourthGrp();
+           
+                }
+                function EventHoverRules()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==20)
+                        {
+                            urlLoc = '{!TagURL29}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME29}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC29}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_20.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL29}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFourthGrp();
+             
+                }
+                function ProcessDesigner()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==21)
+                        {
+                            urlLoc = '{!TagURL52}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME52}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC52}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_21.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL52}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSixthGrp();
+            
+                }
+                function AvailableServicesHome()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==22)
+                        {
+                            urlLoc = '{!TagURL53}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME53}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC53}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/22AvailableServices.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                            //  urlLoc = '{!TagURL53}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSecondGrp();
+            
+                }
+                function SkillsHome()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==23)
+                        {
+                            urlLoc = '{!TagURL54}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME54}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC54}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/23Skillshome.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL54}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSecondGrp();
+            
+                }
+                function TaskTemplatesHome()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==24)
+                        {
+                            urlLoc = '{!TagURL55}';
+                            if(urlLoc != null && urlLoc !='')
+                            {  
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME55}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC55}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/24TaskTemplatesHome.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL55}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSecondGrp();
+            
+                }
+                function BookingWindowsHome()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==25)
+                        {
+                            urlLoc = '{!TagURL56}';
+                            if(urlLoc != null && urlLoc !='')
+                            {  
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME56}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC56}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/25BookingWindowsHome.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL56}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFourthGrp();
+            
+                }
+                function iPadAppConfiguration()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==26)
+                        {
+                            urlLoc = '{!TagURL57}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME57}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC57}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/26iPadAppConfiguration.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL57}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFifthGrp();
+            
+                }
+                
+                function ManageToolbars()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==27)
+                        {
+                            urlLoc = '{!TagURL58}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME58}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC58}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_27.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL58}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSixthGrp();
+                
+                }
+                function ManageOtherActions()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==28)
+                        {
+                            urlLoc = '{!TagURL59}';
+                            if(urlLoc != null && urlLoc !='')
+                            {
+                               document.getElementById(i).className = "buttonNormalStateSelected";
+                               document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                               document.getElementById('Name001').innerHTML="{!TagNAME59}";
+                               document.getElementById('Desc001').innerHTML="{!TagDESC59}";
+                               document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_28.png')}";
+                               document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                               //urlLoc = '{!TagURL59}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSixthGrp();
+                }
+                function ManageProcessAccess()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==29)
+                        {
+                            urlLoc = '{!TagURL60}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME60}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC60}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_29.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL60}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFifthGrp();
+                }
+                function ManageTDMMigrationTool()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==30)
+                        {
+                            urlLoc = '{!TagURL61}';
+                            if(urlLoc != null && urlLoc !='')
+                            {
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME61}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC61}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_30.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL61}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSixthGrp();
+                }
+                function ManageDCFieldUpdates()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==31)
+                        {
+                            urlLoc = '{!TagURL62}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME62}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC62}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_31.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL62}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFourthGrp();
+                }
+                <!-- Newly Added for new Group -->
+                function RecevingProcesses()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==32)
+                        {
+                            urlLoc = '{!TagURL63}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML='{!TagNAME70}';
+                                document.getElementById('Desc001').innerHTML='{!TagDESC70}';
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_33.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                // urlLoc = '{!TagURL63}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                function ShippingProcesses()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==33)
+                        {
+                            urlLoc = '{!TagURL64}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME71}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC71}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_32.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL64}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                
+                function MobileConfiguration()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==34)
+                        {
+                            urlLoc = '{!TagURL65}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME72}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC72}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/mob_config.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL65}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFifthGrp();
+                }
+                function SearchConfiguration()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==35)
+                        {
+                            urlLoc = '{!TagURL66}';
+                            if(urlLoc != null && urlLoc !='')
+                            {
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME73}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC73}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_34.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL66}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSixthGrp();
+                }
+                function RoutingRules()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==36)
+                        {
+                            urlLoc = '{!TagURL67}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME74}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC74}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_37.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL67}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                function WorkOrdViews()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==37)
+                        {
+                            urlLoc = '{!TagURL68}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME75}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC75}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_38.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                // urlLoc = '{!TagURL68}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableFourthGrp();
+                }
+                function InitiateReturnProcesses()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==38)
+                        {
+                            urlLoc = '{!TagURL69}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME76}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC76}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_36.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL69}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                <!-- Neeraj: newly Added buttons -->
+                function ServiceMaxLocations()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==39)
+                        {
+                            urlLoc = '{!TagURL70}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME77}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC77}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_80.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL70}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                function Fulfillmentprocess()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==40)
+                        {
+                            urlLoc = '{!TagURL71}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME78}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC78}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_81.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL71}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                function ForwardShipments()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==41)
+                        {
+                            urlLoc = '{!TagURL72}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME79}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC79}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_82.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL72}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                function RevAndSubs()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==42)
+                        {
+                            urlLoc = '{!TagURL73}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME80}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC80}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_85.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL73}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                function OutboundRouteCalculation()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==43)
+                        {
+                            urlLoc = '{!TagURL74}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!JSENCODE(TagNAME81)}";
+                                document.getElementById('Desc001').innerHTML="{!JSENCODE(TagDESC81)}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_83.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL74}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                function DeliveryRules()
+                {
+                    for(i=1; i<=44; i++)
+                    {
+                        if(i==44)
+                        {
+                            urlLoc = '{!TagURL75}';
+                            if(urlLoc != null && urlLoc !='')
+                            { 
+                                document.getElementById(i).className = "buttonNormalStateSelected";
+                                document.getElementById("btnLink"+i).className = "buttonLinkSelected";
+                                document.getElementById('Name001').innerHTML="{!TagNAME82}";
+                                document.getElementById('Desc001').innerHTML="{!TagDESC82}";
+                                document.getElementById('{!$Component.img}').src="{!URLFOR($Resource.CONF_SetupHome,'images/B_Icon_84.png')}";
+                                document.getElementById('{!$Component.svmx_gobutton}').src="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}";
+                                //urlLoc = '{!TagURL75}';
+                            }
+                        }
+                        else
+                        {
+                            document.getElementById(i).className = "buttonNormalState";
+                            document.getElementById("btnLink"+i).className = "buttonLink";
+                        }
+                    }
+                    disableSeventhGrp();
+                }
+                
+                function HELP() 
+                {
+                    urlLoc = '{!TagHLPURL}';
+                    window.open(urlLoc,"_win");
+                }
+            </script>
+            <div id="MainContainer">
+                <header>
+                    <div class="headerFMA">
+                        <div class="headerLogo"><div class="Logoheader"><div class="Logo1"><apex:image url="{!SvmxLogoId}" width="100%" /></div></div></div>
+                        <div class="headerFMAText">
+                            <div class="headerFMAHelpLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/Help_small.png')}"usemap="#Map"/>
+                                <map name="Map">
+                                    <area shape="rect" coords="-2,0,27,34" href="javascript:HELP()" alt="Help" title="Help" />
+                                </map>
+                            </div>
+                            <div class="headerFMATextHeading">{!TAG001}</div>
+                            <div class="headerFMATextDesc">{!TAG003}</div>
+                        </div>
+                    </div>
+                </header>
+                <section>
+                    <div class="middleCont">
+                        <div class="leftCont"> 
+                            <div class="GroupCont" style="padding-left: 8px; padding-top: 23px;">
+                                <div id="101" class="buttonNormalStateForGroup"><a id="btnLinkGroup1" class="buttonLinkForGroup"  href="javascript:FirstGroup()"><div class="buttonNormalTextWithIconGroup" id="macstyle">{!TagGroupName1}</div></a></div>
+                                <div id="102" class="buttonNormalStateForGroup"><a id="btnLinkGroup2" class="buttonLinkForGroup" href="javascript:SecondGroup()"><div class="buttonNormalTextWithIconGroup">{!TagGroupName2}</div></a></div>
+                                <div id="103" class="buttonNormalStateForGroup"><a id="btnLinkGroup3" class="buttonLinkForGroup" href="javascript:ThirdGroup()"><div class="buttonNormalTextWithIconGroup">{!TagGroupName3}</div></a></div>
+                                <div id="104" class="buttonNormalStateForGroup"><a id="btnLinkGroup4" class="buttonLinkForGroup" href="javascript:FourthGroup()"><div class="buttonNormalTextWithIconGroup">{!TagGroupName4}</div></a></div>
+                                <div id="105" class="buttonNormalStateForGroup"><a id="btnLinkGroup5" class="buttonLinkForGroup" href="javascript:FifthGroup()"><div class="buttonNormalSmallTextWithIconGroup" >{!TagGroupName5}</div></a></div>
+                                <div id="106" class="buttonNormalStateForGroup"><a id="btnLinkGroup6" class="buttonLinkForGroup" href="javascript:SixthGroup()"><div class="buttonNormalTextWithIconGroup" >{!TagGroupName6}</div></a></div>
+                                <div id="107" class="buttonNormalStateForGroup" style="margin-bottom:0;"><a id="btnLinkGroup7" class="buttonLinkForGroup" href="javascript:SeventhGroup()"><div class="buttonNormalTextWithIconGroup" >{!TagGroupName7}</div></a>
+                                    <div class="groupSpringRelIcon"></div>  
+                                </div>
+                                <script>
+                                        document.getElementById("107").style.display  = "{!strAPLDispaly}";
+                                </script> 
+                            </div> 
+                            <div class="buttonStateContNew">
+                                <div class="top">
+                                    <div id="1" style="display: block" class="buttonNormalState"><a id="btnLink1" class="buttonLink" href="javascript:Modules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_1.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT11}</div></div></div></div></a></div>
+                                    <div id="2" style="display: block" class="buttonNormalState"><a id="btnLink2" class="buttonLink" href="javascript:Submodules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_2.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT12}</div></div></div></div></a></div>
+                                    <div id="3" style="display: block"  class="buttonNormalState"><a id="btnLink3" class="buttonLink" href="javascript:Settings()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_3.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT13}</div></div></div></div></a></div>
+                                    <div id="4" style="display: block" class="buttonNormalState"><a id="btnLink4" class="buttonLink" href="javascript:DisplayTags()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_4.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT14}</div></div></div></div></a></div>
+                                    <div id="7"  style="display: block" class="buttonNormalState"><a id="btnLink7" class="buttonLink" href="javascript:ConfigurationProfiles()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_7.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT17}</div></div></div></div></a></div>
+                                    <div id="6" style="display: block" class="buttonNormalState"><a id="btnLink6" class="buttonLink" href="javascript:ObjectMapping()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_6.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT16}</div></div></div></div></a></div>
+                                    <div id="5" style="display: block"  class="buttonNormalState"><a id="btnLink5" class="buttonLink" href="javascript:Translations()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_5.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT15}</div></div></div></div></a></div> 
+                                    <div id="8"  style="display: none" class="buttonNormalState"><a id="btnLink8" class="buttonLink" href="javascript:ServiceOrg()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_8.png')}" /></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT18}</div></div></div></div></a></div>
+                                    <div id="9"  style="display: none"class="buttonNormalState"><a id="btnLink9" class="buttonLink" href="javascript:Territories()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_9.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT19}</div></div></div></div></a></div>
+                                    <div id="23"  style="display: none" class="buttonNormalState"><a id="btnLink23" class="buttonLink" href="javascript:SkillsHome()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/23SkillHome-small.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT54}</div></div></div></div></a></div>
+                                     <div id="22" style="display: none"  class="buttonNormalState"><a id="btnLink22" class="buttonLink" href="javascript:AvailableServicesHome()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/22Availableservices-small.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT53}</div></div></div></div></a></div>
+                                    <div id="24"  style="display: none" class="buttonNormalState"><a id="btnLink24" class="buttonLink" href="javascript:TaskTemplatesHome()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/24TaskTemplatesHome-small.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT55}</div></div></div></div></a></div>
+                                    <div id="17" style="display: none" class="buttonNormalState"><a id="btnLink17" class="buttonLink" href="javascript:SLATerms()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_17.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT27}</div></div></div></div></a></div>
+                                    <div id="16" style="display: none"  class="buttonNormalState"><a id="btnLink16" class="buttonLink" href="javascript:CounterRules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_16.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT26}</div></div></div></div></a></div>
+                                    <div id="14" style="display: none" class="buttonNormalState"><a id="btnLink14" class="buttonLink" href="javascript:AutoEntitlementRules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_14.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT24}</div></div></div></div></a></div>  
+                                    <div id="25" style="display: none" class="buttonNormalState"><a id="btnLink25" class="buttonLink" href="javascript:BookingWindowsHome()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/25BookingWindowsHome-small.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT56}</div></div></div></div></a></div>
+                                    <div id="11" style="display: none" class="buttonNormalState"><a id="btnLink11" class="buttonLink" href="javascript:MTTSRules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_11.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT21}</div></div></div></div></a></div>
+                                    <div id="12" style="display: none" class="buttonNormalState"><a id="btnLink12" class="buttonLink" href="javascript:TerritoryMatchRules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_12.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT22}</div></div></div></div></a></div>
+                                    <div id="13" style="display: none" class="buttonNormalState"><a id="btnLink13" class="buttonLink" href="javascript:DispatchProcesses()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_13.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT23}</div></div></div></div></a></div>
+                                    <div id="15"  style="display: none" class="buttonNormalState"><a id="btnLink15" class="buttonLink" href="javascript:OptiMaxSettings()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_15.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT25}</div></div></div></div></a></div>
+                                    <div id="20" style="display: none" class="buttonNormalState"><a id="btnLink20" class="buttonLink" href="javascript:EventHoverRules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_20.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT29}</div></div></div></div></a></div>
+                                    <div id="19" style="display: none" class="buttonNormalState"><a id="btnLink19" class="buttonLink" href="javascript:EventSubjectRules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_19.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT28}</div></div></div></div></a></div>
+                                    <div id="31" style="display: none" class="buttonNormalState"><a id="btnLink31" class="buttonLink" href="javascript:ManageDCFieldUpdates()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_31.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT62}</div></div></div></div></a></div> 
+                                    <div id="18" style="display: none" class="buttonNormalState"><a id="btnLink18" class="buttonLink" href="javascript:OfflineProfiles()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_18.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT51}</div></div></div></div></a></div>
+                                    <div id="26" style="display: none" class="buttonNormalState"><a id="btnLink26" class="buttonLink" href="javascript:iPadAppConfiguration()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/26iPadAppConfiguration-small.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT57}</div></div></div></div></a></div>
+                                    <div id="29" style="display: none" class="buttonNormalState"><a id="btnLink29" class="buttonLink" href="javascript:ManageProcessAccess()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_29.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT60}</div></div></div></div></a></div> 
+                                    <div id="21" style="display: none" class="buttonNormalState"><a id="btnLink21" class="buttonLink" href="javascript:ProcessDesigner()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_21.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT52}</div></div></div></div></a></div>
+                                    <div id="28" style="display: none" class="buttonNormalState"><a id="btnLink28" class="buttonLink" href="javascript:ManageOtherActions()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_28.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT59}</div></div></div></div></a></div> 
+                                    <div id="27" style="display: none" class="buttonNormalState"><a id="btnLink27" class="buttonLink" href="javascript:ManageToolbars()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_27.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT58}</div></div></div></div></a></div> 
+                                    <div id="30" style="display: none" class="buttonNormalState"><a id="btnLink30" class="buttonLink" href="javascript:ManageTDMMigrationTool()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_30.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT61}</div></div></div></div></a></div> 
+                                    <div id="10" style="display: none"  class="buttonNormalState"><a id="btnLink10" class="buttonLink" href="javascript:InventoryProcesses()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_10.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT20}</div></div></div></div></a></div>
+                                    <!-- Newly Added group Buttons -->
+                                    
+                                    <div id="39" style="display: none"  class="buttonNormalState"><a id="btnLink39" class="buttonLink" href="javascript:ServiceMaxLocations()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_80.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT77}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div>
+                                    
+                                    <div id="38" style="display: none"  class="buttonNormalState"><a id="btnLink38" class="buttonLink" href="javascript:InitiateReturnProcesses()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_36.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT76}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div>
+                                    
+                                    <div id="36" style="display: none"  class="buttonNormalState"><a id="btnLink36" class="buttonLink" href="javascript:RoutingRules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_37.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT74}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div>
+                                    
+                                    <div id="32" style="display: none"  class="buttonNormalState"><a id="btnLink32" class="buttonLink" href="javascript:RecevingProcesses()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_33.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT70}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div>
+                                    
+                                    <div id="43" style="display: none"  class="buttonNormalState"><a id="btnLink43" class="buttonLink" href="javascript:OutboundRouteCalculation()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_83.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT81}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div>
+                                    
+                                    <div id="44" style="display: none"  class="buttonNormalState"><a id="btnLink44" class="buttonLink" href="javascript:DeliveryRules()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_84.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT82}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div> 
+                                    
+                                    <div id="41" style="display: none"  class="buttonNormalState"><a id="btnLink41" class="buttonLink" href="javascript:ForwardShipments()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_82.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT79}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div>
+                                    
+                                    <div id="33" style="display: none"  class="buttonNormalState"><a id="btnLink33" class="buttonLink" href="javascript:ShippingProcesses()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_32.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT71}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div>
+                                    
+                                    <div id="42" style="display: none"  class="buttonNormalState"><a id="btnLink42" class="buttonLink" href="javascript:RevAndSubs()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_85.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT80}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div>
+                                    
+                                    <div id="40" style="display: none"  class="buttonNormalState"><a id="btnLink40" class="buttonLink" href="javascript:Fulfillmentprocess()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_81.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT78}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>  
+                                    </div>
+                                    
+                                    <!-- For mobile confiuration. -->
+                                    <div id="34" style="display: none"  class="buttonNormalState"><a id="btnLink34" class="buttonLink" href="javascript:MobileConfiguration()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/mob_config_small.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT72}</div></div></div></div></a></div>
+                                    
+                                    <div id="35" style="display: none"  class="buttonNormalState"><a id="btnLink35" class="buttonLink" href="javascript:SearchConfiguration()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_34.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT73}</div></div></div></div></a>
+                                    <div class="preRelIcon"></div>
+                                    </div>
+                                    
+                                    <div id="37" style="display: none"  class="buttonNormalState"><a id="btnLink37" class="buttonLink" href="javascript:WorkOrdViews()"><div class="buttonNormalLogo"><apex:image url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/S_Icon_38.png')}"/></div><div class="buttonNormalTextWithIcon"><div id="outer" class="border"><div id="middle"><div id="inner" class="border">{!TagTEXT75}</div></div></div></div></a></div>
+                                    
+                                
+                                </div>
+                            </div>
+                            
+                            <div class="indicatesTxt">{!TagGroupNote}</div>
+                            
+                        </div>
+                        <div class="Devider"></div>
+                        <div class="rightCont">
+                            <div class="rightContIcon">
+                                <div class="rightContIconImage" id="icon001"><apex:image id="img" url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/module_icon_big.png')}"/></div>
+                            </div>
+                            <div class="rightContBottom">
+                                <div class="rightContHeader">
+                                    <div class="rightContHeaderText" id="Name001"></div> 
+                                </div>
+                                <div class="rightContDesc">
+                                    <div class="rightContDescText" id="Desc001"></div>
+                                    <div class="rightContGoButton"> <a href="#" onClick="javascript:GotoUrl()"><apex:image id="svmx_gobutton" url="{!URLFOR($Resource.SVMXC__CONF_SetupHome,'images/button_go.png')}"/></a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <script type="text/javascript">
+                FirstGroup();
+            </script>
+    </apex:form>    
+</apex:page>

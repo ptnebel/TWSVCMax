@@ -1,0 +1,48 @@
+<apex:page controller="SVMXC.DCON_DispatchConsole"  title=" ">
+    <apex:form >
+    <center>
+    <apex:flash id="DCMAP" src="{!$Resource.SVMXC__DCON_DispatchConsole_Map}" height="680" width="100%" flashvars="sessionId={!MySessionId}&serverURL={!$Api.Partner_Server_URL_90}&mapKey={!GMapAPI}&clientId={!clientId}&workOrderID={!workorderId}&workOrder={!workorderNo}&mapclientid=gme-servicemaxinc"></apex:flash>
+    </center>  
+    <script type="text/javascript">
+    function changeTitle(title) { document.title = title; }
+    </script>
+     <script type="text/javascript">
+        var url;
+        
+        //window.onbeforeunload = enableMap
+        
+        /*function enableMap()
+        {
+            //var cnf = confirm("Are you sure?");
+            
+            if(cnf == true)
+            {
+                alert("Bye "+window.opener.document);
+                if (window.opener && !window.opener.closed)
+                    window.opener.document.getElementById("DispatchConsole").enableMap();
+            }
+            else
+            {
+                //alert(window.opener.title);
+            }
+        }*/
+        
+        function openPopUp(url)
+        {
+            window.open(url,"_blank","width=800,height=600,0,status=0,scrollbars=1");
+            return false; 
+        }
+        
+        function setMaxSize(){
+            var swf = document.getElementById('{!$Component.DCMAP}:flash');
+            swf.height = screen.height-90;
+            //swf.width = screen.width-10;
+        }
+        
+        setMaxSize();
+    </script>
+    <script type="text/javascript">
+    changeTitle("{!$Label.svmxc__DCON001_TAG254}");
+    </script>
+  </apex:form>
+</apex:page>

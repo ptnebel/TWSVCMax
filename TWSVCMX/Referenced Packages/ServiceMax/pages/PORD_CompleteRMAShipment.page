@@ -1,0 +1,12 @@
+<apex:page id="Page" controller="SVMXC.PORD_CompleteRMAShipment" tabStyle="SVMXC__RMA_Shipment_Order__c">
+    <apex:form id="RMAShipForm">
+        <apex:pageBlock id="blockRMAShip" helpTitle="{!TAG014}"  helpUrl="{!HLPURL}" rendered="true" mode="edit">      
+            <b><apex:actionStatus startText="{!TAG003}" id="myStatus"/></b>             
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="{!TAG012}" action="{!SVMX_SaveRMAShipment}" status="myStatus" Disabled="{!DisableCommit}" reRender="blockRMAShip" style="font-Size:10px"/>
+                <apex:commandButton value="{!TAG013}" action="{!SVMXC_GoBacktoRecord}" status="myStatus" reRender="blockRMAShip" style="font-Size:10px"/>
+            </apex:pageBlockButtons>            
+            <apex:pageMessages /> 
+        </apex:pageBlock>       
+    </apex:form>    
+</apex:page>

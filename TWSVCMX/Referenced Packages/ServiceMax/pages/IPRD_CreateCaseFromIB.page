@@ -1,0 +1,59 @@
+<apex:page id="page1" Controller="SVMXC.IPRD_CreateCaseFromIB" tabStyle="case" >
+  <apex:form id="form1">
+   <script type="text/javascript">
+            function saveaction()
+            {
+                dosave();
+                document.getElementById('page1:form1:pblock1:pgblockbuttons:button1').disabled=true; 
+                document.getElementById('page1:form1:pblock1:pgblockbuttons:button1').className = 'btnDisabled'; 
+            }
+            function oncompleteofsubmit()
+            {
+                if(!{!btnisdisabled})
+                {
+                           document.getElementById('page1:form1:pblock1:pgblockbuttons:button1').className = 'btn';
+                           document.getElementById('page1:form1:pblock1:pgblockbuttons:button1').disabled=false;
+                }
+            }
+        </script>
+    <apex:pageBlock id="pblock1" title="{!TAG001} : {!IBname}" mode="edit" helpTitle="{!TAG010}" helpUrl="{!HLPURL}"> 
+     <apex:pageMessages id="msg1"/>
+      <apex:pageBlockButtons Location="top" id="pgblockbuttons">
+          
+            <apex:commandButton value="{!TAG002}" id="button1" onclick="saveaction()"  rerender="pgblockbuttons" status="Status1"/>
+            <!-- <apex:commandButton value="{!TAG002}" action="{!CreateCase}" id="button1" reRender="msg1"/> -->
+            <apex:commandButton value="{!TAG003}" action="{!DoCancel}" id="button2"/>  
+        </apex:pageBlockButtons>
+      <apex:actionFunction action="{!CreateCase}" name="dosave" status="Status1" rerender="msg1" oncomplete="oncompleteofsubmit()"/>
+     <apex:actionstatus starttext="processing" id="Loading"/>
+     <apex:pageblockSection rendered="{!if(IsDisplay==true,true,false)}">
+     <apex:pageBlockSectionItem >
+     <apex:outputLabel value="{!TAG004}"/>
+     <apex:selectList id="list1" value="{!SelectedRT}" size="1">
+     <apex:selectOptions value="{!RecordType}"/>
+     </apex:selectList>
+     </apex:pageBlockSectionItem> 
+     <apex:pageBlockSectionItem >
+     <apex:outputLabel value="{!$ObjectType.case.fields.ownerid.Label}"/>
+     <apex:inputfield value="{!caseHeader.ownerid}"/>
+     </apex:pageBlockSectionItem>
+      </apex:pageblockSection>
+     <apex:pageBlockSection rendered="{!if(IsDisplay==true,true,false)}">
+     <apex:inputField value="{!caseHeader.accountid}"/>
+     <apex:inputfield value="{!caseHeader.contactid}"/>
+     <apex:inputfield value="{!caseHeader.SVMXC__Product__c}"/>
+     <apex:inputfield value="{!caseHeader.Priority}"/>
+     <apex:inputField value="{!caseHeader.SVMXC__Component__c}"/>
+     <apex:inputfield value="{!caseHeader.Status}" required="true"/>
+     <apex:inputfield value="{!caseHeader.SVMXC__Top_Level__c}"/>
+     <apex:inputfield value="{!caseHeader.Origin}"/>
+     <apex:inputfield value="{!caseHeader.SVMXC__Perform_Auto_Entitlement__c}"/>
+     <apex:inputfield value="{!caseHeader.Type}"/>
+     </apex:pageBlockSection>
+     <apex:pageblockSection rendered="{!if(IsDisplay==true,true,false)}" title="{!TAG011}" columns="1" dir="LTR">
+     <apex:inputfield value="{!caseHeader.Subject}" style="width:500px" />
+     <apex:inputfield value="{!caseHeader.Description}" style="width:450px;height:100px"/>     
+     </apex:pageBlockSection>
+ </apex:pageBlock>
+ </apex:form>
+</apex:page>

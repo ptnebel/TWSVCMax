@@ -1,0 +1,258 @@
+<apex:page title="{!TAG039}" sidebar="true" showHeader="true"  Controller="SVMXC.EVER_CaseEntitlement" id="EVER_CaseEntitlement"  >
+ 
+     <apex:form id="SearchForm" > 
+            
+         <apex:variable value="{!CaseHdr}" var="cs"/>
+         <!-- Active TAB background-color:#9F9F00  Inactive TAB background-color:#E4E4CB (Old When Salesforce UI Not Changed)-->
+         <style>
+            .activeTab {background-color: #1797C0; color:white; background-image:none; font-size:12px}   
+            .inactiveTab {background-color: #1797C0; color:black; background-image:none; font-size:12px}  
+            
+        </style>        
+            
+    <!--  Tab panel --> 
+    <apex:tabPanel switchType="ajax" value="{!Tabname}"  id="AccountTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab">
+<!--  first tab -->     
+        <apex:tab label="{!TAG069}" name="name1" id="tabThird">
+             <apex:pageBlock id="mainBlock" title="{!TAG039}"  helpTitle="{!TAG020}"  helpUrl="{!HLPURL}"  mode="edit">   
+                        <apex:actionStatus id="SetEntType" startText="{!TAG057}"/> 
+
+                    <!-- The below tag will provide a javascript method which when is called in turn will call a controller's method -->    
+                    <apex:actionFunction action="{!UpdateEntitlementType}" name="UpdateEntType" reRender="mainBlock" status="SetEntType" />         
+                   
+
+                        
+                        
+                        <apex:pageBlockSection columns="2"  showHeader="true" title="{!TAG005}" collapsible="true"   dir="LTR" >         
+                 <!-- Row1 -->       <apex:pageBlockSectionItem >
+                                         <apex:outputText value="{!TAG058}" style="font-size:11px" /> 
+                                         <apex:inputCheckbox value="{!MyObject.Show_Future_Entitlements}" /> 
+                                     </apex:pageBlockSectionItem>                  
+                                     <apex:PageBlockSectionItem >
+                                         <apex:outputText id="chkCovParProd"    value="{!TAG059}" style="font-size:11px"  />  
+                                          <apex:inputCheckbox id="chkCovParProd2"  value="{!MyObject.Chk_Parent_Product}"/> 
+                                     </apex:PageBlockSectionItem>                   
+                  <!-- Row2 -->    
+                                 <apex:PageBlockSectionItem >
+                                    <apex:outputText value="{!TAG060}"  style="font-size:11px" /> 
+                                    <apex:inputCheckbox value="{!MyObject.Show_Expired_Entitlement}"  /> 
+                                </apex:PageBlockSectionItem>
+                                <apex:PageBlockSectionItem >
+                                     <apex:outputText id="chkCovTopProd"    value="{!TAG061}" style="font-size:11px" />  
+                                    <apex:inputCheckbox id="chkCovTopProd2"    value="{!MyObject.Chk_Top_Level_Product}"/>   
+                                </apex:PageBlockSectionItem>
+                   <!-- Row3 -->    
+                                 <apex:PageBlockSectionItem >
+                                    <apex:outputText value="{!TAG062}" style="font-size:11px" /> 
+                                    <apex:inputCheckbox value="{!MyObject.Match_Account}" /> 
+                                </apex:PageBlockSectionItem>
+                                <apex:PageBlockSectionItem >
+                                     <apex:outputText id="chkCovChdProd"  value="{!TAG063}" style="font-size:11px" />  
+                                    <apex:inputCheckbox id="chkCovChdProd2"  value="{!MyObject.Chk_Child_Products}"/>   
+                                </apex:PageBlockSectionItem>
+                <!-- Row4 -->    
+                                 <apex:PageBlockSectionItem >
+                                    <apex:outputText value="{!TAG064}" style="font-size:11px" /> 
+                                    <apex:inputCheckbox value="{!MyObject.Match_Contact}" /> 
+                                </apex:PageBlockSectionItem>
+                                <apex:PageBlockSectionItem >
+                                     <apex:outputText id="chkCovPartNo"   value="{!TAG065}" style="font-size:11px" />  
+                                    <apex:inputCheckbox id="chkCovPartNo2"   value="{!MyObject.Chk_Part_Number}"/>   
+                                </apex:PageBlockSectionItem>
+                <!-- Row 5 -->
+                                <apex:pageBlockSectionItem > 
+                                      <apex:outputText value="{!TAG066}"  style="font-size:11px" />                    
+                                      <apex:selectRadio disabledClass="labelCol" enabledClass="labelCol"  onclick="UpdateEntType();" disabled="{!NOT(AllowEntFilters)}"   value="{!SelectedEntType}">
+                                            <apex:selectOptions value="{!EntitlementTypes}" />
+                                    </apex:selectRadio> 
+                                 </apex:pageBlockSectionItem>
+                                  <apex:pageBlockSectionItem >
+
+                                   <apex:outputText id="chkCovProdFam"   value="{!TAG067}" style="font-size:11px" /> 
+                                <apex:inputCheckbox id="chkCovProdFam2"   value="{!MyObject.Chk_Product_Family}"/>
+                                 </apex:pageBlockSectionItem>
+                <!-- Row 6 -->
+                                <apex:pageBlockSectionItem >                  
+                                </apex:pageBlockSectionItem> 
+
+                               <apex:pageBlockSectionItem >                  
+                                    <apex:outputText id="chkCovProdLine"    value="{!TAG068}" style="font-size:11px"  />               
+                                    <apex:inputCheckbox id="chkCovProdLine2" value="{!MyObject.Chk_Product_Line}"/>
+                                </apex:pageBlockSectionItem> 
+                                
+                             </apex:pageBlockSection>  
+                 
+                   
+                   
+                </apex:pageBlock> <!-- Outer Most Close -->  
+        
+        </apex:tab>
+<!--  second tab -->        
+        <apex:tab label="{!TAG070}" name="name2" id="tabTwo">
+                 <apex:pageMessages />  
+        <apex:pageBlock id="mainBlockTab2"   helpTitle="{!TAG020}"  helpUrl="{!HLPURL}"  mode="edit" >
+        <apex:actionStatus id="processbar" startText="{!TAG057}"/> 
+                 <apex:pageBlockButtons location="top">
+                        <apex:commandButton value="{!TAG007}" disabled="{!NOT(DisplayForm)}" action="{!SVMX_doCheckEntitlement}" reRender="AccountTabPanel" id="theCheckEntButton" status="processbar"/>
+                         <apex:commandButton value="{!TAG008}" disabled="{!NOT(DisplayForm)}" action="{!SaveEntitlement}" id="theSaveEntButton"     status="processbar" />
+                         <apex:commandButton action="{!Cancel}" value="{!TAG052}" id="theCancelButton" status="processbar"/>  
+                </apex:pageBlockButtons> 
+                <!--  Case Section -->
+               <apex:pageBlockSection showHeader="true" collapsible="false"  title="{!TAG004}" columns="2"  rendered="{!if((ObjectIs == 'Case'),true,false)}">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG072}" style="font-size:11px" />
+                             <apex:outputText value="{!CaseHdr.CaseNumber}" id="CaseNumber" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG073}" style="font-size:11px" />
+                            <apex:inputField value="{!CaseHdr.SVMXC__Product__c}" id="ComponentName" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem> 
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG074}" style="font-size:11px" />
+                            <apex:outputText value="{!CaseHdr.Account.Name}" id="AccountName" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG075}" style="font-size:11px" />
+                            <apex:inputField value="{!CaseHdr.SVMXC__Component__c}" id="ComponentSN" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG076}" style="font-size:11px" />
+                            <apex:outputText value="{!CaseHdr.Contact.Name}" id="ContactName" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem>                           
+                       
+                       <!-- Defect 002752(Nov.-15th): Added Rendered properties in pageBlockSectionItem -->
+                        <apex:pageBlockSectionItem rendered="{!IsCaseUpdatable}">
+                            <apex:outputLabel value="{!TAG077}" style="font-size:11px" />
+                            <apex:inputTextarea value="{!CaseHdr.SVMXC__Entitlement_Notes__c}" style="width:180px" id="EntitlementNotes" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem rendered="{!NOT(IsCaseUpdatable)}">
+                            <apex:outputLabel value="{!TAG077}" style="font-size:11px" />
+                            <apex:outputText value="{!CaseHdr.SVMXC__Entitlement_Notes__c}" style="width:180px" id="EntitlementNotes" /> 
+                        </apex:pageBlockSectionItem>
+               </apex:pageBlockSection>
+               
+               <!--  WorkOrder Section -->
+               
+                <apex:pageBlockSection showHeader="true" collapsible="false"  title="{!TAG004}" columns="2"  rendered="{!if((ObjectIs == 'WorkOrder'),true,false)}">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG072}" style="font-size:11px" />
+                             <apex:outputText value="{!WOHdr.Name}" id="CaseNumber" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG073}" style="font-size:11px" />
+                            <apex:inputField value="{!WOHdr.SVMXC__Product__c}" id="ComponentName" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem> 
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG074}" style="font-size:11px" />
+                            <apex:outputText value="{!WOHdr.SVMXC__Company__r.name}" id="AccountName" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG075}" style="font-size:11px" />
+                            <apex:inputField value="{!WOHdr.SVMXC__Component__c}" id="ComponentSN" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!TAG076}" style="font-size:11px" />
+                            <apex:outputText value="{!WOHdr.SVMXC__Contact__r.name}" id="ContactName" style="font-size:11px" /> 
+                        </apex:pageBlockSectionItem>                           
+                        
+                        <!-- Defect 002752(Nov.-15th): Added Rendered properties in pageBlockSectionItem -->
+                        <apex:pageBlockSectionItem rendered="{!IsWOUpdatable}">
+                            <apex:outputLabel value="{!TAG077}" style="font-size:11px" />
+                            <apex:inputTextarea value="{!WOHdr.SVMXC__Entitlement_Notes__c}" style="width:180px" id="EntitlementNotes" /> 
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem rendered="{!NOT(IsWOUpdatable)}">
+                            <apex:outputLabel value="{!TAG077}" style="font-size:11px" />
+                            <apex:outputText value="{!WOHdr.SVMXC__Entitlement_Notes__c}" style="width:180px" id="EntitlementNotes" /> 
+                        </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+        </apex:pageBlock>
+         <!-- //Entitlement Result Section Starts Here -->
+     <apex:pageBlock id="subBlock"  dir="LTR"> 
+        <!--  <apex:pageMessages />  -->
+        <apex:pageBlockSection showHeader="true" collapsible="true" dir="LTR" title="{!TAG021}" columns="1"> 
+        
+                <!-- This table to display warranty -->  
+
+                <apex:pageBlockTable value="{!SVMX_WarrResults}" var="wa"  style="font-size:11px" rendered="{!DisplayWarrBlockTab}" rowClasses="odd,even" ><!-- rendered="{!DisplayWarrBlockTab}" -->
+                        <apex:column >
+                        <apex:facet name="header">{!TAG046}</apex:facet>
+                          <apex:inputField value="{!wa.SVMXC__Select__c}"  /> 
+                        </apex:column>                             
+                        
+                                              
+                          <apex:column > 
+                            <apex:facet name="header">{!TAG084}</apex:facet> 
+                             <apex:commandLink action="{!switchtab}" style="font-size:11px" value="{!wa.Name}" reRender="AccountTabPanel">  <apex:param name="pid" value="{!wa.id}"/><apex:param name="tabname" value="{!wa.Name}"/>  </apex:commandLink>                                                
+                        </apex:column> 
+                         <apex:column >
+                                     <apex:facet name="header">{!TAG079}</apex:facet>
+                                     <apex:outputField value="{!wa.SVMXC__Start_Date__c}"/>
+                        </apex:column>
+                         <apex:column >
+                                     <apex:facet name="header">{!TAG080}</apex:facet>
+                                     <apex:outputField value="{!wa.SVMXC__End_Date__c}"/>
+                        </apex:column>
+                         <apex:column >
+                                     <apex:facet name="header">{!TAG085}</apex:facet>
+                                     <apex:outputField value="{!wa.SVMXC__Installed_Product__c}"/>
+                        </apex:column>
+
+
+                         <apex:column >
+                                     <apex:facet name="header">{!TAG086}</apex:facet>
+                                     <apex:outputField value="{!wa.SVMXC__Service_Template__c}"/>
+                        </apex:column>
+                                    
+                </apex:pageBlockTable>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection showHeader="true" collapsible="true" dir="LTR" title="{!TAG050}" columns="1"> 
+
+                <!-- This table to display Service Contracts -->  
+
+                <apex:pageBlockTable value="{!SVMX_SCResults}" var="sc" styleClass="tableClass list" rendered="{!DisplaySCBlockTab}"  rowClasses="odd,even"    >     <!--  -->
+                        <apex:column >       
+                        <apex:facet name="header">{!TAG046}</apex:facet>   
+                          <apex:inputCheckbox value="{!sc.selected}" id="selected2" /> 
+                        </apex:column>     
+                        
+                         <apex:column > 
+                            <apex:facet name="header">{!TAG083}</apex:facet>     
+                             <apex:commandLink action="{!switchtab}" style="font-size:11px" value="{!sc.SCName}" reRender="AccountTabPanel">  <apex:param name="pid" value="{!sc.SCId}"/><apex:param name="tabname" value="{!sc.SCName}"/> </apex:commandLink>                                                
+                        </apex:column>   
+                            
+                        <apex:column >       
+                         <apex:facet name="header">{!TAG079}</apex:facet>                           
+                        <apex:outputText value="{!sc.SDate}" />              
+                        </apex:column>     
+                        <apex:column >       
+                         <apex:facet name="header">{!TAG080}</apex:facet>                           
+                        <apex:outputText value="{!sc.EDate}" />                                               
+                      </apex:column>     
+                        <apex:column >       
+                         <apex:facet name="header">{!TAG051}</apex:facet>                           
+                        <apex:outputText value="{!sc.CoveredBy}" />                                            
+                        </apex:column>     
+                         <apex:column >  
+                              
+                         <apex:facet name="header">{!TAG082}</apex:facet>  
+                         <apex:commandLink action="{!switchtab}"  value="{!sc.SLAName}" reRender="AccountTabPanel">  <apex:param name="pid" value="{!sc.SLAID}"/><apex:param name="tabname" value="{!sc.SLAName}"/>  </apex:commandLink>                                                                        
+                         <!-- <apex:outputLink target="_blank" value="{!if(sc.SLAID!=null ,URLFOR($Action.SVMXCDEV__Service_Level__c.View, sc.SLAID),'')}" >{!sc.SLAName}</apex:outputLink> --> 
+                         <!-- <apex:outputText value="{!sc.SLAName}" />-->
+                       </apex:column> 
+                </apex:pageBlockTable>
+        </apex:pageBlockSection>                  
+    
+    </apex:pageBlock>     
+        
+        </apex:tab>
+    <!-- Third tab --> 
+         <apex:tab label="{!tabNameValue}" name="name3" id="tabFirst">
+         
+             <apex:iframe src="{!PageNameToRedirect}{!DetailPageId}" scrolling="true" id="theIframe"/> <!-- Not Needed, Removed by GM on 26Mar10: {!$CurrentPage.parameters.relatedId} -->
+
+        </apex:tab>
+       
+    </apex:tabPanel>   
+    
+ </apex:form>
+</apex:page>

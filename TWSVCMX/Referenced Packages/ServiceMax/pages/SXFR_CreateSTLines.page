@@ -1,0 +1,85 @@
+<apex:page title="{!TAG001}" standardcontroller="SVMXC__Stock_Transfer__c" extensions="SVMXC.SXFR_CreateSTLines" id="Page1"  showHeader="true"  sidebar="true" tabStyle="SVMXC__Stock_Transfer__c"> 
+  <script type="text/javascript">
+  function customSelectChecked( form,value)
+    {   
+        var i = 0; 
+        for (i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].name.search('selected') > 0 && form.elements[i].disabled == false) {
+                form.elements[i].checked = value;
+            }
+        }
+    }    
+    function customSelectAllOrNoneByCheckbox(form,control)
+    {  customSelectChecked( form,control.checked); }
+    
+  </script> 
+    
+
+  <apex:pageMessages rendered="{!NOT(DisplayBlockLevelMessage)}"    showDetail="true"  />  
+
+  <apex:form id="Form1" >  
+    
+     <apex:actionFunction action="{!GettPrice}" name="updateprice" reRender="PageBlock1"  status="LoadingStatus"></apex:actionFunction>  
+    <apex:pageBlock title="{!TAG002}  {!SourceSXFR.Name}" id="PageBlock1"   mode="edit" helpTitle="{!TAG003}"  helpUrl="{!HLPURL}">   
+         <apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" />  
+         
+        <apex:pageBlockButtons location="top">
+                             <apex:commandButton action="{!AddSXFRLine}"  reRender="PageBlock1" value="{!TAG004}"  rendered="{!NOT(showWarnings)}" id="theAddLine1"/>
+                             <apex:commandButton action="{!RemoveSXFRLine}" value="{!TAG005}"   reRender="PageBlock1" rendered="{!NOT(showWarnings)}"  id="theDeleteLines1"/>
+                             <apex:commandButton action="{!ClearWarnings}" value="{!TAG006}" rendered="{!showWarnings}"  id="theContinueButton1" /> 
+                             <apex:commandButton action="{!GettPrice}" value="{!TAG009}" rerender="PageBlock1"  status="LoadingStatus" id="theGetPriceButton1"/>   
+                             <apex:commandButton action="{!UpdateLines}"  value="{!TAG007}"  rendered="{!NOT(showWarnings)}" reRender="PageBlock1" id="theSubmitButton1"/>   
+                             <apex:commandButton action="{!Cancel}" value="{!TAG008}" id="theCancelButton1"/>   
+        </apex:pageBlockButtons> 
+           <apex:actionStatus id="LoadingStatus" startText="{!TAG022}"/>    
+        <apex:pageBlockTable id="BlockTable1" value="{!NewSXFRLine}" var="sxfrLine" width="100%"  rendered="{!DisplayTableColumns}" >
+        <apex:column >             
+                         <apex:facet name="header"> 
+                         
+                          <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox( document.forms['Page1:Form1'],this);">  
+                          </apex:inputCheckbox>
+                          </apex:facet>                       
+                         
+                          <apex:inputField value="{!sxfrLine.SVMXC__Select__c}" id="selected" /> 
+            </apex:column>
+
+            <apex:column >             
+                         <apex:facet name="header">{!$ObjectType.SVMXC__Parts_Request_Line__c.fields.SVMXC__Product__c.Label}</apex:facet>
+                         <apex:outputPanel layout="block" styleClass="requiredInput">
+                         <apex:outputPanel layout="block" styleClass="requiredBlock"/>                         
+                         <apex:inputField value="{!sxfrLine.SVMXC__Product__c}"/>
+                        </apex:outputPanel>
+            </apex:column>
+            
+            
+            <apex:column >       
+ 
+                     <apex:facet name="header">{!TAG011}</apex:facet>                    
+                     <apex:inputField value="{!sxfrLine.SVMXC__Use_Price_From_Pricebook__c}"/>
+            </apex:column>
+             
+             <apex:column >             
+                         <apex:facet name="header">{!$ObjectType.SVMXC__Stock_Transfer_Line__c.fields.SVMXC__Quantity_Transferred2__c.Label}</apex:facet>
+                         <apex:outputPanel layout="block" styleClass="requiredInput">
+                         <apex:outputPanel layout="block" styleClass="requiredBlock"/>                         
+                         <apex:inputField value="{!sxfrLine.SVMXC__Quantity_Transferred2__c}"/>
+                         </apex:outputPanel>
+            </apex:column>
+            
+            <apex:column >             
+                         <apex:facet name="header">{!$ObjectType.SVMXC__Stock_Transfer_Line__c.fields.SVMXC__Unit_Price2__c.Label}</apex:facet>
+                         <apex:inputField value="{!sxfrLine.SVMXC__Unit_Price2__c}"/>
+            </apex:column>
+                        
+            
+            <apex:column >             
+                         <apex:facet name="header">{!$ObjectType.SVMXC__Stock_Transfer_Line__c.fields.SVMXC__Additional_Information__c.Label}</apex:facet>
+                         <apex:inputTextarea style="width:200px;" rows="2" value="{!sxfrLine.SVMXC__Additional_Information__c}"/>
+                         
+            </apex:column>
+        </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+  
+ 
+</apex:page>

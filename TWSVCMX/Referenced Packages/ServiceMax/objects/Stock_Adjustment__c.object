@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object captures &quot;hard-reset&quot; adjustments to ServiceMax stock data. This is used by ServiceMax application administrators when a mismatch is found between real stock and ServiceMax stock.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Additional_Information__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any additional information relevant to this stock adjustment.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Any additional information relevant to this stock adjustment.</inlineHelpText>
+        <label>Additional Information</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Adjustment_Account_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The source/target inventory account against which this increase/decrease is accounted for.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The source/target inventory account against which this increase/decrease is accounted for.</inlineHelpText>
+        <label>Adjustment Account Number</label>
+        <length>30</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Adjustment_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of adjustment. Indicates the purpose for stock adjustment</description>
+        <externalId>false</externalId>
+        <label>Adjustment Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Damaged</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Excess</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Expired</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Missing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Physical Inventory</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Scrap</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Change_Quantity2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Positive number indicating the change in quantity (Higher quantity – lower quantity)</description>
+        <externalId>false</externalId>
+        <formula>IF( New_Quantity2__c  &gt;  Old_Quantity2__c , New_Quantity2__c   -   Old_Quantity2__c ,  Old_Quantity2__c  -  New_Quantity2__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Positive number indicating the change in quantity (Higher quantity – lower quantity)</inlineHelpText>
+        <label>Change Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Change_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates if the change was an increase or decrease</description>
+        <externalId>false</externalId>
+        <formula>IF( New_Quantity2__c  &gt;  Old_Quantity2__c  , &quot;Increase&quot;,  IF( Old_Quantity2__c &gt;  New_Quantity2__c  , &quot;Decrease&quot;, &quot;&quot;) )</formula>
+        <inlineHelpText>Indicates if the change was an increase or decrease</inlineHelpText>
+        <label>Change Type</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IsPartnerRecord__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if transaction is for/ by a Partner or not.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if transaction is for/ by a Partner or not.</inlineHelpText>
+        <label>IsPartnerRecord</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>IsPartner__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if transaction is for/ by a Partner or not.</description>
+        <externalId>false</externalId>
+        <formula>IF(  IsPartnerRecord__c  ,&quot;True&quot;, &quot;False&quot;)</formula>
+        <inlineHelpText>Flag indicates if transaction is for/ by a Partner or not.</inlineHelpText>
+        <label>Is Partner</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Physical location of the product where stock is adjusted. This is a lookup to an existing site record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Physical location of the product where stock is adjusted. This is a lookup to an existing site record.</inlineHelpText>
+        <label>Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipName>Stock_Adjustment</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>New_Quantity2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Product quantity after stock adjustment.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Product quantity after stock adjustment.</inlineHelpText>
+        <label>New Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Old_Quantity2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Product quantity before stock adjustment.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Product quantity before stock adjustment.</inlineHelpText>
+        <label>Old Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Account, set by trigger.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Account.</inlineHelpText>
+        <label>Partner Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Stock Adjustments</relationshipLabel>
+        <relationshipName>Stock_Adjustment</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Contact, set by trigger.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Contact.</inlineHelpText>
+        <label>Partner Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Stock Adjustments</relationshipLabel>
+        <relationshipName>Stock_Adjustment</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Posted_To_Inventory__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if this stock adjustment has been posted to inventory or not. This is set automatically.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if this stock adjustment has been posted to inventory or not. This is set automatically.</inlineHelpText>
+        <label>Posted To Inventory</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the product. This is a lookup to an existing salesforce product record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the product. This is a lookup to an existing salesforce product record.</inlineHelpText>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipName>Stock_Adjustment</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <label>Stock Adjustment</label>
+    <listViews>
+        <fullName>All_Stock_Adjustments</fullName>
+        <columns>NAME</columns>
+        <columns>Product__c</columns>
+        <columns>Location__c</columns>
+        <columns>Adjustment_Type__c</columns>
+        <columns>Old_Quantity2__c</columns>
+        <columns>Change_Type__c</columns>
+        <columns>Change_Quantity2__c</columns>
+        <columns>New_Quantity2__c</columns>
+        <columns>Posted_To_Inventory__c</columns>
+        <columns>Adjustment_Account_Number__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Stock Adjustments</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <displayFormat>SADJ-{00000000}</displayFormat>
+        <label>Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Stock Adjustments</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Adjustment_Type__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Product__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Location__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Old_Quantity2__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Change_Type__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Change_Quantity2__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>New_Quantity2__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Adjustment_Account_Number__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CREATEDBY_USER</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Product__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Location__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Old_Quantity2__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>New_Quantity2__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Posted_To_Inventory__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CREATEDBY_USER</lookupDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Location__c</searchFilterFields>
+        <searchFilterFields>Product__c</searchFilterFields>
+        <searchFilterFields>CREATEDBY_USER</searchFilterFields>
+        <searchResultsAdditionalFields>Product__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Location__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Old_Quantity2__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>New_Quantity2__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Posted_To_Inventory__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CREATEDBY_USER</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>SVMXC_ValidateAdjustmentQuantityChange</fullName>
+        <active>true</active>
+        <description>Adjustment quantity cannot be changed.</description>
+        <errorConditionFormula>AND(!ISNEW(),  ISCHANGED(New_Quantity2__c))</errorConditionFormula>
+        <errorDisplayField>New_Quantity2__c</errorDisplayField>
+        <errorMessage>Once saved, adjustment quantity cannot be modified.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>SVMXC_ValidateStockableLocation</fullName>
+        <active>true</active>
+        <description>The adjustment location should be a stocking location.</description>
+        <errorConditionFormula>(Location__r.Stocking_Location__c = false)</errorConditionFormula>
+        <errorDisplayField>Location__c</errorDisplayField>
+        <errorMessage>This is not a stocking location. Please select stocking locations only.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Post_To_Inventory</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Post To Inventory</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__INVT_SmartEngine?hdrId={!Stock_Adjustment__c.Id}&amp;SMid=SADJ001</url>
+    </webLinks>
+</CustomObject>

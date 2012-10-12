@@ -1,0 +1,1271 @@
+<apex:page ID="SearchPage">
+    <apex:form >
+        <script type="text/javascript">
+           var __sfdcSessionId = '{!GETSESSIONID()}';
+           var TabProcessId = null;
+        </script>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMX_resources, 'SVMXC_resources/SearchUtil2/style3.css')}"/>        
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery-1.6.2.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMX_resources, 'SVMXC_resources/SearchUtil2/jquery.tipTip.js')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/dataTables_2-11-2011.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/jquery.ajaxLoader.css')}"/>                
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.inherit-1.3.2.js')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMX_resources, 'SVMXC_resources/SearchUtil2/tipTip.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Ajax.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_UIParser.js')}"/>  
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Utils.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_XMLParser.js')}"/>      
+        <script src="/soap/ajax/15.0/connection.js" type="text/javascript"></script>
+        <script src="/soap/ajax/15.0/apex.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            function SVMX_LaunchThis(urlStr, winType, winWidth, winHeight, winScroll, fullscreen)
+            {
+                if(winType == 'New Window' && fullscreen == 'yes')
+                {
+                    window.open(urlStr,'svmxwindow','fullscreen=yes, scrollbars=auto')
+                }
+                else if(winType == 'New Window' && fullscreen == 'no' )
+                {
+                    window.open(urlStr,'svmxwindow','width='+winWidth+','+'height='+winHeight+','+'scrollbars='+winScroll);
+                }
+                else
+                {
+                    window.parent.location.href='' + urlStr;
+                }
+            }
+        </script>
+        <style type="text/css">
+        
+            caption {
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#EDDA74', endColorstr='#FF8040');
+            background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#EDDA74), to(#FF8040));
+            background:-moz-linear-gradient(0% 90% 90deg, #EDDA74, #FF8040);
+            color: black;
+            border-top: none;
+            border-right: none;
+            text-align: center;
+            font-weight: bold;
+            }
+            
+            #divProcessingImage {
+                background:url("ajax-loader2.gif") top left;
+                width:32px;
+                height:32px;   
+                left:60%; 
+                top:35%; 
+            }
+            
+            caption.cap_medium {
+            font-size: 100%;
+            }
+
+            caption.cap_small {
+            font-size: 75%;
+            }
+
+            caption.cap_large {
+            font-size: 150%;
+            }
+
+            #toolBarHolder thead {
+            border-left: none;
+            }
+
+            #toolBarHolder td {
+            vertical-align:center;
+            font-weight:normal;
+            }
+
+            #toolBarHolder .td1 {
+            vertical-align:center;
+            font-weight:normal;
+            width:50%;
+            }
+
+            #toolBarHolder tbody td {
+            background-color: #D9ECFF;
+            }
+
+            #toolBarHolder tbody tr.odd, #toolBarHolder tbody tr.odd td{
+            background-color: #BDDFFF;
+            }
+
+            .svmxbtn {
+            font-family:'Arial', 'Helvetica', sans-serif;
+            font-weight:bold;
+            color:#000;
+            text-decoration:none;
+            display:block;
+            border:2px solid #657383;
+            white-space: pre-wrap;
+            padding: 0 0 0 0;
+            -webkit-transition: all .4s ease-in-out;
+            -moz-transition: all .4s ease-in-out;
+            -o-transition: all .4s ease-in-out;
+            transition: all .4s ease-in-out;
+            }
+
+            .disabledbtn {
+            background:#488AC7;
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#B7CEEC', endColorstr='#657383');
+            background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#B7CEEC), to(#657383));
+            background:-moz-linear-gradient(0% 90% 90deg, #B7CEEC, #657383);
+            }
+
+            .enabledbtn {
+            background:#488AC7;
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5CB3FF', endColorstr='#488AC7');
+            background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#5CB3FF), to(#488AC7));
+            background:-moz-linear-gradient(0% 90% 90deg, #5CB3FF, #488AC7);
+            }
+
+            .mediumbtn {
+            font-size: 12px;
+            height:50px;
+            width:100px;
+            -moz-border-radius:8px;
+            -webkit-border-radius:8px;
+            -o-border-radius:8px;
+            border-radius:8px;
+            }
+
+            #toolBarHolder .tab1c {
+            width:100%;
+            }
+
+            .smallbtn {
+            font-size: 10px;
+            height:40px;
+            width:80px;
+            -moz-border-radius:5px;
+            -webkit-border-radius:5px;
+            -o-border-radius:5px;
+            border-radius:5px;
+            }
+
+            .largebtn {
+            font-size: 14px;
+            height:70px;
+            width:130px;
+            -moz-border-radius:10px;
+            -webkit-border-radius:10px;
+            -o-border-radius:10px;
+            border-radius:10px;
+            }
+
+            .enabledbtn:hover {
+            color: black;
+            border-color:#C35617;
+
+            background:#FF8040;
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF8040', endColorstr='#EDDA74');
+            background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#FF8040), to(#EDDA74));
+            background:-moz-linear-gradient(0% 90% 90deg, #FF8040 , #EDDA74);
+            }
+
+            .enabledbtn:active {
+            border-style: inset;
+            } 
+        
+        
+            .activetr {
+                background:#a8c6ee !important;
+            }
+            .tableWrap {width:100%; overflow-x:auto; clear:both}
+            
+
+        </style>
+        
+        
+        <script type="text/javascript">
+            function getQuerystring(key, default_)
+            {
+              if (default_==null) default_=""; 
+              key = key.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+              var regex = new RegExp("[\\?&]"+key+"=([^&#]*)");
+              var qs = regex.exec(window.location.href);
+              if(qs == null)
+                return default_;
+              else
+                return qs[1];
+            }
+        </script>
+        
+        <script type="text/javascript">
+            SVMXloader.loaderid = 'SVMXloader';
+            function getValueFromValueMapSOAP(key,xo)
+            {
+                var currentSobjId;
+                var recordConut;
+                var ObjectName;
+                var allChildDetailsElements = xo.getElementsByTagName("stringMap","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                for (i=0; i<=allChildDetailsElements.length; i++)
+                {
+                    if(xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildDetailsElements[i])[0] != null)
+                    {
+                        if(xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildDetailsElements[i])[0].firstChild != null)
+                        {
+                            var strKeyValue = xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildDetailsElements[i])[0].firstChild.nodeValue;
+                            if(strKeyValue == "SEARCH_OBJECT_ID")
+                            {
+                                currentSobjId = xo.getElementsByTagName("value","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildDetailsElements[i])[0].firstChild.nodeValue;
+                            }
+                            else if(strKeyValue == "SEARCH_OBJECT_NAME")
+                            {
+                                ObjectName = xo.getElementsByTagName("value","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildDetailsElements[i])[0].firstChild.nodeValue;
+                            }
+                            else if(strKeyValue == "NO_OF_RECORDS")
+                            {
+                                recordConut = xo.getElementsByTagName("value","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildDetailsElements[i])[0].firstChild.nodeValue;
+                            }
+                        }
+                    }
+                }
+                document.getElementById(currentSobjId+"_WizardId").style.display = "none";
+                var headingElementId = currentSobjId+'_'+ObjectName;
+                if(recordConut == -1){ recordConut = 0;}
+                var Objectlabel = (document.getElementById(headingElementId).innerHTML).split("<span",1)
+                document.getElementById(headingElementId).innerHTML = Objectlabel+ "<span> ("+recordConut+") </span>";
+                
+                for(searchDef in IdMapArray)
+                {
+                    var CurrentId = IdMapArray[searchDef].DefId;
+                    if(TabProcessId == CurrentId)
+                    {
+                        for(searchProcess in IdMapArray[searchDef].SrchObjId)
+                        {
+                            var CurrentObjId = IdMapArray[searchDef].SrchObjId[searchProcess];
+                            if(currentSobjId == CurrentObjId)
+                            {
+                                var table = document.getElementById(IdMapArray[searchDef].SrchObjId[searchProcess]);
+                                var rows = document.getElementById(IdMapArray[searchDef].SrchObjId[searchProcess]).getElementsByTagName('tr');
+                                while (rows.length > 1)
+                                {
+                                    table.deleteRow(1);
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+                var allChildElements = xo.getElementsByTagName("MapStringMap","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                for(var intCntValMap = 0; intCntValMap < allChildElements.length ; intCntValMap++)
+                {
+                    var allChildStrMapElements = xo.getElementsByTagName("valueMap","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef" ,allChildElements[intCntValMap]);
+                    var row1 = document.createElement("TR");
+                    
+                    var lengthSize = xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef" ,allChildElements[intCntValMap]).length;
+                    var IsRecordId = null;
+                    for(var index = 0; index < lengthSize; index++)
+                    {
+                        var recId = xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef" ,allChildElements[intCntValMap])[index].firstChild.nodeValue;
+                        if(recId == "RecordId")
+                        {
+                            IsRecordId = xo.getElementsByTagName("id","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef" ,allChildElements[intCntValMap])[index].firstChild.nodeValue;
+                            break;
+                        }
+                    }
+                    row1.setAttribute("id", IsRecordId);
+                    var defaultcelltd = document.createElement("TD");
+                    defaultcelltd.setAttribute("id", IsRecordId);
+                    var RadioElement = document.createElement("input");
+                    RadioElement.setAttribute("type", "radio");
+                    RadioElement.setAttribute("id", IsRecordId);
+                    RadioElement.setAttribute("name", currentSobjId);
+                    defaultcelltd.appendChild(RadioElement);
+                    row1.appendChild(defaultcelltd);
+                    
+                    RadioElement.onclick = function()
+                    {
+                        debugger;
+                        document.getElementById("divProcessingImage").style.display = "block";
+                        var response = new String();
+                        response = sforce.apex.execute('SVMXC.INTF_WebServicesDef', 'INTF_GetSFWHTML_WS', {recId: this.id, keyVal: ''});
+                        var rows = document.getElementById(this.id);
+                        var RecName = rows.getElementsByTagName('td')[1].innerHTML.split("</a>",1)[0].split(">",2)[1];
+                        if(response != null)
+                        {
+                            document.getElementById(currentSobjId+"_WizardId").style.display = "block";
+                        }
+                        document.getElementById(currentSobjId+"_WizardId").innerHTML = '<span>' + "{!$Label.SFM003_TAG006}"+": "+RecName + '</span>';
+                        document.getElementById(currentSobjId+"_WizardId").innerHTML += response;
+                        document.getElementById("divProcessingImage").style.display = "none";
+                    };
+                    
+                    
+                    for(var intValMap = 0; intValMap < allChildStrMapElements.length ; intValMap++)
+                    {
+                        if(xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildStrMapElements[intValMap])[0] != null)
+                        {
+                            if(xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildStrMapElements[intValMap])[0].firstChild != null)
+                            {
+                                debugger ;
+                                for(searchDef in IdMapArray)
+                                {
+                                    var CurrentId = IdMapArray[searchDef].DefId;
+                                    if(TabProcessId == CurrentId)
+                                    {
+                                        for(searchProcess in IdMapArray[searchDef].SrchObjId)
+                                        {
+                                            var CurrentObjId = IdMapArray[searchDef].SrchObjId[searchProcess];
+                                            var RecordName;
+                                            if(currentSobjId == CurrentObjId)
+                                            {
+                                                var table = document.getElementById(IdMapArray[searchDef].SrchObjId[searchProcess]);
+                                                var keyNameResp = xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildStrMapElements[intValMap])[0].firstChild.nodeValue;
+                                                var valNameResp = xo.getElementsByTagName("value","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildStrMapElements[intValMap])[0].firstChild.nodeValue;
+                                                var valNameResp1 = xo.getElementsByTagName("value1","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildStrMapElements[intValMap])[0].firstChild.nodeValue;
+                                                var sortValueResp = xo.getElementsByTagName("sortValue","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildStrMapElements[intValMap])[0].firstChild.nodeValue;
+                                                //alert('Key:'+ keyNameResp +'  Value:'+ valNameResp +' sort VAlue: '+ sortValueResp);
+                                                var FldsDataType = xo.getElementsByTagName("type","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildStrMapElements[intValMap])[0].firstChild.nodeValue;
+                                                if(FldsDataType == 'BOOLEAN')
+                                                {
+                                                    if(valNameResp == 'true' )
+                                                    {
+                                                        valNameResp = "<img src = '{!URLFOR($Resource.SVMX_resources,'SVMXC_resources/SearchUtil2/checked.png')}'/>";
+                                                    }
+                                                    else
+                                                    {
+                                                        valNameResp = "<img src = '{!URLFOR($Resource.SVMX_resources,'SVMXC_resources/SearchUtil2/unChecked.png')}'/>";
+                                                    }
+                                                }
+                                                var celltd3 = document.createElement("TD");
+                                                var urlLocation = '../'+valNameResp1;
+                                                
+                                                if(valNameResp1 != 'NotApplicable')
+                                                {
+                                                    celltd3.innerHTML = "<a target=\"_blank\"  href="+ urlLocation+ ">" + valNameResp+"</a>";
+                                                }
+                                                else
+                                                {
+                                                    celltd3.innerHTML = valNameResp;
+                                                }
+                                                row1.appendChild(celltd3);
+                                                table.appendChild(row1);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                document.getElementById("divProcessingImage").style.display = "none";
+                $('table.tableHolder tr:odd').addClass('odd');
+                $('table.tableHolder tr:even').addClass('even');
+                activateTr = function()
+                {
+                    var tr = $('table.tableHolder').find('tr');
+                    tr.bind('dblclick', function(event) 
+                    {
+                        tr.removeClass('activetr');
+                        var tds = $(this).addClass('activetr').find('td');
+                    });
+                };
+                activateTr();
+            }
+        </script>
+        <style type="text/css">
+           table.tableHolder { 
+                border-collapse: collapse;
+                clear: both;
+                font-size: 11px;
+                font-family:Arial, Helvetica, sans-serif;
+                width: 100%;   
+            }
+            table.tableHolder td,table.tableHolder th{
+                border: 1px solid #57bffd !important;
+                padding: 5px;
+                text-align: left;
+                white-space: normal;
+            }
+            table.tableHolder tr th{
+                background: #9ee8fa url(../images/sort_asc.png) no-repeat center right; /* Old browsers */
+                background: url(../images/sort_asc.png) no-repeat center right, -moz-linear-gradient(top, #9ee8fa 0%, #d6f9ff 100%); /* FF3.6+ */
+                background: url(../images/sort_asc.png) no-repeat center right, -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9ee8fa), color-stop(100%,#d6f9ff)); /* Chrome,Safari4+ */
+                background: url(../images/sort_asc.png) no-repeat center right, -webkit-linear-gradient(top, #9ee8fa 0%,#d6f9ff 100%); /* Chrome10+,Safari5.1+ */
+                background: url(../images/sort_asc.png) no-repeat center right, -o-linear-gradient(top, #9ee8fa 0%,#d6f9ff 100%); /* Opera11.10+ */
+                background: url(../images/sort_asc.png) no-repeat center right, -ms-linear-gradient(top, #9ee8fa 0%,#d6f9ff 100%); /* IE10+ */
+                background: url(../images/sort_asc.png) no-repeat center right, linear-gradient(top, #9ee8fa 0%,#d6f9ff 100%); /* W3C */
+            }
+           .tableHolder{
+                overflow: visible !important;
+            }
+            .content {min-height:400px;}
+            .content .heading {border-bottom:none}
+                        
+            tr.alt td {
+                background-color: #ecf6fc;
+            }
+
+        div.tabs > div {
+            padding: 5px;
+            margin-top: 3px;
+            border: 5px solid #333;
+        }
+            
+            .tabContent {border:none; background:none}
+            
+            .active222 {display:block !important;}
+            
+        .wizardClass{
+            border: 1px solid #666666;
+            border-radius: 5px 5px 5px 5px;
+            margin: 15px 0 0;
+            padding: 10px 0;
+            overflow: auto;
+            height:180px;
+        }
+        .wizardClass span{
+            font-size: 13px;
+            font-weight: bold;
+            display:block;
+            padding:0 0 7px 7px;
+        }
+        
+        .Onloader {
+            /*background: url("ajax-loader2.gif") no-repeat scroll 10px center, -moz-linear-gradient(center top , #9EE8FA 0%, #D6F9FF 100%) repeat scroll 0 0 transparent;
+            border: 1px solid #000000;
+            border-radius: 5px 5px 5px 5px;
+            color: #000000;
+            font-weight: bold;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 12px 20px 68pxx 48px;*/
+            height: 450px;
+            width: 99%;
+            display:table !important
+        }
+        
+        #dynamicDivOnLoad {
+            width:100px;
+            vertical-align: middle;
+            text-align: center;
+            margin: 0 auto;
+            display: table-cell;
+        }
+        </style>
+        <div id="SVMXerrorConsole" class="mainContainer" style="display:none;">
+                <div  class="processContent">
+                    <span id="errorMessage" style="font-weight:bold;color:red"></span>
+                    <span id="showMessage" style="font-weight:bold;color:black"></span>
+                    <div class="closeLink"><a href="#" onclick="clearErrorMessage();hideMessage('FADEOUT');">Close</a></div>
+                </div>
+        </div>
+            
+        <div id="SVMXloader" class="SVMXloader" style="display:none">
+            <span id="SVMXloaderMessage" style="font-weight:bold;color:black">Processing...</span>
+        </div>
+        
+        <div id="ProcessingDiv" style="display:none">
+            <div id="ProcessingDivInner" class="Onloader">
+             
+            </div>
+        </div>
+        
+        <div class="bgGradient" id="mainBlockContainer">
+            <div class="mainContainer">
+                <div class="searchH">
+                  
+                    <strong>{!$Label.SFM003_TAG002}</strong>
+                </div>
+                
+                <div class="searchH" style="overflow:hidden">
+                    <div style="float:left; padding:0 0 0 10px">
+                        <select style="padding:2px" id="SearchOptrId">
+                           
+                        </select>
+                    </div>
+                    <div style="float:left; padding:0 0 0 10px">
+                        <input type="text" id="SearchTextId" onblur="if(this.value == ''){this.value = '{!$Label.SFM003_TAG003}'}" onfocus="if(this.value == '{!$Label.SFM003_TAG003}'){this.value =''};" value="{!$Label.SFM003_TAG003}" name="searchKey" class="inputBox"/> 
+                        <input type="button" class="goBtn" name="goButton" id="goBtn" value="{!$Label.SFM003_TAG004}"  onclick="SearchAction()"/>
+                    </div>
+                    <div style="float:right; padding:0 10px 0 0">
+                        {!$Label.COMM001_TAG031} <select style="padding:2px" id="pickValue">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                            </select> {!$Label.SFM003_TAG005}
+                    </div>
+                </div>
+                
+                <div style="margin:25px 0 0 0">
+                    <div class="tabHolder">
+                        <ul class="tabs" id="tabs"></ul>
+                    </div>
+                    
+                    <div class="tabContentOuter">
+                        <div class="tabContainer">
+                            <div class="tabContent" id="tabcontainerH">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="toolBarHolder" class="searchH" style="display:none; clear:both; margin:0">
+                    Toolbar Holder
+                </div>
+                
+            </div>
+        </div> 
+            
+        <script type="text/javascript">
+            var mm =1;
+            var listInc = 0;
+            var nn = 1;
+            var ll = 1;
+            function create_div_dynamic(elementIdd, noofDivs, noofChldDivs)
+            {
+                for(var m = 0; m < noofDivs; m++)
+                {
+                    dv = document.createElement('div');
+                    dv.className="tab_content";
+                    dv.setAttribute('id',"tab"+mm);
+                    document.getElementById(elementIdd).appendChild(dv);    
+                    dv.function = createUl('tab'+mm);       
+                    dv.function = createDiv44(noofChldDivs);
+                    mm++;                    
+                }
+                function createUl(elem)
+                {
+                    var elementObject = document.getElementById(elem);
+                    var ul = document.createElement("ul");
+                    ul.setAttribute('id', 'ulID'+ll);
+                    ul.className = "tabs22"
+                    elementObject.appendChild(ul);
+                    ll++;
+                }
+                function createDiv44(noofChldDivs)
+                {
+                    for(var n = 0; n < noofChldDivs; n++)
+                    {
+                        dv2 = document.createElement('div');
+                        dv2.className="content";
+                        dv2.setAttribute('id',"content" + mm + n);      
+                        document.getElementById("tab"+mm).appendChild(dv2);
+                    } 
+                }
+            }
+            
+            function createli(elementId, textvalue, listId, TestTilte) 
+            {
+                listInc++;
+                var elementObject = document.getElementById(elementId);
+                var li = document.createElement("li");
+                li.setAttribute('id', listId);
+                var IdForTitle = listId+'_TitleId';
+                li.innerHTML = '<a  class="tabClass'+ listInc +'" href="#tab'+ listInc +'"><span  id='+ IdForTitle +' class="tooltip">' + textvalue + '<span></a>';
+                elementObject.appendChild(li);
+                document.getElementById(IdForTitle).title = (TestTilte != null) ? TestTilte : textvalue;
+            }   
+            
+            var IdMapArray = new Object();
+            var IdNameMapObj = new Object();
+            function GetAllSearchDefAction()
+            {
+                document.getElementById("SearchOptrId").options.length=0;
+                document.getElementById("SearchOptrId").options[0]= new Option('{!$Label.COMM001_TAG013}', "Contains");
+                document.getElementById("SearchOptrId").options[1]= new Option('{!$Label.COMM001_TAG012}', "Exact Match");
+                document.getElementById("SearchOptrId").options[2]= new Option('{!$Label.COMM001_TAG014}', "Ends With");
+                document.getElementById("SearchOptrId").options[3]= new Option('{!$Label.COMM001_TAG015}', "Starts With");
+                var dynamicDivOnLoad = document.createElement("div");
+                dynamicDivOnLoad.setAttribute("id", "dynamicDivOnLoad");
+                document.getElementById("mainBlockContainer").style.display = "none";
+                var canvas = document.getElementById('ProcessingDivInner');
+                canvas.appendChild(dynamicDivOnLoad);
+                var imageVar = "<img src = '{!URLFOR($Resource.SVMX_resources,'SVMXC_resources/SearchUtil2/ajax-loader2.gif')}'/>";
+                document.getElementById("dynamicDivOnLoad").innerHTML = imageVar; 
+                document.getElementById("ProcessingDiv").style.display = "block";
+                var servReq1 = new SOAPRequest({orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"});
+                var request = new INTF_SFMRequest(null, null, null, null);
+                servReq1.errorHandler = {handler : function(e, me)
+                {
+                    document.getElementById("divProcessingImage").style.display = "none";
+                    document.getElementById("mainBlockContainer").style.display = "none";
+                    document.getElementById("ProcessingDiv").style.display = "none";
+                    showError(me.status + ' :' + me.responseText);
+                    return false;
+                }}
+                servReq1.responseHandler = {handler : function(e, me)
+                    {
+                        var result = servReq1.__getResponse(me);
+                        var firstOprator = result[0].stringMap.value;
+                        var indexNo = -1;
+                        for (var firstIndexOprtr=0; firstIndexOprtr < document.getElementById("SearchOptrId").options.length; firstIndexOprtr++) 
+                        {
+                            if((document.getElementById("SearchOptrId").options[firstIndexOprtr].value == firstOprator)&& (firstIndexOprtr != 0))
+                            {
+                                indexNo = firstIndexOprtr;
+                            }
+                        }
+                        if(indexNo != -1)
+                        {
+                            var indexInnerHtml = document.getElementById("SearchOptrId").options[indexNo].innerHTML;
+                            var indexValue = document.getElementById("SearchOptrId").options[indexNo].value;
+                            var zeroInnerHtml = document.getElementById("SearchOptrId").options[0].innerHTML;
+                            var zeroValue = document.getElementById("SearchOptrId").options[0].value;
+                            document.getElementById("SearchOptrId").options[0].innerHTML= indexInnerHtml;
+                            document.getElementById("SearchOptrId").options[0].value= indexValue;
+                            document.getElementById("SearchOptrId").options[indexNo].innerHTML= zeroInnerHtml;
+                            document.getElementById("SearchOptrId").options[indexNo].value= zeroValue;
+                        }
+                        if(!result[0].MapStringMap.length && result[0].MapStringMap != null)
+                        {
+                            var AllIdNameObj = new Object();
+                            AllIdNameObj.SF_SearchId = result[0].MapStringMap.valueMap.key;
+                            AllIdNameObj.SVMX_SearchId = result[0].MapStringMap.valueMap.value;
+                            IdNameMapObj[i] = AllIdNameObj;
+                        }
+                        else
+                        {
+                            for (var x=0; x< result[0].MapStringMap.length; x++)
+                            {
+                                var AllIdNameObj = new Object();
+                                AllIdNameObj.SF_SearchId = result[0].MapStringMap[x].valueMap.key;
+                                AllIdNameObj.SVMX_SearchId = result[0].MapStringMap[x].valueMap.value;
+                                IdNameMapObj[x] = AllIdNameObj;
+                            }
+                        }
+                        if(!result[0].lstSearchInfo.length && result[0].lstSearchInfo != null)
+                        {
+                                var AllIdRecs = new Object();
+                                AllIdRecs.SrchObjId = new Array();
+                                createli('tabs', result[0].lstSearchInfo.searchDef.SVMXC__Name__c, result[0].lstSearchInfo.searchDef.Id, result[0].lstSearchInfo.searchDef.SVMXC__Description__c);
+                                var noOfChildDiv;
+                                if(!result[0].lstSearchInfo.searchDetails.length && result[0].lstSearchInfo.searchDetails != null)
+                                {
+                                    noOfChildDiv =  1;
+                                }
+                                else
+                                {
+                                    noOfChildDiv =  result[0].lstSearchInfo.searchDetails.length;
+                                }
+                                create_div_dynamic("tabcontainerH", 1, noOfChildDiv);
+                                AllIdRecs.DefId = result[0].lstSearchInfo.searchDef.Id;
+                                var innerIndexOfArray;
+                                if(!result[0].lstSearchInfo.searchDetails.length && result[0].lstSearchInfo.searchDetails != null)
+                                {
+                                    innerIndexOfArray =  1;
+                                }
+                                else
+                                {
+                                    innerIndexOfArray =  result[0].lstSearchInfo.searchDetails.length;
+                                }
+                                var MyArray = new Array()
+                                MyArray[0]=new Array(innerIndexOfArray)
+                                if(!result[0].lstSearchInfo.searchDetails.length && result[0].lstSearchInfo.searchDetails != null)
+                                {
+                                    MyArray[0][0] = result[0].lstSearchInfo.searchDetails.objectDetails.Id;
+                                    AllIdRecs.SrchObjId[0] = MyArray[0][0];
+                                    var CustomInt = 0+1;
+                                    var CustomId = "content"+ CustomInt + 0;
+                                    var ulID = "ulID"+ CustomInt;
+                                    var headingDiv; 
+                                    headingDiv = document.createElement('li');
+                                    var HeaderEleId = result[0].lstSearchInfo.searchDetails.objectDetails.Id+'_'+result[0].lstSearchInfo.searchDetails.objectDetails.SVMXC__Target_Object_Name__c;
+                                    var HeaderEleDesc = result[0].lstSearchInfo.searchDetails.objectDetails.SVMXC__Description__c;
+                                    headingDiv.innerHTML = '<a class="tooltip"  id='+ HeaderEleId +' href="#' + CustomId +'">' + result[0].lstSearchInfo.searchDetails.objectLable + '</a>';
+                                    document.getElementById(ulID).appendChild(headingDiv);
+                                    document.getElementById(HeaderEleId).title = (HeaderEleDesc != null) ? HeaderEleDesc : result[0].lstSearchInfo.searchDetails.objectLable;
+                                    var tbl = document.createElement("table");
+                                    var wizardDiv = document.createElement("div");
+                                    var tblHead = document.createElement("thead");
+                                    var row = document.createElement("tr");
+                                    var defaultcell = document.createElement("th");
+                                    defaultcell.innerHTML = ' ';
+                                    row.appendChild(defaultcell);
+                                    if(!result[0].lstSearchInfo.searchDetails.fields.length && result[0].lstSearchInfo.searchDetails.fields != null)
+                                    {
+                                        var strFldName;
+                                        if(!result[0].lstSearchInfo.searchDetails.fieldsLable.length && result[0].lstSearchInfo.searchDetails.fieldsLable != null)
+                                        {
+                                            var strFld = result[0].lstSearchInfo.searchDetails.fields.SVMXC__Field_Name__c;
+                                            if(result[0].lstSearchInfo.searchDetails.fieldsLable.key == strFld)
+                                            {
+                                                strFldName = result[0].lstSearchInfo.searchDetails.fieldsLable.value;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (var index=0; index< result[0].lstSearchInfo.searchDetails.fieldsLable.length; index++) 
+                                            {
+                                                var strFld = result[0].lstSearchInfo.searchDetails.fields.SVMXC__Field_Name__c;
+                                                if(result[0].lstSearchInfo.searchDetails.fieldsLable[index].key == strFld)
+                                                {
+                                                    strFldName = result[0].lstSearchInfo.searchDetails.fieldsLable[index].value;
+                                                }
+                                            }
+                                        }
+                                        var cell = document.createElement("th");
+                                        var cellText = document.createTextNode(strFldName);
+                                        cell.appendChild(cellText);
+                                        row.appendChild(cell);
+                                    }
+                                    else
+                                    {
+                                        for (var k=0; k < result[0].lstSearchInfo.searchDetails.fields.length; k++)
+                                        {   
+                                            var strFldName1;
+                                            for (var index=0; index< result[0].lstSearchInfo.searchDetails.fieldsLable.length; index++) 
+                                            {
+                                                var strFld1 = result[0].lstSearchInfo.searchDetails.fields[k].SVMXC__Field_Name__c;
+                                                var strFld2 = result[0].lstSearchInfo.searchDetails.fields[k].Id;
+                                                if(result[0].lstSearchInfo.searchDetails.fieldsLable[index].value1 == strFld2)
+                                                {
+                                                    if(result[0].lstSearchInfo.searchDetails.fieldsLable[index].key == strFld1)
+                                                    {
+                                                        strFldName1 = result[0].lstSearchInfo.searchDetails.fieldsLable[index].value;
+                                                    }
+                                                }
+                                            }
+                                            var cell = document.createElement("th");
+                                            var cellText = document.createTextNode(strFldName1);
+                                            cell.appendChild(cellText);
+                                            cell.setAttribute("id", result[0].lstSearchInfo.searchDetails.fields[k].SVMXC__Field_Name__c);
+                                            row.appendChild(cell);
+                                        }
+                                    }
+                                    tblHead.appendChild(row);
+                                    tbl.appendChild(tblHead);
+                                    document.getElementById(CustomId).appendChild(tbl);
+                                    document.getElementById(CustomId).appendChild(wizardDiv);
+                                    wizardDiv.setAttribute("id", result[0].lstSearchInfo.searchDetails.objectDetails.Id +'_WizardId');
+                                    wizardDiv.setAttribute("class", "wizardClass");
+                                    document.getElementById(result[0].lstSearchInfo.searchDetails.objectDetails.Id +'_WizardId').style.display = "none";
+                                    tbl.setAttribute("id", result[0].lstSearchInfo.searchDetails.objectDetails.Id);
+                                    tbl.setAttribute("class", "tableHolder");
+                                }
+                                else
+                                {
+                                    for (var j=0; j< result[0].lstSearchInfo.searchDetails.length; j++) 
+                                    {   
+                                        MyArray[0][j] = result[0].lstSearchInfo.searchDetails[j].objectDetails.Id;
+                                        AllIdRecs.SrchObjId[j] = MyArray[0][j];
+                                        var CustomInt = 0+1;
+                                        var CustomId = "content"+ CustomInt + j;
+                                        var ulID = "ulID"+ CustomInt;
+                                        var headingDiv; 
+                                        headingDiv = document.createElement('li');
+                                        var HeaderEleId= result[0].lstSearchInfo.searchDetails[j].objectDetails.Id+'_'+result[0].lstSearchInfo.searchDetails[j].objectDetails.SVMXC__Target_Object_Name__c;
+                                        var HeaderEleDesc = result[0].lstSearchInfo.searchDetails[j].objectDetails.SVMXC__Description__c;
+                                        headingDiv.innerHTML = '<a class="tooltip"  id='+ HeaderEleId +' href="#' + CustomId +'">' + result[0].lstSearchInfo.searchDetails[j].objectLable + '</a>';
+                                        document.getElementById(ulID).appendChild(headingDiv);
+                                        document.getElementById(HeaderEleId).title = (HeaderEleDesc != null) ? HeaderEleDesc : result[0].lstSearchInfo.searchDetails[j].objectLable;
+                                        var tbl = document.createElement("table");
+                                        var wizardDiv = document.createElement("div");
+                                        var tblHead = document.createElement("thead");
+                                        var row = document.createElement("tr");
+                                        var defaultcell = document.createElement("th");
+                                        defaultcell.innerHTML = ' ';
+                                        row.appendChild(defaultcell);
+                                        if(!result[0].lstSearchInfo.searchDetails[j].fields.length && result[0].lstSearchInfo.searchDetails[j].fields != null)
+                                        {
+                                            var strFldName1;
+                                            for (var index=0; index< result[0].lstSearchInfo.searchDetails[j].fieldsLable.length; index++) 
+                                            {
+                                                
+                                                var strFld1 = result[0].lstSearchInfo.searchDetails[j].fields.SVMXC__Field_Name__c;
+                                                var strFld2 = result[0].lstSearchInfo.searchDetails[j].fields.Id;
+                                                if(result[0].lstSearchInfo.searchDetails[j].fieldsLable[index].value1 == strFld2)
+                                                {
+                                                    if(result[0].lstSearchInfo.searchDetails[j].fieldsLable[index].key == strFld1)
+                                                    {
+                                                        strFldName1 = result[0].lstSearchInfo.searchDetails[j].fieldsLable[index].value;
+                                                    }
+                                                }
+                                            }
+                                            var cell = document.createElement("th");
+                                            var cellText = document.createTextNode(strFldName1);
+                                            cell.appendChild(cellText);
+                                            row.appendChild(cell);
+                                        }
+                                        else
+                                        {
+                                            for (var k=0; k < result[0].lstSearchInfo.searchDetails[j].fields.length; k++)
+                                            {   
+                                                var strFldName1;
+                                                for (var index=0; index< result[0].lstSearchInfo.searchDetails[j].fieldsLable.length; index++) 
+                                                {
+                                                    var strFld1 = result[0].lstSearchInfo.searchDetails[j].fields[k].SVMXC__Field_Name__c;
+                                                    var strFld2 = result[0].lstSearchInfo.searchDetails[j].fields[k].Id;
+                                                    if(result[0].lstSearchInfo.searchDetails[j].fieldsLable[index].value1 == strFld2)
+                                                    {
+                                                        if(result[0].lstSearchInfo.searchDetails[j].fieldsLable[index].key == strFld1)
+                                                        {
+                                                            strFldName1 = result[0].lstSearchInfo.searchDetails[j].fieldsLable[index].value;
+                                                        }
+                                                    }
+                                                }
+                                                var cell = document.createElement("th");
+                                                var cellText = document.createTextNode(strFldName1);
+                                                cell.appendChild(cellText);
+                                                cell.setAttribute("id", result[0].lstSearchInfo.searchDetails[j].fields[k].SVMXC__Field_Name__c);
+                                                row.appendChild(cell);
+                                            }
+                                        }
+                                        tblHead.appendChild(row);
+                                        tbl.appendChild(tblHead);
+                                        document.getElementById(CustomId).appendChild(tbl);
+                                        document.getElementById(CustomId).appendChild(wizardDiv);
+                                        wizardDiv.setAttribute("id", result[0].lstSearchInfo.searchDetails[j].objectDetails.Id +'_WizardId');
+                                        wizardDiv.setAttribute("class", "wizardClass");
+                                        document.getElementById(result[0].lstSearchInfo.searchDetails[j].objectDetails.Id +'_WizardId').style.display = "none";
+                                        tbl.setAttribute("id", result[0].lstSearchInfo.searchDetails[j].objectDetails.Id);
+                                        tbl.setAttribute("class", "tableHolder");
+                                    }
+                                }
+                                IdMapArray[0] = AllIdRecs;
+                        }
+                        else
+                        {
+                            for (var i=0; i< result[0].lstSearchInfo.length; i++)
+                            {
+                                var AllIdRecs = new Object();
+                                AllIdRecs.SrchObjId = new Array();
+                                createli('tabs', result[0].lstSearchInfo[i].searchDef.SVMXC__Name__c, result[0].lstSearchInfo[i].searchDef.Id, result[0].lstSearchInfo[i].searchDef.SVMXC__Description__c);
+                                var noOfChildDiv;
+                                if(!result[0].lstSearchInfo[i].searchDetails.length && result[0].lstSearchInfo[i].searchDetails != null)
+                                {
+                                    noOfChildDiv =  1;
+                                }
+                                else
+                                {
+                                    noOfChildDiv =  result[0].lstSearchInfo[i].searchDetails.length;
+                                }
+                                create_div_dynamic("tabcontainerH", 1, noOfChildDiv);
+                                
+                                AllIdRecs.DefId = result[0].lstSearchInfo[i].searchDef.Id;
+                                var innerIndexOfArray;
+                                if(!result[0].lstSearchInfo[i].searchDetails.length && result[0].lstSearchInfo[i].searchDetails != null)
+                                {
+                                    innerIndexOfArray =  1;
+                                }
+                                else
+                                {
+                                    innerIndexOfArray =  result[0].lstSearchInfo[i].searchDetails.length;
+                                }
+                                var MyArray = new Array()
+                                MyArray[i]=new Array(innerIndexOfArray)
+                                
+                                if(!result[0].lstSearchInfo[i].searchDetails.length && result[0].lstSearchInfo[i].searchDetails != null)
+                                {
+                                    MyArray[i][0] = result[0].lstSearchInfo[i].searchDetails.objectDetails.Id;
+                                    AllIdRecs.SrchObjId[0] = MyArray[i][0];
+                                    var CustomInt = i+1;
+                                    var CustomId = "content"+ CustomInt + 0;
+                                    var ulID = "ulID"+ CustomInt;
+                                    var headingDiv; 
+                                    headingDiv = document.createElement('li');
+                                    var HeaderEleId= result[0].lstSearchInfo[i].searchDetails.objectDetails.Id+'_'+result[0].lstSearchInfo[i].searchDetails.objectDetails.SVMXC__Target_Object_Name__c;
+                                    var HeaderEleDesc = result[0].lstSearchInfo[i].searchDetails.objectDetails.SVMXC__Description__c;
+                                    headingDiv.innerHTML = '<a class="tooltip"  id='+ HeaderEleId +' href="#' + CustomId +'">' + result[0].lstSearchInfo[i].searchDetails.objectLable + '</a>';
+                                    document.getElementById(ulID).appendChild(headingDiv);
+                                    document.getElementById(HeaderEleId).title = (HeaderEleDesc != null) ? HeaderEleDesc : result[0].lstSearchInfo[i].searchDetails.objectLable;
+                                    var tbl = document.createElement("table");
+                                    var wizardDiv = document.createElement("div");
+                                    var tblHead = document.createElement("thead");
+                                    var row = document.createElement("tr");
+                                    var defaultcell = document.createElement("th");
+                                    defaultcell.innerHTML = ' ';
+                                    row.appendChild(defaultcell);
+                                    if(!result[0].lstSearchInfo[i].searchDetails.fields.length && result[0].lstSearchInfo[i].searchDetails.fields != null)
+                                    {
+                                        var strFldName;
+                                        if(!result[0].lstSearchInfo[i].searchDetails.fieldsLable.length && result[0].lstSearchInfo[i].searchDetails.fieldsLable != null)
+                                        {
+                                            var strFldName1;
+                                            var strFld1 = result[0].lstSearchInfo[i].searchDetails.fields.SVMXC__Field_Name__c;
+                                            var strFld2 = result[0].lstSearchInfo[i].searchDetails.fields.Id;
+                                            if(result[0].lstSearchInfo[i].searchDetails.fieldsLable.value1 == strFld2)
+                                            {
+                                                if(result[0].lstSearchInfo[i].searchDetails.fieldsLable.key == strFld1)
+                                                {
+                                                    strFldName1 = result[0].lstSearchInfo[i].searchDetails.fieldsLable.value;
+                                                }
+                                            }
+                                        }
+                                        var cell = document.createElement("th");
+                                        var cellText = document.createTextNode(strFldName1);
+                                        cell.appendChild(cellText);
+                                        row.appendChild(cell);
+                                    }
+                                    else
+                                    {
+                                        for (var k=0; k < result[0].lstSearchInfo[i].searchDetails.fields.length; k++)
+                                        {   
+                                            var strFldName1;
+                                            for (var index=0; index< result[0].lstSearchInfo[i].searchDetails.fieldsLable.length; index++) 
+                                            {
+                                                var strFld1 = result[0].lstSearchInfo[i].searchDetails.fields[k].SVMXC__Field_Name__c;
+                                                var strFld2 = result[0].lstSearchInfo[i].searchDetails.fields[k].Id;
+                                                if(result[0].lstSearchInfo[i].searchDetails.fieldsLable[index].value1 == strFld2)
+                                                {
+                                                    if(result[0].lstSearchInfo[i].searchDetails.fieldsLable[index].key == strFld1)
+                                                    {
+                                                        strFldName1 = result[0].lstSearchInfo[i].searchDetails.fieldsLable[index].value;
+                                                    }
+                                                }
+                                            }
+                                            var cell = document.createElement("th");
+                                            var cellText = document.createTextNode(strFldName1);
+                                            cell.appendChild(cellText);
+                                            cell.setAttribute("id", result[0].lstSearchInfo[i].searchDetails.fields[k].SVMXC__Field_Name__c);
+                                            row.appendChild(cell);
+                                        }
+                                    }
+                                    tblHead.appendChild(row);
+                                    tbl.appendChild(tblHead);
+                                    document.getElementById(CustomId).appendChild(tbl);
+                                    
+                                    document.getElementById(CustomId).appendChild(wizardDiv);
+                                    wizardDiv.setAttribute("id", result[0].lstSearchInfo[i].searchDetails.objectDetails.Id +'_WizardId');
+                                    wizardDiv.setAttribute("class", "wizardClass");
+                                    document.getElementById(result[0].lstSearchInfo[i].searchDetails.objectDetails.Id +'_WizardId').style.display = "none";
+                                    
+                                    tbl.setAttribute("id", result[0].lstSearchInfo[i].searchDetails.objectDetails.Id);
+                                    tbl.setAttribute("class", "tableHolder");
+                                }
+                                else
+                                {
+                                    for (var j=0; j< result[0].lstSearchInfo[i].searchDetails.length; j++) 
+                                    {   
+                                        MyArray[i][j] = result[0].lstSearchInfo[i].searchDetails[j].objectDetails.Id;
+                                        AllIdRecs.SrchObjId[j] = MyArray[i][j];
+                                        var CustomInt = i+1;
+                                        var CustomId = "content"+ CustomInt + j;
+                                        var ulID = "ulID"+ CustomInt;
+                                        var headingDiv; 
+                                        headingDiv = document.createElement('li');
+                                        
+                                        var HeaderEleId= result[0].lstSearchInfo[i].searchDetails[j].objectDetails.Id+'_'+result[0].lstSearchInfo[i].searchDetails[j].objectDetails.SVMXC__Target_Object_Name__c;
+                                        var HeaderEleDesc = result[0].lstSearchInfo[i].searchDetails[j].objectDetails.SVMXC__Description__c;
+                                        headingDiv.innerHTML = '<a class="tooltip" id='+ HeaderEleId + ' href="#' + CustomId +'">' + result[0].lstSearchInfo[i].searchDetails[j].objectLable + '</a>';
+                                        document.getElementById(ulID).appendChild(headingDiv);
+                                        document.getElementById(HeaderEleId).title = (HeaderEleDesc != null) ? HeaderEleDesc : result[0].lstSearchInfo[i].searchDetails[j].objectLable;
+                                        var tbl = document.createElement("table");
+                                        var wizardDiv = document.createElement("div");
+                                        var tblHead = document.createElement("thead");
+                                        var row = document.createElement("tr");
+                                        var defaultcell = document.createElement("th");
+                                        defaultcell.innerHTML = ' ';
+                                        row.appendChild(defaultcell);
+                                        if(!result[0].lstSearchInfo[i].searchDetails[j].fields.length && result[0].lstSearchInfo[i].searchDetails[j].fields != null)
+                                        {
+                                            var strFldName;
+                                            for (var index=0; index< result[0].lstSearchInfo[i].searchDetails[j].fieldsLable.length; index++) 
+                                            {
+                                                var strFld1 = result[0].lstSearchInfo[i].searchDetails[j].fields.SVMXC__Field_Name__c;
+                                                    var strFld2 = result[0].lstSearchInfo[i].searchDetails[j].fields.Id;
+                                                    if(result[0].lstSearchInfo[i].searchDetails[j].fieldsLable[index].value1 == strFld2)
+                                                    {
+                                                        if(result[0].lstSearchInfo[i].searchDetails[j].fieldsLable[index].key == strFld1)
+                                                        {
+                                                            strFldName = result[0].lstSearchInfo[i].searchDetails[j].fieldsLable[index].value;
+                                                        }
+                                                    }
+                                            }
+                                            var cell = document.createElement("th");
+                                            var cellText = document.createTextNode(strFldName);
+                                            cell.appendChild(cellText);
+                                            row.appendChild(cell);
+                                        }
+                                        else
+                                        {
+                                            for (var k=0; k < result[0].lstSearchInfo[i].searchDetails[j].fields.length; k++)
+                                            {   
+                                                var strFldName1;
+                                                for (var index=0; index< result[0].lstSearchInfo[i].searchDetails[j].fieldsLable.length; index++) 
+                                                {
+                                                    var strFld1 = result[0].lstSearchInfo[i].searchDetails[j].fields[k].SVMXC__Field_Name__c;
+                                                    var strFld2 = result[0].lstSearchInfo[i].searchDetails[j].fields[k].Id;
+                                                    if(result[0].lstSearchInfo[i].searchDetails[j].fieldsLable[index].value1 == strFld2)
+                                                    {
+                                                        if(result[0].lstSearchInfo[i].searchDetails[j].fieldsLable[index].key == strFld1)
+                                                        {
+                                                            strFldName1 = result[0].lstSearchInfo[i].searchDetails[j].fieldsLable[index].value;
+                                                        }
+                                                    }
+                                                }
+                                                var cell = document.createElement("th");
+                                                var cellText = document.createTextNode(strFldName1);
+                                                cell.appendChild(cellText);
+                                                cell.setAttribute("id", result[0].lstSearchInfo[i].searchDetails[j].fields[k].SVMXC__Field_Name__c);
+                                                row.appendChild(cell);
+                                            }
+                                        }
+                                        tblHead.appendChild(row);
+                                        tbl.appendChild(tblHead);
+                                        document.getElementById(CustomId).appendChild(tbl);
+                                        document.getElementById(CustomId).appendChild(wizardDiv);
+                                        wizardDiv.setAttribute("id", result[0].lstSearchInfo[i].searchDetails[j].objectDetails.Id +'_WizardId');
+                                        wizardDiv.setAttribute("class", "wizardClass");
+                                        document.getElementById(result[0].lstSearchInfo[i].searchDetails[j].objectDetails.Id +'_WizardId').style.display = "none";
+                                        tbl.setAttribute("id", result[0].lstSearchInfo[i].searchDetails[j].objectDetails.Id);
+                                        tbl.setAttribute("class", "tableHolder");
+                                    }
+                                }
+                                IdMapArray[i] = AllIdRecs;
+                            }
+                        }
+                    }
+                }
+                servReq1.invoke("SFM_GetSearchInfo_WS", request, {async : false});
+                debugger;
+                var urlkeyWord = null;
+                urlkeyWord = decodeURIComponent(getQuerystring('SVMX_keyWord'));
+                var svmx_SrchId = null;
+                svmx_SrchId = decodeURIComponent(getQuerystring('SVMX_SearchId'));
+                var svmx_SrchName = null;
+                svmx_SrchName = decodeURIComponent(getQuerystring('SVMX_SearchName'));
+                if(((svmx_SrchId != null && svmx_SrchId != '') || (svmx_SrchName != null && svmx_SrchName != '')))
+                {
+                    document.getElementById('SearchTextId').value = urlkeyWord;
+                    var strKeyWord = updateSpecialCharacter(urlkeyWord);
+                    var strRecLimit = document.getElementById('pickValue').value;
+                    var searchOperator = document.getElementById('SearchOptrId').value;
+                    var reqToGetSearchData = new Object();
+                    if(svmx_SrchId != null && svmx_SrchId != '')
+                    {
+                        TabProcessId = svmx_SrchId;
+                    }
+                    else if(svmx_SrchName != null && svmx_SrchName != '')
+                    {
+                        for(searchDefId in IdNameMapObj)
+                        {
+                            var CurrentId = IdNameMapObj[searchDefId].SVMX_SearchId;
+                            if(CurrentId == svmx_SrchName)
+                            {
+                                TabProcessId = IdNameMapObj[searchDefId].SF_SearchId;;
+                            }
+                        }
+                    }
+                    var servReq2 = new SOAPRequest({orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"});
+                    var reqCollection = [];
+                    for(searchDef in IdMapArray)
+                    {
+                        var CurrentId = IdMapArray[searchDef].DefId;
+                        if(CurrentId == TabProcessId)
+                        {
+                            for(var i=0;i< IdMapArray[searchDef].SrchObjId.length;i++)
+                            {
+                                var ProcIdKeywordObjMap = [new SVMXMap("SearchProcessId",TabProcessId), new SVMXMap("SVMXSearchProcessId",svmx_SrchName), new SVMXMap("KeyWord",strKeyWord),new SVMXMap("ObjectId",IdMapArray[searchDef].SrchObjId[i]), new SVMXMap("RecordLimit",strRecLimit), new SVMXMap("SEARCH_OPERATOR",searchOperator)];                  
+                                var reqToGetSearchData = new INTF_SFMRequest(null, null, ProcIdKeywordObjMap, null);
+                                reqCollection[reqCollection.length] = {
+                                    props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                            methodName : "SFM_GetSearchResult_WS", data : reqToGetSearchData , options : {}};
+                            }
+                        }
+                    }
+                    
+                    var src = new SOAPRequestCollection(reqCollection);
+                    src.responseHandler = {handler : function(e, me)
+                    {
+                        debugger;
+                        var src = e.target;
+                        var allResponses = src.getAllResponses();
+                        for(var ri in allResponses)
+                        {
+                            var resp = allResponses[ri];
+                            var xo = new XMLObj(resp, true);
+                            getValueFromValueMapSOAP("eventType",xo);
+                        }
+                    }};
+                    src.invokeAll();
+                }
+                else
+                {
+                    if(svmx_SrchId != null && svmx_SrchId != '')
+                    {
+                        TabProcessId = svmx_SrchId;
+                    }
+                    else if(svmx_SrchName != null && svmx_SrchName != '')
+                    {
+                        for(searchDefId in IdNameMapObj)
+                        {
+                            var CurrentId = IdNameMapObj[searchDefId].SVMX_SearchId;
+                            if(CurrentId == svmx_SrchName)
+                            {
+                                TabProcessId = IdNameMapObj[searchDefId].SF_SearchId;;
+                            }
+                        }
+                    }
+                    document.getElementById("divProcessingImage").style.display = "none";
+                }               
+                document.getElementById("mainBlockContainer").style.display = "block";
+                document.getElementById("ProcessingDiv").style.display = "none";
+                $(function(){
+                    $(".tooltip").tipTip({defaultPosition: "top", edgeOffset: 1});
+                });
+            
+            }
+        
+        </script>
+        
+       <script type="text/javascript">
+            $(document).ready(function()
+            {
+                if(TabProcessId == null)
+                {
+                    $(".tab_content").hide(); //Hide all content
+                    $(".tab_content .content").hide(); //Hide all content               
+                    $(".tab_content .content:first").show(); //Show first tab content
+                    $("ul.tabs li:first").addClass("active").show(); //Activate first tab
+                    $(".tab_content:first").show(); //Show first tab content
+                    TabProcessId = $("ul.tabs").find("li.active").attr("id");
+                }
+                //When page loads...
+                $(".tab_content").hide(); //Hide all content
+                $(".tab_content .content").hide(); //Hide all content               
+                $("ul.tabs22 li:first").addClass("active").show(); //Activate first tab
+                $(".tab_content .content:first").show(); //Show first tab content
+                 $('ul.tabs22').each(function() {
+                    $(this).find('li:first').addClass('active');
+                });
+                //On Click Event
+                $("ul.tabs li").click(function()
+                {
+                    $("ul.tabs li").removeClass("active"); //Remove any "active" class
+                    $(this).addClass("active"); //Add "active" class to selected tab
+                    $(".tab_content").hide(); //Hide all tab content
+                    var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+                    TabProcessId = $("ul.tabs").find("li.active").attr("id");
+                    $(activeTab).show(); //Fade in the active ID content
+                    $(".tab_content .content").hide(); //Hide all content               
+                $("ul.tabs22 li:first").addClass("active").show(); //Activate first tab
+                $(".tab_content .content:first").show(); //Show first tab content
+                 $('ul.tabs22').each(function() {
+                    $(this).find('li:first').addClass('active');
+                });
+                
+                $('div.tab_content').each(function() {
+                    $(this).find('.content:first').css('display','block');
+                });
+                    return false;
+                });
+                
+                $("ul.tabs li").each(function() {
+                    var liId = $(this).attr('id');
+                    
+                    if(TabProcessId == liId)
+                    {
+                        $(this).addClass("active");                     
+                        //$(".tab_content").hide(); //Hide all tab content
+                         $(".tab_content").hide();
+                        var activeTab = $(this).find("a").attr("href"); 
+                        $(activeTab).show(); //Fade in the active ID content
+                        $("ul.tabs22 li:first").addClass("active").show(); //Activate first tab
+                        $(".tab_content .content:first").show();
+                            $("ul.tabs li").removeClass("active"); //Remove any "active" class
+                            $(this).addClass("active"); //Add "active" class to selected tab
+                            $(".tab_content").hide(); //Hide all tab content
+                            var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+                            TabProcessId = $("ul.tabs").find("li.active").attr("id");
+                            $(activeTab).show(); //Fade in the active ID content
+                            $(".tab_content .content").hide(); //Hide all content               
+                        $('div.tab_content').each(function() {
+                            $(this).find('.content:first').css('display','block');
+                        });
+                            return false;
+                        
+                    }
+                    
+                });
+                
+                $("ul.tabs li:first").addClass("first");
+                $("ul.tabs li:last").addClass("last");
+                
+                /* Second Tabination */
+                $("ul.tabs22 li").click(function() {
+            
+                    $("ul.tabs22 li").removeClass("active"); //Remove any "active" class
+                    $(this).addClass("active"); //Add "active" class to selected tab
+                    $(".tab_content .content").hide(); //Hide all tab content
+                    var activeTab22 = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+                    //alert(activeTab22);
+                    $(this).addClass("active"); //Add "active" class to selected tab
+                    $(activeTab22).show(); //Fade in the active ID content
+                    return false;
+                    });
+                update_rows();  
+                function update_rows()
+                {
+                    $(".tableHolder tr:even").css("background-color", "#DCF4FA");
+                    $(".tableHolder tr:odd").css("background-color", "#fff");
+                }
+                $('table.tableHolder').wrap('<div class="tableWrap" />');
+            }); 
+            
+        </script>
+        
+        <script type="text/javascript">
+            var dynamicDiv = document.createElement("div");
+            dynamicDiv.setAttribute("id", "divProcessingImage");
+            dynamicDiv.style.position="absolute"; 
+            var canvas = document.getElementById('tabcontainerH');
+            canvas.appendChild(dynamicDiv);
+            var imageVar = "<img src = '{!URLFOR($Resource.SVMX_resources,'SVMXC_resources/SearchUtil2/ajax-loader2.gif')}'/>";
+            document.getElementById("divProcessingImage").innerHTML = imageVar; 
+            function updateSpecialCharacter(keyword)
+            {
+                keyword = keyword.replace(/&/g, '&amp;'); 
+                keyword = keyword.replace(/\'/g,'&apos;');
+                keyword = keyword.replace(/</g,'&lt;');
+                keyword = keyword.replace(/>/g,'&gt;');
+                return keyword;
+            }
+            function SearchAction()
+            {
+                debugger;
+                var canvas = document.getElementById('tabcontainerH');
+                canvas.appendChild(dynamicDiv);
+                var imageVar = "<img src = '{!URLFOR($Resource.SVMX_resources,'SVMXC_resources/SearchUtil2/ajax-loader2.gif')}'/>";
+                document.getElementById("divProcessingImage").innerHTML = imageVar; 
+                document.getElementById("divProcessingImage").style.display = "block";
+                var strKeyWord = document.getElementById('SearchTextId').value;
+                if(strKeyWord === '{!$Label.SFM003_TAG003}')
+                {
+                    strKeyWord = '';
+                }
+                strKeyWord = updateSpecialCharacter(strKeyWord);
+                var strRecLimit = document.getElementById('pickValue').value;
+                var searchOperator = document.getElementById('SearchOptrId').value;
+                var reqToGetSearchData = new Object();
+                var servReq2 = new SOAPRequest({orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"});
+                var reqCollection = [];
+                for(searchDef in IdMapArray)
+                {
+                    var CurrentId = IdMapArray[searchDef].DefId;
+                    if(CurrentId == TabProcessId)
+                    {
+                        for(var i=0;i< IdMapArray[searchDef].SrchObjId.length;i++)
+                        {
+                            var ProcIdKeywordObjMap = [new SVMXMap("SearchProcessId",TabProcessId), new SVMXMap("KeyWord",strKeyWord),new SVMXMap("ObjectId",IdMapArray[searchDef].SrchObjId[i]), new SVMXMap("RecordLimit",strRecLimit), new SVMXMap("SEARCH_OPERATOR",searchOperator)];                  
+                            var reqToGetSearchData = new INTF_SFMRequest(null, null, ProcIdKeywordObjMap, null);
+                            reqCollection[reqCollection.length] = {
+                                props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                        methodName : "SFM_GetSearchResult_WS", data : reqToGetSearchData , options : {}};
+                        }
+                    }
+                }
+                var src = new SOAPRequestCollection(reqCollection);
+                src.responseHandler = {handler : function(e, me)
+                {
+                    debugger;
+                    var src = e.target;
+                    var allResponses = src.getAllResponses();
+                    for(var ri in allResponses)
+                    {
+                        var resp = allResponses[ri];
+                        var xo = new XMLObj(resp, true);
+                        getValueFromValueMapSOAP("eventType",xo);
+                    }
+                }};
+                src.invokeAll();
+            }
+        </script>
+        <script> GetAllSearchDefAction(); </script>
+    </apex:form>
+</apex:page>

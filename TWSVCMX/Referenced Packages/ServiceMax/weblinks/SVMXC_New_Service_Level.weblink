@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPageWebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <availability>online</availability>
+    <description>Link to create a new service level record</description>
+    <displayType>link</displayType>
+    <linkType>url</linkType>
+    <masterLabel>New SLA Terms</masterLabel>
+    <openType>replace</openType>
+    <protected>false</protected>
+    <url>/apex/SVMXC__SLAT_ManageSLATerms</url>
+</CustomPageWebLink>

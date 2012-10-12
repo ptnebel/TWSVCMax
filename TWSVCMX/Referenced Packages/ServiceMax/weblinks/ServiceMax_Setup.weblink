@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPageWebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <availability>online</availability>
+    <description>This link launches the ServiceMax Setup Home Page.</description>
+    <displayType>link</displayType>
+    <linkType>page</linkType>
+    <masterLabel>ServiceMax Setup</masterLabel>
+    <openType>replace</openType>
+    <page>CONF_SetupHome</page>
+    <protected>false</protected>
+</CustomPageWebLink>

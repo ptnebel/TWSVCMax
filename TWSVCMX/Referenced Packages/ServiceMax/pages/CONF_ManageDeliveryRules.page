@@ -1,0 +1,251 @@
+<apex:page controller="SVMXC.CONF_ManageDeliveryRules" id="page1">
+    <apex:form id="SVMX_FORM">
+        <apex:inputHidden value="{!SelIndex}" id="SelIndex"/>
+        <apex:pageBlock id="tab7pblock1" mode="edit" title="{!Tag147}" helptitle="{!HLPTITLE}" helpurl="{!HLPURL}">
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="{!Tag028}" id="newrule" status="processing71" rerender="SVMX_FORM" action="{!CreateNewDeliveryRule}" rendered="{!NOT(renderOnlyRule)}"/>
+                <apex:commandButton value="{!Tag027}" id="viewdeliveryrule" status="processing71" action="{!populateRuleANDHubsOnEdit}" rerender="SVMX_FORM" rendered="{!NOT(renderOnlyRule)}"/>
+                <apex:commandButton value="{!Tag124}" status="processing71" action="{!DeleteDeliveryRule}" id="deletedelruleheader" rerender="SVMX_FORM" onClick="{if(!confirm('{!TAG171}')){return false}}" rendered="{!NOT(renderOnlyRule)}"/>
+                <apex:commandButton value="{!Tag093}" action="{!SaveDeliveryRule}" rerender="SVMX_FORM" status="processing71" disabled="{!DeliveryRuleRec.SVMXC__IsStandard__c}" rendered="{!renderOnlyRule}"/>
+                <apex:commandButton value="{!Tag144}" action="{!backToSetupHome}"/>
+            </apex:pageBlockButtons>
+            <apex:pageMessages rendered="true"/>
+            <apex:actionStatus id="processing71" startText="{!Tag092}"/>
+            <apex:actionFunction action="{!DeleteDeliveryRule}" name="DeleteDeliveryRule" reRender="tab7pblock1" status="processing71" />
+            <apex:pageBlockSection columns="1" collapsible="false" dir="LTR" id="tab1sec1" rendered="{!NOT(renderOnlyRule)}">
+                <apex:pageBlockSection columns="1">
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockTable id="maintable" width="70%" value="{!DeliveryRulesLst}" var="item">
+                            <apex:column >
+                                <apex:facet name="header"> {!Tag149} </apex:facet>
+                                <apex:inputCheckbox value="{!item.SVMXC__Select__c}"/>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header"> {!Tag004} </apex:facet>
+                                <apex:outputText value="{!item.SVMXC__Location__r.Name}"/>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header"> {!Tag059} </apex:facet>
+                                <apex:outputText value="{!item.SVMXC__Name__c}"/>
+                            </apex:column>
+                            <!--  <apex:column >
+                                <apex:facet name="header"> Default Delivery Location </apex:facet>
+                                <apex:outputText value="{!item.SVMXC__Default_Location__r.Name}"/>
+                            </apex:column> -->
+                            <apex:column >
+                                <apex:facet name="header"> {!Tag005} </apex:facet>
+                                <apex:outputText value="{!item.LastModifiedBy.Name}"/>
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+        <apex:pageBlock id="PageBlock2" mode="edit"  rendered="{!DisplayRuleInfo}">
+            
+            <apex:pageBlockButtons location="top" rendered="{!NOT(renderOnlyRule)}">
+                <apex:commandButton value="{!Tag093}" action="{!SaveDeliveryRule}" rerender="SVMX_FORM" status="processing71" disabled="{!DeliveryRuleRec.SVMXC__IsStandard__c}"/>
+                <apex:commandButton value="{!Tag094}" action="{!Cancel_DeliveryRule}" rerender="SVMX_FORM" status="processing71"/>
+            </apex:pageBlockButtons>
+            
+            <apex:actionFunction name="populateDefLocs" action="{!populateDefLocs}" status="processing72" rerender="SVMX_FORM"/>
+            <apex:actionFunction action="{!onchangeObjectName}" name="onchangeObjectName" reRender="SVMX_FORM" status="processing73">
+                <apex:param name="tab7selIndex" assignTo="{!deliveryRuleSelIndex}" value=""/>
+            </apex:actionFunction>
+            
+            <apex:pageBlockSection columns="1">
+                <apex:actionStatus id="processing72" startText="{!Tag092}"/>
+                <apex:pageBlockSection columns="2">
+                    <apex:pageblockSectionItem >
+                        <apex:pageBlockSection columns="2">
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="{!Tag058}" style="font-weight:bold;font-size:12px;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block" styleClass="requiredInput" style="width:70%">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                    <apex:selectList size="1" style="width:70%" value="{!DeliveryRuleRec.SVMXC__Location__c}" id="LocId" onchange="populateDefLocs()" disabled="{!IsdisableValue}">
+                                        <apex:selectOptions value="{!slctLstSelect_Hub}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel>                               
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem rendered="{!renderForSelectedDepot}">
+                                <apex:outputLabel value="{!Tag059}" style="font-weight:bold;font-size:12px;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem rendered="{!renderForSelectedDepot}">
+                                <apex:outputPanel layout="block" styleClass="requiredInput" style="width:70%">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                    <apex:inputText value="{!DeliveryRuleRec.SVMXC__Name__c}"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem rendered="{!renderForSelectedDepot}">
+                                <apex:outputLabel value="{!TAG001}" style="font-weight:bold;font-size:12px;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem rendered="{!renderForSelectedDepot}">
+                                <apex:outputPanel layout="block" styleClass="requiredInput" style="width:70%">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                    <apex:selectRadio value="{!DeliveryRuleRec.SVMXC__Type__c}" layout="pageDirection">
+                                        <apex:selectOption itemValue="Manual" itemLabel="{!TAG002}"/>
+                                        <apex:selectOption itemValue="Automatic" itemLabel="{!TAG003}"/>
+                                    </apex:selectRadio>
+                                </apex:outputPanel>                               
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection> 
+                    </apex:pageblockSectionItem>
+                    
+                    <apex:pageblockSectionItem id="PBSectinDefaultLoc" rendered="{!renderForSelectedDepot}">
+                        <apex:pageBlockSection columns="2">
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="{!Tag063}" style="font-weight:bold;font-size:12px;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:selectList size="1" value="{!DeliveryRuleRec.SVMXC__Default_Location__c}" disabled="{!DeliveryRuleRec.SVMXC__IsStandard__c}">
+                                        <apex:selectOptions value="{!slctLstDelLocs}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                            <!--  Amar(14/Feb/2012): Commented B'coz we are not supporting partial delivery -->
+                            <!--<apex:pageBlockSectionItem >
+                                <apex:outputLabel value="{!Tag062}" style="font-weight:bold;font-size:12px;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                              <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputCheckbox value="{!DeliveryRuleRec.APL_Allow_Partial_Delivery__c}" disabled="{!DeliveryRuleRec.SVMXC__IsStandard__c}"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem> --> 
+                        </apex:pageBlockSection>
+                    </apex:pageblockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlock mode="edit" id="pgBlock3Details" rendered="{!renderForSelectedDepot}">
+                <apex:pageBlockSection columns="1">
+                    <apex:pageBlockSectionItem dataStyle="margin-left:40%;left:38%;padding-left:40%;background:lightGrey" datastyleClass="disableTab" rendered="{!DisplayRuleInfo}">
+                        <apex:outputText value="{!Tag066}" style="font-weight:bold;font-Size:13px;color:#000000;" styleclass="disableTab"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:actionStatus id="processing73" startText="{!Tag092}"/>
+                    <apex:pageBlockSectionItem datastyle="width:100%;">
+                        <apex:outputPanel style="margin-left:38%;">
+                            <apex:commandButton value="{!Tag028}" id="newrule" status="processing73" rerender="SVMX_FORM" action="{!DeliveryRuleAddLine}" disabled="{!disableNewEditDel}"/>
+                            <apex:commandButton value="{!Tag007}"  id="editrule" status="processing73" action="{!EditRuleLine}" rerender="SVMX_FORM" disabled="{!disableNewEditDel}"/>
+                            <apex:commandButton value="{!Tag124}" status="processing73" action="{!DeliveryRuleDelLine}" id="deletedelruleline" rerender="SVMX_FORM" onClick="{if(!confirm('{!TAG171}')){return false}}"  Disabled="{!if(DeliveryRuleLineRecsLst.size < 1,true,false)}"/>
+                            <apex:commandButton value="{!Tag093}" action="{!SaveDeliveryRule}" rerender="SVMX_FORM" status="processing73" disabled="{!(DeliveryRuleRec.SVMXC__IsStandard__c || NOT(disableNewEditDel))}"/>
+                            <apex:commandButton value="{!Tag094}" action="{!Cancel_DeliveryRuleLine}" rerender="SVMX_FORM" status="processing73" disabled="{!NOT(disableNewEditDel)}"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockSection columns="1" id="tab7delrulepblocksec" rendered="{!DisplayRuleInfo}">
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockTable id="table1" cellPadding="4" width="70%" value="{!DeliveryRuleLineRecsLst}" var="item">
+                                    <apex:column style="font-Size:10px;font-Size:10px;width:5%;">
+                                        <apex:facet name="header"><div style="font-weight:bold;font-size:12px;">{!Tag149}</div></apex:facet>
+                                        <apex:inputCheckbox value="{!item.SVMXC__Select__c}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;font-Size:10px;width:5%;">
+                                        <apex:facet name="header"><div style="font-weight:bold;font-size:12px;"> {!Tag011} </div></apex:facet>
+                                        <apex:outputLabel value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;font-Size:10px;width:30%;">
+                                        <apex:facet name="header"><div style="font-weight:bold;font-size:12px;">{!Tag067}</div></apex:facet>
+                                        <apex:outputText value="{!item.SVMXC__Name__c}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:40%;">
+                                        <apex:facet name="header"><div style="font-weight:bold;font-size:12px;">{!Tag070}</div></apex:facet>
+                                        <apex:outputText value="{!item.Location__r.Name}" style="font-Size:12px"/>
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem dataStyle="margin-left:38%;left:38%;padding-left:38%;background:lightGrey" datastyleClass="disableTab" rendered="{!DisplayRuleLineInfo}">
+                        <apex:outputtext value="{!Tag125}" style="font-weight:bold;font-Size:13px;color:#000000;" styleclass="disableTab"/>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <!-----------------Section 3----------------->
+                <apex:pageBlockSection columns="1" rendered="{!DisplayRuleLineInfo}" id="blockSec3">
+                   <!-- Row 1 starts here -->
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockSection columns="4" id="Temp123">
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="{!Tag148}" style="font-weight:bold;font-size:12px;display: block;text-align: left;padding: 0 0 0 20%;color:#000"></apex:outputLabel>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                    <apex:inputText value="{!deliveryRuleLineRec.SVMXC__Name__c}"/>
+                               </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>   
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >            
+                        <apex:pageBlockSection columns="1" id="PBsectionForRuleLine">
+                            <apex:pageBlockTable id="deliveryruletable1" cellPadding="4" value="{!RuleLineWrapObjLst}" var="item" style="width:100%; margin:0 auto;">
+                                <apex:column rendered="true" style="font-Size:10px;width:2%;">
+                                    <apex:outputtext value="{!Round(item.ExpressionRec.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:10%;">
+                                    <apex:facet name="header"><div style="font-weight:bold;font-size:12px;">{!Tag072}</div></apex:facet><!-- Object Name -->
+                                    <apex:selectList size="1" value="{!item.ExpressionRec.SVMXC__Object_Name2__c}" onchange="onchangeObjectName({!item.ExpressionRec.SVMXC__Sequence__c});" disabled="{!deliveryRuleLineRec.SVMXC__IsStandard__c}">
+                                        <apex:selectoptions value="{!AccProdSelectLst}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:30%;">
+                                    <apex:facet name="header"><div style="font-weight:bold;font-size:12px;">{!Tag031}</div></apex:facet>
+                                    <apex:selectList size="1" style="width:80%" value="{!item.ExpressionRec.SVMXC__Field_Name__c}" disabled="{!deliveryRuleLineRec.SVMXC__IsStandard__c}">
+                                        <apex:selectOptions value="{!item.ObjectFields}"/> 
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="font-Size:10px;width:18%;">
+                                    <apex:facet name="header"><div style="font-weight:bold;font-size:12px;">{!Tag032}</div></apex:facet>
+                                    <apex:selectList style="width:70%;" size="1" value="{!item.ExpressionRec.SVMXC__Operator__c}" disabled="{!deliveryRuleLineRec.SVMXC__IsStandard__c}">
+                                        <apex:selectOptions value="{!OperatorSelectLst}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="font-Size:10px;width:30%;">
+                                    <apex:facet name="header"><div style="font-weight:bold;font-size:12px;">{!Tag033}</div></apex:facet>
+                                    <apex:inputText value="{!item.ExpressionRec.SVMXC__Operand__c}" style="font-Size:12px;" disabled="{!deliveryRuleLineRec.SVMXC__IsStandard__c}"/>
+                                </apex:column>
+                                <apex:column style="font-Size:10px;width:7px;height:7px;width:10%;" id="delrulecommandbutton">
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" id="DeliveryRuleCriteriaDelLines" action="{!DeliveryRuleCriteriaDelLines}"    onclick="javascript:document.getElementById('page1:SVMX_FORM:SelIndex').value = {!item.ExpressionRec.SVMXC__Sequence__c};" status="processing73" reRender="blockSec3" title="{!TAG151}" />
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" id="hdraddrow" reRender="blockSec3" status="processing73" action="{!DeliveryRuleCriteriaAddLines}" rendered="{!if(DeliveryRuleExprhighestSequenceNumber == item.ExpressionRec.SVMXC__Sequence__c,true,false)}" disabled="{!deliveryRuleLineRec.SVMXC__IsStandard__c}" title="{!TAG150}" />
+                                </apex:column>
+                            </apex:pageBlockTable>
+                        </apex:pageBlockSection>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSection >
+                        <apex:commandButton id="deliveryruleexpraddline" image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" reRender="blockSec3" status="processing73" rendered="{!if((DeliveryRuleExprhighestSequenceNumber == 0) ,true,false)}"  action="{!DeliveryRuleCriteriaAddLines}" disabled="{!deliveryRuleLineRec.SVMXC__IsStandard__c}" title="{!TAG150}" />
+                    </apex:pageBlockSection>
+                    <br/>
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockSection columns="1">
+                            <apex:pageBlockSectionItem dataStyle="text-align:center;width:100%;">
+                                <apex:outputText style="font-Size:11px;">
+                                    <div style="font-size:11px; width:95%; margin:0 auto; overflow:hidden;"> 
+                                        <b style="float:left; display:block; padding:1px 7px 0 0; text-align:left; font-size:12px; font-weight:bold;">{!Tag034}</b>
+                                        <div style="float:left; padding:0 0 0 3%">
+                                            <apex:inputText value="{!deliveryRuleLineRec.SVMXC__Advance_Expression__c}" size="60" disabled="{!deliveryRuleLineRec.SVMXC__IsStandard__c}"/>
+                                        </div>    
+                                    </div>
+                                </apex:outputText>
+                            </apex:pageBlockSectionItem>
+                                <!-- Row 1 starts here -->
+                            <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!Tag020}" style="font-weight:bold;font-size:12px;display: block;text-align: left;padding: 0 0 0 20%;color:#000"></apex:outputLabel>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                    <apex:selectList size="1" value="{!deliveryRuleLineRec.SVMXC__Location__c}" disabled="false">
+                                        <apex:selectOptions value="{!slctLstDelLocs}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        
+        </apex:pageBlock>
+        
+    </apex:form>
+</apex:page>

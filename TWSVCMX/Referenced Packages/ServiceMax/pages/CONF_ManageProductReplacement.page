@@ -1,0 +1,172 @@
+<apex:page ID="ProductReplacement" controller="SVMXC.CONF_ManageProductReplacement">
+    <apex:form id="ProductReplacementForm">
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMX_resources, 'SVMXC_resources/SVMX_ProductReplacement/jquery-1.6.2.min.js')}"/>
+        <style type="text/css">
+            .diffColor {background-color: #E3F3FF !important}           
+        </style> 
+        <apex:pageBlock id="Pageblock1" mode="edit" title="{!Tag002}" helptitle="{!HLPTITLE}" helpurl="{!HLPURL}">
+            <apex:actionStatus id="Processing1" startText="{!Tag001}"/>
+            <apex:pageMessages rendered="{!IsError}"/>
+            <apex:pageBlockButtons id="pgBlckBtns" location="TOP">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <apex:commandButton value="{!Tag017}" action="{!BackToSetupHome}" status="Processing1" id="BackToSetupHome" rerender="Pageblock1"/>  
+            </apex:pageBlockButtons>
+            
+            <div style="overflow:hidden; margin:7px 0 0 2.3%">
+                <apex:panelGroup style="float:left;">
+                      <apex:inputText id="searchText" value="{!strSearchKeyword}"/>
+                      <apex:commandButton value="{!Tag016}" action="{!ProdctSearch}" rerender="GridId,Pageblock1" status="Processing1"/>
+                </apex:panelGroup>
+                <apex:panelGroup style="float:right; padding-right: 1%;">
+                    <apex:outputText value="{!Tag018}"/>&nbsp;&nbsp;&nbsp;
+                    <apex:selectList value="{!pickValue}" size="1">
+                        <apex:selectOptions value="{!PicklistOption}"/>
+                    </apex:selectList>
+                </apex:panelGroup>
+            </div>
+            
+            <apex:pageBlockSection id="pgblockbuttons" dir="LTR" columns="1" collapsible="false">
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        $(".inputBtnStyle").click(function() {                          
+                            $(this).closest("table.testing tr").siblings().removeClass("diffColor");
+                            $(this).parents("table.testing tr").toggleClass("diffColor", this.clicked);
+                        });
+                    });
+                </script> 
+                <apex:panelGrid id="GridId" columns="1" styleClass="testTable" style="width:100%" >
+                    <apex:pageblockTable value="{!ProdLst}" id="table11" var="ProdObj" styleClass="testing" rendered="{!if((ProdLstSize == 0 ) ,false,true)}">
+                            <apex:column title="{!Tag019}"> 
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/edit.png')}" style="width:13px;height:12px;background:#E2E2E1;" styleClass="inputBtnStyle" value="Manage" title="" id="Manage" status="Processing1" rerender="PBSection1"  action="{!ProductReplacementAction}">
+                                    <apex:param name="selectedrow2_tab3" value="{!ProdObj.Id}" assignTo="{!ProdSelect}"/>
+                                </apex:commandButton>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!Tag005}</apex:facet>
+                                <apex:outputField value="{!ProdObj.Name}"/>
+                            </apex:column>
+                            <apex:column >
+                               <apex:facet name="header">{!Tag006}</apex:facet>
+                                <apex:outputField value="{!ProdObj.ProductCode}"/> 
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!Tag007}</apex:facet>
+                                <apex:outputField value="{!ProdObj.SVMXC__Replacement_Available__c}"/>
+                            </apex:column>
+                    </apex:pageblockTable>
+                </apex:panelGrid>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="PBSection1" columns="1">             
+                <apex:actionStatus id="processing2" startText="{!Tag001}"/>
+                <apex:pageBlock id="Pageblock2" mode="edit" rendered="{!IsRender}">
+                     <apex:pageBlockButtons id="pgBlckBtns" location="TOP">
+                        <apex:commandButton value="{!Tag003}" style="padding-left: 7px; margin-left: 15%;" status="processing2" action="{!ConformReplacement}" rerender="Pageblock1"/> 
+                        <apex:commandButton value="{!Tag004}" action="{!CancelAction}" status="processing2" id="Cancel" rerender="PBSection1"/>
+                    </apex:pageBlockButtons>
+                    <center style="padding-right: 100px; margin-left: 2%; margin-right: 2%; height: 22px; border:1px solid #C0C0C0; background:LightGrey; display:none;" id="center1">
+                        <apex:toolbar id="theToolbar3" styleClass="disableTab" width="5%" rendered="{!IsRender}">          
+                            <apex:toolbarGroup location="left" id="toolbarGroup1">
+                                <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                            </apex:toolbarGroup> 
+                            <apex:toolbarGroup location="left" id="toolbarGroup2">
+                                <apex:outputText value="{!titleName}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>              
+                            </apex:toolbarGroup> 
+                        </apex:toolbar>
+                    </center>
+                    <script>
+                        function show()
+                        {
+                            if({!IsRender})
+                                document.getElementById('center1').style.display = 'block';
+                            else
+                                document.getElementById('center1').style.display = 'none';
+                        }
+                        show();
+                    </script>
+                    
+                   
+                    
+                    <apex:pageBlockSection id="PBSection" columns="1" rendered="{!IsRender}">
+                    
+                        <apex:pageMessages rendered="{!IsDetailError}"/>
+                        <style type="text/css">
+                            h2.mainTitle {width:350px; text-align:left}
+                        </style>
+                        <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                            <apex:panelGrid cellpadding="0" width="100%" cellspacing="0" columns="1" border="0" rowClasses="line" styleClass="testTable"  style="text-align:left;">
+                                <apex:outputText >
+                                   <td style="width:45%;text-align:left;">
+                                        <apex:pageblock title="{!Tag009}" id="PBlack21" mode="edit"> 
+                                            <div style="overflow:hidden;">
+                                                <apex:panelGroup style="float:left; padding:1% 0 0 5%">
+                                                      <apex:inputText id="searchText" value="{!strSearchKeywordForAvail}"/>
+                                                      <apex:commandButton value="{!Tag016}" status="processing2" action="{!AvailProdctSearch}" rerender="PBlack21"/>
+                                                </apex:panelGroup>
+                                                <apex:panelGroup style="float:right; padding:1% 3% 0 0">
+                                                    <apex:outputText value="{!Tag018}"/>&nbsp;&nbsp;&nbsp;
+                                                    <apex:selectList value="{!pickValueForAvail}" size="1">
+                                                        <apex:selectOptions value="{!PicklistOption}"/>
+                                                    </apex:selectList>
+                                                </apex:panelGroup>
+                                            </div>                                          
+                                            <apex:pageBlockSection dir="LTR" columns="1" collapsible="false" >
+                                                <apex:pageblockTable value="{!AvailProdLst}" var="Prod" width="100%" styleClass="testing2" rendered="{!if((AvailProdLstSize == 0 ) ,false,true)}">
+                                                    <apex:column > 
+                                                        <apex:facet name="header"></apex:facet>
+                                                        <apex:inputCheckbox value="{!Prod.SVMXC__Select__c}"/>
+                                                    </apex:column>
+                                                    <apex:column >
+                                                        <apex:facet name="header">{!Tag005}</apex:facet>
+                                                        <apex:outputField value="{!Prod.Name}"/>
+                                                    </apex:column>
+                                                    <apex:column >
+                                                       <apex:facet name="header">{!Tag006}</apex:facet>
+                                                        <apex:outputField value="{!Prod.ProductCode}"/>
+                                                    </apex:column>
+                                                </apex:pageblockTable>
+                                            </apex:pageBlockSection>
+                                        </apex:pageblock>
+                                   </td>
+                                    <td style="width:5%;text-align:Center; vertical-align:middle;">
+                                    
+                                        <apex:commandButton action="{!OnAddproduct}" id="right" rerender="PBSection" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Right_Bttn.JPG')}" alt="Up" status="processing2" title="{!Tag020}" />
+                                        <br/><br/>
+                                        <apex:commandButton action="{!OnRemProduct}" id="left" rerender="PBSection" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Left_Bttn.JPG')}" alt="Up" status="processing2" title="{!Tag021}" />
+                                    </td>
+                                   <td style="width:45%;text-align:right;">
+                                        <apex:pageblock title="{!Tag015}" mode="edit">
+                                            <apex:pageblockSection rendered="{!IsListEmpty}">
+                                                <apex:outputLabel value="{!Tag010}" />  
+                                            </apex:pageblockSection> 
+                                            <apex:pageBlockSection rendered="{!NOT(IsListEmpty)}" dir="LTR" columns="1" collapsible="false" >
+                                                <apex:pageblockTable value="{!TobeReplacProdLst}" var="Prod" width="100%">
+                                                    <apex:column > 
+                                                        <apex:facet name="header"></apex:facet>
+                                                        <apex:inputCheckbox value="{!Prod.SVMXC__Select__c}"/>
+                                                    </apex:column>
+                                                    <apex:column >
+                                                        <apex:facet name="header">{!Tag005}</apex:facet>
+                                                        <apex:outputField value="{!Prod.Name}"/>
+                                                    </apex:column>
+                                                    <apex:column >
+                                                        <apex:facet name="header">{!Tag006}</apex:facet>
+                                                        <apex:outputField value="{!Prod.ProductCode}"/>
+                                                    </apex:column>
+                                                </apex:pageblockTable>
+                                            </apex:pageBlockSection>
+                                        </apex:pageblock>
+                                   </td>
+                                   <td style="width:5%;text-align:Center; vertical-align:middle;">
+                                        <apex:commandButton action="{!UpProduct}" id="Up"  rendered="{!NOT(IsListEmpty)}" rerender="PBSection" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Up_Bttn.JPG')}" alt="Up" title="{!Tag022}" status="processing2"/>
+                                        <br/><br/>
+                                        <apex:commandButton action="{!DownProduct}" id="down" rendered="{!NOT(IsListEmpty)}" rerender="PBSection" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Down_Bttn.JPG')}" alt="Down" title="{!Tag023}" status="processing2"/>
+                                    </td>
+                                </apex:outputText>
+                            </apex:panelGrid>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                </apex:pageBlock> 
+          </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,1186 @@
+<apex:page name="setupInitiateReturn" id="setupInitiateReturn" controller="SVMXC.CONF_SetupInitiateReturn">
+    <apex:form id="SVMX_FORM">
+        <style>
+            .activeTab{
+                background-color: #8599B1; 
+                color:white; 
+                background-image:none; 
+                font-size:14Px
+            } 
+            .inactiveTab{
+                background-color: #B0BFD2; 
+                color:black; 
+                background-image:none;
+            }
+            .disableTab 
+            {
+                background-color : Lightgrey ;
+                color:LightGrey;
+                background-image:none;
+                font-size:1.2em;
+                font-size:1.2em;
+            }
+        </style>
+    <apex:pageBlock title="{!TAG001}" id="pgBlck1" helptitle="{!HLPTITLE}" helpurl="{!HLPURL}">
+        <!----------------------------------------------------------- Buttons ------------------------------------------------------------------------------->
+        <apex:pageBlockButtons location="TOP">
+            <apex:commandButton id="quickSave" value="{!TAG002}" action="{!quickSave}" reRender="SVMX_FORM" status="processing" disabled="{!disabled}"/>
+            <apex:commandButton id="saveAndClose" value="{!TAG003}" action="{!saveClose}" reRender="pgMsg" disabled="{!disabled}" status="processing"/>
+            <apex:commandButton id="cancel" value="{!TAG004}" action="{!cancel}"/>
+        </apex:pageBlockButtons>
+        <apex:pageMessages id="pgMsg"/>
+        <apex:actionStatus startText="{!TAG015}" id="processing" style="font-Size:13px;Font-weight:Bold;"/>
+        <apex:pageBlockSection columns="1" id="pgBlck1Sec1">
+            <!----------------------------------------------------------- Tab-Panel ------------------------------------------------------------------------->
+            <apex:tabPanel id="pgBlck1Sec1TabPanel1" switchType="client" tabClass="activeTab" inactiveTabClass="inactiveTab" value="{!selectedTab}">
+                <!-------------------------------------------------- Tab-1 Starts Here ---------------------------------------------------------------------->
+                <apex:tab id="TAB1" name="TAB1" label="{!TAG005}">
+                    <apex:inputHidden value="{!delIndex}" id="delIndex"/>
+                <!-------------------------------------------------- Tab-1 Sec-1 ------------------------------------------------------------------------>
+                    <apex:pageBlock mode="edit" id="tab1pageblock1">
+                        <apex:pageBlockSection columns="1" collapsible="false" dir="LTR" id="tab1sec1">
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TAG011}" style="font-Size:12px;" />
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                        <apex:inputText value="{!processName}" style="width:50%;" disabled="{!disabled}"/>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TAG012}" style="font-Size:12px;" />
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                        <apex:inputText value="{!processID}" style="width:50%;" disabled="{!disabled}"/>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TAG013}" style="font-Size:12px;" />
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:inputTextArea value="{!processDesc}" style="width:50%;" disabled="{!disabled}"/>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey">
+                            <apex:toolbar id="tab1theToolbar1" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab1theToolbar1toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab1theToolbar1toolbarGroup2">
+                                    <apex:outputText value="{!TAG014}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        
+                        <apex:actionFunction name="onChngInitRetParentExp" id="onChngInitRetParentExp" action="{!onChngInitRetParentExp}" reRender="tab1Sec2,tab1Sec3" status="tab1status1"/>
+                        <apex:actionFunction name="EditCriteriaInitRetParentExp" id="EditCriteriaInitRetParentExp" action="{!EditCriteriaInitRetParentExp}" reRender="tab1Sec3" status="tab1status1"/>
+                        <apex:actionFunction name="NewCriteriaInitRetParentExp" id="NewCriteriaInitRetParentExp" action="{!NewCriteriaInitRetParentExp}" reRender="tab1Sec2,tab1Sec3" status="tab1status1"/>
+                    <!-------------------------------------------------- Tab-1 Sec-2 ------------------------------------------------------------------------>
+                        <apex:actionStatus id="tab1status1" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection columns="3" id="tab1Sec2">
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputLabel value="{!TAG016}" style="font-weight:bold;font-size:13px;"/>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:selectList value="{!selectedCriteriaInitRet}" size="1" style="width:70%" onChange="onChngInitRetParentExp()" disabled="{!disabled}"> 
+                                        <apex:selectOptions value="{!lstCriteriaInitRet}"/>
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1" id="tab2hdrexpslctlstblock">
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputLink title="{!TAG017}" value="#" style="margin-left:0px;left:0px;" onclick="EditCriteriaInitRetParentExp()" rendered="{!Not(DisableEditLnkInitRet)}">
+                                            <apex:outputText value="{!TAG017}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                        <apex:outputLink title="{!TAG018}" value="#" style="margin-left:0px;left:0px;" onclick="NewCriteriaInitRetParentExp()" disabled="{!disabled}">
+                                            <apex:outputText value="{!TAG018}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" id="tab1Sec3">
+                            <apex:pageBlockSection columns="4" rendered="{!renderInitRetExprBlock}" id="tab1Sec3sec1" title="" collapsible="false">
+                                <apex:outputLabel value="{!TAG019}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprName1" value="{!ExpParentInitRet.namedExpression.SVMXC__Name__c}" style="width:200px;"/>
+                                    <apex:inputHidden value="{!ExpParentInitRet.namedExpression.SVMXC__IsStandard__c}" id="IsStandardValueForExpParent"/>
+                                    <apex:inputHidden value="{!disabled}" id="disabledValue"/>
+                                    
+                                    <script>
+                                    var valueForStandard = true;
+                                    var valueForDisable = document.getElementById('{!$Component.disabledValue}').value;
+                                    function valuesForDisabledExpParent()
+                                    {
+                                        valueForStandard = document.getElementById('{!$Component.IsStandardValueForExpParent}').value;
+                                    }
+                                    valuesForDisabledExpParent();
+                                    
+                                    function check_disable211(){if(valueForStandard == 'false' && valueForDisable == 'false') {return false;} else {return true;}}
+                                    document.getElementById('{!$Component.ExprName1}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                                
+                                <apex:outputLabel value="{!TAG020}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprUId1" value="{!ExpParentInitRet.namedExpression.SVMXC__ProcessID__c}" style="width:200px;"/>
+                                    <script>
+                                    document.getElementById('{!$Component.ExprUId1}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            
+                            <apex:pageBlockSection columns="1" rendered="{!renderInitRetExprBlock}" id="tab1Sec3sec3">
+                                <apex:pageBlockTable id="tab1table1" value="{!ExpParentInitRet.expressionDetails}" var="item" cellPadding="4" width="100%" rendered="{!renderInitRetExprBlock}">
+                                    <apex:column rendered="true" style="font-Size:10px;width:2%;">
+                                        <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;width:30%;">
+                                        <apex:facet name="header">{!TAG021}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Field_Name__c}" size="1" multiselect="false" style="font-Size:12px;" disabled="{!(ExpParentInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                            <apex:selectOptions value="{!Hdrfldlist}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG022}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Operator__c}" disabled="{!(ExpParentInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}" size="1" multiselect="false" style="font-Size:12px">
+                                            <apex:selectOptions value="{!OperatorSelectLst}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG023}</apex:facet>
+                                        <apex:inputText value="{!item.SVMXC__Operand__c}" disabled="{!(ExpParentInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:7px;height:7px;width:8%;" rendered="{!NOT(ExpParentInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!HdrDeleteRowInitRet}"  onclick="javascript:document.getElementById('{!$Component.DelIndex}').value = {!item.SVMXC__Sequence__c}" id="tab1hdrdeleterow1" status="tab1status1" reRender="tab1Sec3sec3" title="{!TAG088}" />
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!HdrADDRowInitRet}"  id="tab1hdraddrow1" rendered="{!if((ParentInitRetExpDetailSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" status="tab1status1" reRender="tab1Sec3sec3" title="{!TAG087}" />
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRowInitRet}" rendered="{!if((ParentInitRetExpDetailSize == 0 ) ,true,false)}" id="tab1hdraddrow2" disabled="{!(ExpParentInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}" status="tab1status1" reRender="tab1Sec3sec3" title="{!TAG087}" />
+                                
+                                <apex:outputText value="{!TAG025}"  style="font-weight:bold;"/> 
+                                <apex:inputText id="HdrAdvOption" value="{!ExpParentInitRet.namedExpression.SVMXC__Advance_Expression__c}" size="80" disabled="{!(ExpParentInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}"/>
+                                
+                                <apex:outputLabel style="font-weight:bold;">{!TAG026}</apex:outputLabel>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                    <apex:inputText value="{!parentInitRetErrorMsg}" size="80"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                        </apex:pageBlockSection>
+                        
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey">
+                            <apex:toolbar id="tab1theToolbar2" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab1theToolbar2toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab1theToolbar2toolbarGroup2">
+                                    <apex:outputText value="{!TAG027}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/> 
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        
+                        <apex:actionFunction name="onChngInitRetLineExp" id="onChngInitRetLineExp" action="{!onChngInitRetLineExp}" reRender="tab1Sec4,tab1Sec5" status="tab1status2"/>
+                        <apex:actionFunction name="EditCriteriaInitRetLineExp" id="EditCriteriaInitRetLineExp" action="{!EditCriteriaInitRetLineExp}" reRender="tab1Sec5" status="tab1status2"/>
+                        <apex:actionFunction name="NewCriteriaInitRetLineExp" id="NewCriteriaInitRetLineExp" action="{!NewCriteriaInitRetLineExp}" reRender="tab1Sec4,tab1Sec5" status="tab1status2"/>
+                    <!-------------------------------------------------- Tab-1 Sec-2 ------------------------------------------------------------------------>
+                        <apex:actionStatus id="tab1status2" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection columns="3" id="tab1Sec4">
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputLabel value="{!TAG016}" style="font-weight:bold;font-size:13px;"/>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:selectList value="{!selectedCriteriaInitRetLine}" size="1" style="width:70%" onChange="onChngInitRetLineExp()" disabled="{!disabled}"> 
+                                        <apex:selectOptions value="{!lstCriteriaInitRetLine}"/>
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1" id="tab1hdrexpslctlstblock">
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputLink title="{!TAG017}" value="#" style="margin-left:0px;left:0px;" onclick="EditCriteriaInitRetLineExp()" rendered="{!Not(DisableEditLnkInitRetLine)}">
+                                            <apex:outputText value="{!TAG017}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                        <apex:outputLink title="{!TAG018}" value="#" style="margin-left:0px;left:0px;" onclick="NewCriteriaInitRetLineExp()" disabled="{!disabled}">
+                                            <apex:outputText value="{!TAG018}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" id="tab1Sec5">
+                            <apex:pageBlockSection columns="4" rendered="{!renderInitRetLineExprBlock}" id="tab1Sec5sec1" title="" collapsible="false">
+                                <apex:outputLabel value="{!TAG019}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprName2" value="{!ExpLineInitRet.namedExpression.SVMXC__Name__c}" style="width:200px;"/>
+                                    <apex:inputHidden value="{!ExpLineInitRet.namedExpression.SVMXC__IsStandard__c}" id="IsStandardValueExpLine"/>
+                                    <script>
+                                    var valueForStandardExpLine = true;
+                                    function valuesForDisabledExpLine()
+                                    {
+                                        valueForStandardExpLine = document.getElementById('{!$Component.IsStandardValueExpLine}').value;
+                                    }
+                                    valuesForDisabledExpLine();
+                                    
+                                    function check_disable211(){if(valueForStandardExpLine == 'false' && valueForDisable == 'false') {return false;} else {return true;}}
+                                    document.getElementById('{!$Component.ExprName2}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                                
+                                <apex:outputLabel value="{!TAG020}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprUId2" value="{!ExpLineInitRet.namedExpression.SVMXC__ProcessID__c}" style="width:200px;"/>
+                                    <script>
+                                    valuesForDisabledExpLine();
+                                    document.getElementById('{!$Component.ExprUId2}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            
+                            <apex:pageBlockSection columns="1" rendered="{!renderInitRetLineExprBlock}" id="tab1Sec5sec3">
+                                <apex:pageBlockTable id="tab1table2" value="{!ExpLineInitRet.expressionDetails}" var="item" cellPadding="4" width="100%" rendered="{!renderInitRetLineExprBlock}">
+                                    <apex:column rendered="true" style="font-Size:10px;width:2%;">
+                                        <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;width:30%;">
+                                        <apex:facet name="header">{!TAG021}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Field_Name__c}" size="1" multiselect="false" style="font-Size:12px;" disabled="{!(ExpLineInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                            <apex:selectOptions value="{!LinefldList}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG022}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Operator__c}" disabled="{!(ExpLineInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}" size="1" multiselect="false" style="font-Size:12px">
+                                            <apex:selectOptions value="{!OperatorSelectLst}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG023}</apex:facet>
+                                        <apex:inputText value="{!item.SVMXC__Operand__c}" disabled="{!(ExpLineInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:7px;height:7px;width:8%;" rendered="{!NOT(ExpLineInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!HdrDeleteRowInitRetLine}"  onclick="javascript:document.getElementById('{!$Component.DelIndex}').value = {!item.SVMXC__Sequence__c}" id="tab1hdrdeleterow2" status="tab1status2" reRender="tab1Sec5sec3" title="{!TAG088}" />
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!HdrADDRowInitRetLine}"  id="tab1hdraddrow3" rendered="{!if((LineInitRetExpDetailSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" status="tab1status2" reRender="tab1Sec5sec3" title="{!TAG087}" />
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRowInitRetLine}" rendered="{!if((LineInitRetExpDetailSize == 0 ) ,true,false)}" id="tab1hdraddrow4" disabled="{!(ExpLineInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}" status="tab1status2" reRender="tab1Sec5sec3" title="{!TAG087}" />
+                                <apex:outputText value="{!TAG025}"  style="font-weight:bold;"/> 
+                                <apex:inputText id="HdrAdvOption" value="{!ExpLineInitRet.namedExpression.SVMXC__Advance_Expression__c}" size="80" disabled="{!(ExpLineInitRet.namedExpression.SVMXC__IsStandard__c || disabled)}"/>
+                                
+                                <apex:outputLabel style="font-weight:bold;">{!TAG026}</apex:outputLabel>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                    <apex:inputText value="{!lineInitRetErrorMsg}" size="80"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" title="" collapsible="false" id="tab1sec6">
+                            <apex:pageBlockSectionItem dataStyle="text-align:right">
+                                <apex:commandButton status="processing" value="{!TAG006} >>" rerender="pgBlck1Sec1TabPanel1" action="{!EntitleConfig}"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageblockSection>
+                    </apex:pageBlock>
+                </apex:tab>
+                
+                <!-------------------------------------------------- Tab-2 Starts Here ---------------------------------------------------------------------->
+                <apex:tab id="TAB2" name="TAB2" label="{!TAG006}">
+                <!-------------------------------------------------- Tab-2 Sec-1 ------------------------------------------------------------------------>
+                    <apex:pageBlock mode="edit" id="tab2pageblock1">
+                        <apex:actionFunction id="onChngEntitle" name="onChngEntitle" status="status1" action="{!onChngEntitle}" reRender="tab2pageblock1"/>
+                        <apex:actionStatus id="status1" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection columns="1" id="tab2sec1">
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TAG028}" style="font-Size:12px;" />
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:inputCheckbox value="{!isPerformEntitle}" disabled="{!disabled}" onchange="onChngEntitle()"/>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey; display:none;" id="center1">
+                            <apex:toolbar id="tab2theToolbar1" styleClass="disableTab" width="5%" rendered="{!renderEntitle}">          
+                                <apex:toolbarGroup location="left" id="tab2theToolbar1toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab2theToolbar1toolbarGroup2">
+                                    <apex:outputText value="{!TAG029}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        <script>
+                            function showBar()
+                            {
+                                if({!renderEntitle})
+                                    document.getElementById('center1').style.display = 'block';
+                                else
+                                    document.getElementById('center1').style.display = 'none';
+                            }
+                            showBar();
+                        </script>
+                        
+                        <apex:actionFunction name="onChngEntitleParentExp" id="onChngEntitleParentExp" action="{!onChngEntitleParentExp}" reRender="tab2Sec3,tab2Sec4" status="tab2status1"/>
+                        <apex:actionFunction name="EditCriteriaEntitleParentExp" id="EditCriteriaEntitleParentExp" action="{!EditCriteriaEntitleParentExp}" reRender="tab2Sec4" status="tab2status1"/>
+                        <apex:actionFunction name="NewCriteriaEntitleParentExp" id="NewCriteriaEntitleParentExp" action="{!NewCriteriaEntitleParentExp}" reRender="tab2Sec3,tab2Sec4" status="tab2status1"/>
+                    <!-------------------------------------------------- Tab-2 Sec-2 ------------------------------------------------------------------------>
+                        <apex:actionStatus id="tab2status1" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection columns="3" id="tab2Sec3" rendered="{!renderEntitle}">
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputLabel value="{!TAG016}" style="font-weight:bold;font-size:13px;"/>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:selectList value="{!selectedCriteriaEntitle}" size="1" style="width:70%" onChange="onChngEntitleParentExp()" disabled="{!disabled}"> 
+                                        <apex:selectOptions value="{!lstCriteriaInitRet}"/>
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1" id="tab1hdrexpslctlstblock">
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputLink title="{!TAG017}" value="#" style="margin-left:0px;left:0px;" onclick="EditCriteriaEntitleParentExp()" rendered="{!Not(DisableEditLnkEntitle)}">
+                                            <apex:outputText value="{!TAG017}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                        <apex:outputLink title="{!TAG018}" value="#" style="margin-left:0px;left:0px;" onclick="NewCriteriaEntitleParentExp()" disabled="{!disabled}">
+                                            <apex:outputText value="{!TAG018}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" id="tab2Sec4" rendered="{!renderEntitle}">
+                            <apex:pageBlockSection columns="4" rendered="{!renderEntitleExprBlock}" id="tab2Sec4sec1" title="" collapsible="false">
+                                <apex:outputLabel value="{!TAG019}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprName3" value="{!ExpParentEntitle.namedExpression.SVMXC__Name__c}" style="width:200px;"/>
+                                    <apex:inputHidden value="{!ExpParentEntitle.namedExpression.SVMXC__IsStandard__c}" id="IsStandardValueExpParentEntitle"/>
+                                    <script>
+                                    var valueForStandardExpParentEntitle = true;
+                                    function valuesForDisabledExpParentEntitle()
+                                    {
+                                        valueForStandardExpParentEntitle = document.getElementById('{!$Component.IsStandardValueExpParentEntitle}').value;
+                                    }
+                                    valuesForDisabledExpParentEntitle();
+                                    
+                                    function check_disable211(){if(valueForStandardExpParentEntitle == 'false' && valueForDisable == 'false') {return false;} else {return true;}}
+                                    document.getElementById('{!$Component.ExprName3}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                                
+                                <apex:outputLabel value="{!TAG020}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprUId3" value="{!ExpParentEntitle.namedExpression.SVMXC__ProcessID__c}" style="width:200px;"/>
+                                    <script>
+                                    valuesForDisabledExpParentEntitle();
+                                    document.getElementById('{!$Component.ExprUId3}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            
+                            <apex:pageBlockSection columns="1" rendered="{!renderEntitleExprBlock}" id="tab2Sec4sec3">
+                                <apex:pageBlockTable id="tab2table1" value="{!ExpParentEntitle.expressionDetails}" var="item" cellPadding="4" width="100%" rendered="{!renderEntitleExprBlock}">
+                                    <apex:column rendered="true" style="font-Size:10px;width:2%;">
+                                        <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;width:30%;">
+                                        <apex:facet name="header">{!TAG021}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Field_Name__c}" size="1" multiselect="false" style="font-Size:12px;" disabled="{!(ExpParentEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                            <apex:selectOptions value="{!Hdrfldlist}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG022}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Operator__c}" disabled="{!(ExpParentEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}" size="1" multiselect="false" style="font-Size:12px">
+                                            <apex:selectOptions value="{!OperatorSelectLst}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG023}</apex:facet>
+                                        <apex:inputText value="{!item.SVMXC__Operand__c}" disabled="{!(ExpParentEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:7px;height:7px;width:8%;" rendered="{!NOT(ExpParentEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!HdrDeleteRowEntitle}"  onclick="javascript:document.getElementById('{!$Component.DelIndex}').value = {!item.SVMXC__Sequence__c}" id="tab2hdrdeleterow1" status="tab2status1" reRender="tab2Sec4sec3" title="{!TAG088}" />
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!HdrADDRowEntitle}"  id="tab2hdraddrow1" rendered="{!if((ParentEntitleExpDetailSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" status="tab2status1" reRender="tab2Sec4sec3" title="{!TAG087}" />
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRowEntitle}" rendered="{!if((ParentEntitleExpDetailSize == 0 ) ,true,false)}" id="tab2hdraddrow2" disabled="{!(ExpParentEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}" status="tab2status1" reRender="tab2Sec4sec3" title="{!TAG087}" />
+                                
+                                <apex:outputText value="{!TAG025}"  style="font-weight:bold;"/> 
+                                <apex:inputText id="HdrAdvOption" value="{!ExpParentEntitle.namedExpression.SVMXC__Advance_Expression__c}" size="80" disabled="{!(ExpParentEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}"/>
+                            </apex:pageblockSection>
+                        </apex:pageBlockSection>
+                    
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey" id="center2">
+                            <apex:toolbar id="tab2theToolbar2" styleClass="disableTab" width="5%" rendered="{!renderEntitle}">
+                                <apex:toolbarGroup location="left" id="tab2theToolbar2toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab2theToolbar2toolbarGroup2">
+                                    <apex:outputText value="{!TAG030}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        <script>
+                            function showBar1()
+                            {
+                                if({!renderEntitle})
+                                    document.getElementById('center2').style.display = 'block';
+                                else
+                                    document.getElementById('center2').style.display = 'none';
+                            }
+                            showBar1();
+                        </script>
+                        
+                        <apex:actionFunction name="onChngEntitleLineExp" id="onChngEntitleLineExp" action="{!onChngEntitleLineExp}" reRender="tab2Sec6,tab2Sec7" status="tab2status2"/>
+                        <apex:actionFunction name="EditCriteriaEntitleLineExp" id="EditCriteriaEntitleLineExp" action="{!EditCriteriaEntitleLineExp}" reRender="tab2Sec7" status="tab2status2"/>
+                        <apex:actionFunction name="NewCriteriaEntitleLineExp" id="NewCriteriaEntitleLineExp" action="{!NewCriteriaEntitleLineExp}" reRender="tab2Sec6,tab2Sec7" status="tab2status2"/>
+                    <!-------------------------------------------------- Tab-2 Sec-2 ------------------------------------------------------------------------>
+                        <apex:actionStatus id="tab2status2" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection columns="3" id="tab2Sec6" rendered="{!renderEntitle}">
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputLabel value="{!TAG016}" style="font-weight:bold;font-size:13px;"/>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:selectList value="{!selectedCriteriaEntitleLine}" size="1" style="width:70%" onChange="onChngEntitleLineExp()" disabled="{!disabled}"> 
+                                        <apex:selectOptions value="{!lstCriteriaInitRetLine}"/>
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1" id="tab1hdrexpslctlstblock">
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputLink title="{!TAG017}" value="#" style="margin-left:0px;left:0px;" onclick="EditCriteriaEntitleLineExp()" rendered="{!Not(DisableEditLnkEntitleLine)}">
+                                            <apex:outputText value="{!TAG017}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                        <apex:outputLink title="{!TAG018}" value="#" style="margin-left:0px;left:0px;" onclick="NewCriteriaEntitleLineExp()" disabled="{!disabled}">
+                                            <apex:outputText value="{!TAG018}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" id="tab2Sec7" rendered="{!renderEntitle}">
+                            <apex:pageBlockSection columns="4" rendered="{!renderEntitleLineExprBlock}" id="tab2Sec7sec1" title="" collapsible="false">
+                                <apex:outputLabel value="{!TAG019}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprName4" value="{!ExpLineEntitle.namedExpression.SVMXC__Name__c}" style="width:200px;"/>
+                                    <apex:inputHidden value="{!ExpLineEntitle.namedExpression.SVMXC__IsStandard__c}" id="IsStandardValueExpLineEntitle"/>
+                                    <script>
+                                    var valueForStandardExpLineEntitle = true;
+                                    function valuesForDisabledExpLineEntitle()
+                                    {
+                                        valueForStandardExpLineEntitle = document.getElementById('{!$Component.IsStandardValueExpLineEntitle}').value;
+                                    }
+                                    valuesForDisabledExpLineEntitle();
+                                    
+                                    function check_disable211(){if(valueForStandardExpLineEntitle == 'false' && valueForDisable == 'false') {return false;} else {return true;}}
+                                    document.getElementById('{!$Component.ExprName4}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                                
+                                <apex:outputLabel value="{!TAG020}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprUId4" value="{!ExpLineEntitle.namedExpression.SVMXC__ProcessID__c}" style="width:200px;"/>
+                                    <script>
+                                    valuesForDisabledExpLineEntitle();
+                                    document.getElementById('{!$Component.ExprUId4}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            
+                            <apex:pageBlockSection columns="1" rendered="{!renderEntitleLineExprBlock}" id="tab2Sec7sec3">
+                                <apex:pageBlockTable id="tab2table1" value="{!ExpLineEntitle.expressionDetails}" var="item" cellPadding="4" width="100%" rendered="{!renderEntitleLineExprBlock}">
+                                    <apex:column rendered="true" style="font-Size:10px;width:2%;">
+                                        <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;width:30%;">
+                                        <apex:facet name="header">{!TAG021}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Field_Name__c}" size="1" multiselect="false" style="font-Size:12px;" disabled="{!(ExpLineEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                            <apex:selectOptions value="{!LinefldList}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG022}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Operator__c}" disabled="{!(ExpLineEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}" size="1" multiselect="false" style="font-Size:12px">
+                                            <apex:selectOptions value="{!OperatorSelectLst}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG023}</apex:facet>
+                                        <apex:inputText value="{!item.SVMXC__Operand__c}" disabled="{!(ExpLineEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:7px;height:7px;width:8%;" rendered="{!NOT(ExpLineEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!HdrDeleteRowEntitleLine}"  onclick="javascript:document.getElementById('{!$Component.DelIndex}').value = {!item.SVMXC__Sequence__c}" id="tab2hdrdeleterow2" status="tab2status2" reRender="tab2Sec7sec3" title="{!TAG088}" />
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!HdrADDRowEntitleLine}"  id="tab2hdraddrow3" rendered="{!if((LineEntitleExpDetailSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" status="tab2status2" reRender="tab2Sec7sec3" title="{!TAG087}" />
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRowEntitleLine}" rendered="{!if((LineEntitleExpDetailSize == 0 ) ,true,false)}" id="tab2hdraddrow4" disabled="{!(ExpLineEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}" status="tab2status2" reRender="tab2Sec7sec3" title="{!TAG087}" />
+                                
+                                <apex:outputText value="{!TAG025}"  style="font-weight:bold;"/> 
+                                <apex:inputText id="HdrAdvOption" value="{!ExpLineEntitle.namedExpression.SVMXC__Advance_Expression__c}" size="80" disabled="{!(ExpLineEntitle.namedExpression.SVMXC__IsStandard__c || disabled)}"/>
+                            </apex:pageblockSection>
+                        </apex:pageBlockSection>
+                    
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey" id="center3">
+                            <apex:toolbar id="tab2theToolbar3" styleClass="disableTab" width="5%" rendered="{!renderEntitle}">
+                                <apex:toolbarGroup location="left" id="tab2theToolbar3toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab2theToolbar3toolbarGroup2">
+                                    <apex:outputText value="{!TAG039}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        <script>
+                            function showBar2()
+                            {
+                                if({!renderEntitle})
+                                    document.getElementById('center3').style.display = 'block';
+                                else
+                                    document.getElementById('center3').style.display = 'none';
+                            }
+                            showBar2();
+                        </script>
+                        
+                        <apex:pageBlockSection columns="6" id="tab2Sec9" rendered="{!renderEntitle}">
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="" />
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG044}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem > 
+                                <apex:outputText value="{!TAG045}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG046}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG047}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >&nbsp;</apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem datastyle="font-size:13px;font-weight:bold;">
+                                <apex:outputText >{!TAG040}</apex:outputText>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="entitleNamespace" value="{!entitleNamespace}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="entitleClass" value="{!entitleClass}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="entitleMethod" value="{!entitleMethod}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputTextArea id="entitleWS" value="{!entitleWS}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            &nbsp;
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="2" title="" collapsible="false" id="tab2sec10">
+                            <apex:pageBlockSectionItem dataStyle="text-align:left">
+                                <apex:commandButton status="processing" value="<< {!TAG005}" rerender="pgBlck1Sec1TabPanel1" action="{!GeneralInfo}"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem dataStyle="text-align:right">
+                                <apex:commandButton status="processing" value="{!TAG008} >>" rerender="pgBlck1Sec1TabPanel1" action="{!RouteCalcConfig}"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:tab>
+                
+                <!-------------------------------------------------- Tab-3 Starts Here ---------------------------------------------------------------------->
+                <apex:tab id="TAB3" name="TAB3" label="{!TAG008}">
+                <!-------------------------------------------------- Tab-3 Sec-1 ------------------------------------------------------------------------>
+                    <apex:pageBlock mode="edit" id="tab3pageblock1">
+                        <apex:actionFunction id="onChngRouteCalc" name="onChngRouteCalc" action="{!onChngRouteCalc}" status="status2" reRender="tab3pageblock1"/>
+                        <apex:actionStatus id="status2" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection columns="2" id="tab3sec1">
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TAG034}" style="font-Size:12px;"/>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:inputCheckbox value="{!isRouteCalc}" disabled="{!disabled}" onClick="onChngRouteCalc()"/>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TAG057}" style="font-Size:12px;" />
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                        <apex:selectList value="{!selectedLoc}" size="1" style="width:70%" disabled="{!disabled}"> 
+                                            <apex:selectOptions value="{!lstLoc}"/>
+                                        </apex:selectList>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey; display:none;" id="center4">
+                            <apex:toolbar id="tab3theToolbar1" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab3theToolbar1toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab3theToolbar1toolbarGroup2">
+                                    <apex:outputText value="{!TAG035}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        <script>
+                            function showBar3()
+                            {
+                                if({!renderRouteCalc})
+                                    document.getElementById('center4').style.display = 'block';
+                                else
+                                    document.getElementById('center4').style.display = 'none';
+                            }
+                            showBar3();
+                        </script>
+                        
+                        <apex:actionFunction name="onChngRouteCalcParentExp" id="onChngRouteCalcParentExp" action="{!onChngRouteCalcParentExp}" reRender="tab3Sec2,tab3Sec3" status="tab3status1"/>
+                        <apex:actionFunction name="EditCriteriaRouteCalcParentExp" id="EditCriteriaRouteCalcParentExp" action="{!EditCriteriaRouteCalcParentExp}" reRender="tab3Sec3" status="tab3status1"/>
+                        <apex:actionFunction name="NewCriteriaRouteCalcParentExp" id="NewCriteriaRouteCalcParentExp" action="{!NewCriteriaRouteCalcParentExp}" reRender="tab3Sec2,tab3Sec3" status="tab3status1"/>
+                    <!-------------------------------------------------- Tab-3 Sec-2 ------------------------------------------------------------------------>
+                        <apex:actionStatus id="tab3status1" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection columns="3" id="tab3Sec2" rendered="{!renderRouteCalc}">
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputLabel value="{!TAG016}" style="font-weight:bold;font-size:13px;"/>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:selectList value="{!selectedCriteriaRouteCalc}" size="1" style="width:70%" onChange="onChngRouteCalcParentExp()" disabled="{!disabled}"> 
+                                        <apex:selectOptions value="{!lstCriteriaInitRet}"/>
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1" id="tab1hdrexpslctlstblock">
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputLink title="{!TAG017}" value="#" style="margin-left:0px;left:0px;" onclick="EditCriteriaRouteCalcParentExp()" rendered="{!Not(DisableEditLnkRouteCalc)}">
+                                            <apex:outputText value="{!TAG017}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                        <apex:outputLink title="{!TAG018}" value="#" style="margin-left:0px;left:0px;" onclick="NewCriteriaRouteCalcParentExp()" disabled="{!disabled}">
+                                            <apex:outputText value="{!TAG018}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" id="tab3Sec3" rendered="{!renderRouteCalc}">
+                            <apex:pageBlockSection columns="4" rendered="{!renderRouteCalcExprBlock}" id="tab3Sec3sec1" title="" collapsible="false">
+                                <apex:outputLabel value="{!TAG019}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprName5" value="{!ExpParentRouteCalc.namedExpression.SVMXC__Name__c}" style="width:200px;"/>
+                                    <apex:inputHidden value="{!ExpParentRouteCalc.namedExpression.SVMXC__IsStandard__c}" id="IsStandardValueExpParentCalc"/>
+                                    <script>
+                                    var valueForStandardExpParentCalc = true;
+                                    function valuesForDisabledExpParentCalc()
+                                    {
+                                        valueForStandardExpParentCalc = document.getElementById('{!$Component.IsStandardValueExpParentCalc}').value;
+                                    }
+                                    valuesForDisabledExpParentCalc();
+                                    
+                                    function check_disable211(){if(valueForStandardExpParentCalc == 'false' && valueForDisable == 'false') {return false;} else {return true;}}
+                                    document.getElementById('{!$Component.ExprName5}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                                
+                                <apex:outputLabel value="{!TAG020}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprUId5" value="{!ExpParentRouteCalc.namedExpression.SVMXC__ProcessID__c}" style="width:200px;"/>
+                                    <script>
+                                    valuesForDisabledExpParentCalc();
+                                    document.getElementById('{!$Component.ExprUId5}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            
+                            <apex:pageBlockSection columns="1" rendered="{!renderRouteCalcExprBlock}" id="tab3Sec3sec3">
+                                <apex:pageBlockTable id="tab2table1" value="{!ExpParentRouteCalc.expressionDetails}" var="item" cellPadding="4" width="100%" rendered="{!renderRouteCalcExprBlock}">
+                                    <apex:column rendered="true" style="font-Size:10px;width:2%;">
+                                        <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;width:30%;">
+                                        <apex:facet name="header">{!TAG021}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Field_Name__c}" size="1" multiselect="false" style="font-Size:12px;" disabled="{!(ExpParentRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                            <apex:selectOptions value="{!Hdrfldlist}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG022}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Operator__c}" disabled="{!(ExpParentRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}" size="1" multiselect="false" style="font-Size:12px">
+                                            <apex:selectOptions value="{!OperatorSelectLst}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG023}</apex:facet>
+                                        <apex:inputText value="{!item.SVMXC__Operand__c}" disabled="{!(ExpParentRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:7px;height:7px;width:8%;" rendered="{!NOT(ExpParentRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!HdrDeleteRowRouteCalc}"  onclick="javascript:document.getElementById('{!$Component.DelIndex}').value = {!item.SVMXC__Sequence__c}" id="tab3hdrdeleterow1" status="tab3status1" reRender="tab3Sec3sec3" title="{!TAG088}" />
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!HdrADDRowRouteCalc}"  id="tab3hdraddrow1" rendered="{!if((ParentRouteCalcExpDetailSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" status="tab3status1" reRender="tab3Sec3sec3" title="{!TAG087}" />
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRowRouteCalc}" rendered="{!if((ParentRouteCalcExpDetailSize == 0 ) ,true,false)}" id="tab3hdraddrow2" disabled="{!(ExpParentRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}" status="tab3status1" reRender="tab3Sec3sec3" title="{!TAG087}" />
+                                <apex:outputText value="{!TAG025}"  style="font-weight:bold;"/> 
+                                <apex:inputText id="HdrAdvOption" value="{!ExpParentRouteCalc.namedExpression.SVMXC__Advance_Expression__c}" size="80" disabled="{!(ExpParentRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}"/>
+                            </apex:pageBlockSection>
+                        </apex:pageBlockSection>
+                        
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey; display:none" id="center5">
+                            <apex:toolbar id="tab3theToolbar2" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab3theToolbar2toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab3theToolbar2toolbarGroup2">
+                                    <apex:outputText value="{!TAG036}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        <script>
+                            function showBar4()
+                            {
+                                if({!renderRouteCalc})
+                                    document.getElementById('center5').style.display = 'block';
+                                else
+                                    document.getElementById('center5').style.display = 'none';
+                            }
+                            showBar4();
+                        </script>
+                        
+                        <apex:actionFunction name="onChngRouteCalcLineExp" id="onChngRouteCalcLineExp" action="{!onChngRouteCalcLineExp}" reRender="tab3Sec4,tab3Sec5" status="tab3status2"/>
+                        <apex:actionFunction name="EditCriteriaRouteCalcLineExp" id="EditCriteriaRouteCalcLineExp" action="{!EditCriteriaRouteCalcLineExp}" reRender="tab3Sec5" status="tab3status2"/>
+                        <apex:actionFunction name="NewCriteriaRouteCalcLineExp" id="NewCriteriaRouteCalcLineExp" action="{!NewCriteriaRouteCalcLineExp}" reRender="tab3Sec4,tab3Sec5" status="tab3status2"/>
+                    <!-------------------------------------------------- Tab-3 Sec-4 ------------------------------------------------------------------------>
+                        <apex:actionStatus id="tab3status2" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection columns="3" id="tab3Sec4" rendered="{!renderRouteCalc}">
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputLabel value="{!TAG016}" style="font-weight:bold;font-size:13px;"/>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:selectList value="{!selectedCriteriaRouteCalcLine}" size="1" style="width:70%" onChange="onChngRouteCalcLineExp()" disabled="{!disabled}"> 
+                                        <apex:selectOptions value="{!lstCriteriaInitRetLine}"/>
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:pageBlockSection columns="1" id="tab1hdrexpslctlstblock">
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputLink title="{!TAG017}" value="#" style="margin-left:0px;left:0px;" onclick="EditCriteriaRouteCalcLineExp()" rendered="{!Not(DisableEditLnkRouteCalcLine)}">
+                                            <apex:outputText value="{!TAG017}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                        <apex:outputLink title="{!TAG018}" value="#" style="margin-left:0px;left:0px;" onclick="NewCriteriaRouteCalcLineExp()" disabled="{!disabled}">
+                                            <apex:outputText value="{!TAG018}" style="Font-size:13px; Font-weight:bold;"></apex:outputText>
+                                        </apex:outputLink>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1" id="tab3Sec5" rendered="{!renderRouteCalc}">
+                            <apex:pageBlockSection columns="4" rendered="{!renderRouteCalcLineExprBlock}" id="tab3Sec5sec1" title="" collapsible="false">
+                                <apex:outputLabel value="{!TAG019}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprName6" value="{!ExpLineRouteCalc.namedExpression.SVMXC__Name__c}" style="width:200px;"/>
+                                    <apex:inputHidden value="{!ExpLineRouteCalc.namedExpression.SVMXC__IsStandard__c}" id="IsStandardValueExpLineCalc"/>
+                                    <script>
+                                    var valueForStandardExpLineCalc = true;
+                                    function valuesForDisabledExpLineCalc()
+                                    {
+                                        valueForStandardExpLineCalc = document.getElementById('{!$Component.IsStandardValueExpLineCalc}').value;
+                                    }
+                                    valuesForDisabledExpLineCalc();
+                                    
+                                    function check_disable211(){if(valueForStandardExpLineCalc == 'false' && valueForDisable == 'false') {return false;} else {return true;}}
+                                    document.getElementById('{!$Component.ExprName6}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                                
+                                <apex:outputLabel value="{!TAG020}" style="font-weight:bold;"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:inputfield id="ExprUId6" value="{!ExpLineRouteCalc.namedExpression.SVMXC__ProcessID__c}" style="width:200px;"/>
+                                    <script>
+                                    valuesForDisabledExpLineCalc();
+                                    document.getElementById('{!$Component.ExprUId6}').disabled = check_disable211();
+                                    </script>
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            
+                            <apex:pageBlockSection columns="1" rendered="{!renderRouteCalcLineExprBlock}" id="tab3Sec5sec3">
+                                <apex:pageBlockTable id="tab2table1" value="{!ExpLineRouteCalc.expressionDetails}" var="item" cellPadding="4" width="100%" rendered="{!renderRouteCalcLineExprBlock}">
+                                    <apex:column rendered="true" style="font-Size:10px;width:2%;">
+                                        <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;width:30%;">
+                                        <apex:facet name="header">{!TAG021}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Field_Name__c}" size="1" multiselect="false" style="font-Size:12px;" disabled="{!(ExpLineRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                            <apex:selectOptions value="{!LinefldList}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG022}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Operator__c}" disabled="{!(ExpLineRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}" size="1" multiselect="false" style="font-Size:12px">
+                                            <apex:selectOptions value="{!OperatorSelectLst}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:30%;">
+                                        <apex:facet name="header">{!TAG023}</apex:facet>
+                                        <apex:inputText value="{!item.SVMXC__Operand__c}" disabled="{!(ExpLineRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:10px;width:7px;height:7px;width:8%;" rendered="{!NOT(ExpLineRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}">
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!HdrDeleteRowRouteCalcLine}"  onclick="javascript:document.getElementById('{!$Component.DelIndex}').value = {!item.SVMXC__Sequence__c}" id="tab3hdrdeleterow2" status="tab3status2" reRender="tab3Sec5sec3" title="{!TAG088}" />
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!HdrADDRowRouteCalcLine}"  id="tab3hdraddrow3" rendered="{!if((LineRouteCalcExpDetailSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" status="tab3status2" reRender="tab3Sec5sec3" title="{!TAG087}" />
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRowRouteCalcLine}" rendered="{!if((LineRouteCalcExpDetailSize == 0 ) ,true,false)}" id="tab3hdraddrow4" disabled="{!(ExpLineRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}" status="tab3status2" reRender="tab3Sec5sec3" title="{!TAG087}" />
+                                
+                                <apex:outputText value="{!TAG025}"  style="font-weight:bold;"/> 
+                                <apex:inputText id="HdrAdvOption" value="{!ExpLineRouteCalc.namedExpression.SVMXC__Advance_Expression__c}" size="80" disabled="{!(ExpLineRouteCalc.namedExpression.SVMXC__IsStandard__c || disabled)}"/>
+                            </apex:pageblockSection>
+                        </apex:pageBlockSection>
+                        
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey; display:none;" id="center6">
+                            <apex:toolbar id="tab3theToolbar3" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab3theToolbar3toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab3theToolbar3toolbarGroup2">
+                                    <apex:outputText value="{!TAG039}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        <script>
+                            function showBar5()
+                            {
+                                if({!renderRouteCalc})
+                                    document.getElementById('center6').style.display = 'block';
+                                else
+                                    document.getElementById('center6').style.display = 'none';
+                            }
+                            showBar5();
+                        </script>
+                        
+                        <apex:pageBlockSection columns="6" id="tab3Sec6" rendered="{!renderRouteCalc}">
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="" />
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG044}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem > 
+                                <apex:outputText value="{!TAG045}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG046}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG047}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >&nbsp;</apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem datastyle="font-size:13px;font-weight:bold;">
+                                <apex:outputText >{!TAG041}</apex:outputText>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="routeCalcNamespace" value="{!routeCalcNamespace}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="routeCalcClass" value="{!routeCalcClass}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="routeCalcMethod" value="{!routeCalcMethod}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputTextArea id="routeCalcWS" value="{!routeCalcWS}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            &nbsp;
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="2" title="" collapsible="false" id="tab3sec7">
+                            <apex:pageBlockSectionItem dataStyle="text-align:left">
+                                <apex:commandButton status="processing" value="<< {!TAG006}" rerender="pgBlck1Sec1TabPanel1" action="{!EntitleConfig}"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem dataStyle="text-align:right">
+                                <apex:commandButton status="processing" value="{!TAG009} >>" rerender="pgBlck1Sec1TabPanel1" action="{!RMAConfig}"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageblockSection>
+                    </apex:pageblock>
+                </apex:tab>
+                
+                <!-------------------------------------------------- Tab-4 Starts Here ---------------------------------------------------------------------->
+                <apex:tab id="TAB4" name="TAB4" label="{!TAG009}">
+                    <apex:pageBlock mode="edit" id="tab4pageblock1">
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey">
+                            <apex:toolbar id="tab4theToolbar1" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab4theToolbar1toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab4theToolbar1toolbarGroup2">
+                                    <apex:outputText value="{!TAG048}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        <!-------------------------------------------------- Tab-4 Sec-1 ------------------------------------------------------------------------>
+                        <apex:pageBlockSection columns="1" id="tab4Sec1">
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TAG049}" style="font-Size:12px;" />
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:selectList value="{!selectedObjMapCase}" size="1" style="width:50%;" disabled="{!disabled}">
+                                        <apex:selectOptions value="{!lstObjMapCase}"/>
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TAG050}" style="font-Size:12px;"/>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:selectList value="{!selectedObjMapCaseLine}" size="1" style="width:50%;" disabled="{!disabled}">
+                                        <apex:selectOptions value="{!lstObjMapCaseLine}"/>
+                                    </apex:selectList>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey">
+                            <apex:toolbar id="tab4theToolbar2" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab4theToolbar2toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab4theToolbar2toolbarGroup2">
+                                    <apex:outputText value="{!TAG039}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        
+                        <apex:pageBlockSection columns="6" id="tab4Sec2">
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="" />
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG044}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem > 
+                                <apex:outputText value="{!TAG045}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG046}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG047}" style="font-Size:12px;font-weight:bold;"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >&nbsp;</apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem datastyle="font-size:13px;font-weight:bold;">
+                                <apex:outputText >{!TAG042}</apex:outputText>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="beforeRMAGenNamespace" value="{!beforeRMAGenNamespace}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="beforeRMAGenClass" value="{!beforeRMAGenClass}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="beforeRMAGenMethod" value="{!beforeRMAGenMethod}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputTextArea id="beforeRMAGenWS" value="{!beforeRMAGenWS}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            &nbsp;
+                            <apex:pageBlockSectionItem datastyle="font-size:13px;font-weight:bold;">
+                                <apex:outputText >{!TAG043}</apex:outputText>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="afterRMAGenNamespace" value="{!afterRMAGenNamespace}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="afterRMAGenClass" value="{!afterRMAGenClass}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputText id="afterRMAGenMethod" value="{!afterRMAGenMethod}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputTextArea id="afterRMAGenWS" value="{!afterRMAGenWS}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey">
+                            <apex:toolbar id="tab4theToolbar3" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab4theToolbar3toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab4theToolbar3toolbarGroup2">
+                                    <apex:outputText value="{!TAG051}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        
+                        <apex:pageBlockSection columns="1" id="tab4Sec3">
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                <apex:pageBlockSection columns="1">
+                                    <apex:outputtext value="{!TAG052}" style="font-Size:12px;" />
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection columns="1">
+                                    <apex:inputText value="{!templateRMAOrder}" style="width:50%;" disabled="{!disabled}"/>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection columns="2" title="" collapsible="false" id="tab4sec4">
+                            <apex:pageBlockSectionItem dataStyle="text-align:Left">
+                                <apex:commandButton status="processing" value="<< {!TAG008}" rerender="pgBlck1Sec1TabPanel1" action="{!RouteCalcConfig}"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem dataStyle="text-align:Right">
+                                <apex:commandButton status="processing" value="{!TAG007} >>" rerender="pgBlck1Sec1TabPanel1" action="{!srcUpdate}"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageblockSection>
+                    </apex:pageBlock>
+                </apex:tab>
+                
+                <!-------------------------------------------------- Tab-5 Starts Here ---------------------------------------------------------------------->
+                <apex:tab id="TAB5" name="TAB5" label="{!TAG007}">
+                    <apex:pageBlock mode="edit" id="tab5pageblock1">
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey">
+                            <apex:toolbar id="tab5theToolbar1" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab5theToolbar1toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab5theToolbar1toolbarGroup2">
+                                    <apex:outputText value="{!TAG037}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        
+                        <apex:actionStatus id="tab5status1" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection id="tab5sec1" columns="1">
+                            <apex:pageBlockTable id="tab5table1" cellPadding="4" width="90%" value="{!srcUpdateHdr}" var="item">
+                                <apex:column rendered="true" style="font-Size:10px;width:2%;">
+                                    <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:20%;">
+                                    <apex:facet name="header">{!TAG021}</apex:facet>
+                                    <apex:selectList value="{!item.SVMXC__Target_Field_Name__c}" size="1" multiselect="false" style="font-Size:12px;" disabled="{!disabled}">
+                                        <apex:selectOptions value="{!Hdrfldlist}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:20%;">
+                                    <apex:facet name="header">{!TAG022}</apex:facet>
+                                    <apex:selectList value="{!item.SVMXC__Action__c}" size="1" multiselect="false" style="font-Size:12px" disabled="{!disabled}">
+                                        <apex:selectOptions value="{!lstUpdateOperator}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:20%;">
+                                    <apex:facet name="header">{!TAG023}</apex:facet>
+                                    <apex:inputText value="{!item.SVMXC__Display_Value__c}" style="font-Size:12px" disabled="{!disabled}"/>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:20%;">
+                                    <apex:facet name="header">{!TAG053}</apex:facet>
+                                    <apex:selectList value="{!item.SVMXC__Configuration_Type__c}" size="1" multiselect="false" style="font-Size:12px" disabled="{!disabled}">
+                                        <apex:selectOptions value="{!lstFldUpdCaseWhen}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="font-Size:10px;width:7px;height:7px;width:8%;">
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!srcUpdateHdrDeleteRow}" onclick="javascript:document.getElementById('{!$Component.DelIndex}').value = {!item.SVMXC__Sequence__c}" status="tab5status1" reRender="tab5sec1" disabled="{!disabled}" title="{!TAG088}" />
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" action="{!srcUpdateHdrADDRow}" style="width:20px;height:18px;background:lightblue" value="AddRow" rendered="{!if((SrcUpdateHdrSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" status="tab5status1" reRender="tab5sec1" disabled="{!disabled}" title="{!TAG087}" />
+                                </apex:column>
+                            </apex:pageBlockTable>
+                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3,'Resources/images/add_exp_img.JPG')}" action="{!srcUpdateHdrADDRow}" style="width:20px;height:18px;background:lightblue" value="AddRow" rendered="{!if((SrcUpdateHdrSize == 0 ) ,true,false)}" status="tab5status1" reRender="tab5sec1" disabled="{!disabled}" title="{!TAG087}" />
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1"/>
+                        <center style="padding-right: 100px; height: 22px; width: 957px; border:1px solid #C0C0C0; background:LightGrey">
+                            <apex:toolbar id="tab5theToolbar2" styleClass="disableTab" width="5%">          
+                                <apex:toolbarGroup location="left" id="tab5theToolbar2toolbarGroup1">
+                                    <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                                </apex:toolbarGroup>
+                                <apex:toolbarGroup location="left" id="tab5theToolbar2toolbarGroup2">
+                                    <apex:outputText value="{!TAG038}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>
+                                </apex:toolbarGroup>
+                            </apex:toolbar>
+                        </center>
+                        
+                        <apex:actionStatus id="tab5status2" startText="{!TAG015}" style="font-Size:13px;Font-weight:bold;"/>
+                        <apex:pageBlockSection id="tab5sec2" columns="1">
+                            <apex:pageBlockTable id="tab5table2" cellPadding="4" width="90%" value="{!srcUpdateLine}" var="item">
+                                <apex:column rendered="true" style="font-Size:10px;width:2%;">
+                                    <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:20%;">
+                                    <apex:facet name="header">{!TAG021}</apex:facet>
+                                    <apex:selectList value="{!item.SVMXC__Target_Field_Name__c}" size="1" multiselect="false" style="font-Size:12px;" disabled="{!disabled}">
+                                        <apex:selectOptions value="{!Linefldlist}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:20%;">
+                                    <apex:facet name="header">{!TAG022}</apex:facet>
+                                    <apex:selectList value="{!item.SVMXC__Action__c}" size="1" multiselect="false" style="font-Size:12px" disabled="{!disabled}">
+                                        <apex:selectOptions value="{!lstUpdateOperator}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:20%;">
+                                    <apex:facet name="header">{!TAG023}</apex:facet>
+                                    <apex:inputText value="{!item.SVMXC__Display_Value__c}" style="font-Size:12px" disabled="{!disabled}"/>
+                                </apex:column>
+                                <apex:column style="font-Size:12px;width:20%;">
+                                    <apex:facet name="header">{!TAG053}</apex:facet>
+                                    <apex:selectList value="{!item.SVMXC__Configuration_Type__c}" size="1" multiselect="false" style="font-Size:12px" disabled="{!disabled}">
+                                        <apex:selectOptions value="{!lstFldUpdCaseLineWhen}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="font-Size:10px;width:7px;height:7px;width:8%;">
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!srcUpdateLineDeleteRow}" onclick="javascript:document.getElementById('{!$Component.DelIndex}').value = {!item.SVMXC__Sequence__c}" status="tab5status2" reRender="tab5sec2" disabled="{!disabled}" title="{!TAG088}" />
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" action="{!srcUpdateLineADDRow}" style="width:20px;height:18px;background:lightblue" value="AddRow" rendered="{!if((srcUpdateLineSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" status="tab5status2" reRender="tab5sec2" disabled="{!disabled}" title="{!TAG087}" />
+                                </apex:column>
+                            </apex:pageBlockTable>
+                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3,'Resources/images/add_exp_img.JPG')}" action="{!srcUpdateLineADDRow}" style="width:20px;height:18px;background:lightblue" value="AddRow" rendered="{!if((srcUpdateLineSize == 0 ) ,true,false)}" status="tab5status2" reRender="tab5sec2" disabled="{!disabled}" title="{!TAG087}" />
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection columns="2" title="" collapsible="false" id="tab5sec3">
+                            <apex:pageBlockSectionItem dataStyle="text-align:left">
+                                <apex:commandButton status="processing" value="<< {!TAG009}" rerender="pgBlck1Sec1TabPanel1" action="{!RMAConfig}"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageblockSection>
+                    </apex:pageBlock>
+                </apex:tab>
+            </apex:tabPanel>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

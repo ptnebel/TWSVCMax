@@ -1,0 +1,59 @@
+<apex:page id="CounterRule" controller="SVMXC.IPRD_CaptureCounterValues" TabStyle="SVMXC__Installed_Product__c">    
+    <apex:form id="RuleForm">
+        <style>
+            .disableTab {
+                background-color :#B0BFD2 ;
+                color:darkred;
+                background-image:none;
+                font-size:1.2em;
+            }            
+        </style>
+        <script type="text/javascript">
+        function stopRKey(evt)
+        {
+            var evt = (evt) ? evt : ((event) ? event : null);
+            var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+            if ((evt.keyCode == 13) && (node.type=="text"))  
+            {
+                return false;
+            }
+        }
+        document.onkeypress = stopRKey;
+        </script>
+        <apex:PageMessages />       
+        <apex:pageBlock id="RuleBlock" mode="Edit" helpTitle="{!Tag016}" helpUrl="{!HLPURL}">
+            <apex:pageBlockButtons id="pbtns" location="Top">
+                <apex:commandButton value="{!TAG003}" action="{!SVMX_SaveCounters}" Disabled="{!DisbleSaveBttn}" reRender="RuleForm" status="LodingStatus"/>
+                <apex:commandButton value="{!TAG002}" action="{!SVMX_Cancel}"/>             
+            </apex:pageBlockButtons> 
+            <apex:panelBar id="PanelBar" rendered="{!ShowPanel}"> 
+            <apex:panelBarItem label="{!TAG001}" headerClass="disableTab" Id="PBItem">   
+            <apex:panelGrid columns="2" id="theGrid" width="100%" >          
+                <apex:outputText ><b>{!TAG015}</b>&nbsp;{!IBProd.SVMXC__Product__r.Name}</apex:outputText>                                           
+                <apex:outputText ><b>{!TAG014}</b>&nbsp;{!IBProd.Serial_Lot_Number__c}</apex:outputText>
+            </apex:panelGrid> 
+            <hr/>
+            <apex:panelGrid columns="1" id="theGrid1" width="100%"> 
+            <b><apex:actionStatus id="LodingStatus"  startText="{!TAG013}"/></b> 
+            <apex:pageBlockTable value="{!WrapCounterList}" var="PCounter" id="CounterRecList" styleClass="tableClass" width="100%">
+                 <apex:column >
+                    <apex:facet name="header">{!TAG006}</apex:facet>              
+                    <apex:outputField value="{!PCounter.Counter.SVMXC__Counter_Name__c}"/>
+                </apex:column>
+                 <apex:column >
+                    <apex:facet name="header">{!TAG007}</apex:facet>              
+                    <apex:outputText value="{!PCounter.Reading}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!TAG008}</apex:facet>              
+                    <apex:inputField value="{!PCounter.Counter.SVMXC__Counter_Reading__c}"/> 
+                </apex:column>              
+            </apex:pageBlockTable>
+            </apex:panelGrid>
+            </apex:panelBarItem>    
+        </apex:panelBar>
+        </apex:pageBlock> 
+        
+        
+    </apex:form> 
+</apex:page>

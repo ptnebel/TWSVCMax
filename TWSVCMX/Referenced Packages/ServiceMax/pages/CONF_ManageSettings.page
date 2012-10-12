@@ -1,0 +1,156 @@
+<apex:page id="conf_settingpage" controller="SVMXC.CONF_ManageSettings"  tabStyle="SVMXC__ServiceMax_Settings__c"> 
+ <!--  Javascript Functions : Select and Unselect List -->
+  <script type="text/javascript">
+  function customSelectChecked( form,type,value)
+    { 
+        var i = 0;
+        for (i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].name.search('cust_selected') > 0 && form.elements[i].disabled == false) {
+                form.elements[i].checked = value;
+            }
+        }
+    }   
+    function customSelectAllOrNoneByCheckbox(form,type,control)
+    {  customSelectChecked( form,type,control.checked); }
+  </script> 
+<apex:form id="conf_settingform">    
+
+
+<apex:pageBlock title="{!Tag001}" id="selectMod" helpTitle="{!Tag008}" helpUrl="{!HLPURL}">
+         <apex:pageBlockButtons Location="Top">
+           <apex:commandButton action="{!GoSetupHome}"  title="{!Tag004}"  value="{!Tag004}" id="backtohomesetup"/>
+           <apex:commandButton action="{!GoSubMod}"  title="{!Tag025}"  value="{!Tag025}" id="backtoSubmod" rendered="{!if(Sid!=NULL&&Mid!=NULL,true,false)}"/>
+         </apex:pageBlockButtons>
+<apex:actionStatus id="LodingStatus"  startText="{!TAG020}" />   
+    <apex:pageBlockSection columns="2">
+    <apex:pageBlockSectionItem dataStyleClass="centerTA"   labelStyleClass="centerTA">
+            <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" columnClasses="colspan50" >
+                <apex:outputLabel for="Modulelist" value="{!TAG023}"  styleClass="labelCol" style="margin:0px 5px;"></apex:outputLabel>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                <apex:selectList value="{!moduleView}" onchange="callSubmodule()"  size="1" id="Modulelist">
+                <apex:selectOptions value="{!Module}" />
+                <apex:actionFunction action="{!onSelectMod}" name="callSubmodule" reRender="conf_settingform"  status="LodingStatus"/>
+                </apex:selectList>
+                </apex:outputPanel> 
+                
+            </apex:panelGrid>
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem dataStyleClass="centerTA"   labelStyleClass="centerTA">
+            <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line">
+                <apex:outputLabel for="SubModulelist" value="{!TAG024}" styleClass="labelCol" style="margin:0px 5px;"></apex:outputLabel>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                <apex:selectList value="{!submoduleView}"  onchange="callSettings()"  size="1" id="SubModulelist">
+                <apex:selectOptions value="{!SubModule}" />
+                <apex:actionFunction action="{!onSelectSubmod}" name="callSettings" reRender="conf_settingform"  status="LodingStatus"/>
+                </apex:selectList>
+                </apex:outputPanel> 
+                
+            </apex:panelGrid>
+    </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+    
+</apex:pageBlock>
+ <!-- Neeraj(16-02-2012): Access the tags instead of $ObjectType.ServiceMax_Processes__c.fields.SettingID__c.Label, to solve translation related issues. -->
+<apex:pageBlock id="stdSettingBlock" title="{!Tag002}" rendered="{!DisplaySettings}">  
+<apex:outputLabel rendered="{!if(IsStdAvail==false,true,false)}" value="{!TAG018}" style="font-size:11px"/>
+     
+        <apex:pageBlockSection columns="1">
+                    <apex:pageBlockTable value="{!SMXStdSettings}" var="list" rendered="{!if(IsStdAvail==true,true,false)}">                   
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG026}</apex:facet>                           
+                        <apex:outputField value="{!list.SVMXC__SettingID__c}"/>                                          
+                    </apex:column>   
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG027}</apex:facet>                           
+                        <apex:outputField value="{!list.SVMXC__Settings_Name__c}"/>                                          
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG028}</apex:facet>                           
+                        <apex:outputField value="{!list.SVMXC__Description__c}"/>                                          
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG029}</apex:facet>                           
+                        <apex:outputField value="{!list.SVMXC__Data_Type__c}"/>                                          
+                    </apex:column>   
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG030}</apex:facet>                           
+                        <apex:outputField value="{!list.SVMXC__Default_Value__c}"/>                                          
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG031}</apex:facet>                           
+                        <apex:outputField value="{!list.SVMXC__Setting_Type__c}"/>                                          
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG032}</apex:facet>                           
+                        <apex:outputField value="{!list.SVMXC__Search_Order__c}"/>                                          
+                    </apex:column>
+                    </apex:pageBlockTable> 
+        </apex:pageBlockSection>
+</apex:pageBlock>
+
+<apex:pageBlock id="custSettingBlock" title="{!Tag003}" mode="edit" rendered="{!DisplaySettings}">  
+<apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" /> 
+<apex:actionStatus id="LodingStdStatus"  startText="{!TAG020}" />
+<apex:outputLabel rendered="{!if(IsCustAvail==false,true,false)}" value="{!TAG018}" style="font-size:11px"/>
+
+                <apex:pageBlockButtons location="top">
+                       <apex:commandButton action="{!AddNewSetting}" title="{!Tag005}"  value="{!Tag005}"  id="new_setting" reRender="custSettingBlock"  status="LodingStdStatus"/>  
+                       <apex:commandButton action="{!saveSet}"  title="{!Tag006}"  value="{!Tag006}" id="save_set" reRender="custSettingBlock"  status="LodingStdStatus" rendered="{!if(IsCustAvail==true,true,false)}"/>
+                       <apex:commandButton action="{!delSet}"  title="{!Tag007}"  value="{!Tag007}" id="del_set" reRender="custSettingBlock"  status="LodingStdStatus" rendered="{!if(IsCustAvail==true,true,false)}"/>
+                </apex:pageBlockButtons> 
+        <apex:pageBlockSection columns="1">
+                    <apex:pageBlockTable id="setting_table" value="{!SMXCustSettings}" var="list" rendered="{!if(IsCustAvail==true,true,false)}">                   
+                    <apex:column style="width:10px">
+                    <apex:facet name="header"></apex:facet>
+                        <apex:inputField id="cust_selected" value="{!list.SVMXC__Select__c}"/>         
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG021}</apex:facet>                           
+                        <apex:outputText value=" "/><apex:outputLink value="#" rendered="{!if(list.Id!=null,true,false)}" onclick="javascript:window.open('{!JSENCODE(PopUpLink)}?sid={!list.Id}&&src=MS','Servicemax_Conf_Setting','width=600,height=250')"> Add/Edit </apex:outputLink>
+                    </apex:column>  
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG026}</apex:facet>
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:inputField value="{!list.SVMXC__SettingID__c}"/>
+                        </apex:outputPanel> 
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG027}</apex:facet>                      
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:inputField value="{!list.SVMXC__Settings_Name__c}"/>
+                        </apex:outputPanel>
+                    </apex:column>
+                     <apex:column >
+                        <apex:facet name="header" >{!TAG028}</apex:facet>                           
+                        <apex:inputField value="{!list.SVMXC__Description__c}" style="width:150px"/>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG029}</apex:facet>     
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>                      
+                        <apex:inputField value="{!list.SVMXC__Data_Type__c}"/>
+                        </apex:outputPanel> 
+                    </apex:column>   
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG031}</apex:facet>                     
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>                          
+                        <apex:inputField value="{!list.SVMXC__Setting_Type__c}"/>  
+                        </apex:outputPanel>                                        
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG032}</apex:facet>                      
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>                         
+                        <apex:inputField value="{!list.SVMXC__Search_Order__c}" />                                          
+                        </apex:outputPanel> 
+                    </apex:column>
+                    </apex:pageBlockTable> 
+        </apex:pageBlockSection>     
+</apex:pageBlock>
+</apex:form>
+</apex:page>

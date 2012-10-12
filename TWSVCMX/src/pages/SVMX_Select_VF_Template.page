@@ -1,0 +1,56 @@
+<apex:page Controller="SVMX_Select_VF_Template">
+ 
+  <apex:sectionHeader title="{!REPTAG001}" id="section1">
+  </apex:sectionHeader>
+<apex:Messages />
+ 
+<apex:variable value="{!SId}" var="s"/>
+  
+<script language="javascript">
+function urlTest()
+{
+    var pName = document.getElementById('{!$Component.form1.pageBlock.section1.item1.list1}').value;
+    var DispTyp  = document.getElementById('{!$Component.form1.pageBlock.section1.item2.list2}').value; 
+    if (pName.length > 0)
+    {
+        if('{!strReportType}' == 'SingleRecord')
+            var jUrl ='/apex/'+ pName +'?DispTyp='+ DispTyp +'&RecordId='+ '{!sId}';
+        else
+            var jUrl ='/apex/'+ pName +'?DispTyp='+ DispTyp +'&d='+ '{!d}';
+        window.open(jUrl);
+    }
+    else
+        alert("please select template");
+}
+    
+</script> 
+  
+ <apex:form id="form1">
+    <apex:pageBlock title="{!REPTAG002}" id="pageBlock">  
+    <apex:pageBlockButtons location="bottom">
+       <apex:commandButton value="{!REPTAG003}" action="{!Generate}" onClick="urlTest()" reRender="form1"/>
+       <apex:commandButton value="{!REPTAG004}" action="{!Cancel}"/>
+    </apex:pageBlockButtons>
+        <!-- This block will show the search textbox and the Search button -->  
+        <apex:pageBlockSection id="section1" collapsible="false" columns="1" title="{!REPTAG005}">    
+          <apex:pageBlockSectionItem id="item1" >
+          <apex:outputLabel value="{!REPTAG006}" style="margin:0px 5px;"/>
+          <apex:selectList id="list1" value="{!PageName}"  multiselect="false" size="8">
+                <apex:selectOptions value="{!items}"/>
+                </apex:selectList>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem id="item2">
+          <apex:outputLabel value="{!REPTAG007}" style="margin:0px 5px;"/>
+          <apex:selectList id="list2" value="{!strDispTyp}" multiselect="false" size="1">
+                <apex:selectOptions value="{!List}"/>
+                </apex:selectList>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem id="item3">
+        <apex:outputLabel value="{!REPTAG008}"/>
+        <apex:inputCheckbox value="{!AttachFile}"/>
+        </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        </apex:pageblock>
+
+ </apex:form>
+</apex:page>

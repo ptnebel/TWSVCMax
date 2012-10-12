@@ -1,0 +1,2 @@
+<apex:page controller="Create_WO" action="{!create}" showHeader="false" sidebar="false">
+</apex:page>

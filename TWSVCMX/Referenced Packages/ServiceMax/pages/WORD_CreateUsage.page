@@ -1,0 +1,219 @@
+<apex:page title="{!TAG038}" standardController="SVMXC__Service_Order__c" extensions="SVMXC.WORD_CreateUsage" id="Page1" sidebar="true" showHeader="true" tabStyle="SVMXC__Service_Order__c"> 
+
+    <script type="text/javascript">
+    function saveaction()
+        {
+            dosave();
+            document.getElementById('Page1:Form1:block:pgblockbuttons:Savebutton').disabled=true;
+            document.getElementById('Page1:Form1:block:pgblockbuttons:Savebutton').className = 'btnDisabled';
+        }
+        function oncompleteofsubmit()
+        {
+            if(!{!btnisdisabled})
+            {
+               document.getElementById('Page1:Form1:block:pgblockbuttons:Savebutton').className = 'btn';
+               document.getElementById('Page1:Form1:block:pgblockbuttons:Savebutton').disabled=false;
+            }
+        }
+
+        function customSelectChecked( form,value)
+        {   
+            var i = 0;
+            for (i = 0; i < form.elements.length; i++) {
+                if (form.elements[i].name.search('selected') > 0 && form.elements[i].disabled == false) {
+                    form.elements[i].checked = value;
+                }
+            }
+        }    
+
+        function customSelectAllOrNoneByCheckbox(form,control)
+        {  customSelectChecked( form,control.checked); }
+    
+    </script>
+
+        <apex:pageMessages rendered="{!NOT(DisplayBlockLevelMessage)}" showDetail="true" /> 
+
+    <apex:form id="Form1" rendered="{!ShowValidData}" >
+        
+        <apex:variable value="{!WORDHeader}" var="WOH"/> 
+        
+        <apex:pageBlock id="block" title="{!TAG011} {!WOH.Name}"  helpTitle="{!TAG012}" helpUrl="{!HLPURL}">
+        <apex:actionStatus id="LodingStdStatus"  startText="{!TAG039}" />
+            <apex:pageBlockButtons style="text-align: center;" location="top" id="pgblockbuttons">
+               
+                   <apex:commandButton action="{!AddPartsLine}" value="{!TAG013}" rerender="block1" id="APLbutton" status="LodingStdStatus"/>
+                    <!-- <apex:commandButton action="{!AddLaborLine}" value="{!TAG014}" rerender="block2" id="ALLbutton" status="LodingStdStatus"/> -->
+                    <apex:commandButton action="{!AddLaborLine}" value="{!TAG014}" rerender="block2" id="ALLbutton" status="LodingStdStatus"/>
+                    <apex:commandButton action="{!AddExpLine}" value="{!TAG015}" rerender="block3" id="AELbutton" status="LodingStdStatus"/>
+                    <apex:commandButton action="{!UpdateLineRecord}" value="{!TAG016}" rerender="block1" id="getpbutton" status="LodingStdStatus"/>
+                    <apex:commandButton action="{!DeleteLine}" value="{!TAG017}" id="DLbutton" status="LodingStdStatus"/>
+                    <!-- Newly added line to deal with defect no. 1297 28/04/2011 -->
+                    <apex:commandButton value="{!TAG018}" id="Savebutton" onclick="javascript:saveaction();"  rerender="pgblockbuttons" status="LodingStdStatus"/>
+                    <!-- <apex:commandButton action="{!newTargetObj}" value="{!TAG018}" id="Savebutton" status="LodingStdStatus"/> -->
+                    <apex:commandButton action="{!Cancel}" value="{!TAG005}" id="Cancelbutton" status="LodingStdStatus"/>
+            </apex:pageBlockButtons>
+            <apex:actionFunction action="{!newTargetObj}" name="dosave" status="LodingStdStatus" rerender="block1" oncomplete="javascript:oncompleteofsubmit();"/>
+  
+        </apex:pageBlock>
+     <!-------------------------------------------- Estimate Part Lines -------------------------------------->
+        <apex:pageBlock id="block1" title="{!TAG019}" mode="edit">    
+    
+            <apex:pageBlockTable value="{!NewWORDPartLine}" var="WOPL1" >
+                 
+                 <apex:column >             
+                     <apex:facet name="header"> 
+                     
+                      <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox( document.forms['Page1:Form1'],this);"> 
+                      </apex:inputCheckbox>
+                      </apex:facet>                       
+                     
+                      <apex:inputField value="{!WOPL1.SVMXC__Select__c}" id="selected" /> 
+                </apex:column>
+
+                <apex:column >       
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Product__c.Label}</apex:facet>       
+                    <apex:inputField value="{!WOPL1.SVMXC__Product__c}" ></apex:inputField>    
+                </apex:column> 
+                
+                <apex:column >   
+                    <apex:facet name="header">{!TAG028}</apex:facet>     
+                    <apex:inputField style="align:center;" value="{!WOPL1.SVMXC__Use_Price_From_Pricebook__c}" ></apex:inputField> 
+                </apex:column>  
+                
+             <!--   <apex:column >   
+                    <apex:facet name="header">{!$ObjectType.Service_Order_Line__c.fields.Serial_Number__c.Label}</apex:facet>     
+                    <apex:inputField value="{!WOPL1.Serial_Number__c}" ></apex:inputField> 
+                </apex:column>     -->
+
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Actual_Quantity2__c.Label}</apex:facet>    
+                    <apex:inputField style="width:90%" value="{!WOPL1.SVMXC__Actual_Quantity2__c}" ></apex:inputField>    
+                </apex:column> 
+                
+                <apex:column >     
+                    <apex:facet name="header">{!TAG029}</apex:facet>    
+                    <apex:inputField style="width:90%" value="{!WOPL1.SVMXC__Actual_Price2__c}" ></apex:inputField>    
+                </apex:column>
+
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Discount__c.Label}</apex:facet>    
+                    <apex:inputField style="width:90%" value="{!WOPL1.SVMXC__Discount__c}" ></apex:inputField>    
+                </apex:column>    
+                
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Work_Description__c.Label}</apex:facet> 
+                    <apex:inputField style="width:80%;height:50px" value="{!WOPL1.SVMXC__Work_Description__c}" ></apex:inputField>
+                </apex:column>
+
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Is_Billable__c.Label}</apex:facet>   
+                    <apex:inputField value="{!WOPL1.SVMXC__Is_Billable__c}" ></apex:inputField>    
+                </apex:column>
+
+            </apex:pageBlockTable>
+    
+        </apex:pageBlock>  
+        
+ 
+        <!----------------------------------------- Estimate Labor Lines ------------------------------------->
+
+        <apex:pageBlock id="block2" title="{!TAG020}" mode="edit">
+
+            <apex:pageBlockTable value="{!NewWORDLaborLine}" var="WOPL2" rendered="{!DisplayLaborColumns}" >
+                                                                        
+                 <apex:column >             
+                      <apex:inputField value="{!WOPL2.SVMXC__Select__c}" id="selected" /> 
+                </apex:column>
+
+                <apex:column >       
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Activity_Type__c.Label}</apex:facet> 
+                    <apex:inputField style="width:100%" value="{!WOPL2.SVMXC__Activity_Type__c}" ></apex:inputField>    
+                </apex:column>    
+
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Start_Date_and_Time__c.Label}</apex:facet>    
+                    <apex:inputField value="{!WOPL2.SVMXC__Start_Date_and_Time__c}" ></apex:inputField>    
+                </apex:column> 
+                
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__End_Date_and_Time__c.Label}</apex:facet>    
+                    <apex:inputField value="{!WOPL2.SVMXC__End_Date_and_Time__c}" ></apex:inputField>    
+                </apex:column>
+
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Actual_Quantity2__c.Label}</apex:facet>    
+                    <apex:inputField style="width:80%" value="{!WOPL2.SVMXC__Actual_Quantity2__c}" ></apex:inputField>    
+                </apex:column>    
+                
+                <apex:column >     
+                    <apex:facet name="header">{!TAG029}</apex:facet>    
+                    <apex:inputField style="width:80%" value="{!WOPL2.SVMXC__Actual_Price2__c}" ></apex:inputField>    
+                </apex:column>
+
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Discount__c.Label}</apex:facet>    
+                    <apex:inputField style="width:80%" value="{!WOPL2.SVMXC__Discount__c}" ></apex:inputField>    
+                </apex:column>    
+                
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Work_Description__c.Label}</apex:facet> 
+                    <apex:inputField style="width:100%;height:50px;" value="{!WOPL2.SVMXC__Work_Description__c}" ></apex:inputField>
+                </apex:column>
+
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Is_Billable__c.Label}</apex:facet>   
+                    <apex:inputField value="{!WOPL2.SVMXC__Is_Billable__c}" ></apex:inputField>    
+                </apex:column>
+
+            </apex:pageBlockTable>
+   
+    </apex:pageBlock>  
+        
+        <!---------------------------------------- Estimate Expenses Lines ----------------------------------->
+
+        <apex:pageBlock id="block3" title="{!TAG021}" mode="edit">
+       
+            <apex:pageBlockTable value="{!NewWORDExpLine}" var="WOPL3" rendered="{!DisplayExpColumns}" >   
+                 
+                 <apex:column >             
+                      <apex:inputField value="{!WOPL3.SVMXC__Select__c}" id="selected" /> 
+                </apex:column>
+
+                <apex:column >       
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Expense_Type__c.Label}</apex:facet>       
+                    <apex:inputField style="width:60%" value="{!WOPL3.SVMXC__Expense_Type__c}" ></apex:inputField>    
+                </apex:column>  
+                
+                 <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Actual_Quantity2__c.Label}</apex:facet>    
+                    <apex:inputField style="width:50%" value="{!WOPL3.SVMXC__Actual_Quantity2__c}" ></apex:inputField>    
+                </apex:column>    
+                
+                <apex:column >     
+                    <apex:facet name="header">{!TAG029}</apex:facet>    
+                    <apex:inputField style="width:50%" value="{!WOPL3.SVMXC__Actual_Price2__c}" ></apex:inputField>    
+                </apex:column>
+
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Discount__c.Label}</apex:facet>    
+                    <apex:inputField style="width:50%" value="{!WOPL3.SVMXC__Discount__c}" ></apex:inputField>    
+                </apex:column>    
+                
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Work_Description__c.Label}</apex:facet> 
+                    <apex:inputField style="width:60%;height:50px;" value="{!WOPL3.SVMXC__Work_Description__c}" ></apex:inputField>
+                </apex:column>
+
+                <apex:column >     
+                    <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Is_Billable__c.Label}</apex:facet>    
+                    <apex:inputField value="{!WOPL3.SVMXC__Is_Billable__c}" ></apex:inputField>    
+                </apex:column>
+
+            </apex:pageBlockTable>
+
+        </apex:pageBlock>  
+        
+    </apex:form>
+
+
+</apex:page>

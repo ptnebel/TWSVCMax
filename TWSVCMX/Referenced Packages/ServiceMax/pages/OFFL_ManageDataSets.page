@@ -1,0 +1,229 @@
+<apex:page id="pageManageDataSets" title="ManageDataSets" sidebar="true" showHeader="true" controller="SVMXC.OFFL_ManageDataSets" standardstylesheets="true"> 
+    <apex:form id="frmManageDataSets">
+
+         <apex:pageBlock id="blockManageDataSets" title="{!TAG021}"  helpTitle="{!TAG024}" helpUrl="{!HLPURL}" rendered="{!allowPageRender}">
+            <apex:actionStatus id="LodingStatus"  startText="{!TAG018}" />  
+            <apex:pageBlockButtons location="top"> 
+                <apex:commandButton value="{!TAG001}" action="{!SVMX_doSave}"/>
+                <apex:commandButton value="{!TAG002}" action="{!SVMX_doQuickSave}"/>
+<!--            <apex:commandButton value="{!TAG022}" action="{!SVMX_doDelete}" onClick="if(!confirm('{!TAG037}')){return false}"  rendered="{!isEditMode}"/>  -->
+                <apex:commandButton value="{!TAG003}" action="{!SVMX_doCancel}" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection id="secDataSet" collapsible="false" columns="1" >
+                <apex:pageMessages rendered="{!NOT(showPageError)}"  showDetail="false" />
+                <apex:pageMessage rendered="{!isHomeTab}" severity="warning" strength="3" title="{!TAG048}" summary="{!TAG048}"/>
+                <apex:pageBlockSection id="secDataSetDetail" collapsible="false" columns="2" >
+                     <apex:pageBlockSectionItem >
+                        <apex:outputText value="{!TAG004}"/>
+                        <apex:outputPanel layout="block" styleClass="requiredInput" >
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>  
+                            <apex:selectList id="SourceObjectList" title="{!TAG043}" disabled="{!isEditMode}" value="{!oOfflObj.SVMXC__Object_Name__c}" onchange="callUpdateFields()" multiselect="false" size="1">
+                                <apex:selectOptions value="{!lstSrcObjOpt}"/>
+                            </apex:selectList>
+                        <apex:actionFunction action="{!SVMX_onSelectObject}" name="callUpdateFields" reRender="secDataSet,FieldList,Relatedlist,secCriteria" status="LodingStatus"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                   <apex:pageBlockSectionItem >
+                            <apex:outputText value="{!TAG006}" />                          
+                            <apex:inputField id="AllowUpload" value="{!oOfflObj.SVMXC__Allow_Upload__c}"/>                               
+                   </apex:pageBlockSectionItem>
+                   <apex:pageBlockSectionItem >
+                        <apex:outputText value="{!TAG005}" />
+                        <apex:outputPanel layout="block" styleClass="requiredInput" >
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/> 
+                            <apex:selectList id="lstOwnShipLimit" value="{!oOfflObj.SVMXC__Ownership_Limit__c}" multiselect="false" size="1">
+                                <apex:selectOptions value="{!lstOwnShipLimit}"/>
+                            </apex:selectList>   
+                       </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                            <apex:outputText value="{!$Label.svmxc__OFFL003_TAG053}" />                          
+                            <apex:inputField id="AllowAttachment" value="{!oOfflObj.SVMXC__Allow_Attachment__c}"/>                               
+                   </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputText value="{!TAG007}"  />                           
+                        <apex:inputField id="AllowTab" value="{!oOfflObj.SVMXC__Allow_Tab__c}"/>                                                   
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="secItemUseAsHomeTab" >
+                        <apex:outputText value="{!TAG008}" />
+                        <apex:inputField onclick="homeTabSelected();" id="UseObjectAsHomeTab" value="{!oOfflObj.SVMXC__Use_Object_As_Home_Tab__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="secAddChild" >
+                        <apex:outputText value="{!TAG049}" />
+                        <apex:inputCheckbox id="AddChild" value="{!AddChild}"/>
+                    </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                        <apex:outputText value="{!$Label.svmxc__OFFL008_TAG050}"  />                           
+                        <apex:inputField id="RetainOldRecords" value="{!oOfflObj.SVMXC__Retain_Old_Records__c}"/>                                                   
+                    </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                    </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                        <apex:outputText value="{!$Label.svmxc__OFFL008_TAG062}"  />                           
+                        <apex:inputField id="AllowAPIAccess" value="{!oOfflObj.SVMXC__Allow_API_Access__c}"/>                                                   
+                    </apex:pageBlockSectionItem>
+                    
+                    
+                    <apex:actionFunction name="homeTabSelected" action="{!SVMX_homeTabSelected}" rerender="secDataSet" status="LodingStatus"/>
+                </apex:pageBlockSection>
+            </apex:pageBlockSection>
+        </apex:pageBlock>        
+        <!-- Select Criteria section -->
+        <apex:pageBlock id="blockCriteria" title="{!TAG009}" rendered="{!allowPageRender}" >
+            <apex:pageMessages id="InvalidCri" rendered="{!NOT(isValidCri)}" showDetail="false" />
+            <apex:actionStatus id="LodingStatusCriteria"  startText="{!TAG018}" />  
+            <apex:pageBlockSection columns="1" collapsible="false" id="secCriteria" >
+                <apex:dataTable value="{!lstTempOffl_DSExp}" columns="6" var="item" cellPadding="4">
+                    <apex:column >                         
+                        <apex:outputField id="Sequence" value="{!item.SVMXC__Sequence__c}"/>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">{!TAG028}</apex:facet>
+                        <apex:selectList value="{!item.Name}" size="1" id="searchField" >
+                            <apex:selectOptions value="{!lstFields}"></apex:selectOptions>
+                        </apex:selectList>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">{!TAG029}</apex:facet>
+                        <apex:selectList value="{!item.SVMXC__Operator__c}" size="1" id="SearchOperator1">
+                            <apex:selectOptions value="{!OperatorSelectList}"></apex:selectOptions>
+                        </apex:selectList>
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header">{!TAG030}</apex:facet>
+                        <apex:inputText size="20" id="SearchValue1" value="{!item.SVMXC__Operand__c}"/>
+                    </apex:column>
+                    <apex:column >
+                       <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources5, 'SVMXC_resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!SVMX_removeRow}" onclick="javascript:document.getElementById('pageManageDataSets:frmManageDataSets:blockCriteria:secCriteria:delIndex').value = {!item.SVMXC__Sequence__c};" title="{!TAG036}" value="{!TAG036}" rendered="true" id="btndelRow" rerender="secCriteria" status="LodingStatusCriteria" />
+                    </apex:column>
+                    <apex:column >
+                       <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources5, 'SVMXC_resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!SVMX_addRow}" value="{!TAG025}" title="{!TAG025}"  rendered="{!if(item.SVMXC__Sequence__c==intDSExpSize,true,false)}" id="btnAddRow" rerender="secCriteria" status="LodingStatusCriteria" />
+                    </apex:column>
+                </apex:dataTable>
+                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources5, 'SVMXC_resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" action="{!SVMX_addRow}" value="{!TAG025}"  title="{!TAG025}" rendered="{!if(0==intDSExpSize,true,false)}" id="btnAddRow" rerender="secCriteria" status="LodingStatusCriteria" />
+            <!--<apex:pageBlockSection > 
+                <apex:actionFunction name="addRow" action="" rerender="secCriteria" status="LodingStatusCriteria"/>
+                    <apex:outputLink value="#" onclick="removeRow()" id="removeLink">Remove Row</apex:outputLink>
+                    <apex:actionFunction name="removeRow" action="{!SVMX_removeRow}" rerender="secCriteria" status="LodingStatusCriteria"/>
+            </apex:pageBlockSection>-->
+                <apex:inputHidden value="{!delind}" id="delIndex"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="1">
+                <apex:pageMessage rendered="true" severity="warning" strength="3" title="{!TAG026}" summary="{!TAG027}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="secAdvanceOption" >
+                <apex:outputText value="{!TAG023}"  style="font-weight: bold;"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection columns="2" >
+                <apex:inputText id="AdvanceOption" value="{!strAdvanceOption}" size="80"/>
+               <!--  <a href="javascript:openPopupFocusEscapePounds('/help/doc/user_ed.jsp?loc=help&target=working_with_advanced_filter_conditions_in_reports_and_list_views.htm&section=Reports', 'Help', 0, 0, 'width=700,height=600,resizable=yes,toolbar=yes,status=no,scrollbars=yes,menubar=yes,directories=no,location=no,dependant=no', false, false);" class="linkCol"  alt="{!TAG042}" title="{!TAG042}">{!TAG035} <img src="/s.gif" alt="{!TAG042}" class="helpIcon" title="{!TAG042}" /></a> -->
+               <!-- <apex:image id="reportBooleanFilter" value="{!$Resource.COMM_AdvancedExpressionImage}"/>-->
+            </apex:pageBlockSection>
+            <apex:pageBlockSection >
+            </apex:pageBlockSection>
+            <!-- 
+            <apex:pageBlockButtons location="top" > 
+                <apex:commandButton value="Update Download" action="{!SVMX_Update_Download}" reRender="secExpressions,secAdvanceOption" status="LodingStatusCriteria"/>
+                <apex:commandButton value="Update Lock" action="{!SVMX_Update_Lock}" reRender="secExpressions,secAdvanceOption" status="LodingStatusCriteria"/>
+                <apex:commandButton value="Update Archival" action="{!SVMX_Update_Archival}" reRender="secExpressions,secAdvanceOption" status="LodingStatusCriteria"/>
+            </apex:pageBlockButtons> 
+            <apex:pageBlockSection id="secExpressions">
+                <apex:dataTable columns="3" value="{!oOfflObj}" var="vOOfflObj" >
+                    <apex:column width="500px">
+                    <apex:outputLink value="#" onclick="onEditDownload()" id="editDownload">{!TAG009}</apex:outputLink>
+                <apex:actionFunction name="onEditDownload" action="{!SVMX_editDownload}" rerender="secCriteria,secAdvanceOption" status="LodingStatusCriteria"/>
+                    <apex:inputField id="SOQLQuery" value="{!vOOfflObj.SOQL_Query__c}" />  
+                    </apex:column>
+                    <apex:column width="500px">
+                    <apex:outputLink value="#" onclick="onEditLock()" id="editLock">{!TAG010}</apex:outputLink>
+                <apex:actionFunction name="onEditLock" action="{!SVMX_editLock}" rerender="secCriteria,secAdvanceOption" status="LodingStatusCriteria"/>
+                    <apex:inputField id="LockCriteria" value="{!vOOfflObj.Lock_Criteria__c}" /> 
+                    </apex:column>
+                    <apex:column width="500px">
+                    <apex:outputLink value="#" onclick="onEditArchival()" id="editArchival">{!TAG011}</apex:outputLink>
+                <apex:actionFunction name="onEditArchival" action="{!SVMX_editArchival}" rerender="secCriteria,secAdvanceOption" status="LodingStatusCriteria"/>
+                    <apex:inputField id="ArchivalCriteria" value="{!vOOfflObj.Archival_Criteria__c}" /> 
+                    </apex:column>
+                 </apex:dataTable>
+            </apex:pageBlockSection>
+            -->
+         </apex:pageBlock>
+        <!-- Related List Block Starts -->
+        <apex:pageBlock title="{!TAG012}" rendered="{!allowPageRender}" >
+         <apex:pageBlockSection id="Relatedlist" columns="1">
+           <apex:pageBlockTable value="{!lstWrpOfflObj_RefObj}"  rendered="True"  var="item"> 
+                    <apex:column width="50%">
+                        <apex:facet name="header" >{!TAG013}</apex:facet>                           
+                        <apex:outputField value="{!item.objObjlabel.SVMXC__Object_Name__c}"/>                                         
+                    </apex:column>
+                    <apex:column width="50%"> 
+                            <apex:facet name="header" >{!TAG014}</apex:facet>                           
+                            <apex:inputField value="{!item.objOfflObj.SVMXC__Select__c}" id="selected" /> 
+                    </apex:column> 
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <!-- Fields list section starts -->
+    <apex:pageBlock title="{!TAG015}" rendered="{!allowPageRender}">
+        <apex:pageBlockSection id="FieldList" columns="1">
+        <apex:actionStatus id="LodingStatusFields"  startText="{!TAG018}" />
+            <apex:pageBlockSectionItem dataStyleClass="centerTA"   labelStyleClass="centerTA" >
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" >
+                        <apex:outputLabel for="FieldName" value=""  styleClass="labelCol" ></apex:outputLabel>
+                        <apex:outputText > 
+                            <td>
+                                <apex:selectList id="FieldsList" title="{!TAG044}" size="8" multiselect="true" value="{!lstAvlbFields}" multiselect="true" style="width:250px">
+                                <apex:selectOptions value="{!lstFieldsOpt}"/>
+                            </apex:selectList>
+                            </td>
+                            <!--
+                             <td style="width:17px;height:100%;vertical-align:middle">
+                                <apex:panelGrid cellspacing="7" cellpadding="0" width="40%" columns="1" style="text-align: center;">
+                                    <div>
+                                        <apex:commandButton action="{!SVMX_onAddFields}" id="AddField" rerender="FieldList" styleClass="rightArrowIcon" alt="{!TAG045}" title="{!TAG045}" status="LodingStatusFields"/>
+                                        <apex:commandButton action="{!SVMX_onRemField}" id="RemoveField" rerender="FieldList" styleClass="leftArrowIcon" alt="{!TAG046}" title="{!TAG046}" status="LodingStatusFields"/>
+                                    </div>
+                                </apex:panelGrid>     
+                            </td>
+                            -->
+                            <td style="width:17px;height:100%;background-color:#AAAAAA;vertical-align:middle">
+                                <apex:outputLink value="javascript:void(0);" onclick="AddField()" >
+                                    <img src="/img/arrow2_picklist_right.gif" alt="{!TAG045}" title="{!TAG045}"/>
+                                </apex:outputLink>
+                                <br/><br/>
+                                <apex:outputLink value="javascript:void(0);" onclick="RemoveField()" >
+                                    <img src="/img/arrow2_picklist_left.gif" alt="{!TAG046}" title="{!TAG046}"/>
+                                </apex:outputLink>
+                            </td>                
+                            <apex:actionFunction name="AddField" action="{!SVMX_onAddFields}" rerender="FieldList" status="LodingStatusFields"/>
+                            <apex:actionFunction name="RemoveField" action="{!SVMX_onRemField}" rerender="FieldList" status="LodingStatusFields"/>
+                            <td>
+                                <apex:selectList title="{!TAG047}" value="{!lstSelFields}" size="8" id="SFields" multiselect="true" style="width:250px">
+                                    <apex:selectOptions value="{!lstSFieldsOpt}" />
+                                </apex:selectList>
+                            </td>
+                            <td>
+                                <apex:panelGrid cellspacing="7" cellpadding="0" width="40%" columns="1" style="text-align: center;">
+                                    <div>
+                                        <apex:commandButton action="{!SVMX_MoveTop}" id="top" rerender="FieldList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Top_Bttn.JPG')}" title="{!TAG038}" status="LodingStatusFields"/>
+                                        <apex:commandButton action="{!SVMX_MoveUp}" id="up" rerender="FieldList" style="width:18px;height:18px;background:white"  image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Up_Bttn.JPG')}" title="{!TAG039}" status="LodingStatusFields"/>
+                                        <apex:commandButton action="{!SVMX_MoveDown}" id="down" rerender="FieldList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Down_Bttn.JPG')}" title="{!TAG040}" status="LodingStatusFields"/>
+                                        <apex:commandButton action="{!SVMX_MoveBottom}" id="Bottom" rerender="FieldList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Bottom_Bttn.JPG')}" title="{!TAG041}" status="LodingStatusFields"/>
+                                    </div>
+                                </apex:panelGrid>     
+                            </td>
+                        </apex:outputText>
+                    </apex:panelGrid>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

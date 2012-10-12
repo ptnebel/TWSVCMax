@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object is used to capture part requests made from field engineers to other field engineers/warehouses/suppliers, and from warehouses to suppliers. Parts requests do not have the context of a service event.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Additional_Information__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any additional information relevant to this parts request.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Any additional information relevant to this parts request.</inlineHelpText>
+        <label>Additional Information</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Age__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Age of the parts request in number of days.</description>
+        <externalId>false</externalId>
+        <formula>(Now() - CreatedDate ) /24</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Age of the parts request in number of days.</inlineHelpText>
+        <label>Age</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Canceled_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the salesforce user that canceled this parts request.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the salesforce user that canceled this parts request.</inlineHelpText>
+        <label>Canceled By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Parts_Request_Canceled_By</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Canceled_on__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time on which this parts request was canceled.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/time on which this parts request was canceled.</inlineHelpText>
+        <label>Canceled on</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Closed_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the salesforce user that closed this parts request.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the salesforce user that closed this parts request.</inlineHelpText>
+        <label>Closed By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Parts_Request_Closed_By</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Closed_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the request was completed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/time when the request was completed.</inlineHelpText>
+        <label>Closed On</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Company__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the supplier company. Applicable for replenishing stock at warehouse locations. Lookup to an existing salesforce account record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the supplier company. Applicable for replenishing stock at warehouse locations. Lookup to an existing salesforce account record.</inlineHelpText>
+        <label>Supplier</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipName>Parts_Request</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>IsPartnerRecord__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Parts Request is for/by a Partner or not.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Parts Request is for/by a Partner or not.</inlineHelpText>
+        <label>IsPartnerRecord</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>IsPartner__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Parts Request is for/by a Partner or not.</description>
+        <externalId>false</externalId>
+        <formula>IF( IsPartnerRecord__c ,&quot;True&quot;, &quot;False&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Flag indicates if Parts Request is for/by a Partner or not.</inlineHelpText>
+        <label>Is Partner</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Partner_Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Account, set by trigger.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Account.</inlineHelpText>
+        <label>Partner Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Parts Requests (Partner Account)</relationshipLabel>
+        <relationshipName>Parts_Request_Partner</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Contact, set by trigger.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Contact.</inlineHelpText>
+        <label>Partner Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Parts Requests</relationshipLabel>
+        <relationshipName>Parts_Request_Partner</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Requested_From__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Location from where stock is requested. This is a lookup to an existing site record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Location from where stock is requested. This is a lookup to an existing site record.</inlineHelpText>
+        <label>Requested From</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipName>Parts_Request_From</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Required_At_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Location where stock is required. This is a lookup to an existing site record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Location where stock is required. This is a lookup to an existing site record.</inlineHelpText>
+        <label>Required At Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipName>Parts_Request_To</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Current status of parts request.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Current status of parts request.</inlineHelpText>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Completed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Total_Amount__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Sum of Total Line Price</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Sum of Total Line Price</inlineHelpText>
+        <label>Total Amount</label>
+        <summarizedField>Parts_Request_Line__c.Total_Line_Price__c</summarizedField>
+        <summaryForeignKey>Parts_Request_Line__c.Parts_Request__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <label>Parts Request</label>
+    <listViews>
+        <fullName>All_Parts_Requests</fullName>
+        <columns>NAME</columns>
+        <columns>Requested_From__c</columns>
+        <columns>Company__c</columns>
+        <columns>Required_At_Location__c</columns>
+        <columns>Status__c</columns>
+        <columns>Total_Amount__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Parts Requests</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <displayFormat>PRQ-{00000000}</displayFormat>
+        <label>Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Parts Requests</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Requested_From__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Required_At_Location__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Company__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Total_Amount__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CREATED_DATE</customTabListAdditionalFields>
+        <customTabListAdditionalFields>LAST_UPDATE</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Closed_On__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Requested_From__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Required_At_Location__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Status__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CREATEDBY_USER</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Closed_By__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Closed_On__c</lookupDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Requested_From__c</searchFilterFields>
+        <searchFilterFields>Required_At_Location__c</searchFilterFields>
+        <searchFilterFields>Status__c</searchFilterFields>
+        <searchFilterFields>CREATEDBY_USER</searchFilterFields>
+        <searchFilterFields>Age__c</searchFilterFields>
+        <searchResultsAdditionalFields>Requested_From__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Required_At_Location__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CREATEDBY_USER</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Closed_By__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Closed_On__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>SVMXC_ValidateLocationsAreSame</fullName>
+        <active>true</active>
+        <description>From and To locations cannot be the same.</description>
+        <errorConditionFormula>(Requested_From__c =  Required_At_Location__c)</errorConditionFormula>
+        <errorDisplayField>Requested_From__c</errorDisplayField>
+        <errorMessage>Requested From location cannot be the same as Required At Location.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>SVMXC_ValidateRequestedFromStockable1</fullName>
+        <active>true</active>
+        <description>Requested From should be a stockable location if Supplier name is not entered.</description>
+        <errorConditionFormula>AND(Company__c = &quot;&quot;, Requested_From__r.Stocking_Location__c = FALSE)</errorConditionFormula>
+        <errorDisplayField>Requested_From__c</errorDisplayField>
+        <errorMessage>Requested From should be a stockable location if Supplier name is not entered.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>SVMXC_ValidateRequestedFromStockable2</fullName>
+        <active>true</active>
+        <description>Requested From should not be a stockable location if supplier name is provided</description>
+        <errorConditionFormula>AND(Company__c &lt;&gt; &quot;&quot;, Requested_From__r.Stocking_Location__c = TRUE)</errorConditionFormula>
+        <errorDisplayField>Requested_From__c</errorDisplayField>
+        <errorMessage>Requested From should be a non-stockable location when supplier name is entered.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>SVMXC_ValidateRequiredAtStockable</fullName>
+        <active>true</active>
+        <description>Required At should be a stockable location</description>
+        <errorConditionFormula>( Required_At_Location__r.Stocking_Location__c = FALSE)</errorConditionFormula>
+        <errorDisplayField>Required_At_Location__c</errorDisplayField>
+        <errorMessage>Required At is not a stockable location. Please select a stockable location.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Add_Lines</fullName>
+        <availability>online</availability>
+        <description>Launch Create Parts Request Lines Screen</description>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Create/Edit Lines</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Parts_Request__c.Id}&amp;SVMX_processId=TDM012&amp;SVMX_retURL=/{!Parts_Request__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Cancel_Parts_Request</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>250</height>
+        <linkType>url</linkType>
+        <masterLabel>Cancel Parts Request</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__PREQ_CancelPartsRequest?PrId={!Parts_Request__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Create_Shipment_Order</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Create Shipment Order</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Parts_Request__c.Id}&amp;SVMX_processId=TDM008&amp;SVMX_retURL=/{!Parts_Request__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Generate_Document_s</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Generate Document(s)</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMX_Select_VF_Template?id={!Parts_Request__c.Id}&amp;ObjName=SVMXC.Parts_Request</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Process_Receipts_Internal</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Process Receipts (Internal)</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__INVT_SmartEngine?hdrId={!Parts_Request__c.Id}&amp;SMid=PREQ004</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Process_Receipts_Supplier</fullName>
+        <availability>online</availability>
+        <description>Receive Parts from Supplier</description>
+        <displayType>button</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Process Receipts (Supplier)</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__INVT_SmartEngine?hdrId={!Parts_Request__c.Id}&amp;SMid=PREQ005</url>
+    </webLinks>
+    <webLinks>
+        <fullName>StockLookupPREQ</fullName>
+        <availability>online</availability>
+        <description>Button should not be on Parts request.
+Do not Use this button.</description>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>sControl</linkType>
+        <masterLabel>Stock Lookup(Do not Use)</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <scontrol>StockLookupPR</scontrol>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+</CustomObject>

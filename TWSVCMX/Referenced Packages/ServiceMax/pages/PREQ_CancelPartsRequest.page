@@ -1,0 +1,12 @@
+<apex:page id="Page" controller="SVMXC.PREQ_CancelPartsRequest" >
+    <apex:form id="RMAShipForm">
+        <apex:pageBlock id="blockRMAShip" helpTitle="{!TAG008}"  helpUrl="{!HLPURL}" rendered="true" mode="edit">      
+            <b><apex:actionStatus startText="{!TAG003}" id="myStatus"/></b>             
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="{!TAG001}" action="{!PerformUpdate}" status="myStatus" Disabled="{!NOT(DisplaySave)}" reRender="blockRMAShip" style="font-Size:10px"/>
+                <apex:commandButton value="{!TAG002}" action="{!BackToRecord}" status="myStatus" reRender="blockRMAShip" style="font-Size:10px"/>
+            </apex:pageBlockButtons>            
+            <apex:pageMessages /> 
+        </apex:pageBlock>       
+    </apex:form>    
+</apex:page>

@@ -1,0 +1,340 @@
+<apex:page controller="CustomerPortalWelcomeController" sidebar="false" showHeader="false">
+<!--  Don't Edit unless you're familiar with CSS and JavaScript -->
+<script type="text/javascript">
+
+// dates used for marketing event dates so events are always in the future during your demo
+var date1 = '{!TODAY() + 7}';
+var date2 = '{!TODAY() + 15}';
+var date3 = '{!TODAY() + 24}';
+
+</script>
+
+<!--  Don't Edit the Style tags unless you're familiar with CSS -->
+<!--  Start Style Tags -->
+<style>
+#container {
+    /* uncomment and edit this section if your customer's web site layout has a fixed width.
+    If you edit this section, you also need to specify a fixed width for the header table in your customer portal header HTML file.
+    margin-left:auto;margin-right:auto;
+    width:850px;
+    */
+}
+#title {
+    float:left;
+    padding:0 0 10px 20px;
+    font-size:1.5em;
+    font-weight:normal;
+}
+#welcome {
+    width:100%;
+    margin-top:5px;
+}
+.welcome_marketingheaderimage {
+    width:30%;
+    padding:10px 0;
+}
+.welcome_marketingheaderimage img {
+    display:block;
+    _text-align:center;
+    text-align:center;
+    margin-left:auto; margin-right:auto;
+}
+.welcome_marketingheadertext {
+    font-size:1em;
+    font-weight:bold;
+    padding:5px 0;
+}
+.welcome_marketingbodytext {
+    padding-right:15px;
+    text-align:left;
+    vertical-align:top;
+    font-size:0.9em;
+    line-height:1.5em;
+}
+.welcome_marketingbodytext ul {
+    padding:0;
+    margin:0;
+    border:0;
+}
+.welcome_bodytext ul li {
+    line-height:1.5em;
+    padding-left:10px;
+    border:0;
+}
+#components {
+    padding-top:10px;
+}
+#components img {
+    display:block;
+    float:left;
+    padding-top:1px;
+    padding-right:5px;
+}
+span {
+    display:block;
+    padding-top:2px;
+    font-size:1em;
+}
+.clearfloats {
+    clear:both;
+}
+</style>
+<!--  End Style Tags -->
+
+<body>
+
+<!-- Start Container to hold other layout div tags. Used to switch between fixed and liquid layouts. -->
+<div id="container">
+
+<div id="title">
+<!-- Start Title. Edit this title if your prospect calls their portal something different. -->
+{!$Organization.Name} Customer Portal
+<!-- End Title. -->
+</div>
+
+<div class="clearfloats"/>
+
+<!--  start table to show the welcome marketing messages. If you don't want to show this, remove from this tag to where it says "End Table to show Welcome Marketing Messages"  -->
+<apex:pageBlock >
+<table id="welcome_table">
+
+<!--  start table row for the welcome graphics -->
+<tr>
+
+<td class="welcome_marketingheaderimage">
+<!-- start image for the left column. If you need to edit this, replace the existing static resource in the Salesforce UI -->
+<apex:image value="{!$Resource.CustomerPortalWelcome_MarketingHeaderImageLeft}" />
+<!-- end image for the left column. -->
+</td>
+
+<td class="welcome_marketingheaderimage">
+<!-- start image for the center column. If you need to edit this, replace the existing static resource in the Salesforce UI -->
+<apex:image value="{!$Resource.CustomerPortalWelcome_MarketingHeaderImageCenter}" />
+<!-- end image for the center column. -->
+</td>
+
+<td class="welcome_marketingheaderimage">
+<!-- start image for the right column. If you need to edit this, replace the existing static resource in the Salesforce UI -->
+<apex:image value="{!$Resource.CustomerPortalWelcome_MarketingHeaderImageRight}" />
+<!-- end image for the right column. -->
+</td>
+
+</tr>
+<!--  end table row for the welcome graphics -->
+
+<!--  start table row for the welcome header text -->
+<tr>
+
+<td class="welcome_marketingheadertext">
+<!-- start header text for left column. Edit text here if you want to change the title showing below the image in the UI -->
+Anytime, Anywhere Access to Answers
+<!-- end header text for left column. Edit text here if you want to change the title showing below the image in the UI -->
+</td>
+
+<td class="welcome_marketingheadertext">
+<!-- start header text for center column. Edit text here if you want to change the title showing below the image in the UI -->
+Upcoming Events
+<!-- end header text for center column. Edit text here if you want to change the title showing below the image in the UI -->
+</td>
+
+<td class="welcome_marketingheadertext">
+<!-- start header text for right column. Edit text here if you want to change the title showing below the image in the UI -->
+
+Product Spotlight
+
+<!--  comment out product spotlight above and uncomment the line below if you want to show Popular Ideas instead of Product Spotlight
+Popular Ideas
+ -->
+
+<!-- end header text for right column. Edit text here if you want to change the title showing below the image in the UI -->
+</td>
+
+</tr>
+<!--  end table row for the welcome header text -->
+
+<!--  start table row for the welcome body text -->
+<tr>
+
+<td class="welcome_marketingbodytext">
+<!-- start body text for left column. Edit text here if you want to change the marketing messaging below the message headers in the UI -->
+We've recently re-designed our customer portal. You can log support cases, search our knowledge base, browse support content, and share your ideas with our customer community.
+<!-- end body text for left column. Edit text here if you want to change the marketing messaging below the message headers in the UI -->
+</td>
+
+<td class="welcome_marketingbodytext">
+<!-- start body text for center column. Edit text here if you want to change the marketing messaging below the message headers in the UI -->
+<ul>
+    <li><script>document.writeln(date1.substring(0,10));</script> : Platinum Customer Dinner</li>
+    <li><script>document.writeln(date2.substring(0,10));</script> : Customer Success Summit</li>
+    <li><script>document.writeln(date3.substring(0,10));</script> : Macbook Air Giveaway</li>
+</ul>
+<!-- end body text for center column. Edit text here if you want to change the marketing messaging below the message headers in the UI -->
+</td>
+<td class="welcome_marketingbodytext">
+<ul>
+    <li>Ultrasound Logiq 500MD : The latest in our classic line.</li>
+    <li>Logiq Pulse Wand : Our premium product.</li>
+    <li>UTM Series : An alternative to our classic product.</li>
+    </ul>
+
+ <!--
+Comment out the Product Spotlight markup above to show Popular Ideas in your portal instead of a Product Spotlight section
+    
+<apex:dataList value="{!PopularIdeas}" var="idea">
+<apex:outputLink value="/ideas/viewIdea.apexp?id={!idea.Id}" target="_top">{!idea.Title}</apex:outputLink> (<b><apex:outputText value="{!idea.Category}" /></b>)
+</apex:dataList>
+-->
+
+</td>
+
+</tr>
+<!--  end table row for the welcome body text -->
+
+</table></apex:pageBlock>
+<!--  end table to show the welcome marketing messages. -->
+
+
+
+<div class="clearfloats"/>
+
+<!--  Start components visualforce code -->
+<div id="components">
+
+<!-- 
+Start My Account Team. If you do not want to display Account Team in your portal, remove this section
+<apex:pageBlock title="My Account Team">
+    
+      <apex:pageBlockTable value="{!AccountTeam}" var="member" rendered="{!ShowAccountTeam}">
+           <apex:column >
+           {!member.MemberName}
+           <apex:facet name="header">Name</apex:facet>
+           </apex:column>
+           <apex:column >
+           {!member.MemberRole}
+           <apex:facet name="header">Title</apex:facet>
+           </apex:column>
+           <apex:column >
+           {!member.MemberPhone}
+           <apex:facet name="header">Phone</apex:facet>
+           </apex:column>
+           <apex:column >
+           <apex:outputLink value="mailto:{!member.MemberEmail}">{!member.MemberEmail}</apex:outputLink>
+           <apex:facet name="header">Email</apex:facet>
+           </apex:column>
+       </apex:pageBlockTable>
+</apex:pageBlock>
+ -->
+<!--  End My Account Team. If you do not want to display Account Team in your portal, remove this section -->
+
+
+<!--
+Start My Contracts. If you do not want to display Contracts in your portal, remove this section
+<apex:pageBlock title="My Contracts">
+    <apex:image id="messageIcon" value="{!$Resource.icon_information}" rendered="{!NOT(ShowContracts)}" /> <span><apex:outputText value="{!ContractsMessage}" rendered="{!NOT(ShowContracts)}"></apex:outputText></span>
+      <apex:pageBlockTable value="{!Contracts}" var="contract" rendered="{!ShowContracts}">
+           <apex:column >
+           {!contract.ContractNumber}
+           <apex:facet name="header">Contract Number</apex:facet>
+           </apex:column>
+           <apex:column >
+           {!contract.StartDate}
+           <apex:facet name="header">Start Date</apex:facet>
+           </apex:column>
+           <apex:column >
+           {!contract.EndDate}
+           <apex:facet name="header">End Date</apex:facet>
+           </apex:column>
+           <apex:column >
+           {!contract.Status}
+           <apex:facet name="header">Status</apex:facet>
+           </apex:column>
+       </apex:pageBlockTable>
+</apex:pageBlock>
+ -->
+<!--  End My Contracts. If you do not want to display Contracts in your portal, remove this section -->
+
+
+<!-- Start My Registered Products (Assets). If you do not want to display Assets in your portal, remove this section -->
+<!--
+    Notes:
+    If you want to take out a column from this table, delete it below. It looks like this: <apex:column >some other tags</apex:column>
+    If you want to add columns to this table with other standard or custom fields, you need to:
+        1) add an <apex:column > tag for it with the correct merge field. Use the existing column markup for examples.
+        2) add this field to the SOQL select query in the controller. It should look something like this: Assets = [select id,Name...etc]; You need to add the api name for this field.
+-->
+<apex:pageBlock title="My Recent Installed Products">
+      <apex:pageBlockTable value="{!installedProducts}" var="asset">
+      <apex:column headerValue="Product ID">
+              <a href="/{!asset.Id}" target="_top">{!asset.Name}</a>
+      </apex:column>
+           <apex:column value="{!asset.SVMXC__Product_Name__c}"/>
+           <apex:column value="{!asset.SVMXC__Serial_Lot_Number__c}"/>
+           <apex:column value="{!asset.SVMXC__Date_Installed__c}"/>
+       </apex:pageBlockTable>
+</apex:pageBlock>
+<!--  End My Registered Products (Assets). If you do not want to display Assets in your portal, remove this section -->
+
+
+<!-- Start My Recent Cases. If you do not want to display Cases in your portal, remove this section -->
+<!--
+    Notes:
+    If you want to take out a column from this table, delete it below. It looks like this: <apex:column >some other tags</apex:column>
+    If you want to add columns to this table with other standard or custom fields, you need to:
+        1) add an <apex:column > tag for it with the correct merge field. Use the existing column markup for examples.
+        2) add this field to the SOQL select query in the controller. It should look something like this: Cases = [select id,Subject...etc]; You need to add the api name for this field.
+-->
+<apex:pageBlock title="My Recent Cases">
+
+    <apex:image id="messageIcon" value="{!$Resource.icon_information}" rendered="{!NOT(ShowRecentCases)}" /> <span><apex:outputText value="{!RecentCasesMessage}" rendered="{!NOT(ShowRecentCases)}"></apex:outputText></span>
+      <apex:pageBlockTable value="{!RecentCases}" var="case" rendered="{!ShowRecentCases}">
+           <apex:column ><apex:outputLink value="/{!case.Id}" target="_top">{!case.CaseNumber}</apex:outputLink>
+           <apex:facet name="header">Case Number</apex:facet>
+           </apex:column> 
+           <apex:column >
+           <apex:outputLink value="/{!case.Id}" target="_top">{!case.Subject}</apex:outputLink>
+           <apex:facet name="header">Subject</apex:facet>
+           </apex:column>
+           <apex:column ><apex:outputField value="{!case.Status}" />
+           <apex:facet name="header">Status</apex:facet>
+           </apex:column>
+       </apex:pageBlockTable>
+       
+</apex:pageBlock>
+<!-- End My Recent Cases. If you do not want to display Cases in your portal, remove this section -->
+
+
+<!-- Start Popular Solutions. If you do not want to display Solutions in your portal, remove this section -->
+<!--
+    Notes:
+    If you want to take out a column from this table, delete it below. It looks like this: <apex:column >some other tags</apex:column>
+    If you want to add columns to this table with other standard or custom fields, you need to:
+        1) add an <apex:column > tag for it with the correct merge field. Use the existing column markup for examples.
+        2) add this field to the SOQL select query in the controller. It should look something like this: Solution = [select id,SolutionName...etc]; You need to add the api name for this field.
+-->
+<apex:pageBlock title="Popular Solutions">
+
+    <apex:image id="messageIcon" value="{!$Resource.icon_information}" rendered="{!NOT(ShowTopSolutions)}" /> <span><apex:outputText value="{!TopSolutionsMessage}" rendered="{!NOT(ShowTopSolutions)}"></apex:outputText></span>
+      <apex:pageBlockTable value="{!TopSolutions}" var="solution" rendered="{!ShowTopSolutions}">
+           <apex:column ><apex:outputLink value="/{!solution.Id}" target="_top">{!solution.SolutionName}</apex:outputLink>
+           <apex:facet name="header">Solution Name</apex:facet> 
+           </apex:column> 
+           <apex:column >
+           <apex:outputField value="{!solution.TimesUsed}" />
+           <apex:facet name="header">Cases Solved</apex:facet>
+           </apex:column>
+           
+       </apex:pageBlockTable>
+       
+</apex:pageBlock> 
+<!-- End Popular Solutions. If you do not want to display Solutions in your portal, remove this section -->
+
+
+</div>
+<!--  End components visualforce code -->
+
+</div>
+<!-- End Container to hold other layout div tags. Used to switch between fixed and liquid layouts. -->
+
+</body>
+
+</apex:page>

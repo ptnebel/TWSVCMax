@@ -1,0 +1,144 @@
+<apex:page id="pageValidateAdd" controller="SVMXC.COMM_ValidateAddress" sidebar="false" showHeader="false"><!--  -->
+<script  src="{!googleUrl}" type="text/javascript"></script> 
+<apex:form id="frmValidateAdd">
+<center>
+    <h2>
+        <label id="message" >{!message}</label>
+    </h2>
+<apex:image url="{!$Resource.SVMXC__Progress}" style="display:{!displayImage}"/>
+</center>
+<apex:actionFunction name="update" action="{!SVMX_doValidate}" status="myStatus"/>
+<apex:actionFunction name="updateNull" action="{!SVMX_doClear}" status="myStatus"/>
+<apex:actionFunction name="Close" action="{!SVMX_doclose}" status="myStatus"/>
+
+<apex:inputHidden value="{!latitude}" id="lat"/>
+<apex:inputHidden value="{!longitude}" id="lon"/>
+</apex:form>
+<script type="text/javascript" >  <!--charset="utf-8"-->
+function SVMX_GetAddress(street, city, state, country, zip) //By GM
+{
+    
+    var Address='' ;
+    if(street!=null && street.length>0){
+     Address = street+',';        
+    }
+    if(city!=null && city.length>0){
+     Address = Address+city+',';
+    }
+    if(state!=null && state.length>0){
+     Address = Address+state+',';
+    }
+    if(country!=null && country.length>0){
+     Address = Address+country+',';
+    }
+    if(zip!=null && zip.length>0){
+     Address = Address+zip;
+    }
+    
+    //alert(Address);
+    myGeocoder = new GClientGeocoder(); 
+    if (!myGeocoder) 
+    { 
+        return null; 
+    } 
+    myGeocoder.getLocations(Address, 
+    function(response) 
+    { 
+        if (response && response.Status.code == 200) 
+        { 
+            var place = response.Placemark[0]; 
+            document.getElementById('pageValidateAdd:frmValidateAdd:lat').value = place.Point.coordinates[1];
+            document.getElementById('pageValidateAdd:frmValidateAdd:lon').value = place.Point.coordinates[0];
+            var a = update();
+        } 
+        else 
+        { 
+            if(response.Status.code == 400)
+                alert("{!JSINHTMLENCODE(TAG003)}");
+            else if(response.Status.code == 500)
+                alert("{!JSINHTMLENCODE(TAG004)}");
+            else if(response.Status.code == 601)
+                alert("{!JSINHTMLENCODE(TAG005)}");
+            else if(response.Status.code == 602)
+                alert("{!JSINHTMLENCODE(TAG006)}");
+            else if(response.Status.code == 603)
+                alert("{!JSINHTMLENCODE(TAG007)}");
+            else if(response.Status.code == 604)
+                alert("{!JSINHTMLENCODE(TAG008)}");
+            else if(response.Status.code == 610)
+                alert("{!JSINHTMLENCODE(TAG009)}");
+            else if(response.Status.code == 620)
+                alert("{!JSINHTMLENCODE(TAG010)}");
+            else
+                alert("{!JSINHTMLENCODE(TAG001)}");
+            var a = updateNull();
+        } 
+        
+        //parent.window.opener.location.href = '/{!objID}';
+        //parent.window.close();
+        
+       
+        } 
+    ); 
+} 
+function sleep(naptime)
+{
+      naptime = naptime * 1000;
+      var sleeping = true;
+      var now = new Date();
+      var alarm;
+      var startingMSeconds = now.getTime();
+      while(sleeping)
+      {
+         alarm = new Date();
+         alarmMSeconds = alarm.getTime();
+         if(alarmMSeconds - startingMSeconds > naptime){ sleeping = false; }
+      }
+}      
+function addLoadEvent(func) 
+{ 
+    var oldonload = window.onload;
+    if (typeof window.onload != 'function') 
+    {
+        window.onload = func;
+    } 
+    else 
+    {
+        window.onload = function() 
+        {
+            oldonload();
+            func();
+        }
+    }
+}
+addLoadEvent(function() 
+{
+if({!isValidated} == false )
+{
+    //SVMX_GetAddress( '{!SUBSTITUTE(SUBSTITUTE(strStreet,'<','&lt;'),'>','&gt;')}', '{!SUBSTITUTE(SUBSTITUTE(strCity,'<','&lt;'),'>','&gt;')}','{!SUBSTITUTE(SUBSTITUTE(strState,'<','&lt;'),'>','&gt;')}','{!SUBSTITUTE(SUBSTITUTE(strCountry,'<','&lt;'),'>','&gt;')}', '{!SUBSTITUTE(SUBSTITUTE(strZip,'<','&lt;'),'>','&gt;')}');
+    SVMX_GetAddress( '{!JSINHTMLENCODE(strStreet)}', '{!JSINHTMLENCODE(strCity)}','{!JSINHTMLENCODE(strState)}','{!JSINHTMLENCODE(strCountry)}', '{!JSINHTMLENCODE(strZip)}');
+
+}
+else
+{
+    if({!isSuccess} == false)
+    {
+        document.getElementById('message').innerhtml = '{!JSINHTMLENCODE(TAG001)}';
+        alert("{!JSINHTMLENCODE(TAG001)}");
+    }
+    else 
+    {
+        document.getElementById('message').innerHTML = '{!JSINHTMLENCODE(message)}';
+        if(!{!closeWindow})
+            Close();
+    }
+    if({!closeWindow})
+    {
+        sleep(2);
+        parent.window.opener.location.href = '{!returnUrl}';
+        parent.window.close();
+    }
+}
+});
+</script>
+</apex:page>

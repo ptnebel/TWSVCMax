@@ -1,0 +1,307 @@
+<apex:page id="page" standardController="case" extensions="SVMXC.SLAT_SLAClockOnCase">
+<apex:form id="form"> 
+
+<style type="text/css">
+.customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            top:00px;
+        }
+.timer {
+   text-align: center;
+   background: black;
+   font-family: Arial;
+   font-weight: bold;
+   border: 2px outset;
+   border-left: 2px outset darkgray;
+   border-top: 2px outset darkgray;
+}
+
+.timer_pad {
+   padding: 10px;
+}
+
+.digits {
+   margin-top: 15px;
+   color: chartreuse;
+   font-size: 20pt;
+   font-family: Verdana;
+}
+
+.title {
+   color: white;   
+}
+
+.hours, .minutes, .seconds {
+   margin-left: 3px;
+}
+
+.hours, .minutes {
+   margin-right: 5px;
+}
+
+.field_cont {
+   margin-top: 15px;
+}
+
+.field {
+   color: yellow;
+}
+
+.btn_cont {
+	align: middle;
+   	margin-top: 10px;
+   	margin-bottom: 10px;
+}
+
+.pause {
+	float: right;
+	margin-left: 5px;
+}
+.resume {
+	float: left;
+	margin-right: 5px;
+}
+</style>
+<Script>
+function IsNumeric(input)
+{
+   return (input - 0) == input;
+}
+function IsNumeric2(input)
+{
+   return (input - 0) == input && input.length > 0;
+}
+function callResumeYes(v)
+{
+	document.getElementById('page:form:IdResumeClock').value='true';
+	document.getElementById('CH_dtimer_resume').click();
+	document.getElementById('page:form:IdResumeClock').value='false';
+	Yes();
+}
+function callResumeNo(v)
+{
+	document.getElementById('page:form:IdResumeClock').value='true';
+	document.getElementById('CH_dtimer_resume').click();
+	document.getElementById('page:form:IdResumeClock').value='false';
+	No();
+}
+function callpause(v)
+{
+	if(document.getElementById(v+':pgblock:lstReasonOpt').value && document.getElementById(v+':pgblock:lstForHowLong').value)
+	{
+		if(document.getElementById(v+':pgblock:lstForHowLong').value == 'b')
+		{
+			if(document.getElementById(v+':lstForHowLongdays').value || document.getElementById(v+':lstForHowLonghrs').value || document.getElementById(v+':lstForHowLongmins').value)
+			{
+				if(IsNumeric(document.getElementById(v+':lstForHowLongdays').value) && IsNumeric(document.getElementById(v+':lstForHowLonghrs').value) && IsNumeric(document.getElementById(v+':lstForHowLongmins').value))
+				{
+					var isvalidtime = 'true';
+					if(IsNumeric2(document.getElementById(v+':lstForHowLongdays').value))
+					{
+						if((document.getElementById(v+':lstForHowLongdays').value*1)>0)
+						{}
+						else
+						{
+							isvalidtime = 'false';
+						}
+					}
+					if(IsNumeric2(document.getElementById(v+':lstForHowLonghrs').value))
+					{
+						if((document.getElementById(v+':lstForHowLonghrs').value*1)>0)
+						{}
+						else
+						{
+							isvalidtime = 'false';
+						}
+					}
+					
+					if(IsNumeric2(document.getElementById(v+':lstForHowLongmins').value))
+					{
+						if((document.getElementById(v+':lstForHowLongmins').value*1)>0)
+						{}
+						else
+						{
+							isvalidtime = 'false';
+						}
+					}
+					if(isvalidtime=='true')
+					{
+						document.getElementById('page:form:IdPauseClock').value='true';
+						document.getElementById('CH_dtimer_pause').click();
+						document.getElementById('page:form:IdPauseClock').value='false';
+						PauseNow();
+					}
+					else
+					{
+						alert('{!JSENCODE(TAG036)}');
+					}
+				}
+				else
+				{
+					alert('{!JSENCODE(TAG036)}');
+				}
+			}
+			else 
+			{
+				alert('{!JSENCODE(TAG037)}');
+			}
+		}
+		if(document.getElementById(v+':pgblock:lstForHowLong').value == 'a')
+		{
+			document.getElementById('page:form:IdPauseClock').value='true';
+			document.getElementById('CH_dtimer_pause').click();
+			document.getElementById('page:form:IdPauseClock').value='false';
+			PauseNow();
+		}
+		
+	}
+	else
+	{
+		alert('{!JSENCODE(TAG038)}');
+	}
+}
+</Script>
+<apex:actionstatus id="status" starttext="{!TAG005}"/>
+<apex:inputhidden id="CH_dtimer1_days" value="{!iIRdays}"/>
+<apex:inputhidden id="CH_dtimer1_hours" value="{!iIRhrs}"/>
+<apex:inputhidden id="CH_dtimer1_minutes" value="{!iIRmins}"/>
+<apex:inputhidden id="CH_dtimer1_seconds" value="{!iIRsecs}"/>
+<apex:inputhidden id="CH_dtimer2_days" value="{!iORdays}"/>
+<apex:inputhidden id="CH_dtimer2_hours" value="{!iORhrs}"/>
+<apex:inputhidden id="CH_dtimer2_minutes" value="{!iORmins}"/>
+<apex:inputhidden id="CH_dtimer2_seconds" value="{!iORsecs}"/>
+<apex:inputhidden id="CH_dtimer3_days" value="{!iAREdays}"/>
+<apex:inputhidden id="CH_dtimer3_hours" value="{!iAREhrs}"/>
+<apex:inputhidden id="CH_dtimer3_minutes" value="{!iAREmins}"/>
+<apex:inputhidden id="CH_dtimer3_seconds" value="{!iAREsecs}"/>
+<apex:inputhidden id="CH_dtimer4_days" value="{!iAROdays}"/>
+<apex:inputhidden id="CH_dtimer4_hours" value="{!iAROhrs}"/>
+<apex:inputhidden id="CH_dtimer4_minutes" value="{!iAROmins}"/>
+<apex:inputhidden id="CH_dtimer4_seconds" value="{!iAROsecs}"/>
+<apex:inputhidden id="IdPauseClock"/>
+<apex:inputhidden id="IdResumeClock"/>
+<apex:inputhidden id="SLAClockPaused" value="{!caseobj.SVMXC__SLA_Clock_Paused__c}"/>
+<apex:inputHidden id="SLAClockPausedSetting" value="{!SLAClockPausedSetting}"/>
+<apex:inputhidden id="SLAMin1" value="{!SLAIRMin}"/>
+<apex:inputhidden id="SLAMin2" value="{!SLAORMin}"/>
+<apex:inputhidden id="SLAMin3" value="{!SLARestorationMin}"/>
+<apex:inputHidden id="SLAMin4" value="{!SLAResolutionMin}"/>
+<apex:inputHidden id="ThresholdTime" value="{!ThresholdTime}"/>
+<apex:inputHidden id="ActualResponse1" value="{!caseobj.SVMXC__Actual_Initial_Response__c}"/>
+<apex:inputHidden id="ActualResponse2" value="{!caseobj.SVMXC__Actual_Onsite_Response__c}"/>
+<apex:inputHidden id="ActualResponse3" value="{!caseobj.SVMXC__Actual_Restoration__c}"/>
+<apex:inputHidden id="ActualResponse4" value="{!caseobj.SVMXC__Actual_Resolution__c}"/>
+<div style="text-align:center;">
+<table  class="timer">
+	<tr>
+				<td class="timer_pad" style="border: 2px Inset #FFFFFF;">
+					<div class="title" >{!TAG030}</div>
+					<div id="CH_dtimer1_digits" class="digits" ></div>
+				</td>
+				<td class="timer_pad" style="border: 2px Inset #FFFFFF;">
+					<div class="title">{!TAG031}</div>
+					<div id="CH_dtimer2_digits" class="digits"></div>
+				</td>
+				<td class="timer_pad" style="border: 2px Inset #FFFFFF;">
+					<div class="title">{!TAG032}</div>
+					<div id="CH_dtimer3_digits" class="digits"></div>
+				</td>
+				<td class="timer_pad" style="border: 2px Inset #FFFFFF;">
+					<div class="title">{!TAG033}</div>
+					<div id="CH_dtimer4_digits" class="digits"></div>
+				</td>
+	</tr>
+	<tr>
+		<td>
+			<div class="btn_cont">
+				<center>
+					<td>
+					   	<input id="CH_dtimer_pause" class="pause" type="button" value="{!TAG034}"  onclick="Pause();"/>
+				   	</td>
+				   	<td>
+					   	<input id="CH_dtimer_resume" class="resume" type="button" value="{!TAG035}" onclick="Start();"/>
+				   	</td>
+				</center>
+			</div>
+		</td>
+	</tr>
+</table>
+</div>
+<Script src="{!URLFOR($Resource.COMM_Countdown)}"/>
+<apex:actionfunction action="{!SVMX_Start}" name="Start"  status="status" reRender="popup1"/>
+<apex:actionfunction action="{!SVMX_Pause}" name="Pause"  status="status" reRender="CH_dtimer1,popup"/>
+
+<apex:actionfunction action="{!SVMX_PauseNow}" name="PauseNow"  status="status" reRender="CH_dtimer1,popup"/>
+<apex:actionfunction action="{!SVMX_Cancel}" name="Cancel"  status="status" reRender="CH_dtimer1,popup"/>
+<apex:actionfunction action="{!SVMX_Yes}" name="Yes" status="status" reRender="CH_dtimer1,popup,popup1"/> 
+<apex:actionfunction action="{!SVMX_No}" name="No" status="status" reRender="CH_dtimer1,popup,popup1"/>
+<apex:actionfunction action="{!SVMX_CancelStartPopup}" name="CancelStartPopup"  status="status" reRender="CH_dtimer1,popup,popup1"/>
+
+ <apex:outputPanel id="popup">
+		
+    	<apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+            <apex:pageBlock id="popupblock" mode="edit">
+            	<apex:actionstatus id="popupstatus1" starttext="{!TAG005}"/>
+            	<apex:pageMessages rendered="{!PopupMsg}"/>
+            	<apex:pageBlockButtons Location="Bottom">
+            		<input id="CH_dtimer_pause2"  type="button" status="popupstatus1" value="{!TAG034}" onclick="callpause('{!$Component.popupblock}');"/>
+            		<input id="CH_dtimer_resume2"  type="button" value="{!TAG024}" onclick="Cancel();"/>
+				   	<!-- <apex:CommandButton value="{!TAG003}" action="{!SVMX_PauseNow}" status="popupstatus" reRender="CH_dtimer1,popup"/>
+            		<apex:CommandButton value="{!TAG004}" action="{!SVMX_Cancel}" reRender="CH_dtimer1,popup"/> -->
+            	</apex:pageBlockButtons>
+            	<apex:pageblockSection id="pgblock" >
+            		<apex:outputLabel value="{!TAG001}" style="font-Size:13px"/>
+            		<apex:SelectList id="lstReasonOpt" value="{!caseobj.SVMXC__SLA_Clock_Pause_Reason__c}" size="1" multiselect="false" style="width:200px">
+            			<apex:selectOptions value="{!ReasonOpt}"/>
+            		</apex:SelectList>
+            		<apex:outputLabel value="{!TAG002}" style="font-Size:13px"/>
+            		<apex:SelectList id="lstForHowLong" value="{!ForHowLong}" size="1" multiselect="false" style="width:200px">
+            			<apex:selectOptions value="{!ForHowLongOpt}"/>
+            		</apex:SelectList>
+              	</apex:pageblockSection>
+            <!--	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            	&nbsp;&nbsp;&nbsp;&nbsp;
+        		<apex:inputfield id="lstForHowLongdays" value="{!caseobj.SLA_Clock_Pause_Days__c}" style="width:25px"/>
+        		<apex:outputLabel value="{!TAG009}" style="font-Size:13px"/>
+        		<apex:inputfield id="lstForHowLonghrs" value="{!caseobj.SLA_Clock_Pause_Hours__c}" style="width:25px"/>
+        		<apex:outputLabel value="{!TAG010}" style="font-Size:13px"/>
+        		<apex:inputfield id="lstForHowLongmins" value="{!caseobj.SLA_Clock_Pause_Minutes__c}" style="width:25px"/>
+				<apex:outputLabel value="{!TAG011}" style="font-Size:13px"/> -->
+        	</apex:pageBlock>
+        </apex:outputPanel>
+    </apex:outputPanel>    	 
+    <apex:outputPanel id="popup1">
+    	<apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displaystartPopUp}">
+    		<apex:pageblock mode="Edit">
+    		 	<apex:actionstatus id="popup1status2" starttext="{!TAG005}"/>
+            	<apex:pageBlockButtons Location="Bottom">
+            		<input id="CH_dtimer_pauseYes"  type="button" status="popupstatus1" value="{!TAG022}" onclick="callResumeYes('{!$Component.popupblock}');" />
+            		<input id="CH_dtimer_pauseNo"  type="button" status="popupstatus1" value="{!TAG023}" onclick="callResumeNo('{!$Component.popupblock}');"/>
+					<input id="CH_dtimer_pauseCancel"  type="button" status="popupstatus1" value="{!TAG024}" onclick="CancelStartPopup();"/>
+            		
+            	</apex:pageBlockButtons>
+    			<apex:pageblockSection Columns="1">
+    				<apex:outputText value="{!VFMessage}" style="font-Size:13px"/>
+    			</apex:pageblockSection>
+    		
+    		</apex:pageblock>
+    	</apex:outputPanel>
+    </apex:outputPanel>	 
+</apex:form>
+</apex:page>

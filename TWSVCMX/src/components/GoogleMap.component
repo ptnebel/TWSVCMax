@@ -1,0 +1,138 @@
+<apex:component >
+
+
+<apex:attribute name="height" description="This is the map height"
+type="integer" default="500" />
+<apex:attribute name="width" description="This is the map width"
+type="integer" default="950" />
+<apex:attribute name="mapType" description="mapType default is 'hybrid' Possible values are 'normal', 'satellite' or 'hybrid'"
+type="string" default="normal" />
+<apex:attribute name="mapkey" description="This is the google map key"
+type="string" required="true" />
+<apex:attribute name="data" description="This is the data to map"
+type="string" required="true" />
+
+<apex:panelGrid columns="1">
+<apex:outputPanel id="map_div" layout="block"
+style="width: {!width}px; height: {!height}px">
+</apex:outputPanel>
+
+</apex:panelGrid>
+
+<script src="http://maps.google.com/maps?file=api&v=2&key={!mapkey}" type="text/javascript"></script>  <!--https://maps.google.com/maps/api/js?sensor=false  -->
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="https://gmaps-utility-library.googlecode.com/svn/trunk/markermanager/release/src/markermanager.js"></script>
+<script type="text/javascript">
+google.load("maps", "2.x");
+var map;
+
+var g_chat_cnt = 5;
+var g_max_chat_cnt = 10;
+var zoomLevel = 14;
+var myGeocoder = new GClientGeocoder();
+
+function drawMap() {
+    map = new google.maps.Map2(
+        document.getElementById('{!$Component.map_div}'));
+    var str = document.getElementById('{!$Component.ipd}').value;
+    ip_list = eval("(" + str + ")" );
+    map.addControl(new GLargeMapControl());
+    if (ip_list.ips.length > 0) {
+         map.setCenter(new GLatLng(40.7834, -73.9662), zoomLevel);
+    } else {
+        //alert('No Chatter activity during given date range!');
+    }
+    window.setTimeout(setupMarkers, 10);
+}
+
+var myg_icon = new GIcon();
+var myg_norm_icon = new GIcon();
+var batch;
+
+function getMarkers() {
+    myg_icon.image = "{!URLFOR($Resource.FIRE)}";
+    myg_icon.shadow = "";
+    myg_norm_icon.image = "{!URLFOR($Resource.NORMAL)}";
+    myg_norm_icon.shadow = "";
+    myg_icon.size = new GSize(32, 32);
+    myg_icon.iconAnchor = new GPoint(16, 16);
+    myg_icon.infoWindowAnchor = new GPoint(16, 0);
+    
+    myg_norm_icon.size = new GSize(32, 32);
+    myg_norm_icon.iconAnchor = new GPoint(16, 16);
+    myg_norm_icon.infoWindowAnchor = new GPoint(16, 0);
+
+    var m_marker;
+    var n = 0;  
+    batch = [];  
+    for (var i = 0; i < ip_list.ips.length; ++i) {
+        if (ip_list.ips[i].lat == '')
+            continue;
+        if (ip_list.ips[i].chat_cnt >= g_chat_cnt) {
+            if (ip_list.ips[i].chat_cnt >= g_max_chat_cnt)
+                m_marker = new GMarker(new GLatLng(ip_list.ips[i].lat, ip_list.ips[i].lon), { title: ip_list.ips[i].name, icon: myg_icon } );
+            else
+                m_marker = new GMarker(new GLatLng(ip_list.ips[i].lat, ip_list.ips[i].lon), { title: ip_list.ips[i].name, icon: myg_norm_icon } ) ;
+
+            if (n++ == 0)
+                map.setCenter(new GLatLng(ip_list.ips[i].lat, ip_list.ips[i].lon), zoomLevel);
+            showAccount(m_marker, ip_list.ips[i].aid);            
+            batch.push(m_marker);
+        }
+    }
+    return batch;
+}
+function showAccount(m_marker, aid) {
+    GEvent.addListener(m_marker, "click", function() {
+        window.open('/apex/Chatter_WO?aid=' + aid, "Account View", 'resizable=1,status=0,toolbar=0,menubar=0,scrollbars=1');
+    });
+}
+
+var mgr;
+function setupMarkers() {
+    geocodeAndDraw();
+}
+
+function refreshMarkers() {
+    mgr.clearMarkers();
+    mgr.addMarkers(getMarkers(), 5);
+    mgr.refresh();
+}
+
+function doMarkers() {
+    var mgrOptions = { borderPadding: 50, maxZoom: 20, trackMarkers: true };
+    mgr = new MarkerManager(map, mgrOptions);
+    mgr.clearMarkers();
+    mgr.addMarkers(getMarkers(), 5);
+    mgr.refresh();
+}
+
+var numDecodes;
+
+function geocodeAndDraw() {
+    lbatch = [];
+    numDecodes = 0;
+    for (var i = 0; i < ip_list.ips.length; ++i) {
+        ip = ip_list.ips[i];
+        addr = ip.street + "," + ip.city + "," + ip.state + "," + ip.zip + "," + ip.country;
+        if (ip_list.ips[i].lat == '') {
+            doGeocode(addr, ip, i);
+        }
+    }
+}
+function doGeocode(addr, l_ip, ix) {
+        myGeocoder.getLatLng(addr, function(point) {
+            ++numDecodes;
+            if (point != null) {
+                l_ip.lat = point.lat();
+                l_ip.lon = point.lng();
+            }
+            if (numDecodes == ip_list.ips.length) {
+                window.setTimeout(doMarkers, 0);
+            }
+        });
+
+}
+google.setOnLoadCallback(drawMap);
+</script>
+</apex:component>

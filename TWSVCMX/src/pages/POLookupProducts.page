@@ -1,0 +1,215 @@
+<apex:page title="Lookup Products" controller="POLookupProducts" showHeader="true">	
+	<apex:form id="selectorder">
+	<html>
+		<style>
+			.inactive { font-weight:bold; color:red; }
+			.active { font-weight:bold; color:green;}
+		</style>
+	</html>
+	<apex:outputPanel id="WholePage">
+    	<apex:pageBlock title="Part Order {!partorder.Name}">
+    		<apex:pageBlockSection columns="1">	
+				<apex:actionStatus id="refreshstatus" startstyle="color:green;" startText="Refreshing...." ></apex:actionStatus> 			
+				<apex:actionStatus id="Savestatus" startstyle="color:green;" startText="Saving...." ></apex:actionStatus> 
+				<apex:actionStatus id="Deletestatus" startstyle="color:green;" startText="Deleting Line...." ></apex:actionStatus> 
+			</apex:pageBlockSection>
+			<apex:pageBlockSection columns="1">
+				<apex:outputField value="{!partorder.Name}"/>
+				<apex:outputField value="{!partorder.SVMXC__Order_Status__c}"/>
+				<apex:outputField value="{!partorder.SVMXC__Source_Location__c}"/>				
+				<apex:pageBlockSectionItem >
+				<apex:outputText value="Consider Location Stock"></apex:outputText>
+				<apex:inputCheckbox value="{!ConsiderLocation}">
+					<apex:actionSupport action="{!POLookupProducts}" event="onclick"  rerender="WholePage, stock, poline">											
+					</apex:actionSupport>
+				</apex:inputCheckbox> 	 			
+				</apex:pageBlockSectionItem>		       
+			</apex:pageBlockSection>	
+		</apex:pageBlock>	
+		
+		<apex:outputPanel id="poline">
+		<apex:pageBlock title="Part Order Lines" >				
+			<apex:pageBlockButtons >				
+				<apex:commandButton action="{!SavePartLines}" value="Save" status="Savestatus" ></apex:commandButton>
+				<apex:commandButton action="{!Cancel}" value="Close"></apex:commandButton>				
+			</apex:pageBlockButtons>
+			<apex:outputText rendered="{!ConsiderLocation=true && location.id=null}" value="A location is required to lookup the location stock."></apex:outputText>			
+			<apex:pageBlockTable value="{!partlines}" var="POLine" style="width:800px" rendered="{!ConsiderLocation=false || (ConsiderLocation=true && location.id!=null)}">
+				<apex:column width="30px">
+					<apex:facet name="header">Select</apex:facet>
+					<apex:outputPanel rendered="{!ConsiderLocation=true}">										
+					<input type="radio" name="renderProduct" ></input>
+						<apex:actionSupport event="onclick" action="{!RerenderStock}" rerender="stock, stock1">
+							<apex:param name="rendervalue" assignTo="{!rendervalue}" value="{!POLine.SVMXC__Product__c}"/>
+							<apex:param name="partlineid" assignTo="{!partlineid}" value="{!POLine.Id}"/>
+						</apex:actionSupport>						
+					</input> 	
+					</apex:outputPanel>	 
+					<apex:outputPanel rendered="{!ConsiderLocation=false}">					
+					<input type="radio" name="renderProduct" ></input>
+						<apex:actionSupport event="onclick" action="{!RerenderProducts}" rerender="NoStockLocationProducts">
+							<apex:param name="rendervalue" assignTo="{!rendervalue}" value="{!POLine.SVMXC__Product__c}"/>
+							<apex:param name="partlineid" assignTo="{!partlineid}" value="{!POLine.Id}"/>
+						</apex:actionSupport>						
+					</input> 	
+					</apex:outputPanel>	       
+		        </apex:column>
+		        <apex:column width="10px">
+		        	<apex:facet name="header"><apex:outputText value="Delete Line"/></apex:facet>
+		          	<apex:commandButton action="{!DeleteLine}" value="Delete" onclick="if(!confirm('Are you sure you want to delete this part line?')) return false;" status="Deletestatus" rerender="poline">
+		          		<apex:param name="pline" value="{!POLine.id}" assignTo="{!partlineid}"/>   
+		          	</apex:commandButton>	
+		        </apex:column>        		        
+				<apex:column width="90px" >
+					<apex:facet name="header"><apex:outputText value="Current Product"/></apex:facet>
+					<apex:outputField value="{!POLine.SVMXC__Product__c}"/>
+				</apex:column>
+				<apex:column width="80px">
+					<apex:facet name="header"><apex:outputText value="Line Number"/></apex:facet>
+					<apex:outputField value="{!POLine.Name}"/>
+				</apex:column> 
+				<apex:column width="80px">
+					<apex:facet name="header"><apex:outputText value="Active Status"/></apex:facet>
+					<apex:outputText value="True"  styleClass="active" rendered="{!POLine.SVMXC__Product__r.IsActive=true}"/>
+					<apex:outputText value="False"  styleClass="inactive" rendered="{!POLine.SVMXC__Product__r.IsActive=false}"/>							
+				</apex:column>
+				<apex:column width="70px" rendered="{!ConsiderLocation=true}">					
+					<apex:facet name="header"><apex:outputText value="Expected Qty"/></apex:facet>
+					<apex:inputField value="{!POLine.SVMXC__Expected_Quantity2__c}"/>						
+				</apex:column>
+				<apex:column width="70px" rendered="{!ConsiderLocation=true}">					
+					<apex:facet name="header"><apex:outputText value="Actual Qty"/></apex:facet>
+					<apex:inputField value="{!POLine.SVMXC__Actual_Quantity2__c}"/>					
+				</apex:column>	
+					
+			</apex:pageBlockTable>			
+		</apex:pageBlock>
+		</apex:outputPanel>
+		
+		<!-- Consider Location Stock!!! -->
+		<apex:outputPanel id="StockLocationProducts1" rendered="{!ConsiderLocation=true && location.id!=null}">
+		<apex:pageBlock title="Substitution Stocks at {!location.Name}" id="stock" >								
+			<apex:outputText rendered="{!rendervalue=''}" value="Select a Part Order Line to see the stock at the location."></apex:outputText>			
+			<apex:outputText rendered="{!rendervalue!=''}">								
+				<apex:pageBlockTable value="{!SubStocks}" var="PS"> 				 	
+					<apex:column style="width:80px" >						
+						<apex:facet name="header"><apex:outputText value="Stock Number"/></apex:facet>
+						<apex:outputField value="{!PS.Name}"/>						
+					</apex:column>
+					<apex:column style="width:80px" >
+						<apex:facet name="header"><apex:outputText value="Select"/></apex:facet>	
+						<apex:commandButton action="{!UpdateProduct}" value="Replace" status="Savestatus" rerender="poline" rendered="{!rendervalue!=PS.SVMXC__Product__c}" >
+	             			<apex:param name="id" value="{!PS.SVMXC__Product__c}" assignTo="{!newproductId}"/>             			
+	             		</apex:commandButton>
+	             	</apex:column> 
+					<apex:column style="width:80px" >
+						<apex:facet name="header"><apex:outputText value="Substitution Product"/></apex:facet>					             							
+						<apex:outputField value="{!PS.SVMXC__Product__c}"/>
+					</apex:column>
+					<apex:column style="width:80px" >
+						<apex:facet name="header"><apex:outputText value="Active Status"/></apex:facet>					
+	             		<apex:outputText value="True"  styleClass="active" rendered="{!PS.SVMXC__Product__r.IsActive=true}"/>
+						<apex:outputText value="False"  styleClass="inactive" rendered="{!PS.SVMXC__Product__r.IsActive=false}"/>
+					</apex:column>
+					<apex:column style="width:80px" >
+						<apex:facet name="header"><apex:outputText value="Quantity in Stock"/></apex:facet>
+						<apex:outputField value="{!PS.SVMXC__Quantity2__c}"/>
+					</apex:column>											
+				</apex:pageBlockTable>			
+			</apex:outputText>	
+		</apex:pageBlock>	 
+		 
+		<apex:pageBlock title="Accessory Stocks at {!location.Name}" id="stock1" >							
+			<apex:outputText rendered="{!rendervalue=''}" value="Select a Part Order Line to see the stock at the location."></apex:outputText>			
+			<apex:outputText rendered="{!rendervalue!=''}">					
+			
+			<apex:pageBlockTable value="{!AccessoryStocks}" var="PS" style="width:800px"> 				 	
+				<apex:column style="width:10%" >						
+					<apex:facet name="header"><apex:outputText value="Stock Number"/></apex:facet>
+					<apex:outputField value="{!PS.Name}"/>						
+				</apex:column>
+				<apex:column style="width:5%" >
+					<apex:facet name="header"><apex:outputText value="Add"/></apex:facet>	
+					<apex:commandButton action="{!AddAccessory}" value="Add" status="Savestatus" rerender="poline" rendered="{!rendervalue!=PS.SVMXC__Product__c}">
+             			<apex:param name="id" value="{!PS.SVMXC__Product__c}" assignTo="{!newproductId}"/>             			
+             		</apex:commandButton>
+             	</apex:column> 
+				<apex:column style="width:80px" >
+					<apex:facet name="header"><apex:outputText value="Accessory Product"/></apex:facet>					
+             		<apex:outputText value="    "></apex:outputText>					
+					<apex:outputField value="{!PS.SVMXC__Product__c}"/>
+				</apex:column>
+				<apex:column style="width:80px" >
+					<apex:facet name="header"><apex:outputText value="Active Status"/></apex:facet>					             						
+					<apex:outputText value="True"  styleClass="active" rendered="{!PS.SVMXC__Product__r.IsActive=true}"/>
+					<apex:outputText value="False"  styleClass="inactive" rendered="{!PS.SVMXC__Product__r.IsActive=false}"/>
+				</apex:column>
+				<apex:column style="width:80px" >
+					<apex:facet name="header"><apex:outputText value="Quantity in Stock"/></apex:facet>
+					<apex:outputField value="{!PS.SVMXC__Quantity2__c}"/>
+				</apex:column>											
+			</apex:pageBlockTable>			
+		</apex:outputText>	
+		</apex:pageBlock>
+		</apex:outputPanel> 
+		
+		<!-- Don't Consider Location Stock!!! -->
+		<apex:outputPanel id="NoStockLocationProducts" rendered="{!ConsiderLocation=false}"> <!-- &&  -->
+			<apex:pageBlock title="Possible Product Substitutions" id="sub1">								
+				<apex:outputText rendered="{!rendervalue=''}" value="Select a Part Order Line to see the product's substitution."></apex:outputText>			
+				<apex:outputText rendered="{!rendervalue!=''}">	
+				<apex:pageBlockTable value="{!SubProducts}" var="PS" style="width:800px">
+					<apex:column width="110px" >
+						<apex:facet name="header"><apex:outputText value="Current Product"/></apex:facet>					             							
+						<apex:outputText value="{!partline.SVMXC__Product__r.Name}"/>
+					</apex:column>
+					<apex:column width="30px" >
+						<apex:facet name="header"><apex:outputText value="Replace"/></apex:facet>	
+							<apex:commandButton action="{!UpdateProduct}" value="Replace" status="Savestatus" rerender="poline" rendered="{!rendervalue!=PS.Related_Product__c}">
+             			<apex:param name="id" value="{!PS.Related_Product__c}" assignTo="{!newproductId}"/>             			
+             		</apex:commandButton>
+	             	</apex:column> 	             	
+					<apex:column width="50px" >
+						<apex:facet name="header"><apex:outputText value="Substitution Product"/></apex:facet>					             							
+						<apex:outputField value="{!PS.Related_Product__c}"/>
+					</apex:column>
+					<apex:column width="50px" >
+						<apex:facet name="header"><apex:outputText value="Active Status"/></apex:facet>					
+	             		<apex:outputText value="True"  styleClass="active" rendered="{!PS.Related_Product__r.IsActive=true}"/>
+						<apex:outputText value="False"  styleClass="inactive" rendered="{!PS.Related_Product__r.IsActive=false}"/>
+					</apex:column>
+				</apex:pageBlockTable>	
+				</apex:outputText>		
+			</apex:pageBlock>
+			
+			<apex:pageBlock title="Accessories" id="accessory1" >								
+				<apex:outputText rendered="{!rendervalue=''}" value="Select a Part Order Line to see the product's accessories."></apex:outputText>			
+				<apex:outputText rendered="{!rendervalue!=''}">					
+				
+				<apex:pageBlockTable value="{!AccessoryProducts}" var="PS" style="width:800px">
+					<apex:column width="110px" >
+						<apex:facet name="header"><apex:outputText value="Main Product"/></apex:facet>					             							
+						<apex:outputText value="{!partline.SVMXC__Product__r.Name}"/>
+					</apex:column> 				 					
+					<apex:column width="30px" >
+						<apex:facet name="header"><apex:outputText value="Add"/></apex:facet>	
+						<apex:commandButton action="{!AddAccessory}" value="Add" status="Savestatus" rerender="poline" rendered="{!rendervalue!=PS.Related_Product__c}">
+             				<apex:param name="id" value="{!PS.Related_Product__c}" assignTo="{!newproductId}"/>             			
+             			</apex:commandButton>
+	             	</apex:column> 
+					<apex:column width="50px">
+						<apex:facet name="header"><apex:outputText value="Accessory Product"/></apex:facet>										
+						<apex:outputField value="{!PS.Related_Product__c}"/>
+					</apex:column>
+					<apex:column width="50px">
+						<apex:facet name="header"><apex:outputText value="Active Status"/></apex:facet>					             						
+						<apex:outputText value="True"  styleClass="active" rendered="{!PS.Related_Product__r.IsActive=true}"/>
+						<apex:outputText value="False"  styleClass="inactive" rendered="{!PS.Related_Product__r.IsActive=false}"/>
+					</apex:column>														
+				</apex:pageBlockTable>			
+			</apex:outputText>	
+			</apex:pageBlock>
+		</apex:outputPanel>			
+	</apex:outputPanel>	
+	</apex:form>
+</apex:page>

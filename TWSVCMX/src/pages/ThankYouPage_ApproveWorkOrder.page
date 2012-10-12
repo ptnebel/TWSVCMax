@@ -1,0 +1,8 @@
+<apex:page showHeader="false">
+    <apex:form > 
+        <apex:pageBlock title="Order Status">
+           <h1>Thank you for submitting your work order status update.</h1> 
+           <!--  Work order number {!SVMXC__Service_Order__c.Name} now has the status {!SVMXC__Service_Order__c.SVMXC__Order_Status__c}. <p/>-->
+        </apex:pageBlock>
+    </apex:form> 
+</apex:page>

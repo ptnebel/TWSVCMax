@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object stores multiple aspects of product counters separated by record types. Record type Definition is used for basic definition of a product counter such as its range of values. Record Type Coverage is used to define counter-based coverage in warranties and service contracts. Record Type Reading is used to capture current counter readings for installed products.</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if this counter is active or not</description>
+        <externalId>false</externalId>
+        <label>Active</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Applicable_Products__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the applicable product in a warranty term for which this coverage is applicable. Reference to an existing Applicable Products record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Applicable Products</label>
+        <referenceTo>Service_Template_Products__c</referenceTo>
+        <relationshipLabel>Counter Details</relationshipLabel>
+        <relationshipName>Counter_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Counter_Definition__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the Counter for which the reading/coverage is applicable. Reference to an existing Counter Details record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Counter Definition</label>
+        <referenceTo>Counter_Details__c</referenceTo>
+        <relationshipLabel>Counter Details</relationshipLabel>
+        <relationshipName>Counter_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Counter_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Unique name of the counter</description>
+        <externalId>false</externalId>
+        <label>Counter Name</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Counter_Reading__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Current reading of this counter</description>
+        <externalId>false</externalId>
+        <label>Counter Reading</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Counter_Rule__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the Counter Rule to which this counter definition applies. Reference to an existing ServiceMax Process record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Counter Rule</label>
+        <referenceTo>ServiceMax_Processes__c</referenceTo>
+        <relationshipLabel>Counter Details</relationshipLabel>
+        <relationshipName>Counter_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Counter_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates if the counter is increasing or decreasing in nature</description>
+        <externalId>false</externalId>
+        <label>Counter Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Increasing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Decreasing</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Counters_Covered__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of counters covered from the configured starting point</description>
+        <externalId>false</externalId>
+        <label>Counters Covered</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Coverage_Limit__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Not used</description>
+        <externalId>false</externalId>
+        <label>Coverage Limit</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Coverage_Starts_At__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the value where the coverage starts for this counter</description>
+        <externalId>false</externalId>
+        <label>Coverage Starts At</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Covered_Products__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the covered product in a service contract for which this coverage is applicable. Reference to an existing Covered Products record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Covered Products</label>
+        <referenceTo>Service_Contract_Products__c</referenceTo>
+        <relationshipLabel>Counter Details</relationshipLabel>
+        <relationshipName>Counter_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Grows_Reduces_By__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the value by which this counter grows or reduces. Not currently used</description>
+        <externalId>false</externalId>
+        <label>Grows/Reduces By</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Installed_Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the installed product for which the reading/coverage is applicable. Reference to an existing installed product record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Installed Product</label>
+        <referenceTo>Installed_Product__c</referenceTo>
+        <relationshipLabel>Counter Details</relationshipLabel>
+        <relationshipName>Counter_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Max_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Maximum allowed value for this counter</description>
+        <externalId>false</externalId>
+        <label>Max Value</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Min_Value__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Minimum allowed value for this counter</description>
+        <externalId>false</externalId>
+        <label>Min Value</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>6</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the product for which the warranty coverage is applicable. Reference to an existing product record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Counter Details</relationshipLabel>
+        <relationshipName>Counter_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Checkbox used in ServiceMax screens to manage record selection</description>
+        <externalId>false</externalId>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Service_Maintenance_Contract__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the service contract for which this coverage is defined. Reference to an existing service contract record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Service/Maintenance Contract</label>
+        <referenceTo>Service_Contract__c</referenceTo>
+        <relationshipLabel>Counter Details</relationshipLabel>
+        <relationshipName>Counter_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Warranty_Terms__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the Warranty Terms for which this coverage is defined. Reference to an existing warranty terms record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Warranty Terms</label>
+        <referenceTo>Service_Template__c</referenceTo>
+        <relationshipLabel>Counter Details</relationshipLabel>
+        <relationshipName>Counter_Details</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <label>Counter Details</label>
+    <nameField>
+        <displayFormat>CN-{0000000000}</displayFormat>
+        <label>Record Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Counter Details</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>Coverage</fullName>
+        <active>true</active>
+        <label>Coverage</label>
+        <picklistValues>
+            <picklist>Counter_Type__c</picklist>
+            <values>
+                <fullName>Decreasing</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Increasing</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Definition</fullName>
+        <active>true</active>
+        <label>Definition</label>
+        <picklistValues>
+            <picklist>Counter_Type__c</picklist>
+            <values>
+                <fullName>Decreasing</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Increasing</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Reading</fullName>
+        <active>true</active>
+        <label>Reading</label>
+        <picklistValues>
+            <picklist>Counter_Type__c</picklist>
+            <values>
+                <fullName>Decreasing</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Increasing</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Counter_Name__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Counter_Reading__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Counter_Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Active__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Counter_Name__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Counter_Type__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Counter_Reading__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Active__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Active__c</searchFilterFields>
+        <searchFilterFields>Counter_Definition__c</searchFilterFields>
+        <searchFilterFields>Counter_Name__c</searchFilterFields>
+        <searchFilterFields>Counter_Reading__c</searchFilterFields>
+        <searchFilterFields>Counter_Rule__c</searchFilterFields>
+        <searchFilterFields>Counter_Type__c</searchFilterFields>
+        <searchFilterFields>Installed_Product__c</searchFilterFields>
+        <searchFilterFields>Max_Value__c</searchFilterFields>
+        <searchFilterFields>Min_Value__c</searchFilterFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

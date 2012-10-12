@@ -1,0 +1,166 @@
+<apex:page controller="SVMX_VF_ServiceContract" contenttype="{!contype}" renderAs="{!render}"> 
+    <apex:pageMessages rendered="false">
+        <apex:pageMessage rendered="false" strength="2" severity="error" title="No Contract data.">
+        </apex:pageMessage>
+    </apex:pageMessages> 
+
+     <apex:stylesheet value="{!$Resource.SVMXVF_Resources1}" />
+
+    <apex:variable var="m" value="{!$User.Alias}"/>
+
+     <apex:repeat value="{!SVContract}" var="svcrpt">
+     
+     <head>
+        <style type="text/css">
+            .font122tispdf{
+                font-size: 11px;            
+                font-family: arial,sans-serif;
+            }
+                @page{     
+                            margin-top:90px;
+                                   @top-left {                      
+                                            vertical-align:bottom;
+                                            background-image:url({!$Resource.SVMXC__SVMX_Logo});
+                                            background-position:left;
+                                            background-repeat:no-repeat;
+                                            Border-bottom:2px #7E7E7E solid;
+                                            width: 100px;
+                                            height: 20px;
+                                               }
+                                               
+                                   @top-center {
+                                          color: rgb(0,0,0);
+                                          content: "SERVICE CONTRACT"; 
+                                          font-size: 18px;      
+                                          font-weight:bold;            
+                                          font-family: Arial Black, sans-serif;
+                                          Border-bottom:2px #7E7E7E solid;
+                                          padding-top:30px;
+                                          width: 250px;
+                                         }
+                                  @top-right {
+                                          color: rgb(0,0,0);
+                                          font-size: 13px;
+                                          content:"{!svcrpt.Name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Date:&nbsp;{!StartDt}";
+                                          font-family: Arial Black, sans-serif;
+                                          Border-bottom:2px #7E7E7E solid;
+                                          text-align:left;
+                                          vertical-align:center;
+                                          padding-top:30px;
+                                          font-weight:bold;
+                                         }
+                                 @bottom-center {
+                                        content: "ServiceMax, Inc: Do Not Copy Without Written Permission from ServiceMax   " "Page " counter(page) " of " counter(pages) ;
+                                        font-size: 10px;
+                                        font-weight: bold;
+                                        font-family: arial,sans-serif;
+                                        Border-top:2px #7E7E7E solid;     
+                                        height: 10px;
+                                  }
+
+                                } 
+        </style>
+    </head>
+
+     
+     <!--<apex:panelGrid columns="2" cellpadding="0" columnClasses="colspan66" cellspacing="0" width="100%" border="0">
+        <apex:outputText styleClass="fontbold19" value="SERVICE CONTRACT"/>
+    
+        <apex:panelGroup id="theGroup" styleClass="left">
+            <apex:image url="{!$Resource.SVMXC__SVMX_Logo}" width="200" height="50"/> 
+        </apex:panelGroup>
+     </apex:panelGrid>-->
+        
+    <br/><br/>
+
+   <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" style="border-bottom: hidden;" columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" styleClass="font13" width="100%" border="1">
+    
+        <apex:outputText value="Contract Name/Number:"/>
+        <apex:outputText value="{!svcrpt.Name}"/>
+        <apex:outputText value="Customer"/>
+        <apex:outputText value="{!svcrpt.SVMXC__Company__r.Name}"/>
+
+        <apex:outputText value="Contact:"/>
+        <apex:outputText value="{!svcrpt.SVMXC__Contact__r.Name}"/>
+        <apex:outputText value="Start Date:"/>
+        <apex:outputText value="{!StartDt}"/>
+
+        <apex:outputText value="Renewal Number:"/>
+        <apex:outputText value="{!RenNum}" />
+        <apex:outputText value="End Date:"/>
+        <apex:outputText value="{!EndDt}"/>
+
+        <apex:outputText value="Contract Price:"/>
+        <apex:outputText value="{!svcrpt.SVMXC__Contract_Price2__c}"/>
+        <apex:outputText value="Renewal Date:"/>
+        <apex:outputText value="{!RenewDt}"/>
+
+        <apex:outputText value="Discount %:"/>
+        <apex:outputText value="{!svcrpt.SVMXC__Discount__c}"/>
+        <apex:outputText value="Discount Price:"/>
+        <apex:outputText value="{!svcrpt.SVMXC__Discounted_Price2__c}"/>
+
+    </apex:panelGrid>
+     </apex:repeat>
+    <br/>
+
+    <apex:outputtext value="Covered Products" styleClass="font14"/>
+    <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan30,colspan20,colspan30" style="border-bottom: hidden; background-color:#D4D4D4;" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="Serial Number"/>
+        <apex:outputText value="Product"/>
+        <apex:outputText value="Product Family"/>
+        <apex:outputText value="Product Line"/>
+    </apex:panelGrid>
+    
+    <apex:repeat value="{!SVCProductDetails}" var="svcrptLine">
+    
+    <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan30,colspan20,colspan30" style=" border-top: hidden;" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="{!svcrptLine.SVMXC__Installed_Product__r.Name}"/>
+        <apex:outputText value="{!svcrptLine.SVMXC__Product__r.Name}"/>
+        <apex:outputText value="{!svcrptLine.SVMXC__Product_Family__c}"/>
+        <apex:outputText value="{!svcrptLine.SVMXC__Product_Line__c}"/>
+    </apex:panelGrid>
+    </apex:repeat>
+    <br/>
+    
+    
+    <apex:outputtext value="Covered Services" styleClass="font14"/>
+    <apex:panelGrid columns="2" cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan30,colspan20,colspan30" style="border-bottom: hidden; background-color:#D4D4D4;" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="Service"/>
+        <apex:outputText value="Service Type"/>
+    </apex:panelGrid>
+    
+    <apex:repeat value="{!SVCIncludedServices}" var="svcincser">
+     <apex:panelGrid columns="2" cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan30,colspan20,colspan30" style=" border-top: hidden;" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="{!svcincser.SVMXC__Service__r.Name}"/>
+        <apex:outputText value="{!svcincser.SVMXC__Service_Type__c}"/>
+    </apex:panelGrid>
+    </apex:repeat>
+    <br/>
+    
+    
+    <apex:outputtext value="Covered Locations" styleClass="font14"/>
+     <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan30,colspan20,colspan30" style="border-bottom: hidden; background-color:#D4D4D4;" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="Location"/>
+    </apex:panelGrid>
+    
+    <apex:repeat value="{!SVCCoverdLocation}" var="svccovloc">
+     <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan30,colspan20,colspan30" style=" border-top: hidden;" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="{!svccovloc.SVMXC__Site__r.Name}"/>
+    </apex:panelGrid>
+    </apex:repeat>
+    <br/>
+    
+    <apex:outputtext value="Entitled Contacts" styleClass="font14"/>
+    <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan30,colspan20,colspan30" style="border-Top: hidden; background-color:#D4D4D4;" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="Contact Name"/>
+    </apex:panelGrid>
+    
+    <apex:repeat value="{!SVCEntitledContacts}" var="svcentcon">
+     <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan30,colspan20,colspan30" style=" border-top: hidden;" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="{!svcentcon.SVMXC__Contact__r.Name}"/>
+    </apex:panelGrid>
+    </apex:repeat>
+    
+  
+</apex:page>

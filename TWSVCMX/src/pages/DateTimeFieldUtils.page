@@ -1,0 +1,11 @@
+<apex:page controller="DateTimeFieldUtils" sidebar="false"  action="{!updateObject}" showHeader="false" >
+<apex:form >
+  
+      <center>
+          <apex:image url="{!$Resource.Progress}" style="display:{!displayImage}"/>
+      </center>
+     
+  
+  </apex:form>
+
+</apex:page>

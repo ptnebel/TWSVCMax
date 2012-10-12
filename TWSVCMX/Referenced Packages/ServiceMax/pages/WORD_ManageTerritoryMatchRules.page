@@ -1,0 +1,223 @@
+<apex:page id="TRTRYRule" controller="SVMXC.WORD_ManageTerritoryMatchRules" action="{!OnHdrObjSelect}">
+	<apex:form id="RuleForm"> 
+        <style>            
+            .customPopup{
+                background-color: white;
+                border-style: solid;
+                border-width: 2px;
+                left: 50%;
+                padding:10px;
+                position: absolute;
+                PopupAnimation: Fade;    			
+                z-index: 9999;
+                /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set margin-left to negative half of what the width is. You can also add the height property for a fixed size pop up.*/
+                width: 600px;
+                margin-left: -250px;
+                top:100px;
+                opacity:10;
+            }
+            .grayscrean {
+                opacity:.5;
+            }
+            .Nograyscrean {
+                opacity:1;
+            }
+            .disableTab {
+                background-color : #DCDCDC ;
+                color:LightGrey;
+                background-image:none;
+                font-size:1.2em;
+            }
+            .activeTab {
+                background-color: #6699CC ;
+                margin:8px;
+                color: White;
+                background-image:none;
+                no-repeat;
+               	font-size:1.0em;
+            }
+        </style>
+        <script>
+	        function customSelectChecked( form,type,value) {  
+	            var i = 0;
+	            for (i = 0; i < form.elements.length; i++) {
+	                if (form.elements[i].name.search(type) > 0 && form.elements[i].disabled == false) {
+	                    form.elements[i].checked = value;
+	                }
+	            }
+	        }  
+	        
+	        function customSelectAllOrNoneByCheckbox(form,type,control)
+	        {  customSelectChecked( form,type,control.checked); }   
+	    
+	        
+	        function checkSelectAll(form,type) {
+	            var isChecked = false;
+	            for (i = 1; i < form.elements.length; i++) {
+	                    if (form.elements[i].name.search(type) > 0 && form.elements[i].checked == true) {
+	                        isChecked = true;
+	                    }
+	                }
+	                if(isChecked == true)
+	                return true;
+	                else
+	                return false;
+	        }
+        </script>
+		<apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displaySeqPopup}">
+			<apex:pageBlock id="TrtrySeqBlk" mode="edit"> 
+				<apex:pageMessages rendered="true"/>				
+				<b><apex:actionStatus id="LoadingSeqPopUp"  startText="{!TAG009}"/></b>				
+				<apex:pageBlockButtons id="pbtns" location="Bottom">
+                	<apex:commandButton value="{!TAG029}" id="SaveOnSeq" action="{!SVMX_SaveSequence}" reRender="RuleForm" status="LoadingSeqPopUp" />                
+                	<apex:commandButton value="{!TAG030}" action="{!SVMX_Cancel}" status="LoadingSeqPopUp" reRender="RuleForm" />
+				</apex:pageBlockButtons>				
+				<apex:panelGrid cellpadding="0" cellspacing="1" columns="2" border="0"  >
+					<apex:pageBlockSection columns="1" id="list1">
+						<apex:panelGrid cellspacing="0" cellpadding="0" width="65%" columns="1" border="0" >
+							<center><apex:toolbar id="theToolbarPP" styleClass="disableTab" width="45%">
+								<apex:toolbarGroup location="left" id="toolbarGroupPP">
+									<apex:outputText value="{!TAG028}"/>				
+								</apex:toolbarGroup>
+							</apex:toolbar></center>
+							<apex:selectList value="{!items}" multiselect="true" style="height:200px;width:450px">
+								<apex:selectOptions value="{!Seqoptions}"/>                
+							</apex:selectList><p/>
+						</apex:panelGrid>
+					</apex:pageBlockSection>
+					<apex:panelGrid cellspacing="7" cellpadding="0" columns="1" style="text-align: center;">
+						<apex:outputText value="  " /><apex:outputText value="  " /> <apex:outputText value="  "/>  <apex:outputText value="  "/><apex:outputText value="  "/><apex:outputText value="  "/>
+						<div>
+							<apex:commandButton action="{!Top}" id="top" style="width:18px;height:18px;background:white"  value="Top" image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Top_Bttn.JPG')}" rerender="TrtrySeqBlk" alt="Top" title="Top" status="LoadingSeqPopUp" />
+							<apex:commandButton action="{!UP}" id="Up" style="width:18px;height:18px;background:white"  value="UP" image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Up_Bttn.JPG')}" rerender="TrtrySeqBlk"  alt="Up" title="Up" status="LoadingSeqPopUp" />
+							<apex:commandButton action="{!Down}" id="down" style="width:18px;height:18px;background:white"  value="down" image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Down_Bttn.JPG')}" rerender="TrtrySeqBlk"  alt="Down" title="Down" status="LoadingSeqPopUp" />
+							<apex:commandButton action="{!Bottom}" id="Bottom" style="width:18px;height:18px;background:white"  value="Bottom" image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Bottom_Bttn.JPG')}" rerender="TrtrySeqBlk"  alt="Bottom" title="Bottom" status="LoadingSeqPopUp" />
+						</div>
+					</apex:panelGrid>
+				</apex:panelGrid>
+			</apex:pageBlock>
+		</apex:outputPanel>		
+		<apex:pageBlock id="RuleBlock" mode="Edit" helpTitle="{!TAG011}" helpUrl="{!HLPURL}"> 
+		<apex:inputHidden value="{!SelectedIndex}" id="SelectedIndex"/>
+            <apex:inputHidden value="{!SelectedID}" id="SelectedID"/>
+            <apex:inputHidden value="{!SelectedLabel}" id="SelectedLabel"/>
+            
+			<center><apex:toolbar id="theToolbar" styleClass="disableTab" width="55%">          
+				<apex:toolbarGroup location="left" id="toolbarGroupForm">
+					<apex:outputText value=" "/>
+				</apex:toolbarGroup>
+				<apex:toolbarGroup location="left" id="toolbarGroupForm1">
+					<apex:outputText value="{!TAG001}"/>				
+				</apex:toolbarGroup>
+			</apex:toolbar></center>
+			<apex:pageBlockButtons id="pbtns" location="Top">
+				<apex:commandButton value="{!TAG002}" action="{!SVMX_AddNewTrtryRule}" Disabled="{!DisbleNewBttn}" reRender="RuleBlock,RefreshPanel" status="LodingStatus"/>             
+				<apex:commandButton value="{!TAG003}" action="{!SVMX_EdtTrtryRule}" Disabled="{!DisbleEdtBttn}" reRender="RuleBlock,RefreshPanel" status="LodingStatus"/>                
+				<apex:commandButton value="{!TAG004}" action="{!SVMX_DelTrTryRule}" Disabled="{!DisbleDelBttn}" reRender="RuleBlock,RefreshPanel" status="LodingStatus" onClick="if(!confirm('{!TAG010}')){return false;}"/>
+				<apex:commandButton value="{!TAG005}" action="{!SVMX_SaveProcessRulewithChild}" Disabled="{!DisbleSaveBttn}" reRender="RuleForm,RuleBlock" status="LodingStatus"/>
+				<apex:commandButton value="{!TAG006}" action="{!SVMX_Cancel}"  Disabled="{!DisableCancelBttn}" reRender="RuleForm,RuleBlock" status="LodingStatus"/>
+				<apex:commandButton value="{!TAG007}" action="{!SVMX_OrderSequence}" Disabled="{!DisbleRuleSeqBttn}" reRender="RuleForm,RuleBlock" status="LodingStatus"/>
+				<apex:commandButton value="{!TAG008}" action="{!SVMX_GoSetupHome}" reRender="RuleForm,RuleBlock" status="LodingStatus"/>
+			</apex:pageBlockButtons>
+			<b><apex:actionStatus id="LodingStatus"  startText="{!TAG009}" /></b>
+			<apex:pageMessages rendered="{!IsRuleBlock}"/>
+			<apex:pageBlockTable value="{!TrtryRuleList}" var="PRule" id="TrtryRuleList" styleClass="tableClass" width="100%">                            
+				<apex:column width="15%" style="Disabled:true">
+					<apex:facet name="header">
+					<apex:inputCheckbox value="{!CheckAllRules}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['TRTRYRule:RuleForm'],'Hide_selected',this);" disabled="{!DisbaleChkBox}"/> 
+					</apex:facet>               
+					<apex:inputCheckbox id="Rule_selected" value="{!PRule.SVMXC__Select__c}" rendered="{!if(PRule.SVMXC__Select__c==true,true,false)}" disabled="{!DisbaleActiveChkBox}"/>
+					<apex:inputCheckbox id="Hide_selected" value="{!PRule.SVMXC__Select__c}" rendered="{!if(PRule.SVMXC__Select__c==false,true,false)}" disabled="{!DisbaleChkBox}"/>
+				</apex:column>          
+				<apex:column width="30%">
+					<apex:facet name="header">{!TAG012}</apex:facet>                
+					<apex:inputfield value="{!PRule.SVMXC__Name__c}" rendered="{!if(PRule.SVMXC__Select__c==true,true,false)}"></apex:inputfield> 
+					<apex:outputfield value="{!PRule.SVMXC__Name__c}" rendered="{!if(PRule.SVMXC__Select__c==false,true,false)}"></apex:outputfield>                      
+				</apex:column>
+				<apex:column width="55%">
+					<apex:facet name="header">{!TAG013}</apex:facet>              
+					<apex:inputfield value="{!PRule.SVMXC__Description__c}" rendered="{!if(PRule.SVMXC__Select__c==true,true,false)}" style="width:80%"/>
+					<apex:outputfield value="{!PRule.SVMXC__Description__c}" rendered="{!if(PRule.SVMXC__Select__c==false,true,false)}"></apex:outputfield>
+				</apex:column>          
+			</apex:pageBlockTable>
+			<apex:outputPanel id="RefreshPanel" rendered="{!showRule}">				
+				<hr size="4" color="#6699CC"/>
+				<b><apex:actionStatus id="LodingStatus1"  startText="{!TAG009}" /></b> 
+				<apex:pageblockSection >
+					<apex:pageBlockSectionItem >
+						<apex:dataTable id="table1" value="{!CriExpressions.lstExpressions}" var="item" cellPadding="4">
+							<apex:column rendered="{!CriExpressions.DisplaySequence}">                                           
+								<apex:outputtext value="{!item.Sequence}"/>
+							</apex:column>
+							<apex:column >
+								<apex:facet name="header">{!TAG025}</apex:facet>
+								<apex:selectList value="{!item.FieldName}" disabled="{!disableValue}" size="1" multiselect="false"><!--  onchange="EntryCriFieldSelect()" onclick="javascript:document.getElementById('TRTRYRule:RuleForm:RuleBlock:SelectedIndex').value = {!item.Sequence};" size="1" multiselect="false"-->
+									<apex:selectOptions value="{!CriExpressions.FieldsList}"/>
+								</apex:selectList>
+								<apex:actionfunction action="{!OnHdrEntryCriFieldSelect}" name="EntryCriFieldSelect"  reRender="RuleForm" status="LodingStatus1"/>                                         
+							</apex:column>
+							<apex:column >
+								<apex:facet name="header">{!TAG026}</apex:facet>
+								<apex:selectList value="{!item.Operator}"  size="1" multiselect="false" Disabled="{!if(disableValue || NOT(CriExpressions.AllowSelectOperater),true,false)}" >
+									<apex:selectOptions value="{!CriExpressions.OperatorSelectList}"/>
+								</apex:selectList>
+							</apex:column>
+							<apex:column >
+								<apex:facet name="header">{!TAG027}</apex:facet>
+								<apex:inputText value="{!item.Operand}" disabled="{!disableValue}"/><!--  rendered="{!if(item.FieldType != 'PICKLIST' && item.FieldType != 'BOOLEAN', true, false)}" />
+								<apex:selectList value="{!item.Operand}" size="1" multiselect="false" rendered="{!if(item.FieldType == 'PICKLIST' ||  item.FieldType == 'BOOLEAN',true,false)}">
+								<apex:selectOptions value="{!item.Values}"/>
+								</apex:selectList>-->
+							</apex:column>                                
+							<!--<apex:column >
+								<apex:commandButton style="width:20px;height:18px;background:lightblue" image="{!URLFOR($Resource.COMM_Resources2, 'SVMXP_resources/images/lookup_exp_img.JPG')}"  value="javascript:void(0);" rendered="{!if(item.FieldType == 'REFERENCE',true,false)}"  onclick="javascript:document.getElementById('MTTSRule:RuleForm:RuleBlock:SelectedIndex').value = {!item.Sequence};" action="{!HdrFind}" reRender="RuleForm" status="LodingStatus1"/>
+								<apex:commandButton style="width:20px;height:18px;background:lightblue" image="{!URLFOR($Resource.COMM_Resources2, 'SVMXP_resources/images/lookup_exp_img.JPG')}"  value="javascript:void(0);" rendered="{!if(item.FieldType == 'DATETIME' || item.FieldType == 'DATE' ,true,false)}" onclick="javascript:document.getElementById('MTTSRule:RuleForm:RuleBlock:SelectedIndex').value = {!item.Sequence};" action="{!HdrFindDate}" reRender="RuleForm" status="LodingStatus1"/>
+							</apex:column>-->
+							<apex:column >
+								<apex:commandButton style="width:20px;height:18px;background:lightblue"  value="Delete" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/delete_exp_img.jpg')}" action="{!HdrDeleteRow}" disabled="{!disableValue}" onclick="javascript:document.getElementById('TRTRYRule:RuleForm:RuleBlock:SelectedIndex').value = {!item.Sequence}" id="hdrdeleterow" status="LodingStatus1" reRender="RuleForm"/>
+							</apex:column>
+							<apex:column >
+								<apex:commandButton style="width:20px;height:18px;background:lightblue"  value="Add" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/add_exp_img.jpg')}" action="{!HdrADDRow}" disabled="{!disableValue}" rendered="{!if(item.Sequence == CriExpressions.Size  && CriExpressions.Size < 9, true, false)}" id="hdraddrow" reRender="RuleForm" status="LodingStatus1"/>
+							</apex:column>
+						</apex:dataTable>
+					</apex:pageBlockSectionItem>
+					<apex:pageBlockSectionItem />
+					<apex:pageBlockSectionItem >
+						<apex:commandButton style="width:20px;height:18px;background:lightblue" value="Add" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/add_exp_img.jpg')}" disabled="{!disableValue}" action="{!HdrADDRow}" rendered="{!if(0 == CriExpressions.Size, true, false)}" id="hdraddrow" reRender="RuleForm" status="LodingStatus1"/>
+					</apex:pageBlockSectionItem>
+					<apex:pageBlockSectionItem />
+					</apex:pageblockSection>
+					<apex:pageblockSection columns="1" rendered="{!CriExpressions.HasAdvanceOption}">
+						<apex:outputText value="{!TAG014}" style="font-weight:bold"/>
+						<apex:inputText id="HdrAdvOption" disabled="{!disableValue}"  value="{!CriExpressions.AdvanceOption}" size="70"/>
+					</apex:pageblockSection>
+				<hr size="4" color="#6699CC"/>
+				<center>
+					<apex:toolbar id="TrtryToolbar" styleClass="disableTab" width="40%">
+						<apex:toolbarGroup location="left" id="toobarGroupForm">
+							<apex:outputText value=""/>
+						</apex:toolbarGroup>
+						<apex:toolbarGroup location="left" id="toobarGroupForm1">
+							<apex:outputText value="{!TAG015}"/>
+						</apex:toolbarGroup>
+						<apex:toolbarGroup location="right" id="toobarGroupForm2">
+							<apex:outputText value=" "/>
+						</apex:toolbarGroup>
+					</apex:toolbar>
+				</center>		
+				<apex:dataTable id="Trtrytable" value="{!TrtryAttWrpList}" var="item" cellPadding="4">
+					<apex:column >
+						<apex:facet name="header">{!TAG023}</apex:facet>                                           
+						<apex:outputtext value="{!item.Mapping.SVMXC__Source_Field_Name__c}"/>
+					</apex:column>
+					<apex:column >
+						<apex:facet name="header">{!TAG024}</apex:facet>
+						<apex:selectList value="{!item.WOItm}"  size="1" multiselect="false">
+							<apex:selectOptions value="{!item.WOFields}"/>
+						</apex:selectList>
+					</apex:column>
+				</apex:dataTable>			
+			</apex:outputPanel>
+		</apex:pageBlock>		
+	</apex:form>    
+</apex:page>

@@ -1,0 +1,120 @@
+<apex:page standardController="SVMXC__Service_Order__c" extensions="SVMX_VF_ServiceReport1"  contenttype="{!contype}" renderAs="{!render}"> 
+    <apex:pageMessages rendered="false">
+        <apex:pageMessage rendered="false" strength="2" severity="error" title="No Work Order data.">
+        </apex:pageMessage>
+    </apex:pageMessages>
+    
+    <apex:stylesheet value="{!$Resource.SVMXVF_Resources1}" />
+
+    <apex:variable var="m" value="{!$User.Alias}"/>
+ 
+    <apex:variable value="{!WorkOrder}" var="svcrpt"/>
+     <apex:panelGrid columns="2" width="100%">
+     <apex:image url="{!$Resource.SVMXC__SVMX_Logo}" /> 
+    <!--  <apex:image url="{!$Resource.SVMXC__SVMX_Logo}" width="150" height="75" style="align:right;"/>  -->
+     </apex:panelGrid>
+     
+     <br/><br/>
+    
+     <apex:panelGrid columns="2" cellpadding="0" columnClasses="colspan66" cellspacing="0" width="100%" border="0">
+        <apex:outputText styleClass="fontbold24" value="SERVICE ORDER"/>
+        <apex:panelGrid columns="2" width="400" styleClass="font12" border="1">
+            <apex:outputText value="Service Order Number"/>
+            <apex:outputText id="WOName" value="{!WorkOrder.Name}"/>  
+            <apex:outputText value="Case Number"/>     
+            <apex:outputText id="CaseNumber" value="{!WorkOrder.SVMXC__Case__r.CaseNumber}"/>  
+            <apex:outputText value="Date"/>
+            <apex:outputText value="{!WODate}"/>
+        </apex:panelGrid>          
+    </apex:panelGrid>
+    <br/><br/>
+ 
+    <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" style="border-bottom: hidden;" columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="Service Location" style="font-weight:bold;"/>
+        <apex:outputText value="{!WorkOrder.Location__r.Name}"/>
+        <apex:outputText value="Service Company" style="font-weight:bold;"/>
+        <apex:outputText value="{!WorkOrder.SVMXC__Service_Group__r.Name}"/>
+        <apex:outputText value="Preferred Tech" style="font-weight:bold;"/>
+        <apex:outputText value="{!WorkOrder.SVMXC__Group_Member__r.Name}"/>
+        
+    </apex:panelGrid>
+
+    <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" style="border-top: hidden; border-bottom: hidden;" columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" rowClasses="line" styleClass="font13" width="100%" border="1">
+        <apex:outputText styleClass="font13" value="Address" style="font-weight:bold;"/>
+        <apex:outputText value="">
+            {!WorkOrder.SVMXC__Street__c}<br/>
+            {!WorkOrder.SVMXC__City__c}<br/>
+            {!WorkOrder.SVMXC__State__c}, {!WorkOrder.SVMXC__Zip__c}<br/>
+            {!WorkOrder.SVMXC__Country__c}
+        </apex:outputText>
+        <apex:outputText value="">
+            <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" rowClasses="line15" styleClass="font13" style="margin:0px 2px; font-weight:bold;" width="100%" border="0">
+                <apex:outputText value="Machine Model" />
+                <hr class="hr3" ></hr> 
+                <apex:outputText value="Machine Serial #" />
+                <hr class="hr3" ></hr> 
+                <apex:outputText value="Purpose of Visit" />
+            </apex:panelGrid>
+        </apex:outputText>
+        <apex:outputText value="">
+            <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" rowClasses="line15" styleClass="font13" width="100%" border="0" style="margin:0px 2px;">
+                <apex:outputText value="{!WorkOrder.SVMXC__Product__r.Name}"/>
+                <hr class="hr3" ></hr> 
+                <apex:outputText value="{!WorkOrder.SVMXC__Component__r.SVMXC__Serial_Lot_Number__c  }"/>
+                <hr class="hr3" ></hr> 
+                <apex:outputText value="{!WorkOrder.SVMXC__Purpose_of_Visit__c}"/>
+            </apex:panelGrid>
+        </apex:outputText>
+    </apex:panelGrid>
+
+    <br/>
+  
+    <apex:panelGrid columns="2" cellpadding="0" cellspacing="0" style="border-top: hidden; text-align:center;" columnClasses="colspan20bgcol,colspan20bgcol" styleClass="font13bold" width="100%" border="1">
+        <apex:outputText value="Service Hours Allowed" />
+        <apex:outputText value="Description of Work to be Performed" />
+    </apex:panelGrid>
+    <apex:panelGrid columns="2" cellpadding="0" cellspacing="0" style="border-top: hidden; text-align:center;" columnClasses="colspan20,colspan20" styleClass="font13" width="100%" border="1">       
+        <apex:outputText value="{!WorkOrder.SVMXC__Problem_Description__c}" />
+    </apex:panelGrid>
+    
+    <br/>
+    <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" style="border-top: hidden; text-align:center;" columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" styleClass="font13bold" width="100%" border="1">
+        PLEASE FILL IN THE FOLLOWING FIELDS AND FAX BACK TO Global AT (630) 427-1000
+    </apex:panelGrid>
+    <apex:panelGrid columns="2" cellpadding="0" cellspacing="0" style="border-top: hidden;" columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" styleClass="font13" width="100%" border="1">
+        <apex:outputText value="Total Cycles on Machine (Egro Only)"/>
+        <apex:outputText value=""/>
+        <apex:outputText value="Number of Cleanings since last PM (Egro Only)"/>
+        <apex:outputText value=""/>
+        <apex:outputText value="Water Hardness"/>
+    </apex:panelGrid>
+    <br/>
+    
+    <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" style="border-top: hidden; text-align:center;" columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" styleClass="font13bold" width="100%" border="0">
+        <apex:outputText value="THE FOLLOWING MUST BE COMPLETED PRIOR TO PAYMENT OF SERVICE INVOICES:"/>
+    </apex:panelGrid>   
+    <br/>
+    
+    <apex:panelGrid styleClass="font13">
+    •   Call Global from the job site when the work is completed<br/>
+    •   All warranty replaced parts must be returned to Global Group North America<br/>
+    •   Please list travel charges separately, in addition to allowed labor hours<br/>
+    •   If more labor time is needed, please call Global first for approval 877-333-9409<br/>
+    •   Please invoice within 60 days of the work being performed.  Failure to comply will result in RNA paying you a flat rate for service hours allowed above<br/>
+    </apex:panelGrid> 
+    <br/>
+    
+    <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" style="border-top: hidden; text-align:center;" columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" styleClass="font13bold" width="100%" border="0">
+        <apex:outputText value="This order number MUST appear on your invoice to us:"/>
+    </apex:panelGrid>
+    <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" style="border-top: hidden; text-align:center;" columnClasses="colspan30bgcol,colspan30,colspan20bgcol,colspan30" styleClass="font13" width="100%" border="1">
+    <apex:outputText value="{!WorkOrder.Name}"/>
+    </apex:panelGrid>
+    <br/>
+    
+    <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" style="border-top: hidden; text-align:center;"  styleClass="font11" width="100%" border="0">
+        Global Group North America    
+        <br/>5555 S. Humble Street Woodridge, CA 60517  
+        <br/>Toll free: 877-111-2454  Fax 630-427-2222 
+    </apex:panelGrid>   
+</apex:page>

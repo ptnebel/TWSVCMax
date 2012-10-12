@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object is to store information related to page layouts, it includes header &amp; detail page.</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Action_On_Zero_Lines__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Action On Zero Lines</description>
+        <externalId>false</externalId>
+        <label>Action On Zero Lines</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Allow</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Warn</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Disallow</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Allow_Delete_Lines__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Allow Delete Lines</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Allow_New_Lines__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Allow New Lines</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Attachments__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Based on this flag, the iPad client will show the Attachments section for a record allowing the user to view, create or edit attachments</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Based on this flag, the iPad client will show the Attachments section for a record allowing the user to view, create or edit attachments</inlineHelpText>
+        <label>Enable Attachments</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Chatter__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Based on this flag, chatter icon will be enabled in the iPad client for the header record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Based on this flag, chatter icon will be enabled in the iPad client for the header record</inlineHelpText>
+        <label>Enable Chatter</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Service_Report_Generation__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If this flag is set to true, iPad client will allow users to create service report from the record. Applies to Work Order based service flows only.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If this flag is set to true, iPad client will allow users to create service report from the record. Applies to Work Order based service flows only.</inlineHelpText>
+        <label>Enable Service Report Generation</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Service_Report_View__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If this flag is set to true, iPad client will allow users to view the service report attached to the record. Applies to Work Order based service flows only.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If this flag is set to true, iPad client will allow users to view the service report attached to the record. Applies to Work Order based service flows only.</inlineHelpText>
+        <label>Enable Service Report View</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Enable_Troubleshooting__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If this flag is set to true, iPad client will allow Troubleshooting function to be opened from a record. Applies to work order-based Service Flows only.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If this flag is set to true, iPad client will allow Troubleshooting function to be opened from a record. Applies to work order-based Service Flows only.</inlineHelpText>
+        <label>Enable Troubleshooting</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Header_Page_Layout__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Header Page Layout</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Header Page Layout</inlineHelpText>
+        <label>Header Page Layout</label>
+        <referenceTo>Page_Layout__c</referenceTo>
+        <relationshipLabel>Header Page Layout</relationshipLabel>
+        <relationshipName>Page_Layouts</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Header_Reference_Field__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Header Reference Field</description>
+        <externalId>false</externalId>
+        <label>Header Reference Field</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Help_URL__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Help URL</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>Hide_Quick_Save__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Hide Quick Save</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Hide_Save__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Hide Save</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Installation_Key__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Installation key used when seeding default page layout</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Installation key used when seeding default page layout</inlineHelpText>
+        <label>Installation Key</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>IsStandard__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag to indicate if page layout is standard.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag to indicate if page layout is standard.</inlineHelpText>
+        <label>Is Standard?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Multi_Add_Configuration__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Multi Add Configuration</label>
+        <referenceTo>ServiceMax_Processes__c</referenceTo>
+        <relationshipLabel>Page Layouts</relationshipLabel>
+        <relationshipName>Page_Layouts</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Multi_Add_Search_Field__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Multi Add Search Field</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Multi_Add_Search_Object__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Multi Add Search Object</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Multi Add Search Object</inlineHelpText>
+        <label>Multi Add Search Object</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Name of page layout.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of page layout.</inlineHelpText>
+        <label>Name</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>No_Of_Columns__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of columns to be displayed in the iPad client. Applies to child sections only.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of columns to be displayed in the iPad client. Applies to child sections only.</inlineHelpText>
+        <label>Number Of Columns</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Object_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Object Name</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Object Name</inlineHelpText>
+        <label>Object Name</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Page_Detail_UniqueId__c</fullName>
+        <deprecated>false</deprecated>
+        <description>UniqueId for Page-Layout (Detail) entry, used by SEED</description>
+        <externalId>false</externalId>
+        <inlineHelpText>UniqueId for Page-Layout (Detail) entry, used by SEED</inlineHelpText>
+        <label>Page Detail UniqueId</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Page_Help__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Page Help</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Page_Layout_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Page Layout ID</description>
+        <externalId>false</externalId>
+        <label>Page Layout ID</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Prompt_For_New_Event__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Based on this flag, the iPad client will prompt the user for creating an event after creating a new record with SFM.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Based on this flag, the iPad client will prompt the user for creating an event after creating a new record with SFM.</inlineHelpText>
+        <label>Prompt For New Event</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Sequence__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Sequence</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Show_Account_History__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Based on this flag, Account History will be available as a child summary in iPad client. Applicable in View mode for Work Order object only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Based on this flag, Account History will be available as a child summary in iPad client. Applicable in View mode for Work Order object only</inlineHelpText>
+        <label>Show Account History</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Show_All_Sections_By_Default__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if all sections of page will be displayed at once in iPad client. If unchecked, the first section is displayed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if all sections of page will be displayed at once in iPad client. If unchecked, the first section is displayed.</inlineHelpText>
+        <label>Show All Sections By Default</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Show_Product_History__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Based on this flag, Product History will be available as a child summary in iPad client. Applicable in View mode for Work Order object only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Based on this flag, Product History will be available as a child summary in iPad client. Applicable in View mode for Work Order object only</inlineHelpText>
+        <label>Show Product History</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type</inlineHelpText>
+        <label>Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Header</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Detail</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <label>Page Layout</label>
+    <nameField>
+        <displayFormat>{0000000000}</displayFormat>
+        <label>Record Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Page Layouts</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

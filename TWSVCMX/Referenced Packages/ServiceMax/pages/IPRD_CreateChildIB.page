@@ -1,0 +1,98 @@
+<apex:page id="page1" title="{!TAG001}" standardcontroller="SVMXC__Installed_Product__c" extensions="SVMXC.IPRD_CreateChildIB"  sidebar="true" showHeader="true"  tabStyle="SVMXC__Installed_Product__c"> 
+
+    <apex:stylesheet value="{!$Resource.SVMXC__SVMX_resources}" />
+    <apex:pageMessages rendered="{!NOT(DisplayBlockLevelMessage)}"  /> <!-- showDetail="true" :: Removed by GM on 16Jan10--> 
+
+    <apex:form id="createchildIB" rendered="{!ShowValidData}" >
+     <script type="text/javascript">
+            function saveaction()
+            {
+                dosave();
+                document.getElementById('page1:createchildIB:block:pgblockbuttons:createchildbutton').disabled=true;
+                document.getElementById('page1:createchildIB:block:pgblockbuttons:createchildbutton').className = 'btnDisabled';
+            }
+            function oncompleteofsubmit()
+            {
+                if(!{!btnisdisabled})
+                {
+                   document.getElementById('page1:createchildIB:block:pgblockbuttons:createchildbutton').className = 'btn';
+                   document.getElementById('page1:createchildIB:block:pgblockbuttons:createchildbutton').disabled=false;
+                }
+            }
+        </script>
+        
+        <apex:variable value="{!IBFields}" var="ibh"/>
+      
+          <apex:pageBlock id="block" title="{!TAG002} {!ibh.SVMXC__Product__r.Name}, {!ibh.SVMXC__Serial_Lot_Number__c}" helpTitle="{!TAG003}" helpUrl="{!HLPURL}" mode="edit">
+       
+            <apex:pageBlockButtons id="pgblockbuttons" location="top" style="text-align:center;">   
+              
+                <apex:commandButton value="{!TAG004}" id="createchildbutton" onclick="saveaction()"  rerender="pgblockbuttons" status="Status1"/>
+                <!--<apex:commandButton action="{!newTargetObj}" value="{!TAG004}" id="createchildbutton"/> -->
+                <apex:commandButton action="{!Cancel}" value="Cancel"/>
+            </apex:pageBlockButtons><br/>
+
+              <apex:pageMessages id="msg1"/>
+            
+            <apex:actionFunction action="{!newTargetObj}" name="dosave" status="Status1" rerender="msg1" oncomplete="oncompleteofsubmit()"/>
+          <!--  <apex:pageMessages />-->
+
+           
+              <apex:pageMessage rendered="{!InfoMessage}" severity="info" strength="3" title="{!TAG006}" summary="{!TAG007}"/>
+              
+              <apex:pageBlockSection collapsible="false" columns="1">
+                
+                  <apex:pageBlockSectionItem >  
+                       <apex:outputlabel style="font:bold" value="{!TAG009}"/>
+                       <apex:selectList style="width:20%;height:23px;" value="{!SelectedRecordType}" size="" multiselect="false"> 
+                           <apex:selectOptions value="{!ObjectRecordTypes}"/>  
+                       </apex:selectList>
+                   </apex:pageBlockSectionItem>  
+                    <apex:inputField id="prd" value="{!IBHeader.SVMXC__Product__c}" rendered="true" required="true"/>
+               <apex:inputField id="sln1" value="{!IBHeader.SVMXC__Serial_Lot_Number__c}" rendered="true" required="false" />
+              
+                    
+              </apex:pageBlockSection>    
+                      
+                                   
+                         
+            <!--<apex:panelGrid cellpadding="0" cellspacing="1" columns="2" width="100%" border="0" rowClasses="line80,line80" columnClasses="colspan50,colspan50" >   
+                
+                <apex:pageBlockSection collapsible="false" columns="1">
+
+                    <apex:panelGrid cellspacing="0" cellpadding="0" width="100%" columns="2" border="0" columnClasses="colspan18,colspan85">
+                        <apex:outputlabel styleClass="labelCol" value="{!TAG009}"/>                        
+                            <apex:selectList style="width:55%" value="{!SelectedRecordType}" size="" multiselect="false"> 
+                                <apex:selectOptions value="{!ObjectRecordTypes}"/>  
+                            </apex:selectList>
+                        
+                        
+                        <apex:outputlabel styleClass="labelCol" value="{!$ObjectType.Installed_Product__c.fields.Product__c.Label}"/>
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:inputField id="prd" value="{!IBHeader.SVMXC__Product__c}" rendered="true" />                 
+                        </apex:outputPanel>   
+                        
+                        <apex:outputLabel styleClass="labelCol" value="Serial/Lot Number"/>                 
+                        <apex:inputField id="sln1" value="{!IBHeader.SVMXC__Serial_Lot_Number__c}" rendered="true" />                         
+                     </apex:panelGrid>                 
+                </apex:pageBlockSection>
+
+                <apex:pageBlockSection collapsible="false" columns="1">
+
+                    <apex:panelGrid cellspacing="0" cellpadding="0" width="100%" columns="1" style="text-align: center;" rowClasses="line17" border="0">
+
+                       <apex:outputText value=""/> 
+                        <apex:pageMessage rendered="{!InfoMessage}" severity="info" strength="3" title="{!TAG006}" summary="{!TAG007}"/>
+                       
+                    </apex:panelGrid>
+
+                </apex:pageBlockSection>     
+            </apex:panelGrid>-->
+
+        </apex:pageBlock> 
+ 
+      <!-- <apex:detail relatedList="false" title="false" rendered="true"/> -->
+
+    </apex:form>
+</apex:page>

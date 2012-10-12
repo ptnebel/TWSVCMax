@@ -1,0 +1,19 @@
+<apex:page StandardController="SVMXC__Service_Contract__c" extensions="SVMXC.SCON_Activation" sidebar="true" showHeader="true"  tabStyle="SVMXC__Service_Contract__c" > 
+    <apex:stylesheet value="{!$Resource.SVMXC__SVMX_resources}" />
+        <apex:form >
+           <apex:variable value="{!SContractHeader}" var="sch"/>
+            <apex:pageBlock id="block" title="{!TAG001}  {!sch.Name}" helpTitle="{!TAG002}" helpUrl="{!HLPURL}">
+                <apex:pageBlockButtons location="top" style="text-align:center;">
+                    <apex:commandButton action="{!ActivateContract}" value="{!TAG003}" id="CConBtid" rendered="{!DisplayActivate}"  />
+                    <apex:commandButton action="{!ActivateContract}" value="Continue" id="conactid" rendered="{!DisplayContinue}"/>
+                    <apex:commandButton action="{!Cancel}" value="{!TAG004}" id="cancelBtid"/>
+                </apex:pageBlockButtons> 
+                <apex:pageMessages showDetail="true"/>
+                 <apex:pageBlockSection rendered="{!showDetailBlock}" collapsible="false" columns="2">
+                     <apex:pageMessage rendered="{!showUpsellMessage}" severity="info" strength="2" title="{!TAG008}" summary="{!TAG007}"/>
+                     <apex:inputField value="{!sch.SVMXC__Activation_Notes__c}" style="width:200px;"> </apex:inputField>
+                 </apex:pageBlockSection>
+            </apex:pageBlock>  
+            <!-- <apex:detail relatedList="false" title="false" rendered="{!showDetailBlock}"/>    -->
+        </apex:form>
+</apex:page>

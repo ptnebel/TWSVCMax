@@ -1,0 +1,317 @@
+<apex:page standardController="SVMXC__RMA_Shipment_Order__c" extensions="SVMX_VF_PartsOrder" contenttype="{!contype}" renderAs="{!strDispTyp}"> 
+  
+  <style>
+  
+  .hr3{
+    border: 0;          
+    height: 1px;             
+    color: #000000;
+    background-color: #000000;
+}
+
+.hr4{
+    border: 0; 
+    height: 1.5px;             
+    color: #4A4A4A
+    background-color: #4A4A4A;
+}
+
+.blackbgcolor{
+    background-color:#CCCCCC;
+}
+
+.blackbgcolor1{
+background-color:#E5E5E5;
+}
+
+.center {
+    text-align:center;
+    vertical-align:top;
+}
+
+.font10 {
+    font-size:10px;
+}
+
+.font11 {
+    font-size:11px;
+}
+
+.font12 {
+    font-size:14px; 
+}
+
+.font13 {
+    font-size:13px;
+}
+
+.font14 {
+    font-size:14px; 
+}
+
+.fontbold {
+    font-weight:bold;
+    font-size:13px;
+    margin:5px 2px;
+}
+
+.fontbold11 {
+    font-weight:bold;
+    font-size:11px;
+    margin:5px 2px;
+}
+
+.fontbold11B4:before {
+    content: "Page :   " counter(page);
+    font-size:11px;
+}
+
+.fontbold14 {
+    
+    font-weight:bold;
+    font-size:14px;
+}
+
+.fontbold15 {
+    
+    font-weight:bold;
+    font-size:15px;
+}
+
+.font16 {
+    font-size:16px; 
+    margin:5px 2px;
+}
+
+
+
+.fontbold19 {
+    
+    font-weight:bold;
+    font-size:19px;
+    margin:5px 2px;
+    text-align:center;
+    vertical-align:top;
+}
+
+.fontbold22 {
+    font-weight:bold;
+    font-size:22px; 
+}
+
+.fontbold24 {
+    font-weight:bold;
+    font-size:24px; 
+}
+
+.colspan2{
+    width:2%;
+}
+
+.colspan3{
+    width:3%;
+}
+
+.colspan4{
+    width:4%;
+}
+
+.colspan5{
+    width:5%;
+}
+
+.colspan6bgcol{
+    width:6%;
+    background-color:#E5E5E5;
+}
+
+.colspan10 {
+    width:10%;
+    
+}
+
+.colspan10bgcol{
+    width:10%;
+    background-color:#E5E5E5;
+}
+
+.colspan12 {
+    width:12%;
+    
+}
+
+.colspan14 {
+    width:14%;
+    
+}
+
+.colspan15 {
+    width:15%;
+}
+
+.colspan15bgcol {
+    width:15%;
+    background-color:#E5E5E5;   
+}
+.colspan18 {
+    width:18%;
+    text-align:left;
+}
+
+.colspan20 {
+    width:20%;
+}
+
+.colspan20bgcol{
+    width:20%;
+    background-color:#D4D4D4;
+}
+
+.colspan24 {
+    width:24%;
+}
+
+.colspan25 {
+    width:25%;
+}
+
+.colspan30 {
+    width:30%;
+}
+
+.colspan36 {
+    width:36%;
+    text-align:left;
+}
+
+.colspan38 {
+    width:38%;
+    text-align:left;
+}
+
+.colspan40 {
+    width:40%;
+}
+
+.colspan50 {
+    width:50%;
+}
+
+.colspan60 {
+    width:60%;
+}
+
+.colspan66 {
+    width:66%;
+}
+
+.colspan70 {
+    width:70%;
+}
+
+.colspan80 {
+    width:80%;
+    text-align:left;
+}
+
+.colspan86 {
+    width:86%;
+}
+
+.colspan89 {
+    width:89%;
+}
+
+.colspan95 {
+    width:95%;
+}
+
+.line { 
+    height:20px;    
+}
+
+.line10 {   
+    height:10px;    
+}
+
+.line15 {   
+    height:15px;    
+}
+
+.line30{    
+    height:30px;    
+}
+
+.bordernone {   
+    border-top: hidden;
+    border-bottom: hidden;  
+    border-left: hidden;
+    border-right: hidden;
+}
+  </style>
+  
+    <apex:pageMessages rendered="false">
+        <apex:pageMessage rendered="false" strength="2" severity="error" title="{!REPTAG001}">
+        </apex:pageMessage>
+    </apex:pageMessages>
+    <apex:repeat value="{!RMAShipment2}" var="wrp">
+  
+  <!--  <apex:stylesheet value="{!$Resource.SVMXVF_Resources1}" /> -->
+  
+    <apex:variable var="m" value="{!$User.Alias}"/>
+    <apex:panelGrid columns="2" cellpadding="0" columnClasses="colspan66" cellspacing="0" width="100%" border="0">
+        <apex:outputText styleClass="fontbold19" style="font-family: Arial Unicode MS;" value="{!REPTAG003}"/>
+        <apex:panelGroup id="theGroup" styleClass="left">
+            <apex:image url="{!$Resource.SVMXC__SVMX_Logo}"/>          
+        </apex:panelGroup>           
+    </apex:panelGrid>
+    <br/><br/><br/><br/>
+    <apex:repeat value="{!wrp.sObj}" var="rmarpt">
+        <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" style="border-bottom: hidden; font-family: Arial Unicode MS; " columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" styleClass="font11" width="100%" border="1">
+            <apex:outputText value="{!$ObjectType.SVMXC__RMA_Shipment_Order__c.fields.Name.Label}"/>
+            <apex:outputText value="{!rmarpt.Name}"/> 
+            <apex:outputText value="{!$ObjectType.SVMXC__RMA_Shipment_Order__c.fields.CreatedDate.Label}"/>
+            <apex:outputText value="{!wrp.RMADate}"/>
+        </apex:panelGrid>
+        <apex:panelGrid columns="3" cellpadding="0" cellspacing="0" style="border-top: hidden; border-bottom: hidden; font-family: Arial Unicode MS; " columnClasses="colspan20bgcol,colspan30,colspan50" styleClass="font11" width="100%" border="1">
+            <apex:outputText value="{!$ObjectType.SVMXC__RMA_Shipment_Order__c.fields.SVMXC__Company__c.Label}"/>
+            <apex:outputText value="{!rmarpt.SVMXC__Company__r.Name}"/>       
+            <apex:outputText value=""/>
+        </apex:panelGrid>
+        <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" style="border-top: hidden; border-bottom: hidden; font-family: Arial Unicode MS; " columnClasses="colspan20bgcol,colspan30" rowClasses="line15" styleClass="font11" width="100%" border="1">
+            <apex:outputText value="{!REPTAG004}"/>
+            <apex:outputText value="">
+                {!rmarpt.SVMXC__Source_Location__r.Name}<br/>
+                {!rmarpt.SVMXC__Source_Street__c}<br/>
+                {!rmarpt.SVMXC__Source_City__c}<br/>
+                {!rmarpt.SVMXC__Source_State__c}<br/> 
+                 {!rmarpt.SVMXC__Source_Zip__c}<br/>
+                {!rmarpt.SVMXC__Source_Country__c}
+            </apex:outputText>  
+            <apex:outputText value="{!REPTAG005}" style="font-family: Arial Unicode MS; "/>
+                <apex:outputText value="">
+                    {!rmarpt.SVMXC__Destination_Location__r.Name}<br/>
+                    {!rmarpt.SVMXC__Destination_Street__c}<br/>
+                    {!rmarpt.SVMXC__Destination_City__c}<br/>
+                    {!rmarpt.SVMXC__Destination_State__c}, {!rmarpt.SVMXC__Destination_Zip__c}<br/>
+                    {!rmarpt.SVMXC__Destination_Country__c}
+                </apex:outputText>
+            </apex:panelGrid>
+            <br/>
+            <apex:panelGrid columns="3" cellpadding="0" cellspacing="0" style="background-color:#D4D4D4; font-family: Arial Unicode MS; " columnClasses="colspan20,colspan50,colspan30" style="border-bottom: hidden; background-color:#D4D4D4;" styleClass="font11" width="100%" border="1">
+                <apex:outputText value="{!$ObjectType.product2.fields.ProductCode.Label}"/>
+                <apex:outputText value="{!$ObjectType.SVMXC__RMA_Shipment_Line__c.fields.SVMXC__Product__c.Label}"/>
+                <apex:outputText value="{!$ObjectType.SVMXC__RMA_Shipment_Line__c.fields.SVMXC__Expected_Quantity2__c.Label}"/>
+            </apex:panelGrid>
+        </apex:repeat>
+        <apex:repeat value="{!wrp.lstsObj}" var="rmarptLine">
+            <apex:panelGrid columns="6" cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan50,colspan30" style=" border-top: hidden; font-family: Arial Unicode MS; " styleClass="font11" width="100%" border="1">
+                <apex:outputField value="{!rmarptLine.SVMXC__Product__r.ProductCode}"/>
+                <apex:outputField value="{!rmarptLine.SVMXC__Product__r.Name}"/>
+                <apex:outputField value="{!rmarptLine.SVMXC__Expected_Quantity2__c}"/>
+            </apex:panelGrid>
+        </apex:repeat>
+        <br/><br/><br/><br/>
+        <div style="page-break-after: always;">&nbsp;</div>
+    </apex:repeat>
+</apex:page>

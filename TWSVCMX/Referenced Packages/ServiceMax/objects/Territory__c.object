@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object provides basic definition of a service territory in ServiceMax. Service territories are not related in anyway to the Salesforce territory definitions.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if this territory is active or not</description>
+        <externalId>false</externalId>
+        <label>Active</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Average_Driving_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Average Driving Time</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Average_Speed__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Average speed in which the technicians of this territory travel on the road. Used in dispatch optimization</description>
+        <externalId>false</externalId>
+        <label>Average Speed</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Break_Hours__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Break Hours</label>
+        <referenceTo>BusinessHours</referenceTo>
+        <relationshipName>Territory2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Description of the territory</description>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Fixed_Cost__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any fixed costs associated with the technicians in this territory for each day of work order activity. Used in dispatch optimization</description>
+        <externalId>false</externalId>
+        <label>Fixed Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Max_Daily_Hours__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Limits on number of hours of work order activity per day. Though this option is available, it is recommended to use technician business hours and break hours to indicate technician’s availability. Used in dispatch optimization</description>
+        <externalId>false</externalId>
+        <label>Max Daily Hours</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Max_Distance__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Distance in miles if the technicians in this territory cannot travel beyond this limit on a given route. Used in dispatch optimization</description>
+        <externalId>false</externalId>
+        <label>Max Distance</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Max_Hours__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Max hours</description>
+        <externalId>false</externalId>
+        <label>Max Hours</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Parent_Territory__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Parent territory a territory rolls up to. Lookup to an existing territory in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Parent Territory</label>
+        <referenceTo>Territory__c</referenceTo>
+        <relationshipLabel>Child Territories</relationshipLabel>
+        <relationshipName>Territory_Child</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Per_Hour_Cost__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Average cost of technician’s time for this territory. Used in dispatch optimization</description>
+        <externalId>false</externalId>
+        <label>Per Hour Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Per_Mile_Cost__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Average travel cost per mile for this territory. Used in dispatch optimization</description>
+        <externalId>false</externalId>
+        <label>Per Mile Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Checkbox used in ServiceMax screens to manage record selection</description>
+        <externalId>false</externalId>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Territory_Code__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any internal (typically financials) code your organization uses to refer to this territory</description>
+        <externalId>false</externalId>
+        <label>Territory Code</label>
+        <length>80</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Territory_s_Business_Hours__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Territory&apos;s Business Hours</label>
+        <referenceTo>BusinessHours</referenceTo>
+        <relationshipName>Territory1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <label>Territory</label>
+    <nameField>
+        <label>Territory Name</label>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Territories</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Territory_Code__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Parent_Territory__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Territory_Code__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Parent_Territory__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Territory_Code__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Parent_Territory__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Territory_Code__c</searchFilterFields>
+        <searchFilterFields>Parent_Territory__c</searchFilterFields>
+        <searchResultsAdditionalFields>Territory_Code__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Parent_Territory__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <webLinks>
+        <fullName>Manage_Territories</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Manage Territories</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SORG_ManageTerritory?Tid={!Territory__c.Id}</url>
+    </webLinks>
+</CustomObject>

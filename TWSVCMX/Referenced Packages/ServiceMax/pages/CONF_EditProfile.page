@@ -1,0 +1,145 @@
+<apex:page id="conf_prof" controller="SVMXC.CONF_EditProfile"  tabStyle="SVMXC__ServiceMax_Settings__c"> 
+
+ <!--  Configuration Profile Pageblock : Display Selected Profile Properties -->
+<apex:form id="F_conf_prof"> 
+   <apex:pageBlock id="ProfDetail" title="{!TAG025}"  helpTitle="{!TAG042}" helpUrl="{!HLPURL}">
+   <apex:pageMessages rendered="{!ProfDisplayBlockLevelMessage}" showDetail="true" />
+        <apex:pageBlockButtons location="top"> 
+            <apex:commandButton title="{!TAG029}"  value="{!TAG029}" action="{!saveProf}" rendered="{!if(ConfProfType=='Global'&&IsDefault==true&&Clone==NULL,false,true)}"/>
+            <apex:commandButton title="{!TAG030}"  value="{!TAG030}" action="{!cancelProf}"/>
+            <apex:commandButton title="{!TAG031}"  value="{!TAG031}" action="{!QsaveProf}" reRender="ProfDetail" rendered="{!if((ConfProfType=='Global'&&IsDefault==true&&Clone==NULL)||(Clone!=NULL),false,true)}"/>
+            <apex:commandButton action="{!GoSetupHome}"  title="{!TAG028}"  value="{!TAG028}" id="backtohomesetup"/>
+        </apex:pageBlockButtons> 
+        <apex:pageBlockSection title="{!TAG032}" columns="2">
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line">
+                        <apex:outputLabel for="ProfileName" value="{!Tag052}"  styleClass="labelCol" style="margin:0px 15px 0px 85px;"></apex:outputLabel>
+                        <apex:outputField id="DefProfile_Name" value="{!Prof_Detail.SVMXC__Profile_Name__c}" rendered="{!if(IsDefault==true&&Clone==NULL,true,false)}"/>
+                        <apex:outputPanel layout="block" styleClass="requiredInput" rendered="{!if(IsDefault==true&&Clone==NULL,false,true)}">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:inputField id="OtrProfile_Name" value="{!Prof_Detail.SVMXC__Profile_Name__c}"/>
+                        </apex:outputPanel>
+                    </apex:panelGrid>          
+            <apex:outputField id="Profile_Default" value="{!Prof_Detail.SVMXC__IsDefault__c}"/>
+            <apex:outputField id="DefProfile_Desc" value="{!Prof_Detail.SVMXC__Description__c}" style="width:150px;" rendered="{!if(IsDefault==true&&Clone==NULL,true,false)}"/>
+            <apex:inputField id="OtrProfile_Desc" value="{!Prof_Detail.SVMXC__Description__c}" style="width:150px;" rendered="{!if(IsDefault==true&&Clone==NULL,false,true)}"/>
+            <apex:outputField id="GloProfile_Active" value="{!Prof_Detail.SVMXC__Active__c}" rendered="{!if(ActiveEditable==true,false,true)}"/>
+            <apex:inputField id="GrpProfile_Active" value="{!Prof_Detail.SVMXC__Active__c}" rendered="{!if(ActiveEditable==true,true,false)}"/>
+        </apex:pageBlockSection>  
+        <!-- Neeraj(Feb-7th-2012): Changed hard coded value of tilte, Access the value through tags to resolve translation issue. -->
+        <apex:pageBlockSection id="ProfileList" title="{!TAG033}" columns="1" rendered="{!DisplayProfiles}">
+        <apex:actionStatus id="LodingStdStatus"  startText="{!TAG040}" />
+        <apex:pageMessages rendered="{!AccessMessage}" showDetail="true" />
+            <apex:pageBlockSectionItem dataStyleClass="centerTA"   labelStyleClass="centerTA" >
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" >
+                        <apex:outputLabel for="ProfileName" value="{!TAG039}"  styleClass="labelCol" ></apex:outputLabel>
+                        <apex:outputText > 
+                           <td>
+                           <apex:selectList title="{!TAG039}" value="{!profile}" size="8" id="Profiles" multiselect="true" style="width:250px" >
+                           <apex:selectOptions value="{!AvailProf}" />
+                           </apex:selectList>
+                           </td>
+                        <td style="width:17px;height:100%;background-color:#AAAAAA;vertical-align:middle"><apex:outputLink value="#" onclick="AddProfile()" ><img src="/img/arrow2_picklist_right.gif" alt="Add" title="{!TAG071}"/></apex:outputLink><br/><br/><apex:outputLink value="#" onclick="RemoveProfile()" ><img src="/img/arrow2_picklist_left.gif" alt="Remove" title="{!TAG072}"/></apex:outputLink></td>                
+                        <apex:actionFunction name="AddProfile" action="{!onAddProfile}" rerender="ProfileList" status="LodingStdStatus"/>
+                        <apex:actionFunction name="RemoveProfile" action="{!onRemProfile}" rerender="ProfileList" status="LodingStdStatus"/>
+                           <td>
+                           <apex:selectList title="{!TAG039}" value="{!Sprofile}" size="8" id="SProfiles" multiselect="true" style="width:250px">
+                           <apex:selectOptions value="{!SelectedProf}" />
+                           </apex:selectList>
+                           </td>
+                        </apex:outputText>
+
+                    </apex:panelGrid>
+            </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+   </apex:pageBlock> 
+
+
+ <!--  Setting Values Pageblock : DIsplays Setting Values for Selected Profile Based on Access Permission -->
+
+    <apex:pageBlock id="Setting_Block"  title="{!TAG026}" mode="edit" rendered="{!if(Clone!=NULL,false,true)}">     
+    <apex:actionStatus id="LodingStatus"  startText="{!TAG040}" />     
+<apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" />
+        <apex:pageBlockButtons location="top"> 
+            <apex:commandButton title="{!TAG044}"  value="{!TAG044}" action="{!onREsetDef}" reRender="F_conf_prof" rendered="{!if(IsDefault==true,false,true)}"/>
+            <apex:commandButton title="{!TAG046}"  value="{!TAG046}" action="{!onRefresh}" reRender="F_conf_prof" rendered="{!if(IsDefault==true,false,true)}"/>
+        </apex:pageBlockButtons> 
+        
+        <apex:pageBlockSection columns="2">
+            <apex:pageBlockSectionItem dataStyleClass="centerTA"   labelStyleClass="centerTA">
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" columnClasses="colspan50" >
+                        <apex:outputLabel for="Modulelist" value="{!Tag048}"  styleClass="labelCol" style="margin:0px 5px;"></apex:outputLabel>
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:selectList title="{!Tag048}" value="{!moduleView}" onchange="callSubmodule()"  size="1" id="Modulelist">
+                        <apex:selectOptions value="{!Module}" />
+                        <apex:actionFunction action="{!onSelectMod}" name="callSubmodule" reRender="F_conf_prof"  status="LodingStatus"/>
+                        </apex:selectList>
+                        </apex:outputPanel>
+                    </apex:panelGrid>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem dataStyleClass="centerTA"   labelStyleClass="centerTA">
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line">
+                        <apex:outputLabel for="SubModulelist" value="{!Tag049}"  styleClass="labelCol" style="margin:0px 5px;"></apex:outputLabel>
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:selectList title="{!Tag049}" value="{!submoduleView}"  onchange="callSettings()"  size="1" id="SubModulelist">
+                        <apex:selectOptions value="{!SubModule}" />
+                        <apex:actionFunction action="{!onSelectSubmod}" name="callSettings" reRender="F_conf_prof"  status="LodingStatus"/>
+                        </apex:selectList>
+                        </apex:outputPanel>
+                    </apex:panelGrid>
+            </apex:pageBlockSectionItem> 
+        </apex:pageBlockSection>
+
+        <apex:outputPanel ><br/></apex:outputPanel>
+        <apex:outputLabel rendered="{!headerRecDisplayBlockLevelMessage}" value="{!TAG011}" style="font-size:11px"/>
+        
+        <apex:pageBlockSection title="{!TAG027}" columns="1" rendered="{!headerDisplayBlockLevelMessage}">
+            <apex:pageBlockTable value="{!wrapSet}" var="list">                   
+                <apex:column style="width:5px" rendered="{!if(IsDefault==true,false,true)}">
+                    <apex:facet name="header" ></apex:facet>                           
+                    <apex:inputField id="loc_selected" value="{!list.WSetting.SVMXC__Select__c}"/>               
+                </apex:column>
+                <apex:column rendered="{!if(IsDefault==true,false,true)}">
+                    <apex:facet name="header" >{!TAG041}</apex:facet>                           
+                    <apex:outputLink value="#" onclick="javascript:window.open('{!PopUpLink}?sid={!list.WSetting.Id}&pid={!PageId}','Servicemax_Conf_Prof','width=600,height=250')"> {!TAG045} </apex:outputLink>                                       
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >{!TAG061}</apex:facet>                           
+                    <apex:outputField value="{!list.WSetting.SVMXC__SettingID__c}"/>                                          
+                </apex:column>   
+                <apex:column >
+                    <apex:facet name="header" >{!TAG062}</apex:facet>                           
+                    <apex:outputField value="{!list.WSetting.SVMXC__Settings_Name__c}"/>                                          
+                </apex:column>  
+                <apex:column >
+                    <apex:facet name="header" >{!TAG063}</apex:facet>                           
+                    <apex:outputField value="{!list.WSetting.SVMXC__Description__c}"/>                                          
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >{!TAG064}</apex:facet>                           
+                    <apex:outputField value="{!list.WSetting.SVMXC__Data_Type__c}"/>                                          
+                </apex:column> 
+                <apex:column >
+                    <apex:facet name="header" >{!TAG065}</apex:facet>                           
+                    <apex:outputField value="{!list.WSetting.SVMXC__Values__c}"/>                                          
+                </apex:column>   
+                <apex:column >
+                    <apex:facet name="header" >{!TAG066}</apex:facet>                           
+                    <apex:outputField value="{!list.WSetting.SVMXC__Default_Value__c}"/>                                          
+                </apex:column> 
+                <apex:column >
+                    <apex:facet name="header" >{!TAG067}</apex:facet>                           
+                    <apex:outputField value="{!list.WSValue.SVMXC__Internal_Value__c}"/>                                          
+                </apex:column>   
+                <apex:column >
+                    <apex:facet name="header" >{!TAG068}</apex:facet>                           
+                    <apex:outputField value="{!list.WSValue.SVMXC__Display_Value__c}"/>
+                </apex:column>   
+            </apex:pageBlockTable> 
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form>
+
+</apex:page>

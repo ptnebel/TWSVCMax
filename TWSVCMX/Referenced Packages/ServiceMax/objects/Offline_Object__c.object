@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object is used to store configuration of objects and data sets associated with a ServiceMax Offline profile.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Advanced_Archival_Criteria__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This is the advance criteria for Archival</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the advance criteria for Archival</inlineHelpText>
+        <label>Advanced Archival Criteria</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Advanced_Download_Criteria__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This is the advance criteria for data download</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the advance criteria for data download</inlineHelpText>
+        <label>Advanced Download Criteria</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Advanced_Lock_Criteria__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This is the advance criteria for data lock.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is the advance criteria for data lock.</inlineHelpText>
+        <label>Advanced Lock Criteria</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Allow_API_Access__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Allow API Access</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Allow_Attachment__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the offline user can see Attachment for  the selected object</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if the offline user can see Attachment for  the selected object</inlineHelpText>
+        <label>Allow Attachment</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Allow_Tab__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the offline user can see this object as a tab</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if the offline user can see this object as a tab</inlineHelpText>
+        <label>Allow Tab In Offline?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Allow_Upload__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if any data created in this object in offline can be uploaded to online</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if any data created in this object in offline can be uploaded to online</inlineHelpText>
+        <label>Allow Upload?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Allow_View_Override__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If the end user can override the default tab view in offline</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If the end user can override the default tab view in offline</inlineHelpText>
+        <label>Allow Override of default view?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Archival_Criteria__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Offline query builder representation of criteria to automatically archive records from offline</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Offline query builder representation of criteria to automatically archive records from offline</inlineHelpText>
+        <label>Archival Criteria</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Child_To_Parent_Field_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>For child objects, this has the API name of the field that connects it to its parent object.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For child objects, this has the API name of the field that connects it to its parent object.</inlineHelpText>
+        <label>Child To Parent Field Name</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lock_Criteria__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Offline query builder representation of criteria to block editing of records in offline</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Offline query builder representation of criteria to block editing of records in offline</inlineHelpText>
+        <label>Lock Criteria</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Object_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>API Name of the object enabled for offline</description>
+        <externalId>false</externalId>
+        <inlineHelpText>API Name of the object enabled for offline</inlineHelpText>
+        <label>Object Name</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Offline_Profile__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Offline Profile to which this object belongs</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Offline Profile to which this object belongs</inlineHelpText>
+        <label>Offline Profile</label>
+        <referenceTo>ServiceMax_Config_Data__c</referenceTo>
+        <relationshipLabel>Datasets For This Profile</relationshipLabel>
+        <relationshipName>Offline_Object</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Offline_Query__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Representation of SOQL query in offline query builder tool</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Representation of SOQL query in offline query builder tool</inlineHelpText>
+        <label>Offline Query</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Ownership_Limit__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the type of restriction to be applied on the data set: All records visible to the owner, all the owner&apos;s records or all the owner&apos;s team&apos;s records</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates the type of restriction to be applied on the data set: All records visible to the owner, all the owner&apos;s records or all the owner&apos;s team&apos;s records</inlineHelpText>
+        <label>Ownership Limit</label>
+        <picklist>
+            <picklistValues>
+                <fullName>My Records</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>My Team&apos;s Records</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>All Records</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Parent_Object__c</fullName>
+        <deprecated>false</deprecated>
+        <description>For child objects, API name of the parent object</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For child objects, API name of the parent object</inlineHelpText>
+        <label>Parent Object</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Profile_Key__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Unique key to identify the relationship between an Offline profile, object name and related object. Calculated automatically</description>
+        <externalId>false</externalId>
+        <formula>IF(Len( Related_To__r.Object_Name__c )&lt;1 ,
+   Offline_Profile__r.Profile_Name__c  &amp; &quot;_&quot; &amp;  Object_Name__c ,
+   Offline_Profile__r.Profile_Name__c  &amp; &quot;_&quot; &amp;  Object_Name__c &amp; &quot;_&quot;  &amp; Related_To__r.Object_Name__c )</formula>
+        <label>Profile Key</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Related_To__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>If this object is included in the dataset indirectly as a result of referencing another object, this field indicates the source object</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If this object is included in the dataset indirectly as a result of referencing another object, this field indicates the source object</inlineHelpText>
+        <label>Related To</label>
+        <referenceTo>Offline_Object__c</referenceTo>
+        <relationshipLabel>Related Objects Enabled for Offline</relationshipLabel>
+        <relationshipName>Offline_Object</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Retain_Old_Records__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the Offline Client user can retain old, unused reference records of this object type</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if the Offline Client user can retain old, unused reference records of this object type</inlineHelpText>
+        <label>Retain Old Records</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>SOQL_Query__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Salesforce SOQL query used to retrieve data from this object</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Salesforce SOQL query used to retrieve data from this object</inlineHelpText>
+        <label>SOQL Query</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Checkbox used in ServiceMax screens to manage record selection</description>
+        <externalId>false</externalId>
+        <inlineHelpText>To select a record for edit or delete on manageDataSet Page</inlineHelpText>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Tab_Order__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Default tab order</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Default tab order</inlineHelpText>
+        <label>Tab Order</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Use_Object_As_Home_Tab__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if this object&apos;s tab should be used as the home tab</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if this object&apos;s tab should be used as the home tab</inlineHelpText>
+        <label>Use Object As Home Tab</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>User_Defined__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if this object is automatically included due to ServiceMax functionality or explicitly added by the user</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if this object is automatically included due to ServiceMax functionality or explicitly added by the user</inlineHelpText>
+        <label>User Defined?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <label>Offline Object</label>
+    <nameField>
+        <displayFormat>{00000000}</displayFormat>
+        <label>Record Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Offline Objects</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

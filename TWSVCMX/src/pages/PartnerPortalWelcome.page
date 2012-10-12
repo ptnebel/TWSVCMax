@@ -1,0 +1,61 @@
+<apex:page controller="PartnerPortalWelcomeController" sidebar="false" showHeader="false">
+
+<body>
+<style>
+#container {
+    /* uncomment and edit this section if your customer's web site layout has a fixed width.
+    If you edit this section, you also need to specify a fixed width for the header table in your customer portal header HTML file.
+    margin-left:auto;margin-right:auto;
+    width:850px;
+    */
+}
+#title {
+    float:left;
+    padding:0 0 10px 20px;
+    font-size:1.5em;
+    font-weight:normal;   
+}
+#welcome {
+    width:100%;
+    margin-top:5px;   
+}
+</style>
+
+<div id="container">
+
+<div id="title">
+<!-- Start Title. Edit this title if your prospect calls their portal something different. -->
+{!$Organization.Name} Partner Portal
+<!-- End Title. -->
+</div>
+
+</div>
+</body>
+
+<apex:pageBlock title="My Recent Cases">    
+      <apex:pageBlockTable value="{!RecentCases}" var="case" >
+           <apex:column ><apex:outputLink value="/{!case.Id}" target="_top">{!case.CaseNumber}</apex:outputLink>
+           <apex:facet name="header">Case Number</apex:facet>
+           </apex:column> 
+           <apex:column >
+           <apex:outputLink value="/{!case.Id}" target="_top">{!case.Subject}</apex:outputLink>
+           <apex:facet name="header">Subject</apex:facet>
+           </apex:column>
+           <apex:column ><apex:outputField value="{!case.Status}" />
+           <apex:facet name="header">Status</apex:facet>
+           </apex:column>
+    </apex:pageBlockTable>       
+</apex:pageBlock>
+
+<apex:pageBlock title="My Recent Installed Products">
+      <apex:pageBlockTable value="{!installedProducts}" var="ip">
+      <apex:column headerValue="Product ID">
+              <a href="/{!ip.Id}" target="_top">{!ip.Name}</a>
+      </apex:column>
+           <apex:column value="{!ip.SVMXC__Product_Name__c}"/>
+           <apex:column value="{!ip.SVMXC__Serial_Lot_Number__c}"/>
+           <apex:column value="{!ip.SVMXC__Date_Installed__c}"/>
+       </apex:pageBlockTable>
+</apex:pageBlock>
+
+</apex:page>

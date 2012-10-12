@@ -1,0 +1,154 @@
+<apex:page Controller="SVMXC.WORD_CreateQuote" id="page1">
+<script type="text/javascript">
+
+        function customSelectChecked(form,value)
+        {   
+            var i = 0;
+            for (i = 0; i < form.elements.length; i++) {
+                if (form.elements[i].name.search('selected') > 0 && form.elements[i].disabled == false) {
+                    form.elements[i].checked = value;
+                }
+            }
+        }  
+        
+        function customSelectAllOrNoneByCheckbox(form,control)
+        {  customSelectChecked( form,control.checked); }
+  
+    </script>
+<apex:form id="form1" > 
+<apex:outputPanel id="CreateQuote">
+<apex:pageBlock id="QuoteHeaderBlock" title="{!TAG001}" helpTitle="{!TAG002}" helpUrl="{!HLPURL}" mode="edit">
+<apex:pageMessages rendered="{!Quote_DisplayBlockLevelMessage}"/>
+<apex:pageBlockButtons Location="Top">
+<apex:commandButton value="{!TAG003}" action="{!QuoteSave}" onClick="if({!IsWarn}){if(!confirm('{!TAG020}')){return false}}" /> <!-- rendered="{!if(Quote_DisplayBlockLevelMessage2==true,false,true)}" -->
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<apex:commandButton value="{!TAG004}" action="{!Cancel}"/>
+</apex:pageBlockButtons>
+<apex:actionStatus id="LodingStatus"  startText="{!TAG025}" />  
+<apex:pageBlockSection > <!-- rendered="{!if(Quote_DisplayBlockLevelMessage2==true,false,true)}" -->
+    <apex:pageBlockSectionItem >
+        <apex:outputLabel value="{!TAG036}"/>
+        <apex:outputPanel layout="block" styleClass="requiredInput">
+        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+        <apex:inputField value="{!QuoteHeader.SVMXC__Service_Order__c}"/>
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem >    
+        <apex:outputlabel value="{!TAG038}"/>
+        <apex:outputField id="RR_TOTALLINEPRICE" value="{!QuoteHeader.SVMXC__Total_Line_Price2__c}" /> <!-- (Commented by GM  onchange="OnChangeHeader()" -->
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem >
+        <apex:outputLabel value="{!TAG037}"/>
+        <apex:outputPanel layout="block" styleClass="requiredInput">
+        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+        <apex:inputField value="{!QuoteHeader.SVMXC__Company__c}"/>
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>    
+    <apex:pageBlockSectionItem >    
+        <apex:outputlabel value="{!TAG039}"/>
+        <apex:inputField value="{!QuoteHeader.SVMXC__Discount_Type__c}" onchange="OnChangeHeader()"/>
+    </apex:pageBlockSectionItem>    
+    <apex:pageBlockSectionItem >
+        <apex:outputLabel value="{!TAG008}"/>
+        <apex:outputPanel layout="block" styleClass="requiredInput">
+        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+        <apex:inputField value="{!QuoteHeader.SVMXC__Contact__c}"/>
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem >    
+        <apex:outputlabel value="{!TAG040}"/>
+        <apex:inputField value="{!QuoteHeader.SVMXC__Discount__c}" onchange="OnChangeHeader()"/>
+    </apex:pageBlockSectionItem>    
+    <apex:pageBlockSectionItem >
+        <apex:outputLabel value="{!TAG035}"/>
+        <apex:outputPanel layout="block" styleClass="requiredInput">
+        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+        <apex:inputField value="{!QuoteHeader.SVMXC__Status__c}" />
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem >
+        <apex:outputLabel value="{!TAG033}"/>
+        <apex:outputPanel layout="block" styleClass="requiredInput">
+        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+        <apex:inputField id="RR_QUOTEAMT" value="{!QuoteHeader.SVMXC__Quote_Amount2__c}"/> 
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem >
+        <apex:outputLabel value="{!TAG034}"/>
+        <apex:outputPanel layout="block" styleClass="requiredInput">
+        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+        <apex:inputField value="{!QuoteHeader.SVMXC__Valid_Until__c}"/> 
+        </apex:outputPanel>
+    </apex:pageBlockSectionItem>
+    <apex:actionFunction action="{!OnChangeHeaderItems}" name="OnChangeHeader" reRender="QuoteHeaderBlock"  status="LodingLineStatus"/>  
+</apex:pageBlockSection>
+</apex:pageBlock>
+
+<apex:pageBlock id="LineBlock" title="{!TAG005}" > <!-- rendered="{!if(Quote_DisplayBlockLevelMessage2==true,false,true)}" -->
+<apex:pageMessages rendered="{!QuoteLine_DisplayBlockLevelMessage}" showDetail="true"/>
+<apex:pageBlockButtons >
+   <apex:commandButton value="{!TAG006}" action="{!AddLines}" reRender="form1" status="LodingLineStatus"/> <!-- LineBlock -->
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <apex:commandButton value="{!TAG007}" action="{!DeleteLines}" reRender="form1" status="LodingLineStatus"/> <!-- CreateQuote -->
+</apex:pageBlockButtons>
+<apex:actionStatus id="LodingLineStatus"  startText="{!TAG025}" />   
+ <apex:pageBlockTable id="RR_LINEITEMS" value="{!PrintQlines}" var="Qline">
+   <apex:column >             
+   <apex:facet name="header"> 
+   <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox( document.forms['page1:form1'],this);">  
+   </apex:inputCheckbox>
+   </apex:facet>                       
+   <apex:inputField value="{!Qline.SVMXC__Select__c}" id="selected" /> 
+   </apex:column>
+
+   <apex:column >   
+   <apex:facet name="header">{!TAG041}</apex:facet> <!-- $ObjectType.Quote_Line__c.fields.Line_Type__c.Label -->    
+   <apex:inputField value="{!Qline.SVMXC__Line_Type__c}"/>
+   </apex:column>     
+             
+   <apex:column >   
+   <apex:facet name="header">{!TAG042}</apex:facet>     <!-- {!$ObjectType.Quote_Line__c.fields.Product__c.Label} -->
+   <apex:inputField value="{!Qline.SVMXC__Product__c}"/>
+   </apex:column>     
+
+   <apex:column >   
+   <apex:facet name="header">{!TAG043}</apex:facet>     <!-- {!$ObjectType.Quote_Line__c.fields.Line_Description__c.Label} -->
+   <apex:inputField value="{!Qline.SVMXC__Line_Description__c}" style="width:150px;height:65px"/>
+   </apex:column> 
+
+   <apex:column >     
+    <apex:facet name="header">{!TAG044}</apex:facet>    <!--  {!$ObjectType.Quote_Line__c.fields.Quantity2__c.Label} -->
+    <apex:inputField value="{!Qline.SVMXC__Quantity2__c}" style="width:100px" onchange="OnChangeQty()"/>  
+    <apex:actionFunction action="{!OnChangeLineItems}" name="OnChangeQty" reRender="RR_QUOTEAMT,RR_TOTALLINEPRICE,RR_LINEITEMS"  status="LodingLineStatus"/>  
+    </apex:column>
+   
+     <apex:column >     
+    <apex:facet name="header">{!TAG045}</apex:facet>    <!--{!$ObjectType.Quote_Line__c.fields.Unit_Price2__c.Label}  -->
+    <apex:inputField value="{!Qline.SVMXC__Unit_Price2__c}" style="width:100px" onchange="OnChangeUP()"/> 
+    <apex:actionFunction action="{!OnChangeLineItems}" name="OnChangeUP" reRender="RR_QUOTEAMT,RR_TOTALLINEPRICE,RR_LINEITEMS"  status="LodingLineStatus"/>  
+    </apex:column>
+               
+    <apex:column >     
+    <apex:facet name="header">{!TAG039}</apex:facet>    <!--{!$ObjectType.Quote_Line__c.fields.Discount_Type__c.Label}  -->
+    <apex:inputField value="{!Qline.SVMXC__Discount_Type__c}" onchange="OnChangeDT()"/> 
+    <apex:actionFunction action="{!OnChangeLineItems}" name="OnChangeDT" reRender="RR_QUOTEAMT,RR_TOTALLINEPRICE,RR_LINEITEMS"  status="LodingLineStatus"/>     
+    </apex:column>
+
+    
+    <apex:column >
+    <apex:facet name="header">{!TAG040}</apex:facet> <!-- {!$ObjectType.Quote_Line__c.fields.Discount__c.Label} -->
+    <apex:inputField value="{!Qline.SVMXC__Discount__c}" style="width:50px" onchange="OnChangeD()"/>  
+    <apex:actionFunction action="{!OnChangeLineItems}" name="OnChangeD" reRender="RR_QUOTEAMT,RR_TOTALLINEPRICE,RR_LINEITEMS"  status="LodingLineStatus"/>     
+    </apex:column>
+
+    <apex:column >     
+    <apex:facet name="header">{!TAG046}</apex:facet>    <!--  {!$ObjectType.Quote_Line__c.fields.Line_Price2__c.Label}-->
+    <apex:outputField value="{!Qline.SVMXC__Line_Price2__c}" style="width:100px"/>    
+    </apex:column> 
+                
+   
+</apex:pageBlockTable>
+</apex:pageBlock>
+</apex:outputPanel>
+</apex:form>
+</apex:page>

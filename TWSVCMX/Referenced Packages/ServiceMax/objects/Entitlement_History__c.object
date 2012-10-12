@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Object that stores complete entitlement history of cases/installed products.</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Case_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to the Case Line for which entitlement check was performed</description>
+        <externalId>false</externalId>
+        <label>Case Line</label>
+        <referenceTo>Case_Line__c</referenceTo>
+        <relationshipLabel>Service/Maintenance History</relationshipLabel>
+        <relationshipName>Service_Maintenance_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Case__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to Case object</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to Case object</inlineHelpText>
+        <label>Case</label>
+        <referenceTo>Case</referenceTo>
+        <relationshipName>R00N70000001hzeTEAQ</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Date_of_entitlement__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date of entitlement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date of entitlement</inlineHelpText>
+        <label>Date of entitlement</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Days_To_Warranty_Expiry__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of days left in the warranty when this entitlement was made. Calculated automatically.</description>
+        <externalId>false</externalId>
+        <formula>End_Date__c - Date_of_entitlement__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Number of days left in the warranty when this entitlement was made. Calculated automatically.</inlineHelpText>
+        <label>Days To Warranty Expiry</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>End_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>End date of service contract or warranty at the time of entitlement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Warranty end date</inlineHelpText>
+        <label>End Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Entitled_By_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to Service Contract Contact</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to Service Contract Contact</inlineHelpText>
+        <label>Entitled By Contact</label>
+        <referenceTo>Service_Contract_Contacts__c</referenceTo>
+        <relationshipName>R00N70000001hzeGEAQ</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Entitled_By_IB__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to Service Contract product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to Service Contract product</inlineHelpText>
+        <label>Entitled By IB</label>
+        <referenceTo>Service_Contract_Products__c</referenceTo>
+        <relationshipName>R00N70000001hzdDEAQ</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Entitled_By_Service__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to Service Contract Service</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to Service Contract Service</inlineHelpText>
+        <label>Entitled By Service</label>
+        <referenceTo>Service_Contract_Services__c</referenceTo>
+        <relationshipName>R00N70000001hzeXEAQ</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Entitled_By_Site__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to Service Contract Site</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Reference to Service Contract Site</inlineHelpText>
+        <label>Entitled By Site</label>
+        <referenceTo>Service_Contract_Sites__c</referenceTo>
+        <relationshipName>R00N70000001hzWtEAI</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Entitlement_notes__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Additional information entered in Case during customer entitlement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional information entered in Case during customer entitlement</inlineHelpText>
+        <label>Entitlement notes</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Exchange_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of exchange allowed as the outcome of entitlement verification.</description>
+        <externalId>false</externalId>
+        <label>Exchange Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Advance Exchange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Return Exchange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Inactive_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which this entitlement record was inactivated to enable reentitlement</description>
+        <externalId>false</externalId>
+        <label>Inactive Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>RMA_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to the RMA Line for which entitlement check was performed</description>
+        <externalId>false</externalId>
+        <label>RMA Line</label>
+        <referenceTo>RMA_Shipment_Line__c</referenceTo>
+        <relationshipLabel>Service/Maintenance History</relationshipLabel>
+        <relationshipName>Service_Maintenance_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>SLA_Terms__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Service level the customer is entitled to by this entitlement event</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Service level the customer is entitled.</inlineHelpText>
+        <label>SLA Terms</label>
+        <referenceTo>Service_Level__c</referenceTo>
+        <relationshipLabel>Service/Maintenance History</relationshipLabel>
+        <relationshipName>Service_Maintenance_History</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Contract__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Service contract used in entitlement. Reference to service contract.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Service contract used in entitlement. Reference to service contract.</inlineHelpText>
+        <label>Service/Maintenance Contract</label>
+        <referenceTo>Service_Contract__c</referenceTo>
+        <relationshipLabel>Service/Maintenance History</relationshipLabel>
+        <relationshipName>R00N70000001hzcQEAQ</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Work order entitled by this entitlement event. Not used</description>
+        <externalId>false</externalId>
+        <label>Work Order</label>
+        <referenceTo>Service_Order__c</referenceTo>
+        <relationshipLabel>Entitlement History</relationshipLabel>
+        <relationshipName>Entitlement_History</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Start date of service contract/warranty at the time of entitlement</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Start date of service contract/warranty at the time of entitlement</inlineHelpText>
+        <label>Start Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Warranty__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Warranty used in entitlement. Reference to warranty record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Warranty used in entitlement. Reference to warranty record</inlineHelpText>
+        <label>Product Warranty</label>
+        <referenceTo>Warranty__c</referenceTo>
+        <relationshipLabel>Service/Maintenance History</relationshipLabel>
+        <relationshipName>R00N70000001hzecEAA</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <label>Service/Maintenance History</label>
+    <nameField>
+        <displayFormat>EHN-{000000}</displayFormat>
+        <label>Record Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Service/Maintenance History</pluralLabel>
+    <searchLayouts>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Case__c</searchFilterFields>
+        <searchFilterFields>Date_of_entitlement__c</searchFilterFields>
+        <searchFilterFields>Service_Contract__c</searchFilterFields>
+        <searchFilterFields>Warranty__c</searchFilterFields>
+        <searchFilterFields>Start_Date__c</searchFilterFields>
+        <searchFilterFields>End_Date__c</searchFilterFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

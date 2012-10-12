@@ -1,0 +1,74 @@
+<apex:page id="pageManageInvertryProcesses" controller="SVMXC.CONF_InventoryProcesses">
+    <apex:form id="form1" >
+       <apex:pageblock id="pblock1" title="{!TAG001}"  helpTitle="{!TAG002}" helpUrl="{!HLPURL}" rendered="true">
+         <apex:pageMessages rendered="{!DisplayBlock1Message}" />
+         <apex:pageblockbuttons >
+              <apex:commandButton id="stdview" value="{!TAG016}" action="{!SVMX_View}"/>
+              <apex:commandButton id="stdclone" value="{!TAG005}" action="{!SVMX_dostdClone}"/>
+              <apex:commandButton value="{!TAG006}" action="{!SVMX_GoHome}"/>
+
+         </apex:pageblockbuttons>
+           <apex:pageBlockSection columns="1" >
+                <apex:pageBlockTable value="{!StdProcesses}"  rendered="True"  var="std"> 
+                 <apex:column >
+                        <apex:facet name="header" ></apex:facet>
+                        <apex:inputField value="{!std.SVMXC__Select__c}" id="stdselected"/>                                         
+                    </apex:column>
+                    
+                   <apex:column > 
+                        <apex:facet name="header" >{!TAG019}</apex:facet>
+                        <apex:outputText value="{!std.SVMXC__ProcessID__c}" id="stdprocess" /> 
+                    </apex:column> 
+					<apex:column > 
+                        <apex:facet name="header" >{!TAG020}</apex:facet>
+                        <apex:outputText value="{!std.SVMXC__Name__c}" id="stdName" /> 
+                    </apex:column> 
+                    <apex:column > 
+                        <apex:facet name="header" >{!TAG021}</apex:facet>
+                        <apex:outputText value="{!std.SVMXC__Description__c}" id="stdDesctiption" /> 
+                    </apex:column> 
+                  <!-- <apex:column > 
+                        <apex:facet name="header" >{!$ObjectType.SVMXC__ServiceMax_Processes__c.fields.SVMXC__SubmoduleID__c.label}</apex:facet>
+                        <apex:outputField value="{!std.SVMXC__SubmoduleID__c}" id="stdActive" /> 
+                    </apex:column>  -->
+              </apex:pageBlockTable>
+            </apex:pageBlockSection>
+       </apex:pageblock>    
+            <apex:pageBlock id="pblock2" title="{!TAG013}"  helpTitle="{!TAG002}" helpUrl="{!HLPURL}" rendered="true">
+           <apex:actionStatus id="status" startText="{!TAG015}"/>
+            <apex:pageMessages rendered="{!DisplayBlock2Message}" />
+            <apex:pageBlockButtons > 
+                <apex:commandButton value="{!TAG003}" action="{!SVMX_new}" reRender="pblock2" status="status"/>
+                <apex:commandButton value="{!TAG004}" action="{!SVMX_doedit}" reRender="pblock2" status="status"/>
+                <apex:commandButton value="{!TAG005}" action="{!SVMX_docustClone}" reRender="pblock2" status="status"/>
+                <apex:commandButton value="{!TAG012}" action="{!SVMX_doDelete}" onClick="if(!confirm('{!TAG023}')){return false}"  reRender="pblock2" status="status"/>
+                
+            </apex:pageBlockButtons> 
+            <apex:pageBlockSection columns="1" >
+                <apex:pageBlockTable value="{!CustProcesses}"  rendered="True"  var="cust"> 
+                     <apex:column >
+                        <apex:facet name="header" ></apex:facet>
+                        <apex:inputField value="{!cust.SVMXC__Select__c}" id="custselected"/>                                         
+                    </apex:column>
+                    
+                     <apex:column > 
+                        <apex:facet name="header" >{!TAG019}</apex:facet>
+                        <apex:outputText value="{!cust.SVMXC__ProcessID__c}" id="custprocess" /> 
+                    </apex:column> 
+					<apex:column > 
+                        <apex:facet name="header" >{!TAG020}</apex:facet>
+                        <apex:outputText value="{!cust.SVMXC__Name__c}" id="custName" /> 
+                    </apex:column> 
+                    <apex:column > 
+                        <apex:facet name="header" >{!TAG021}</apex:facet>
+                        <apex:outputText value="{!cust.SVMXC__Description__c}" id="custDesctiption" /> 
+                    </apex:column> 
+                    <!-- <apex:column > 
+                        <apex:facet name="header" >{!$ObjectType.SVMXC__ServiceMax_Processes__c.fields.SVMXC__SubmoduleID__c.label}</apex:facet>
+                        <apex:outputField value="{!cust.SVMXC__SubmoduleID__c}" id="custActive" /> 
+                    </apex:column>  -->
+              </apex:pageBlockTable>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,484 @@
+<apex:page controller="SVMXC.PREV_ViewEditPMPlan" tabStyle="SVMXC__PM_Plan__c" id="thepage">
+ <style>
+   .activeTab {background-color: #8E9DBE; color:white; background-image:none; font-size:14Px} 
+
+   .inactiveTab {background-color: lightGrey; color:black; background-image:none}
+ </style>
+  <style type="text/css">
+       .customPopup{  
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+    </style>
+    <script>
+      function ClearFields(formname,pageblock,fieldids){
+       var form = document.getElementById(formname);
+           var fields=new Array();
+           fields = fieldids.split(",");
+           for (i = 0; i < form.elements.length; i++) {
+               for(j = 0; j < fields.length; j++){
+                   if (form.elements[i].name.search(fields[j]) > 0 && form.elements[i].name.search(pageblock) > 0){
+                       form.elements[i].value = '';
+                       }
+               }
+           }
+       } 
+    </script>
+    <script type="text/javascript">
+        function stopRKey(evt)
+        {
+            var evt = (evt) ? evt : ((event) ? event : null);
+            var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+            if ((evt.keyCode == 13) && (node.type=="text"))  
+            {
+                return false;
+            }
+        }
+        document.onkeypress = stopRKey;
+    </script>
+    
+    
+    <script>
+            function customSelectChecked( form,type,value) {  
+                var i = 0;
+                for (i = 0; i < form.elements.length; i++) {
+                    if (form.elements[i].name.search(type) > 0 && form.elements[i].disabled == false) {
+                        form.elements[i].checked = value;
+                    }
+                }
+            }  
+            
+            function customSelectAllOrNoneByCheckbox(form,type,control)
+            {  customSelectChecked( form,type,control.checked); }   
+        
+            
+            function checkSelectAll(form,type) {
+                var isChecked = false;
+                for (i = 1; i < form.elements.length; i++) {
+                        if (form.elements[i].name.search(type) > 0 && form.elements[i].checked == true) {
+                            isChecked = true;
+                        }
+                    }
+                    if(isChecked == true)
+                    return true;
+                    else
+                    return false;
+            }
+        </script>
+ <apex:form id="ViewEditPMPlanform">
+  <apex:pageBlock id="pblock" title="{!TAG002} {!SCObject.name}" helpTitle="{!TAG003}" helpUrl="{!HLPURL}" >
+  <apex:actionStatus id="status" startText="{!TAG001}" style="font-Size:11px"/>
+  <apex:pageMessages rendered="{!HdrMsg}"/> 
+    <apex:tabpanel switchType="client" id="tabEditPMPlan" value="{!selectedTab}" tabClass="activeTab" inactiveTabClass="inactiveTab ">
+     
+     <!-- Start TAB1 PM Plane -->
+     
+       
+      <apex:tab label="{!TAG004}" name="{!TAG004}" id="tabPMPlan" style="font-Size:11px">
+       <apex:pageBlock id="tab1block1" mode="edit">
+       <apex:actionStatus id="status1" startText="{!TAG001}" style="font-Size:14px"/>
+       <apex:pageblockbuttons Location="top">
+            <apex:commandbutton value="{!TAG047}" action="{!SVMX_Recalculate}" reRender="ViewEditPMPlanform" status="status" id="Recalculate" disabled="{!if(OR(PMObject.SVMXC__Schedule_Type__c = 'Counter Based',PMObject.SVMXC__Schedule_Type__c = ''),true,false)}"/>
+            <apex:commandButton value="{!TAG019}" action="{!SVMX_Cancel}"  id="cancel" onclick="ClearFields('thepage:ViewEditPMPlanform','tab3blcok','SuccssEmail,ErrorEmail')"/>
+       </apex:pageblockbuttons>
+         <apex:pageBlockSection columns="1">
+             <apex:pageBlockSectionitem >  
+               <apex:outputtext value="{!TAG008}" style="font-Size:12px"/>
+               <apex:outputPanel layout="block" styleClass="requiredInput">
+               <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputtext value="{!PMObject.Name}" size="30"/>
+               </apex:outputPanel>      
+          </apex:pageBlockSectionitem>  
+         </apex:pageBlockSection>   
+         <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionitem >
+               <apex:outputtext value="{!TAG009}" style="font-Size:12px"/>
+               <apex:inputTextarea value="{!PMObject.SVMXC__Description__c}" cols="95" rows="3" style="font-Size:14px"/>
+            </apex:pageBlockSectionitem>  
+         </apex:pageBlockSection> 
+         <apex:pageBlockSection >
+            <apex:pageBlockSectionitem >
+               <apex:outputtext value="{!TAG010}" style="font-Size:12px"/>
+               <apex:inputfield value="{!PMObject.SVMXC__Status__c}" />
+            </apex:pageBlockSectionitem>
+            <apex:pageBlockSectionitem >
+               <apex:outputtext value="{!TAG011}" style="font-Size:12px"/>
+               <apex:outputPanel layout="block" styleClass="requiredInput">
+               <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!PMObject.SVMXC__Start_Date__c}"/> <!-- (Commented by amar on 15/12/09) onchange="DateChngFun();"-->
+               </apex:outputPanel>
+            </apex:pageBlockSectionitem>
+         </apex:pageBlockSection> 
+         <apex:pageBlockSection >
+            <apex:pageBlockSectionitem />
+            <apex:pageBlockSectionitem >
+               <apex:outputtext value="{!TAG012}" style="font-Size:12px"/>
+               <apex:outputPanel layout="block" styleClass="requiredInput">
+               <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!PMObject.SVMXC__End_Date__c}"/>  <!-- (Commented by amar on 15/12/09) onchange="DateChngFun();"-->
+               </apex:outputPanel>
+            </apex:pageBlockSectionitem>
+         </apex:pageBlockSection>
+       <apex:pageBlockSection title="" collapsible="false"/>
+        <apex:pageBlockSection >
+          <apex:pageBlockSectionItem >
+             <apex:outputtext value="{!TAG013}" style="font-Size:12px"/>
+             <apex:outputtext value="{!PMObject.SVMXC__Schedule_Type__c}" style="font-Size:12px"/> <!--(Commented by amar on 11/12/09)  onchange="OnChangeSheduleType();"-->
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >
+             <apex:outputtext value="{!TAG018}" style="font-Size:12px"/>
+             <apex:inputfield value="{!PMObject.SVMXC__SLA_Terms__c}"/>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >
+             <apex:outputtext value="{!TAG014}" style="font-Size:12px"/>
+             <apex:inputfield value="{!PMObject.SVMXC__Last_PM_Date__c}" style="width:100px"/>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem >
+             <apex:outputtext value="{!TAG016}" style="font-Size:12px"/> 
+             <apex:inputfield value="{!PMObject.SVMXC__Next_PM_Date__c}" style="width:100px"/>
+          </apex:pageBlockSectionItem>  
+          <apex:pageBlockSectionItem rendered="{!if(OR(PMObject.SVMXC__Schedule_Type__c = 'Counter Based',PMObject.SVMXC__Schedule_Type__c = ''),false,true)}">
+             <apex:outputtext value="{!TAG015}" style="font-Size:12px"/>
+             <apex:outputPanel layout="block" styleClass="requiredInput">
+             <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                <apex:inputfield value="{!PMObject.SVMXC__Frequency__c}"  style="width:100px"/> <!-- (Commented by amar on 15/12/09) onchange="DateChngFun();"-->
+             </apex:outputPanel>
+          </apex:pageBlockSectionItem>
+          <apex:pageBlockSectionItem rendered="{!if(OR(PMObject.SVMXC__Schedule_Type__c = 'Counter Based',PMObject.SVMXC__Schedule_Type__c = ''),false,true)}">
+             <apex:outputtext value="{!TAG021}" style="font-Size:12px"/>
+             <apex:outputPanel layout="block" styleClass="requiredInput">
+             <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                <apex:inputfield value="{!PMObject.SVMXC__Frequency_Unit__c}"  style="width:100px"/> <!-- (Commented by amar on 15/12/09) onchange="DateChngFun();"-->
+             </apex:outputPanel>    
+          </apex:pageBlockSectionItem>   
+          <apex:pageBlockSectionItem rendered="{!if((PMObject.SVMXC__Schedule_Type__c = 'Time & Counters'),true,false)}">
+             <apex:outputtext value="{!TAG017}" style="font-Size:11px"/>
+             <apex:inputfield value="{!PMObject.SVMXC__Time_and_Counters__c}" />
+          </apex:pageBlockSectionItem>
+          
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="" collapsible="false"/>
+        <apex:pageBlockSection columns="1">
+            <apex:commandButton value="{!TAG020}" action="{!SVMX_PM_WOSetting}"  id="PM_WOSettingF" reRender="ViewEditPMPlanform" status="status" style="float: right;"/>
+       </apex:pageBlockSection>
+       <apex:actionfunction action="{!SVMX_OnChangeSheduleType}" name="OnChangeSheduleType" status="status1" reRender="ViewEditPMPlanform"/> 
+     <!--    <apex:actionfunction action="{!SVMX_DateChngFun}" name="DateChngFun" status="status1" reRender="ViewEditPMPlanform"/> -->
+     </apex:pageBlock>
+      </apex:tab>
+      <!--  End TAB1 --- PM Plane -->
+      
+      <!--  Start TAB2 --- WOSetting -->
+      
+    <apex:tab label="{!TAG005}" name="{!TAG005}" id="tabWOSeting" style="font-Size:11px">
+      <apex:pageBlock id="tab2block1" mode="edit">
+      <apex:actionStatus id="status2" startText="{!TAG001}" style="font-Size:12px"/>
+      <apex:pageBlockbuttons Location="Top">
+        <apex:commandButton value="{!TAG019}" action="{!SVMX_Cancel}"  id="cancel" onclick="ClearFields('thepage:ViewEditPMPlanform','tab3blcok','SuccssEmail,ErrorEmail')"/>
+      </apex:pageBlockbuttons>
+       <apex:pageBlockSection >
+           <apex:pageblocksectionitem >  
+                <apex:outputtext value="{!TAG022}" style="font-Size:12px"/>  
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!PMObject.SVMXC__Create_Work_Order__c}" style="width:25px"/>
+                </apex:outputPanel> 
+           </apex:pageblocksectionitem>                
+           <apex:pageblocksectionitem >
+                <apex:outputtext value="{!TAG025}" style="font-Size:12px"/>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!PMObject.SVMXC__Number_of_Work_orders__c}" onchange="Chngfldmap();"/>
+                </apex:outputPanel> 
+          </apex:pageblocksectionitem>
+         <apex:pageblocksectionitem >
+                <apex:outputtext value="{!TAG024}" style="font-Size:12px"/>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                <apex:selectList value="{!PMObject.SVMXC__Field_map_for_wo__c}" size="1" multiselect="false">
+                    <apex:selectOptions value="{!fldmapforWO}"/>
+                </apex:selectList> 
+                </apex:outputPanel>
+          </apex:pageblocksectionitem>
+          <apex:pageBlockSectionItem >
+                <apex:outputtext value="{!TAG029}" style="font-Size:12px"/>
+                <apex:SelectList value="{!PMObject.SVMXC__Task_Template__c}" size="1" multiselect="false">
+                    <apex:selectOptions value="{!TaskTmplt}"/>
+                </apex:SelectList> 
+          </apex:pageBlockSectionItem> 
+          <apex:pageblocksectionitem >
+                <apex:outputtext value="{!TAG040}" style="font-Size:12px"/>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!PMObject.SVMXC__Work_Order_Assign_To__c}" onchange="OnSelectWO();"/>
+                </apex:outputPanel> 
+          </apex:pageblocksectionitem>  
+          <apex:pageblocksectionitem rendered="{!if((PMObject.SVMXC__Work_Order_Assign_To__c = 'User'),true,false)}">
+                <apex:outputtext value="{!TAG041}" style="font-Size:12px"/>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!PMObject.SVMXC__Work_Order_Assign_To_User__c}"/>
+                </apex:outputPanel> 
+         </apex:pageblocksectionitem>
+         <apex:pageblocksectionitem rendered="{!if((PMObject.SVMXC__Work_Order_Assign_To__c = 'Queue'),true,false)}">
+                <apex:outputtext value="{!TAG042}" style="font-Size:12px"/> 
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                <apex:selectlist value="{!PMObject.SVMXC__Work_Order_Assign_To_Queue__c}" size="1" multiselect="false">
+                    <apex:selectOptions value="{!WOQueue}"/>
+                </apex:selectlist>
+                </apex:outputPanel>
+         </apex:pageblocksectionitem>
+         <!-- <apex:pageblocksectionitem rendered="{!if((PMObject.Work_Order_Assign_To__c = 'Dispatch Process'),true,false)}">
+                <apex:outputtext value="{!TAG026}" style="font-Size:12px"/>
+                <apex:SelectList value="{!PMObject.Dispatch_Process__c}" size="1" multiselect="false">
+                    <apex:selectOptions value="{!DispatchProcess}"/>
+                </apex:SelectList>
+         </apex:pageblocksectionitem>   -->
+       </apex:pageBlockSection>
+         <apex:pageBlockSection title="" collapsible="false"/>
+        <apex:pageBlockSection rendered="{!LicenseType}">
+            <apex:pageBlockSectionItem >
+                <apex:outputtext value="{!TAG028}" style="font-Size:12px"/>
+                <apex:inputfield value="{!PMObject.SVMXC__Create_Case__c}" onclick="EnbleCaseDetail();"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem />   
+             <!--     <apex:pageBlockSectionItem >
+                <apex:outputtext value="{!TAG031}" style="font-Size:11px"/>
+                <apex:inputfield value="{!PMObject.Create_Parts_Requests__c}" />
+            </apex:pageblocksectionitem>  -->
+        </apex:pageBlockSection>
+        <apex:pageBlockSection id="tab2section3" rendered="{!if((PMObject.SVMXC__Create_Case__c = true),true,false)}"> 
+            <apex:pageblocksectionitem >
+                <apex:outputtext value="{!TAG027}" style="font-Size:12px"/>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                <apex:SelectList value="{!PMObject.SVMXC__Field_map_for_Case__c}" size="1" multiselect="false" > 
+                    <apex:selectoptions value="{!fldmapforCase}" />
+                </apex:SelectList>
+                </apex:outputPanel>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputtext value="{!TAG030}" style="font-Size:12px"/>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!PMObject.SVMXC__Number_of_Cases__c}" onchange="OnSelectCase();"/>
+                </apex:outputPanel>   
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionitem >
+                <apex:outputtext value="{!TAG043}" style="font-Size:12px"/>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!PMObject.SVMXC__Case_Assign_To__c}" onchange="OnSelectCase();"/>
+                </apex:outputPanel> 
+            </apex:pageBlockSectionitem> 
+            <apex:pageBlockSectionItem rendered="{!if((PMObject.Case_Assign_To__c = '{!TAG046}'),true,false)}"/>
+            <apex:pageblocksectionitem rendered="{!if((PMObject.SVMXC__Case_Assign_To__c = 'User'),true,false)}">
+                <apex:outputtext value="{!TAG044}" style="font-Size:12px"/>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputfield value="{!PMObject.SVMXC__Case_Assign_To_User__c}" />
+                </apex:outputPanel> 
+            </apex:pageblocksectionitem>
+            <apex:pageblocksectionitem rendered="{!if((PMObject.SVMXC__Case_Assign_To__c ='Queue'),true,false)}">
+                <apex:outputtext value="{!TAG045}" style="font-Size:12px"/> 
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                <apex:selectlist value="{!PMObject.SVMXC__Case_Assign_To_Queue__c}" size="1" multiselect="false">
+                    <apex:selectOptions value="{!CaseQueue}"/>
+                </apex:selectlist>
+                </apex:outputPanel>
+           </apex:pageblocksectionitem>
+       
+           
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="" collapsible="false" rendered="{!if((PMObject.SVMXC__Create_Case__c = true),true,false)}"/>
+        <apex:PageBlockSection columns="2">
+                <apex:commandButton value="{!TAG032}" action="{!SVMX_PM_Plan}"  id="PM_planB" reRender="ViewEditPMPlanform" status="status" style="float: left;"/>
+                <apex:commandButton value="{!TAG033}" action="{!SVMX_PM_Alert}"  id="PM_AlertF" reRender="ViewEditPMPlanform" status="status" style="float: right;"/>
+       </apex:PageBlockSection>
+       <apex:actionfunction action="{!SVMX_EnbleCaseDetail}" name="EnbleCaseDetail" status="status2" reRender="ViewEditPMPlanform"/>
+       <apex:actionfunction action="{!SVMX_OnSelectWO}" name="OnSelectWO" status="status2" reRender="ViewEditPMPlanform"/>
+       <apex:actionfunction action="{!SVMX_OnSelectCase}" name="OnSelectCase" status="status2" reRender="ViewEditPMPlanform"/>
+       <apex:actionfunction action="{!SVMX_Chngfldmap}" name="Chngfldmap" status="status2" reRender="ViewEditPMPlanform"/>
+    </apex:pageBlock>
+    </apex:tab>
+    
+     <!--  End TAB2 --- WOSetting -->
+    
+     <!--  Start TAB3 --- Aleart & Logging -->
+     
+    <apex:tab label="{!TAG006}" name="{!TAG006}" id="tabAlert" style="font-Size:11px">
+      <apex:pageBlock id="tab3blcok" mode="edit">
+      <apex:pageBlockButtons Location="top">
+             <apex:commandButton value="{!TAG019}" action="{!SVMX_Cancel}"  id="cancel" onclick="ClearFields('thepage:ViewEditPMPlanform','tab3blcok','SuccssEmail,ErrorEmail')"/>
+      </apex:pageBlockButtons>
+         <apex:pageBlockSection columns="2">
+                <apex:outputtext value="{!TAG034}" style="font-weight: bold; font-Size:12px"/>
+                <apex:pageblockSectionitem >  
+                    <apex:outputtext value=""/>
+                    <apex:inputfield id="SuccssEmail" value="{!PMObject.SVMXC__Success_Email_ID__c}" style="width:200px"/>
+                </apex:pageblockSectionitem>  
+                <apex:outputtext value="{!TAG035}" style="font-weight: bold; font-Size:12px; width:200px"/>
+                <apex:pageblockSectionitem > 
+                    <apex:outputtext value=""/>
+                    <apex:inputfield id="ErrorEmail" value="{!PMObject.SVMXC__Error_Email_ID__c}" style="width:200px"/>
+                </apex:pageblockSectionitem> 
+                <apex:outputtext value="{!TAG036}" style="font-weight: bold; font-Size:12px"/>
+                <apex:pageblockSectionitem > 
+                    <apex:outputtext value=""/>               
+                    <apex:inputcheckbox value="{!PMObject.SVMXC__Activity_On_Success__c}" />
+                </apex:pageblockSectionitem> 
+                <apex:outputtext value="{!TAG037}" style="font-weight: bold; font-Size:12px"/>
+                <apex:pageblockSectionitem >
+                    <apex:outputtext value=""/> 
+                    <apex:inputcheckbox value="{!PMObject.SVMXC__Activity_On_Error__c}" />
+                </apex:pageblockSectionitem> 
+         </apex:pageBlockSection>
+         <apex:pageBlockSection title="" collapsible="false"/>
+         <apex:pageblockSection columns="2">
+            <apex:commandButton value="{!TAG038}" action="{!SVMX_PM_WOSetting}"  id="PM_WOSettingB" reRender="ViewEditPMPlanform" status="status" style="float: left;"/>
+          
+            <apex:commandButton value="{!TAG039}" action="{!SVMX_PM_ProductCoverage}" id="PM_ProductCoverageF" reRender="ViewEditPMPlanform" status="status" style="float: right;"/>
+         </apex:pageblockSection>
+      </apex:pageBlock>
+    </apex:tab>
+    <!--  End TAB3 --- Aleart & Logging -->
+    
+    <!--  Start TAB4 --- Product Coverage -->
+    
+  <apex:tab label="{!TAG007}" name="{!TAG007}" id="tabProductCoverage" style="font-Size:13px">
+    <apex:pageblock id="tab4block1" mode="edit">
+    <apex:pageBlockButtons location="top">
+        <apex:commandButton value="{!TAG052}" action="{!SVMX_FindCoveredProduct}"  rerender="popup"  status="status" disabled="{!DisableFindCP}"/>
+        <apex:commandButton value="{!TAG053}" action="{!SVMX_DelData}"  reRender="ViewEditPMPlanform" status="status" />
+        <apex:commandButton value="{!TAG019}" action="{!SVMX_Cancel}" id="cancel" onclick="ClearFields('thepage:ViewEditPMPlanform','tab3blcok','SuccssEmail,ErrorEmail')"/>
+    </apex:pageBlockButtons>
+        <apex:pageBlockSection rendered="{!if((PMWrapperObjlst.size == 0),true,false)}"> 
+        <apex:outputlabel value="{!TAG087}" style="font-Size:11px"/>
+        </apex:pageBlockSection>  
+        <apex:pageBlockSection rendered="{!if((PMWrapperObjlst.size > 0),true,false)}">
+        <apex:datatable id="table1" value="{!PMWrapperObjlst}" var="item" cellPadding="4" style="font-Size:11px">
+            <apex:column >
+                <!--  <apex:facet name="header" >{!TAG048} <Style> font-weight: bold; font-Size:12px </Style> </apex:facet>-->
+                <apex:facet name="header">
+                        <apex:inputCheckbox value="{!CheckAll}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['thepage:ViewEditPMPlanform'],'selected',this);" /><!-- disabled="{!DisbaleChkBox}" --> 
+                 </apex:facet>  
+               <apex:inputcheckbox id="selected" value="{!item.select}"/>   
+            </apex:column>   
+            <apex:column >
+                <apex:facet name="header" >{!TAG049}<Style> font-weight: bold; font-Size:12px </Style></apex:facet> 
+                <apex:outputtext value="{!item.ProductName}" style="font-Size:12px"/>
+            </apex:column> 
+            <apex:column >
+                <apex:facet name="header" >{!TAG050}<Style> font-weight: bold; font-Size:12px </Style></apex:facet>
+                <apex:outputtext value="{!item.IPName}" style="font-Size:12px"/>   
+            </apex:column>
+       <!--      <apex:column >
+                <apex:facet name="header" >{!TAG055}</apex:facet>
+                <apex:inputfield value="{!item.PMCoverage.PM_Frequency__c}"/>   
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header" >{!TAG056}</apex:facet>
+                <apex:inputfield value="{!item.PMCoverage.PM_Limit__c}"/>   
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header" >{!TAG057}</apex:facet>
+                <apex:inputfield value="{!item.PMCoverage.PM_Cycle_Type__c}"/>  
+            </apex:column>  -->
+      </apex:datatable>
+    </apex:pageBlockSection>
+     <apex:pageBlockSection title="" collapsible="false"/>
+    <apex:pageBlockSection columns="2">
+        <apex:commandButton value="{!TAG051}" action="{!SVMX_PM_Alert}"  id="PM_AlertB" reRender="ViewEditPMPlanform" status="status" style="float: left;"/>
+        <apex:commandButton value="{!TAG054}" action="{!SVMX_PMSave}"  status="status" style="float: right;" />
+    </apex:pageBlockSection>
+   </apex:pageblock>
+  
+   <apex:outputPanel id="popup">
+    <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+        <apex:pageBlock >
+        <apex:actionStatus id="popupstatus" startText="{!TAG001}" style="font-Size:11px"/>
+        <apex:pageMessages rendered="{!PopupMsg}"/> 
+        <apex:pageBlockSection title="{!TAG062}" collapsible="false" columns="2">
+         <apex:panelGrid columns="1">   
+         <apex:panelGroup >
+            <apex:pageBlockSectionItem >  
+                <apex:inputText value="{!SearchKeyword}"/>
+                <apex:commandButton value="{!TAG063}" action="{!SVMX_Go}"  status="popupstatus" rerender="popup"/>
+            </apex:pageBlockSectionItem>
+          </apex:panelGroup>
+          </apex:panelGrid>     
+          <apex:panelGrid columns="1" style="font-Size:11px">   
+          <apex:panelGroup >  
+            <apex:pageBlockSectionItem >
+                <apex:outputlabel value="{!TAG064}" />
+                <apex:inputcheckbox value="{!FilterByPF}"/>
+            </apex:pageBlockSectionItem>
+            </apex:panelGroup> 
+            <apex:panelGroup style="float:right;">               
+            <apex:pageBlockSectionItem >
+                <apex:outputText value="{!TAG065}" />                
+                <apex:inputcheckbox value="{!FilterByPL}"/>
+            </apex:pageBlockSectionItem>
+            </apex:panelGroup>
+           </apex:panelGrid> 
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="" collapsible="false"/>
+        <apex:pageBlockSection rendered="{!displayfindpro}">
+        <apex:outputtext value="{!TAG087}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection rendered="{!NOT(displayfindpro)}">    
+        <apex:datatable id="popuptable1" value="{!PopupWrapperObjLst}" var="item" cellPadding="4" >
+            <apex:column >
+            <apex:facet name="header">
+              		<apex:inputCheckbox value="{!CheckAll}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['thepage:ViewEditPMPlanform'],'selected1',this);" /><!-- disabled="{!DisbaleChkBox}" --> 
+             </apex:facet> 
+             <apex:inputcheckbox id="selected1" value="{!item.select}"/> 
+             </apex:column>  
+            <apex:column >
+                <apex:facet name="header" >{!TAG049}</apex:facet> 
+                <apex:outputtext value="{!item.ProductName}"/>
+            </apex:column> 
+            <apex:column >
+                <apex:facet name="header" >{!TAG050}</apex:facet>
+                <apex:outputtext value="{!item.IPName}"/>   
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header" >{!TAG067}</apex:facet>
+                <apex:outputtext value="{!item.ProductFamily}"/>    
+            </apex:column>
+            <apex:column >
+                <apex:facet name="header" >{!TAG068}</apex:facet>
+                <apex:outputtext value="{!item.ProductLine}"/>  
+            </apex:column>
+      </apex:datatable>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="" collapsible="false"/>
+        <apex:pageBlockSection >
+        <apex:commandButton value="{!TAG061}" action="{!SVMX_AddSelected}"   rerender="ViewEditPMPlanform" status="status"  style="float:right;"/>
+        <apex:commandButton value="{!TAG019}" action="{!SVMX_CancelPopup}"  rerender="ViewEditPMPlanform"  status="status"/>
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:outputPanel>
+   </apex:outputPanel>
+    
+</apex:tab>
+      
+      <!--  End TAB4 --- Product Coverage -->
+    </apex:tabpanel>
+   
+  </apex:pageBlock>
+</apex:form>
+</apex:page>

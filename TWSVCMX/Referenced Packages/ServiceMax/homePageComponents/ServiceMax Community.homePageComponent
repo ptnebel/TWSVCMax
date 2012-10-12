@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HomePageComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <body>&lt;iframe id=&quot;svmx_community_page&quot; src=&quot;/apex/SVMXC__HOME_CommunityAccess?core.apexpages.devmode.url=1&quot; frameborder=&quot;0&quot; height=&quot;20px&quot; width=&quot;150px&quot;&gt;&lt;/iframe&gt;</body>
+    <pageComponentType>htmlArea</pageComponentType>
+    <width>narrow</width>
+</HomePageComponent>

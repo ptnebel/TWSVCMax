@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link  href="/dCSS/Theme2/default/elements.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/dCSS/Theme2/default/common.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/dCSS/Theme2/default/custom.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/ie7/rlHovers.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/css/assistive.css" media="aural,braille,embossed" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/dStandard.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+
+<link  href="/sCSS/Theme2/{!SUBSTITUTE(SUBSTITUTE($Organization.Id,'<','&lt;'),'>','&gt;')}/{!SUBSTITUTE(SUBSTITUTE($User.Id,'<','&lt;'),'>','&gt;')}/dCustom0.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+
+<link  href="/sCSS/Theme2/default/extended.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/js/functions.js"></script>
+<script  src="/dJS/en/library.js" type="text/javascript"></script>
+<script src="/soap/ajax/10.0/connection.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/setup.js"></script>
+<script  src="/static/081407/js/picklist.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(Scontrol.URL,'<','&lt;'),'>','&gt;'),'"','&quot;')}"></script>
+
+
+</head>
+
+<body class="case detailPage" onload="SVMXC_EN_ShowEntitlement('{!SUBSTITUTE(SUBSTITUTE(Case.Id,'<','&lt;'),'>','&gt;')}','{!SUBSTITUTE(SUBSTITUTE(User.Id,'<','&lt;'),'>','&gt;')}', 'CASE');">
+
+<div class="bPageBlock secondaryPalette">
+
+<form id="ent_form" name="ent_form">
+<div class="pbHeader">
+    <table  border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	    <td class="pbButton" align=center>
+		<input value="Check Entitlement" name="LAB001" class="btn" title="Check Entitlement" id="btnCheck" onclick="return SVMXC_EN_CheckEntitlementDelay();" type="button" />&nbsp;
+		<input value="Save Entitlement" name="LAB002" class="btn" title="Save Entitlement" id="btnSaveEnt" type="button" onclick="SVMXC_EN_SaveEntitlement();" />&nbsp;
+		<input value="Save Product" name="LAB003" class="btn" title="Save Product" id="btnSaveProd" type="button" onclick="SVMXC_EN_SaveProduct(true);" />&nbsp;
+		<input value="Configuration" name="LAB004" class="btn" title="Configuration" id="btnIbConfig" type="button" onclick="SVMXC_EN_LaunchIBConfigDelay();" />
+	    </td>
+	    <td class="labelCol" align=right><label name="LAB005">Include</label></td>
+	    <td class="dataCol"><input type="checkbox" id="expd_ent" name="expd_ent"></input></td>
+	    <td class="labelCol"><label name="LAB006" id="expd_ent_label">Expired Entitlements</label></td>
+	    <td class="dataCol"><input type="checkbox" id="fut_ent" name="fut_ent"></input></td>
+	    <td class="labelCol"><label name="LAB007" id="fut_ent_label">Future Entitlements</label></td>
+	<tr/>
+    </table>
+</div>
+
+<div id="enwaitmsg" style="display: none">
+<center>
+<br>
+<SPAN STYLE="font-size: 100%; font-family: 'Arial', 'Helvetica', sans-serif;"><b>Checking available entitlements. Please wait...</b></span><br>
+<img src="/img/waiting_dots.gif" alt="Please wait..." title="Please wait..." height="20" width="196"><br>
+<br>
+</center>
+</div>
+
+<div id="ibwaitmsg" style="display: none">
+<center>
+<br>
+<SPAN STYLE="font-size: 100%; font-family: 'Arial', 'Helvetica', sans-serif;"><b>Retrieving configuration. Please wait...</b></span><br>
+<img src="/img/waiting_dots.gif" alt="Please wait..." title="Please wait..." height="20" width="196"><br>
+<br>
+</center>
+</div>
+
+<div class="pbBody">
+	<div class="pbSubsection">
+	    <div id="ErrMsg" name="ErrMsg" style="color:red"></div>
+
+	    <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		    <td class="labelCol"><label name="LAB008" id="product_label" for="product">Product (Component)</label></td>
+		    <td class="dataCol col02">
+			<input type="hidden" name="product_lkid" id="product_lkid" value="" />
+			<input type="hidden" name="product_lkold" id="product_lkold" value="null" />
+			<input type="hidden" name="product_lktp" id="product_lktp" value="" />
+			<input type="hidden" name="product_lspf" id="product_lspf" value="0" />
+			<input type="hidden" name="product_mod" id="product_mod" value="0" />
+			<span class="lookupInput">
+			    <input  id="product" maxlength="255" name="product" size="20" tabindex="1" type="text"
+				    onchange="getElementByIdCS('product_lkid').value='';getElementByIdCS('product_mod').value='1';"
+				    onblur="SVMXC_EN_ExitProduct();" />
+			    <a href="JavaScript: openLookup('/_ui/common/data/LookupPage?lkfm=editPage&lknm=product&lktp=' +
+						document.getElementById('product_lktp').value, 670,
+						document.getElementById('product_mod').value, '&lksrch=' +
+						escapeUTF(document.getElementById('product').value));" 
+					id="product_lkwgt"
+					onclick="setLastMousePosition(event)" 
+					tabindex="500"
+					title="Product Lookup (New Window)">
+					<img src="/img/lookup.gif" alt="Product Lookup (New Window)" class="lookupIcon" title="Product Lookup (New Window)" /></a>
+			</span>
+		    </td>
+		    <td class="labelCol"><label name="LAB009" id="serial_label" for="serial">Serial/Lot Number</label></td>
+		    <td class="dataCol last">
+			<input type="hidden" name="ibprodid" id="ibprodid" value="" />
+			<input type="hidden" name="serial_lkid" id="serial_lkid" value="" />
+			<input type="hidden" name="serial_lkold" id="serial_lkold" value="null" />
+			<input type="hidden" name="serial_lktp" id="serial_lktp" value="" />
+			<input type="hidden" name="serial_lspf" id="serial_lspf" value="0" />
+			<input type="hidden" name="serial_mod" id="serial_mod" value="0" />
+			<span class="lookupInput">
+			    <input id="serial" maxlength="255" name="serial" size="20" tabindex="2" type="text"
+				    onchange="getElementByIdCS('serial_lkid').value='';getElementByIdCS('serial_mod').value='1';" 
+				    onblur="SVMXC_EN_ExitSerial();" />
+			    <a href="JavaScript: openLookup('/_ui/common/data/LookupPage?lkfm=editPage&lknm=serial&lktp=' +
+						document.getElementById('serial_lktp').value, 670,
+						document.getElementById('serial_mod').value, '&lksrch=' +
+						escapeUTF(document.getElementById('serial').value));" 
+					id="serial_lkwgt"
+					onclick="setLastMousePosition(event)" 
+					tabindex="500"
+					title="Installed Product Lookup (New Window)">
+					<img	src="/img/lookup.gif"
+						    alt="Installed Product Lookup (New Window)"
+						    class="lookupIcon"
+						    title="Installed Product Lookup (New Window)" /></a>
+			</span>
+		    </td>
+		</tr>
+		<tr>
+		    <td class="labelCol"><label name="LAB010" for="top_product">Product (Top-Level)</label></td>
+		    <td class="dataCol col02">
+			<input id="top_product" readonly="true" maxlength="255" name="top_product" size="20" tabindex="3" type="text" />
+			<input type="hidden" name="top_product_lkid" id="top_product_lkid" value="" /></td>
+		    <td class="labelCol"><label name="LAB011" for="top_serial">Serial/Lot Number</label></td>
+		    <td class="dataCol last">
+			<input id="top_serial" readonly="true" maxlength="255" name="top_serial" size="20" tabindex="4" type="text" />
+			<input type="hidden" name="top_serial_lkid" id="top_serial_lkid" value="" /></td>
+		</tr>
+	    </table>
+	    <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+		    <td class="labelCol last"><label name="LAB012" for="ent_notes">Entitlement Notes</label></td>
+		    <td class="data2Col last">
+			<textarea cols="80" id="ent_notes" value="" maxlength="32000" name="ent_notes" tabindex="5"
+				onchange="handleTextAreaElementChange('ent_notes', 32000, 'remaining', 'over limit');"
+				onclick="handleTextAreaElementChange('ent_notes', 32000, 'remaining', 'over limit');" 
+				onkeydown="handleTextAreaElementChange('ent_notes', 32000, 'remaining', 'over limit');" 
+				onkeyup="handleTextAreaElementChange('ent_notes', 32000, 'remaining', 'over limit');" 
+				onmousedown="handleTextAreaElementChange('ent_notes', 32000, 'remaining', 'over limit');"
+				rows="6" type="text" wrap="soft">
+			</textarea>
+		    </td>
+		</tr>
+	    </table>
+	    <hr/>
+	</div>
+</div>
+
+<div class="pbBody" id="entinfo" style="display:none">
+    <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	    <td class="labelCol"><label name="LAB013">Date of Entitlement</label></td>
+	    <td class="dataCol"><a id="ent_date"></a></td>
+	</tr>
+	<tr>
+	    <td class="labelCol"><label name="LAB014">Warranty</label></td>
+	    <td class="dataCol"><a id="ent_warr"></a></td>
+	    <td class="labelCol"><label name="LAB015">Service Contract</label></td>
+	    <td class="dataCol last"><a id="ent_sc"></a></td>
+	</tr>
+	<tr>
+	    <td class="labelCol"><label name="LAB022">Start Date</label></td>
+	    <td class="dataCol"><a id="ent_start_date"></a></td>
+	    <td class="labelCol"><label name="LAB023">End Date</label></td>
+	    <td class="dataCol last"><a id="ent_end_date"></a></td>
+	</tr>
+    </table>
+    <hr/>
+</div>
+<div class="pbBody" id="divResults" name="divResults">
+    <table id="tableEnt" class="list" border="0" cellpadding="0" cellspacing="0">
+
+	<tbody id="list_tbody">
+	</tbody>
+    </table>
+</div>
+
+<div class="pbBody" id="addlscinfo" style="display:none">
+    <hr/>
+    <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	    <td class="labelCol"><label name="LAB025" id="sld_label">Service Level Description</label></td>
+	    <td class="dataCol"><a id="svc_level_desc" name="svc_level_desc"></a></td>
+	    <td class="labelCol"><label name="LAB026" id="scn_label">Service Contract Notes</label></td>
+	    <td class="dataCol last"><a id="sc_notes" name="sc_notes"></a></td>
+	</tr>
+	<tr>
+	    <td class="labelCol"><label name="LAB027" id="svcl_label">Services Covered</label></td>
+	    <td class="dataCol"><a id="sc_svc_list" name="sc_svc_list"></a></td>
+	    <td class="labelCol"><label name="LAB028" id="contl_label">Contacts Covered</label></td>
+	    <td class="dataCol"><a id="sc_cont_list" name="sc_cont_list"></a></td>
+	</tr>
+	<tr>
+	    <td class="labelCol"><label name="LAB029" id="sitel_label">Sites Covered</label></td>
+	    <td class="dataCol"><a id="sc_site_list" name="sc_site_list"></a></td>
+	</tr>
+    </table>
+</div>
+
+<div class="pbBody" id="addlwarrinfo" style="display:none">
+    <hr/>
+    <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	    <td class="labelCol"><label name="LAB030" id="inv_reqd_label">Invoice Required</label></td>
+	    <td class="dataCol"><input disabled="true" type="checkbox" id="inv_reqd" name="inv_reqd"></input></td>
+	    <td class="labelCol"><label name="LAB034" id="shp_alwd_label">Shipment Allowed</label></td>
+	    <td class="dataCol last"><input disabled="true" type="checkbox" id="shp_alwd" name="shp_alwd"></input></td>
+	</tr>
+	<tr>
+	    <td class="labelCol"><label name="LAB031" id="loan_label">Loander Provided</label></td>
+	    <td class="dataCol"><input disabled="true" type="checkbox" id="loan_prov" name="loan_prov"></input></td>
+	    <td class="labelCol"><label name="LAB035" id="rma_label">RMA Required</label></td>
+	    <td class="dataCol last"><input disabled="true" type="checkbox" id="rma_reqd" name="rma_reqd"></input></td>
+	</tr>
+	<tr>
+	    <td class="labelCol"><label name="LAB032" id="ons_rep_label">Onsite Repair</label></td>
+	    <td class="dataCol"><input disabled="true" type="checkbox" id="ons_repair" name="ons_repair"></input></td>
+	    <td class="labelCol"><label name="LAB036" id="xfer_label">Transferable</label></td>
+	    <td class="dataCol last"><input disabled="true" type="checkbox" id="xferable" name="xferable"></input></td>
+	</tr>
+	<tr>
+	    <td class="labelCol"><label name="LAB033" id="walkin_label">Walk-in Allowed</label></td>
+	    <td class="dataCol"><input disabled="true" type="checkbox" id="walkin_alwd" name="walkin_alwd"></input></td>
+	    <td class="labelCol"><label name="LAB037" id="excl_label">Exclusions</label></td>
+	    <td class="dataCol last"><a id="warr_excl" name="warr_excl"></a></td>
+	</tr>
+    </table>
+</div>
+
+<div class="pbBody" id="ibtree" style="display:none">
+    <hr/>
+    <table  border="0" cellpadding="0" cellspacing="0">
+	<tr>
+	    <td class="pbButton" align=center>
+		<input value="Hide" class="btn" title="Hide" onclick="return SVMXC_EN_HideIBConfigSection();" id="btnHide" type="button" />&nbsp;
+		<input value="Show" class="btn" title="Show" onclick="return SVMXC_EN_ShowIBConfigSection();" id="btnShow" type="button" />
+	    </td>
+    	</tr>
+    </table>
+    <div id="domRoot" style="background-color: white; font-size: 9pt; font-family: verdana,helvetica;"></div>
+</div>
+</div>
+ </form>
+</body>
+</html>

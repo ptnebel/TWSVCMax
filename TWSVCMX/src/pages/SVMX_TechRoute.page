@@ -1,0 +1,21 @@
+<apex:page controller="SVMX_TechRoute" showheader="true" sidebar="false"  >
+
+    <apex:form id="frm">
+        <apex:pageBlock title="Technicians Route" id="mapBlk" tabStyle="svmxc__Service_Order__c">
+        <apex:messages />
+            <apex:pageBlockButtons location="top">  
+            <apex:commandButton action="{!ShowRoute}" value="Show Route" id="show_Route"/>
+            <apex:commandButton action="{!reset}" value="Reset" id="Reset"/>
+            <!--<apex:commandButton action="{!autorefresh}" value="Refresh" id="Refresh"/>  -->
+            </apex:pageBlockButtons>  
+            <apex:pageBlockSection columns="1">
+            <apex:inputField id="SRVTeamIP" value="{!WO.SVMXC__Service_Group__c}" ></apex:inputField>  
+            <apex:inputField id="TechIP" value="{!WO.SVMXC__Group_Member__c}" ></apex:inputField>  
+            <apex:inputField id="DateIP" value="{!WO.SVMXC__Scheduled_Date__c}" ></apex:inputField>
+            </apex:pageBlockSection>            
+            <apex:actionStatus startText="Refreshing...." id="myStatus"/>
+            <apex:iframe src="{!URL}" scrolling="False" id="theIframe" height="500px" />
+            <!-- <apex:actionPoller action="{!autorefresh}" rendered="{!autofresh}" status="myStatus" interval="30"/> -->
+        </apex:pageBlock>   
+    </apex:form>
+</apex:page>

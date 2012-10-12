@@ -1,0 +1,407 @@
+<apex:page controller="ServiceMaxMassDataEdit">
+<apex:form >
+    <apex:pageBlock title="ServiceMax Data Editor" id="editor"> 
+        <apex:pageBlockButtons style="text-align: left;" location="top">
+            <apex:commandButton action="{!AccountButton}" value="Account" rerender="editor" status="refreshstatus"></apex:commandButton>
+            <apex:commandButton action="{!LocationButton}" value="Location" rerender="editor" status="refreshstatus"></apex:commandButton>
+            <apex:commandButton action="{!ProductButton}" value="Product" rerender="editor" status="refreshstatus"></apex:commandButton>
+            <apex:commandButton action="{!IPButton}" value="Installed Product" rerender="editor" status="refreshstatus"></apex:commandButton>
+            <apex:commandButton action="{!WorkOrderButton}" value="Work Order" rerender="editor" status="refreshstatus"></apex:commandButton>
+            <apex:commandButton action="{!TechButton}" value="Technician/Equipment" rerender="editor" status="refreshstatus"></apex:commandButton>
+            <apex:commandButton action="{!updateDateButton}" value="Correct Dates" rerender="editor" status="refreshstatus"></apex:commandButton>
+            <!-- <apex:commandButton action="{!FeedItemsButton}" value="Chatter" rerender="editor" status="refreshstatus"></apex:commandButton> -->
+        </apex:pageBlockButtons>
+        
+        <apex:commandButton action="{!QuickSave}" value="Quick Save" rendered="{!button!='updateDate'&&button!=''&&button!='FeedItems'}" rerender="editor" status="Savestatus"></apex:commandButton>
+        <apex:commandButton action="{!Save}" value="Save" rendered="{!button!='updateDate'&&button!=''&&button!='FeedItems'}" rerender="editor" status="Savestatus"></apex:commandButton>
+        
+        <apex:pageBlockSection >    
+            <apex:actionStatus id="refreshstatus" startstyle="color:green;" startText="Refreshing...." ></apex:actionStatus>            
+            <apex:actionStatus id="Savestatus" startstyle="color:green;" startText="Saving...." ></apex:actionStatus> 
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="Account" rendered="{!button=='Account' && vieworedit=='edit'}">   
+            <!-- <apex:commandButton action="{!CreateNew}" rerender="editor" status="refreshstatus"></apex:commandButton> -->
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="Account" rendered="{!button=='Account' && vieworedit!='edit'}">   
+             <!--<apex:commandButton action="{!CreateAccountButton}" value="edit" rerender="editor" status="refreshstatus"></apex:commandButton>-->
+            <apex:pageBlockTable value="{!Accounts}" var="Acct" >                       
+                <!-- <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Delete"></apex:outputText></apex:facet>       
+                    <apex:inputCheckbox value="{!Acct.Select__c}" />  
+                </apex:column>
+                 -->
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Name"></apex:outputText></apex:facet>       
+                    <!-- <apex:inputField value="{!Acct.Name}" />  -->
+                    <!-- <apex:inputField value="{!Acct.Name}" rendered="{!(!Acct.IsPersonAccount)}"/>
+                    <apex:outputPanel rendered="{!Acct.IsPersonAccount}">
+                    	<apex:inputText value="{!Acct.FirstName}" />
+                    	<apex:inputText value="{!Acct.LastName}" />
+                    </apex:outputPanel>   
+                     --> 
+                </apex:column> 
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Billing Street"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Acct.BillingStreet}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Billing City"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Acct.BillingCity}"/>    
+                </apex:column>  
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Billing State"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Acct.BillingState}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Billing Country"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Acct.BillingCountry}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Billing Zip"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Acct.BillingPostalCode}"/>    
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="Location" rendered="{!button=='Location'}">   
+            <apex:pageBlockTable value="{!Locations}" var="Loc" >
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Name"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Loc.Name}"/>    
+                </apex:column> 
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Account"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Loc.SVMXC__Account__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Street"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Loc.SVMXC__Street__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="City"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Loc.SVMXC__City__c}"/>    
+                </apex:column>  
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="State"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Loc.SVMXC__State__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Country"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Loc.SVMXC__Country__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Zip"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Loc.SVMXC__Zip__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Stocking Location"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Loc.SVMXC__Stocking_Location__c}"/>    
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="Technician/Equipment" rendered="{!button=='Tech'}">   
+            <apex:pageBlockTable value="{!Techs}" var="Tech" >
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Name"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Tech.Name}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Street"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Tech.SVMXC__Street__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="City"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Tech.SVMXC__City__c}"/>    
+                </apex:column>  
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="State"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Tech.SVMXC__State__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Country"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Tech.SVMXC__Country__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Zip"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Tech.SVMXC__Zip__c}"/>    
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+                
+        <apex:pageBlockSection title="Product" rendered="{!button=='Product'}">
+            <apex:pageBlockTable value="{!Products}" var="Prod" >
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Name"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Prod.Name}" style="width:300px"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Product Code"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Prod.ProductCode}"/>    
+                </apex:column>  
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Product Family"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Prod.Family}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Product Line"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Prod.SVMXC__Product_Line__c}"/>    
+                </apex:column>  
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Description"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Prod.Description}" style="width:300px"/>    
+                </apex:column>  
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Enable Serialized Tracking of Stock"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Prod.SVMXC__Enable_Serialized_Tracking__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Stockable"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!Prod.SVMXC__Stockable__c}"/>    
+                </apex:column>    
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="Installed Products" rendered="{!button=='IP'}" id="IPSection">
+            <apex:pageBlockTable value="{!InstalledProducts}" var="IP" >
+                <apex:column >
+                    <apex:facet name="header">
+                    <apex:commandLink rerender="IPSection" action="{!ViewInstalledProducts}" value="Name{!IF(sortExpression=='name',IF(sortDirection=='ASC','▼','▲'),'')}" >
+                        <apex:param value="name" name="column" assignTo="{!sortExpression}"></apex:param>
+                    </apex:commandLink>
+                    </apex:facet>  
+                    <apex:outputField value="{!IP.Name}" />     
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">
+                    <apex:commandLink rerender="IPSection" action="{!ViewInstalledProducts}" value="Serial Number{!IF(sortExpression=='SVMXC__Serial_Lot_Number__c',IF(sortDirection=='ASC','▼','▲'),'')}">
+                        <apex:param value="SVMXC__Serial_Lot_Number__c" name="column" assignTo="{!sortExpression}"></apex:param>
+                    </apex:commandLink>
+                    </apex:facet>       
+                    <apex:inputField value="{!IP.SVMXC__Serial_Lot_Number__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Component"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!IP.SVMXC__Product__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Parent Component"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!IP.SVMXC__Parent__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Top Level Component"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!IP.SVMXC__Top_Level__c}"/>    
+                </apex:column>   
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Location"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!IP.SVMXC__Site__c}"/>    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Street"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!IP.SVMXC__Street__c}"/>    
+                </apex:column>    
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="City"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!IP.SVMXC__City__c}"/>    
+                </apex:column>   
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="State"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!IP.SVMXC__State__c}"/>    
+                </apex:column>   
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Zip"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!IP.SVMXC__Zip__c}"/>    
+                </apex:column>  
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+                 
+        <apex:pageBlockSection title="Work Order" rendered="{!button=='WorkOrder'}" id="WorkOrderSection">
+            <apex:pageBlockTable value="{!WorkOrders}" var="WO" >
+                <apex:column >
+                    <apex:facet name="header">
+                    <apex:commandLink rerender="WorkOrderSection" action="{!ViewWorkOrders}" value="Name{!IF(sortExpression=='Name',IF(sortDirection=='ASC','▼','▲'),'')}">
+                        <apex:param value="Name" name="column" assignTo="{!sortExpression}"></apex:param>
+                    </apex:commandLink>
+                    </apex:facet>       
+                    <apex:outputField value="{!WO.Name}" />    
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Component"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__Component__c}"/>      
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Order Type"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__Order_Type__c}"/>      
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Order Status"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__Order_Status__c}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Account"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__Company__c}"/>
+                </apex:column>
+                <!-- <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Record Type"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.RecordTypeId}"/>                    
+                </apex:column>  
+                --> 
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Priority"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__Priority__c}"/>
+                </apex:column>               
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Street"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__Street__c}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="City"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__City__c}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="State"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__State__c}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Country"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__Country__c}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header"><apex:outputText value="Zip"></apex:outputText></apex:facet>       
+                    <apex:inputField value="{!WO.SVMXC__Zip__c}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="Automatic Date Updater" rendered="{!button=='updateDate'}" id="AutoDateSection" columns="1">  
+            <apex:pageBlockSectionItem >
+                <apex:commandButton action="{!AutoDateCorrect}" value="Make Dates Current" status="DatesCurrentStatus" rerender="AutoDateSection"></apex:commandButton>             
+                <apex:outputText value="All Work Orders with Scheduled Dates and All Events in the Dispatch Console will be updated. "></apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:actionStatus id="DatesCurrentStatus" startstyle="color:green;" startText="Updating...." ></apex:actionStatus> 
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="Manual Date Updater" rendered="{!button=='updateDate'}" id="DateSection" columns="1">                             
+            <apex:pageBlockSectionItem >    
+                <apex:outputLabel value="Current Date in the Org" />
+                <apex:inputField value="{!RefOrder.SVMXC__Preferred_End_Time__c}" />
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >    
+                <apex:outputLabel value="New Desired Date" />
+                <apex:inputField value="{!RefOrder.SVMXC__Preferred_Start_Time__c}" />
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >    
+                <apex:commandButton value="Calculate Dates" rerender="DateSection"></apex:commandButton>
+                <apex:outputText value="{!CalculateDate}"></apex:outputText>                
+            </apex:pageBlockSectionItem>
+            <apex:pageMessages />
+            <apex:pageBlockSectionItem >    
+                <apex:commandButton value="Ready to Confirm" rerender="calculationReadySection"></apex:commandButton>           
+                <apex:outputText value=" "></apex:outputText>
+            </apex:pageBlockSectionItem>            
+        </apex:pageBlockSection>
+        
+        <apex:outputPanel id="calculationReadySection">     
+        <apex:pageBlockSection title="Confirm" rendered="{!calculationReady=true}" columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="The following objects and fields will be updated:" />
+                <apex:outputText value="WorkOrder.Scheduled Date"/>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:commandButton action="{!CommitDates}" value="Submit Calculation"></apex:commandButton>
+                <apex:outputLabel value="There is no way to UNDO after this!" />
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection> 
+        </apex:outputPanel>
+<!-- 
+    <apex:pageBlockSection title="Create Feed Items" rendered="{!button=='FeedItems'}" id="FeedId">  
+        <apex:pageBlockTable value="{!cFeedItems}" var="Feed" >     
+             <apex:column >
+                <apex:facet name="header"><apex:outputText value="Type"></apex:outputText></apex:facet>       
+                <apex:inputField value="{!Feed.fitem.Type}"/>    
+            </apex:column>    
+                
+            <apex:column > 
+                <apex:facet name="header"><apex:outputText value="Created By Id"></apex:outputText></apex:facet>       
+                <apex:inputField value="{!Feed.fitem.CreatedById}"/>     
+            </apex:column>                               
+            <apex:column >
+                <apex:facet name="header"><apex:outputText value="Object"></apex:outputText></apex:facet>       
+                <apex:selectList value="{!Feed.objectName}" size="1" required="true">
+                    <apex:selectOptions value="{!ObjectList}"/>
+                    <apex:actionSupport event="onchange" reRender="FeedId" status="MatchStatus">
+                        <apex:param name="matchFeedid" value="{!Feed.fitem.Id}" assignTo="{!matchFeedId}"/>
+                                                            
+                    </apex:actionSupport>        
+                                 
+                </apex:selectList>     
+            </apex:column>  
+            <apex:column >
+                <apex:facet name="header"><apex:outputText value="Matched Object"></apex:outputText></apex:facet>  
+                <apex:actionStatus id="MatchStatus" startstyle="color:green;" startText="Retrieving...." ></apex:actionStatus>      
+                <apex:outputText value="check FeedId: {!matchFeedId}"/>
+                <apex:inputField value="{!Feed.sobj.so.SVMXC__Company__c}" rendered="{!Feed.objectName=='Account'}" >
+                    <apex:actionSupport event="onchange" action="{!updateParentId}" rerender="FeedId">
+                        
+                    </apex:actionSupport>
+                </apex:inputField> 
+                <apex:inputField value="{!Feed.sobj.so.SVMXC__Contact__c}" rendered="{!Feed.objectName=='Contact'}"/>
+                <apex:inputField value="{!Feed.sobj.so.SVMXC__Component__c}" rendered="{!Feed.objectName=='Installed Product'}"/>
+            </apex:column>    
+                             
+            <apex:column > 
+                <apex:facet name="header"><apex:outputText value="Object-Record"></apex:outputText></apex:facet>       
+                <apex:inputField value="{!Feed.sobj['AccountId']}" rendered="{!matchFeedobject=='Account'}"/>       // rendered="{!matchFeedobject=='Account'}" 
+            </apex:column> 
+                                                       
+            <apex:column >
+                <apex:facet name="header"><apex:outputText value="Parent Id"></apex:outputText></apex:facet>       
+                <apex:outputText value="{!Feed.fitem.ParentId}"/>     
+            </apex:column> 
+            <apex:column >
+                <apex:facet name="header"><apex:outputText value="Body"></apex:outputText></apex:facet>       
+                <apex:inputField value="{!Feed.fitem.Body}"/>     
+            </apex:column> 
+                                          
+        </apex:pageBlockTable>  
+        <apex:outputPanel >
+        <apex:commandLink value="Add Row" action="{!addFeedRow}" rerender="FeedId" status="addstatus"/> &nbsp;|&nbsp;&nbsp;
+        <apex:commandLink value="Remove Row" action="{!removeFeedRow}" rerender="FeedId" status="delstatus"/>   
+        <br></br> <br></br>
+        <apex:actionStatus id="addstatus" startstyle="color:green;" startText="Adding New Feed Line.... (please wait)" ></apex:actionStatus>
+        <apex:actionStatus id="delstatus" startstyle="color:green;" startText="Removing Last Feed Line.... (please wait)" ></apex:actionStatus>
+        </apex:outputPanel>     
+    </apex:pageBlockSection>    
+    
+    
+    <apex:commandButton rendered="{!button=='FeedItems'}" action="{!CreateNew}" value="Create Feeds" status="Savestatus"></apex:commandButton>
+    <br></br><apex:outputText rendered="{!button=='FeedItems'}" value="  This is a one time action and cannot be undone. "/>
+    
+            
+    <apex:pageBlockSection title="Current Feed Items" rendered="{!button=='FeedItems'}">    
+        <apex:pageBlockTable value="{!FeedItems}" var="FeedI" >     
+            <apex:column >
+                <apex:facet name="header"><apex:outputText value="Type"></apex:outputText></apex:facet>       
+                <apex:outputField value="{!FeedI.Type}"/>    
+            </apex:column>              
+            <apex:column >
+                <apex:facet name="header"><apex:outputText value="Body"></apex:outputText></apex:facet>       
+                <apex:outputField value="{!FeedI.Body}" rendered="{!FeedI.Type=='TextPost'}"/>    
+            </apex:column> 
+            <apex:column >
+                <apex:facet name="header"><apex:outputText value="Record Name"></apex:outputText></apex:facet>       
+                <apex:outputField value="{!FeedI.Parent.Name}"/>    
+            </apex:column> 
+            <apex:column >
+                <apex:facet name="header"><apex:outputText value="Chatter By"></apex:outputText></apex:facet>       
+                <apex:outputField value="{!FeedI.CreatedBy.Name}"/>    
+            </apex:column>                         
+        </apex:pageBlockTable>
+    </apex:pageBlockSection>
+    -->
+    </apex:pageBlock>   
+     
+</apex:form> 
+</apex:page>

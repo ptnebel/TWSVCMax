@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--
+// ServiceMax Release 1.0
+// Automatic Renewal of Service Contract. 
+// 1. Captures Start & End Date.
+// 2. Copies Service contract header, products, contacts, sites and services into a new Service Contract
+// 3. Sets the renewal number, date and reference to old contract
+// The new contract will be inactive by default and should be Activated explicitly by clicking Activate button
+-->
+<html>
+<head>
+<title>Renew Service Contract</title>
+<link  href="/dCSS/Theme2/default/elements.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/dCSS/Theme2/default/common.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/dCSS/Theme2/default/custom.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/ie7/rlHovers.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/css/assistive.css" media="aural,braille,embossed" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/dStandard.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/{!SUBSTITUTE(SUBSTITUTE($Organization.Id,'<','&lt;'),'>','&gt;')}/{!SUBSTITUTE(SUBSTITUTE($User.Id,'<','&lt;'),'>','&gt;')}/dCustom0.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/extended.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="/js/functions.js"></script>
+<script  src="/dJS/en/library.js" type="text/javascript"></script>
+<script src="/soap/ajax/10.0/connection.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/setup.js"></script>
+<script  src="/static/081407/js/picklist.js" type="text/javascript"></script>
+<script type="text/javascript" src="{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(Scontrol.URL,'<','&lt;'),'>','&gt;'),'"','&quot;')}"></script>
+
+
+<script language="javascript" type="text/javascript">
+
+var MsgList = new Array();
+
+function SVMXC_SC_SetupRenewalPage()
+{
+    SVMXC_SC_InitMessageList("SCONSC3");
+    SVMXC_SC_SetLabels("screnewform");
+    var sdate = document.getElementById("start_date");
+    var edate = document.getElementById("end_date");
+    sdate.value = "{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(TEXT(Service_Contract__c.Start_Date__c),'<','&lt;'),'>','&gt;'),'"','&quot;')}";
+    edate.value = "{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(TEXT(Service_Contract__c.End_Date__c),'<','&lt;'),'>','&gt;'),'"','&quot;')}";
+}
+
+/*=============================================================================*/
+</script>
+</head>
+
+<body class="Custom76Tab detailPage" onload="SVMXC_SC_SetupRenewalPage()">
+
+<div class="bPageTitle" id="EditTitle">
+    <div class="ptBody secondaryPalette">
+    	<div class="content">
+		<img src="/s.gif" alt="Service Contract" class="pageTitleIcon" title="Service Contract"/>
+		<h1 class="pageType">Renew Service Contract<span  class="titleSeparatingColon">:</span></h1>
+		<h2 class="pageDescription">{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(Service_Contract__c.Name,'<','&lt;'),'>','&gt;'),'"','&quot;')}</h2>
+		<br>
+		<div class="blank">&nbsp;</div>
+	</div>
+    </div>
+</div>
+
+<div class="bPageBlock bEditBlock secondaryPalette">
+    <div class="pbBody">
+	<form id="screnewform">
+	    <div class="pbSubsection">
+		<div id="ErrMsg" name="ErrMsg" style="color:red"></div>
+
+		<div class="buttons">
+		    <input value="Renew Contract" name="LAB003" class="btn" title="Renew Contract" onclick="SVMXC_SC_RenewServiceContract('{!SUBSTITUTE(SUBSTITUTE(Service_Contract__c.Id,'<','&lt;'),'>','&gt;')}');" id="btnSave" type="button" />&nbsp;
+		    <input value="Cancel" name="LAB004" class="btn" title="Cancel" id="btnCancel" type="button" onclick="SVMXC_SC_CancelScreen();" />&nbsp;
+		</div>
+
+		<hr />
+
+		<table class="detailList" border="0" cellpadding="0" cellspacing="0">	
+		    <tr>
+			<td class="labelCol"><label name="LAB001" for="start_date">Start Date</label></td>
+			<td class="dataCol">
+			    <div class="requiredInput"><div class="requiredBlock"></div>
+			    <span class="dateInput">
+				<input id="start_date" maxlength="20" name="start_date" size="20" tabindex="1" type="text" />
+				<a href="JavaScript: SVMXC_ShowCal(document.getElementById('start_date'), 'screnewform');"
+					id="cal1"
+					onclick="setLastMousePosition(event)" 
+					tabindex="500">
+					<img src="/img/date_picker.gif" alt="" class="datePickerIcon" title="" /></a>
+			    </span>
+			    </div>
+			</td>
+		    </tr>
+		    <tr>
+			<td class="labelCol"><label name="LAB002" for="end_date">End Date</label></td>
+			<td class="dataCol">
+			    <div class="requiredInput"><div class="requiredBlock"></div>
+			    <span class="dateInput">
+				<input id="end_date" maxlength="20" name="end_date" size="20" tabindex="2" type="text" />
+				<a href="JavaScript: SVMXC_ShowCal(document.getElementById('end_date'), 'screnewform');"
+					id="cal2"
+					onclick="setLastMousePosition(event)" 
+					tabindex="500">
+					<img src="/img/date_picker.gif" alt="" class="datePickerIcon" title="" /></a>
+			    </span>
+			    </div>
+			</td>
+		    </tr>
+		</table>
+	    </div>
+	</form>
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,73 @@
+<apex:component controller="SVMXC.SVMX_Sequence" allowDML="true">
+<style>
+     .customPopup
+     {
+         background-color: #F8F8F8;
+                border-style: solid;
+                border-width: 1px;
+                left: 50%;
+                padding:10px;
+                position: fixed;
+                z-index: 9999;
+                /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set            margin-left to negative half of what the width is. You can also add            the height property for a fixed size pop up.*/
+                width: 460px;
+                height:310px;
+                margin-left: -160px;
+                top:150px;
+                opacity:10;
+     }
+
+.disableTab 
+     {
+        background-color : Lightgrey ;
+        color:LightGrey;
+        background-image:none;
+        font-size:1.2em;
+     }
+</style>
+<script type="text/javascript">
+function sequence1(){
+
+
+}
+</script>
+<apex:attribute name="RecordLst" type="SVMXC__ServiceMax_Processes__c[]" required="false" description="" assignTo="{!TempProcessObjLst}" />
+<!-- <apex:attribute name="HeaderRecId" type="String" required="false" description="" assignTo="{!HeaderRecId}" /> -->
+<apex:outputPanel id="seqblock" rendered="true" layout="block" styleClass="customPopup">
+            <apex:pageBlock id="TrtrySeqBlk" mode="edit" helpTitle="{!TAG004}" helpUrl="{!TAG005}"> 
+                <apex:pageMessages rendered="false"/>
+                <b><apex:actionStatus id="LoadingSeqPopUp"  startText="{!TAG006}" rendered="true"/></b>
+                <apex:pageBlockButtons id="pbtns" location="Bottom">
+                    <apex:commandButton value="{!TAG001}" id="SaveOnSeq" action="{!SVMX_SaveSequence}"  status="LoadingSeqPopUp" reRender="seqblock" oncomplete="javascript:window.location.reload();"/>
+                    <apex:commandButton value="{!TAG002}" onclick="javascript:document.getElementById('{!$Component.sequencepanel}').style.display = 'none';" reRender="seqblock"/>
+                </apex:pageBlockButtons>    
+                    <apex:panelGrid cellpadding="0" cellspacing="1" columns="2" width="31%" border="0"  >
+                        <apex:pageBlockSection columns="1" id="list1">
+                        <apex:panelGrid cellspacing="0" cellpadding="0" width="65%" columns="1" border="0" >
+                            <center><apex:toolbar id="theToolbarPP" styleClass="disableTab" width="45%">
+                                <apex:toolbarGroup location="left" id="toolbarGroupPP">
+                                    <apex:outputText value="{!TAG003}"/>                
+                                </apex:toolbarGroup>
+                            </apex:toolbar></center>
+                            <apex:selectList value="{!items}" multiselect="true" style="height:200px;width:320px" id="SeqLst">
+                                <apex:selectOptions value="{!ActionOptns}"/>                
+                            </apex:selectList><p/>
+                        </apex:panelGrid>
+                    </apex:pageBlockSection>
+                    <apex:panelGrid cellspacing="7" cellpadding="0" width="35%" columns="1" style="text-align: center;">
+                        <apex:outputText value="  " /><apex:outputText value="  " /> <apex:outputText value="  "/>  <apex:outputText value="  "/><apex:outputText value="  "/><apex:outputText value="  "/>
+                        <div>
+                            <apex:commandButton action="{!Top}" id="top" rerender="TrtrySeqBlk" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Top_Bttn.JPG')}" alt="{!Tag007}" title="{!Tag007}" status="LoadingSeqPopUp"/>
+                            <apex:commandButton action="{!UP}" id="Up" rerender="TrtrySeqBlk" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Up_Bttn.JPG')}" alt="{!Tag008}" title="{!Tag008}" status="LoadingSeqPopUp"/>
+                            <apex:commandButton action="{!Down}" id="down" rerender="TrtrySeqBlk" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Down_Bttn.JPG')}" alt="{!Tag009}" title="{!Tag009}" status="LoadingSeqPopUp"/>
+                            <apex:commandButton action="{!Bottom}" id="Bottom" rerender="TrtrySeqBlk" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Bottom_Bttn.JPG')}" alt="{!Tag010}" title="{!Tag010}" status="LoadingSeqPopUp"/>
+                        </div>
+                    </apex:panelGrid>
+                    </apex:panelGrid>
+                
+            </apex:pageBlock>
+        
+        </apex:outputPanel>
+
+
+</apex:component>

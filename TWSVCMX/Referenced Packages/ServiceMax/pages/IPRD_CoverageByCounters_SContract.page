@@ -1,0 +1,84 @@
+<apex:page id="CounterRule" controller="SVMXC.IPRD_CoverageByCounters_SContract">
+<apex:form id="RuleForm">
+        <style>
+            .disableTab {
+                background-color :#B0BFD2 ;
+                color:darkred;
+                background-image:none;
+                font-size:1.2em;
+            }
+        </style> 
+        <!--newly added on 06/10/2010 by hh to deal with defect 1388-->
+        <script type="text/javascript">
+        function stopRKey(evt)
+        {
+            var evt = (evt) ? evt : ((event) ? event : null);
+            var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+            if ((evt.keyCode == 13) && (node.type=="text"))  
+            {
+                return false;
+            }
+        }
+        document.onkeypress = stopRKey;
+    </script>
+        <apex:PageMessages />
+        <apex:pageBlock id="RuleBlock" mode="Edit" helpTitle="{!Tag021}" helpUrl="{!HLPURL}">
+            <apex:pageBlockButtons id="pbtns" location="Top">
+                <apex:commandButton value="{!TAG003}" action="{!SVMX_SaveCounters}" Disabled="{!DisbleSaveBttn}" reRender="RuleForm" status="LodingStatus"/>
+                <apex:commandButton value="{!TAG002}" action="{!SVMX_Cancel}"/>             
+            </apex:pageBlockButtons> 
+            <apex:panelBar id="PanelBar" rendered="{!ShowPanel}">  
+                <apex:panelBarItem label="{!TAG001}" headerClass="disableTab" Id="PBItem">   
+                    <center>
+                    <apex:panelGrid columns="1" id="theGrid" width="100%" >          
+                       <apex:outputText ><b>{!TAG016}&nbsp;{!SrvcContract.Name}.&nbsp;{!TAG017}</b></apex:outputText>
+                    </apex:panelGrid></center> 
+                     <hr/>
+                     
+                    <apex:panelGrid columns="1" id="theGrid1" width="100%"> 
+                        <b><apex:actionStatus id="LodingStatus"  startText="{!TAG013}"/></b>
+                        <apex:pageBlockTable value="{!WrapCounterList}" var="PCounter" id="CounterRecList" styleClass="tableClass" width="100%">
+                             <apex:column >
+                                <apex:facet name="header">{!TAG004}</apex:facet>              
+                                <apex:outputfield value="{!PCounter.appProd.SVMXC__Installed_Product__r.SVMXC__Product__c}"/>
+                            </apex:column>
+                             <apex:column >
+                                <apex:facet name="header">{!TAG007}</apex:facet>              
+                                <apex:outputText value="{!PCounter.ProdName}"/>
+                            </apex:column>  
+                             <apex:column >
+                                <apex:facet name="header">{!TAG005}</apex:facet>              
+                                <apex:outputText value="{!PCounter.RuleName}"/>
+                            </apex:column>                       
+                             <apex:column >
+                                <apex:facet name="header">{!TAG006}</apex:facet>              
+                                <apex:outputField value="{!PCounter.Counter.SVMXC__Counter_Name__c}"/>
+                            </apex:column>
+                             <apex:column >
+                                <apex:facet name="header">{!TAG008}</apex:facet>              
+                                <apex:outputField value="{!PCounter.Counter.SVMXC__Counter_Type__c}"/>
+                            </apex:column>
+                             <apex:column >
+                                <apex:facet name="header">{!TAG009}</apex:facet>              
+                                <apex:outputField value="{!PCounter.Counter.SVMXC__Min_Value__c}"/>
+                            </apex:column>
+                             <apex:column >
+                                <apex:facet name="header">{!TAG010}</apex:facet>              
+                                <apex:outputField value="{!PCounter.Counter.SVMXC__Max_Value__c}"/>
+                            </apex:column>                           
+                            <apex:column >
+                                <apex:facet name="header">{!TAG011}</apex:facet>              
+                                <apex:inputField value="{!PCounter.Counter.SVMXC__Coverage_Starts_At__c}"/> 
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG012}</apex:facet>              
+                                <apex:inputField value="{!PCounter.Counter.SVMXC__Counters_Covered__c}"/> 
+                            </apex:column>              
+                        </apex:pageBlockTable>
+                    </apex:panelGrid>
+                    
+                </apex:panelBarItem>
+            </apex:panelBar>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

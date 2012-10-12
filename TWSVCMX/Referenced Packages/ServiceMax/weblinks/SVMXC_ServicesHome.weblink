@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPageWebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <availability>online</availability>
+    <description>Link to show Services tab</description>
+    <displayType>link</displayType>
+    <linkType>sControl</linkType>
+    <masterLabel>Available Services Home</masterLabel>
+    <openType>replace</openType>
+    <protected>false</protected>
+    <scontrol>SVMXC_ServicesHome</scontrol>
+</CustomPageWebLink>

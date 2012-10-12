@@ -1,0 +1,74 @@
+<apex:page controller="SVMXC.CONF_ManageTranslations" id="page1" tabStyle="SVMXC__ServiceMax_Tags__c">
+  <apex:form id="form1">
+    <apex:pageBlock title="{!TAG001}" id="pblock1" helpTitle="{!TAG013}" helpUrl="{!HLPURL}">
+         <apex:pageBlockButtons Location="Top">
+            <apex:commandButton action="{!goHome}" value="{!TAG002}" id="backtohomesetup"/>
+          </apex:pageBlockButtons>
+
+<apex:pageblockSection columns="1"> 
+<apex:actionStatus id="LodingStatus"  startText="{!TAG014}"/>
+          <apex:pageBlockSectionItem >
+          <apex:outputLabel style="margin:0px 5px;" value="{!TAG004}" id="mview"/>
+          <apex:outputPanel layout="block" styleClass="requiredInput">
+          <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+          <apex:selectList value="{!moduleView}" size="1" onchange="Makesubmodule()"> 
+                <apex:selectOptions value="{!module}"/>
+                 <apex:actionFunction action="{!Callsubmodule}" name="Makesubmodule" reRender="form1" status="LodingStatus"/>
+               
+          </apex:selectList>
+          </apex:outputPanel>
+        
+          </apex:pageBlockSectionItem> 
+       
+         
+        <apex:pageBlockSectionItem > 
+             
+             <apex:outputLabel style="margin:0px 5px;" value="{!TAG005}"/>
+             <apex:outputPanel layout="block" styleClass="requiredInput">
+             <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+             <apex:selectList value="{!submoduleView}"  onchange="Maketag()" size="1">
+                <apex:selectOptions value="{!SubModule}"/>
+               <apex:actionFunction action="{!Calltag}" name="Maketag" reRender="form1" status="LodingStatus"/>
+            </apex:selectList>
+           </apex:outputPanel>
+           
+         </apex:pageBlockSectionItem>
+         
+         <apex:pageBlockSectionItem > 
+          <apex:outputLabel style="margin:0px 5px;" value="{!TAG003}"/>
+             <apex:outputPanel layout="block" styleClass="requiredInput">
+             <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+          <apex:inputField value="{!Language.SVMXC__Language__c}" onchange="Makelang()">
+            <apex:actionFunction action="{!Calltag}" name="Makelang" reRender="form1" status="LodingStatus"/>
+          </apex:inputfield>
+          </apex:outputPanel>
+          </apex:pageBlockSectionItem>
+          </apex:pageblockSection>
+   </apex:pageBlock>
+  
+   <apex:pageBlock id="pblock2" title="{!TAG006} {!sname.SVMXC__Name__c}" rendered="{!DisplayTags}"> 
+    <apex:pageMessages rendered="{!Msg}"/> 
+  <apex:outputLabel value="{!TAG011}" style="font-size:11px" rendered="{!if(IsStdAvail==false,true,false)}"/> 
+  <apex:actionStatus id="LodingStatus1"  startText="{!TAG014}"/>
+        <apex:pageBlockButtons location="Top">
+            <apex:commandButton action="{!Save}" value="{!TAG007}" reRender="pblock2" status="LodingStatus1"/>
+            <apex:commandButton action="{!CopyTranslation}" value="{!TAG015}" reRender="pblock2" status="LodingStatus1"/>
+            <apex:commandButton action="{!Clear}" value="{!TAG016} {!strlangLab} {!TAG017}" reRender="pblock2" status="LodingStatus1"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockTable id="ptable1" value="{!wrapTags}" var="s" rendered="{!if(IsStdAvail==true,true,false)}">
+              <apex:column >
+                     <apex:facet name="header">{!$ObjectType.SVMXC__ServiceMax_Tags__c.fields.Name.Label}</apex:facet>
+                     <apex:outputField value="{!s.wTagMasterRec.name}"/>
+               </apex:column>
+              <apex:column >
+                     <apex:facet name="header">{!TAG008}</apex:facet>
+                     <apex:outputField value="{!s.wTagMasterRec.SVMXC__Tag_Text__c}"/>
+               </apex:column>
+               <apex:column >
+                     <apex:facet name="header">{!strlangLab} {!TAG009}</apex:facet>
+                     <apex:inputtext value="{!s.wTagLangRec.SVMXC__Tag_Text__c}"style="width:300px;" /> <!-- style="border-left:3px solid #CC0000;" -->
+               </apex:column>
+        </apex:pageBlockTable>       
+   </apex:pageBlock>
+  </apex:form>
+</apex:page>

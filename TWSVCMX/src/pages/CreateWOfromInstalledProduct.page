@@ -1,0 +1,52 @@
+<apex:page title="{!TAG001}" controller="CreateWOfromInstalledProduct" sidebar="true" showHeader="true" tabStyle="SVMXC__Service_Order__c"> 
+
+    <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_Resources/css/SVMXC_Resources.css')}" />
+    <apex:pageMessages rendered="{!NOT(DisplayBlockLevelMessage)}" showDetail="true" /> 
+    
+    <apex:form id="createwo" rendered="{!ShowValidData}" >
+
+       <!--   <apex:actionFunction name="newTargetObj()" action="{!newTargetObj}"  status="myStatus"/> -->
+        <apex:variable value="{!InstalledProductHeader}" var="chdr"/>
+
+        <apex:pageBlock id="block" title="Create Work Order From: {!InstalledProductHeader.Name}" helpTitle="{!TAG003}" mode="edit" helpUrl="{!HLPURL}"><br/> 
+            <apex:pageBlockButtons location="top" style="text-align:center;">   
+                <apex:commandButton action="{!newTargetObj}" value="{!TAG005}" id="createchildbutton"/>
+                <apex:commandButton action="{!Cancel}" value="{!TAG006}"/>              
+            </apex:pageBlockButtons><br/>
+            
+            <apex:pageBlockSection columns="2">
+                
+                <apex:pageBlockSectionItem rendered="{!if(RecTypSize>0,true,false)}">                 
+                    <apex:outputlabel style="font:bold" value="{!TAG004}"/> 
+                    <apex:selectList style="width:25%" value="{!SelectedRecordType}" size="" multiselect="false">       
+                    	<apex:selectOptions value="{!ObjectRecordTypes}"/>                
+                    </apex:selectList>     
+                </apex:pageBlockSectionItem>  
+ 
+                <apex:outputField id="Account" value="{!WOHeader.SVMXC__Company__c}" rendered="true"/>  <!-- SVMXC__Company__c -->
+                <apex:outputField id="Contact" value="{!WOHeader.SVMXC__Contact__c}" rendered="true"/>
+                <apex:inputField id="Owner" value="{!WOHeader.OwnerId}" rendered="true" />   
+                <apex:inputField id="Component" value="{!WOHeader.SVMXC__Component__c}" rendered="false"/> 
+            </apex:pageBlockSection> 
+            
+            <apex:pageBlockSection title="Order Details" collapsible="true">  
+            	<apex:inputField id="OrderStatus" value="{!WOHeader.SVMXC__Order_Status__c}" rendered="true"/>
+            	<apex:inputField id="OrderPriority" value="{!WOHeader.SVMXC__Priority__c}" rendered="true" />   
+            	<apex:inputField id="OrderType" value="{!WOHeader.SVMXC__Order_Type__c}" rendered="true" />    	
+            </apex:pageBlockSection>
+            
+            <apex:pageblockSection title="Service Location" columns="1" dir="LTR">
+	            <apex:inputField id="Street" value="{!WOHeader.SVMXC__Street__c}" rendered="true" />       
+	            <apex:inputField id="City" value="{!WOHeader.SVMXC__City__c}" rendered="true" /> 
+	            <apex:inputField id="State" value="{!WOHeader.SVMXC__State__c}" rendered="true" /> 
+	            <apex:inputField id="Country" value="{!WOHeader.SVMXC__Country__c}" rendered="true" /> 
+	            <apex:inputField id="Zip" value="{!WOHeader.SVMXC__Zip__c}" rendered="true" />  
+	        </apex:pageblockSection>   
+	                
+        </apex:pageBlock> 
+      
+       <!-- <apex:detail relatedList="false" title="Case Record" rendered="true"/> -->
+        
+    </apex:form>
+
+</apex:page>

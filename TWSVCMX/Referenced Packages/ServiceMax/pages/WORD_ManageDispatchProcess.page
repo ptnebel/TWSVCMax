@@ -1,0 +1,155 @@
+<apex:page id="page1" controller="SVMXC.WORD_ManageDispatchProcess">
+<apex:form id="form1">
+
+<style> 
+     .customPopup
+     {
+         background-color: #B0BFD2;
+                border-style: solid;
+                border-width: 2px;
+                left: 50%;
+                padding:10px;
+                position: fixed;
+                z-index: 9999;
+                /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set            margin-left to negative half of what the width is. You can also add            the height property for a fixed size pop up.*/
+                width: 400px;
+                margin-left: -250px;
+                top:100px;
+                opacity:10;
+     }
+  </style>   
+<!---------------------------------------------Rule Sequence Popup---------------------------------------------->
+
+
+    <apex:outputPanel id="popup" styleClass="customPopup" layout="block" rendered="{!displaySeqPopup}">
+            <apex:pageBlock id="Sequenceblock" mode="edit" title="{!TAG028}">
+                <apex:pageMessages rendered="true"/>
+                <b><apex:actionStatus id="LoadingSeqPopUp"  startText="{!TAG006}"/></b>
+                <apex:pageBlockButtons id="pbtns" location="Bottom">
+                    <apex:commandButton value="{!TAG029}" id="SaveOnSeq" action="{!SVMX_SaveSequence}" reRender="form1" status="LoadingSeqPopUp" />                
+                    <apex:commandButton value="{!TAG030}" action="{!SVMX_PopupCancel}" status="LoadingSeqPopUp" reRender="form1" />
+                </apex:pageBlockButtons>
+                <apex:panelGrid cellpadding="0" cellspacing="1" columns="2" width="31%" border="0"  >
+                    <apex:pageBlockSection columns="1" id="list1">
+                        <apex:panelGrid cellspacing="0" cellpadding="0" width="65%" columns="1" border="0" >
+                            <apex:selectList value="{!items}" multiselect="true" style="height:200px;width:250px">
+                                <apex:selectOptions value="{!Seqoptions}"/>                
+                            </apex:selectList><p/>
+                        </apex:panelGrid>
+                    </apex:pageBlockSection>
+                    <apex:panelGrid cellspacing="7" cellpadding="0" width="35%" columns="1" style="text-align: center;">
+                        <apex:outputText value="  " /><apex:outputText value="  " /> <apex:outputText value="  "/>  <apex:outputText value="  "/><apex:outputText value="  "/><apex:outputText value="  "/>
+                        <div>
+                            <apex:commandButton action="{!Top}" id="top" rerender="Sequenceblock" style="width:18px;height:18px;background:white"  image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Top_Bttn.JPG')}" alt="Top" title="Top" status="LoadingSeqPopUp"/>
+                            <apex:commandButton action="{!UP}" id="Up" rerender="Sequenceblock" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Up_Bttn.JPG')}" alt="Up" title="Up" status="LoadingSeqPopUp"/>
+                            <apex:commandButton action="{!Down}" id="down" rerender="Sequenceblock" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Down_Bttn.JPG')}" alt="Down" title="Down" status="LoadingSeqPopUp"/>
+                            <apex:commandButton action="{!Bottom}" id="Bottom" rerender="Sequenceblock" style="width:18px;height:18px;background:white"  image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Bottom_Bttn.JPG')}" alt="Bottom" title="Bottom" status="LoadingSeqPopUp"/>
+                        </div>
+                    </apex:panelGrid> 
+                </apex:panelGrid>
+            </apex:pageBlock>
+        </apex:outputPanel>
+
+
+<apex:pageBlock id="block1" helpTitle="{!TAG007}" helpUrl="{!HLPURL}">
+<apex:pageMessages rendered="{!HdrMsg}"/> 
+<apex:actionStatus id="status" startText="{!TAG006}"/>  
+    <apex:pageBlockButtons location="top">
+        <apex:commandButton value="{!TAG001}" action="{!SVMX_NewProcess}"/>
+        <apex:commandButton value="{!TAG002}" action="{!SVMX_Clone}" Disabled="{!DisProSize}"/>
+        <apex:commandButton value="{!TAG003}" action="{!SVMX_Edit}" Disabled="{!DisProSize}"/>
+        <apex:commandButton value="{!TAG004}" action="{!SVMX_Delete}" Disabled="{!DisProSize}"  onClick="{if(!confirm('{!TAG017}')){return false}}" />
+        <apex:commandButton value="{!TAG031}" action="{!SVMXC_ShowJob}" Disabled="{!if(DispatchProcessLst.size = 0,true,false)}"/>
+        <apex:commandButton value="{!TAG005}" action="{!SVMX_BackToSetupHome}"/>
+        <apex:CommandButton value="{!TAG032}" action="{!SVMX_DPSequence}" status="status" reRender="form1" Disabled="{!if(DispatchProcessLst.size < 2,true,false)}"/> 
+    </apex:pageBlockButtons>
+    <apex:pageblockSection rendered="{!DisProSize}">
+        <apex:outputLabel value="{!TAG013}" />
+    </apex:pageblockSection>
+    <apex:pageBlockSection columns="1" rendered="{!DisProLst}">
+        <apex:pageblockTable value="{!DispatchProcessLst}" var="DP">
+            <apex:column >
+                <apex:facet name="header">{!TAG008}</apex:facet>
+                <apex:inputfield value="{!DP.SVMXC__Select__c}"/>       
+            </apex:column> 
+            <apex:column >
+                <apex:facet name="header">{!TAG009}</apex:facet>  
+                <apex:outputField value="{!DP.SVMXC__Name__c}"/>
+           </apex:column>
+          <apex:column >
+              <apex:facet name="header">{!TAG010}</apex:facet>
+              <apex:outputField value="{!DP.SVMXC__Dispatch_Method__c}"/>  
+           </apex:column>
+          <apex:column >
+              <apex:facet name="header">{!TAG019}</apex:facet>
+              <apex:outputField value="{!DP.SVMXC__Dispatch_Process_Status__c}"/>  
+           </apex:column>
+           <apex:column >
+                <apex:facet name="header">{!TAG011}</apex:facet>
+                <apex:outputField value="{!DP.LastModifiedById}"/>  
+           </apex:column>
+           <apex:column >
+                <apex:facet name="header">{!TAG012}</apex:facet>
+                <apex:inputField value="{!DP.LastModifiedDate}"/> 
+           </apex:column>
+       <!--       <apex:column >
+                <apex:facet name="header">{!TAG020}</apex:facet>
+                <apex:outputField value="{!DP.SVMXC__Sequence__c}"/> 
+           </apex:column> -->
+        </apex:pageblockTable>
+    </apex:pageBlockSection>
+</apex:pageBlock>
+<apex:outputPanel id="detail">
+	<apex:pageBlock id="detailBlock" rendered="{!showPannel}">
+	<apex:inputHidden id="IdField" value="{!selectedId}"/>
+	 <apex:pageBlockButtons location="top">
+        <apex:commandButton value="{!TAG033}" action="{!SVMX_RunJob}"/>
+     </apex:pageBlockButtons>  
+	<apex:tabPanel switchType="ajax" value="{!Tabname}" id="JobTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab">
+<!--  first tab -->     
+        <apex:tab label="{!TAG026}" name="one" id="tabone">
+		<apex:pageBlockSection showHeader="true" collapsible="true"  columns="1">
+			 <apex:pageBlockTable value="{!JobRecLst}" var="jobj"  style="font-size:11px"  rowClasses="odd,even" ><!-- rendered="{!DisplayWarrBlockTab}" -->
+                    <apex:column >
+                    <!-- <script type="text/javascript">
+					function setvalues(){alert(document.getElementById('page1:form1:detailBlock:IdField').value);}
+					</script> -->
+                    <apex:facet name="header">{!TAG008}</apex:facet>
+					<input id="Checkbox"  name="Checkbox" type="radio" value="" onclick="javascript:document.getElementById('page1:form1:detailBlock:IdField').value = '{!jobj.jobRec.id}';"/>
+                    </apex:column> 
+                    <apex:column >
+                    <apex:facet name="header">{!TAG021}</apex:facet>
+                    <apex:commandLink action="{!switchtab}"  value="{!jobj.jobRec.Name}"  reRender="JobTabPanel">  <apex:param name="jid" value="{!jobj.jobRec.id}"/><apex:param name="tabname" value="{!jobj.jobRec.Name}"/>  </apex:commandLink>                    
+                    </apex:column> 
+                    <apex:column >
+                    <apex:facet name="header">{!TAG022}</apex:facet>
+                      <apex:outputField value="{!jobj.jobRec.SVMXC__Territory__c}"  /> 
+                    </apex:column> 
+                    <apex:column >
+                    <apex:facet name="header">{!TAG023}</apex:facet>
+                      <apex:outputField value="{!jobj.jobRec.SVMXC__Type__c}"  /> 
+                    </apex:column> 
+                    <apex:column >
+                    <apex:facet name="header">{!TAG024}</apex:facet>
+                      <apex:outputField value="{!jobj.jobRec.SVMXC__Start_Time__c}"  /> 
+                    </apex:column>  
+                    <apex:column >
+                    <apex:facet name="header">{!TAG025}</apex:facet>
+                      <apex:outputField value="{!jobj.jobRec.SVMXC__End_Time__c}"  /> 
+                    </apex:column>
+                    <apex:column >
+                    <apex:facet name="header">{!TAG034}</apex:facet>
+                      <apex:outputField value="{!jobj.jobRec.SVMXC__OptiMax_Message__c}"  /> 
+                    </apex:column>   
+	         </apex:pageBlockTable>
+		</apex:pageBlockSection>
+		</apex:tab>
+		<apex:tab label="{!Lablename}"  name="two" id="tabtwo">
+			 <apex:iframe src="{!PageNameToRedirect}{!DetailPageId}" scrolling="true" id="theIframe"/>
+		</apex:tab>
+		</apex:tabPanel> 
+	
+	</apex:pageBlock>
+</apex:outputPanel>
+</apex:form>
+</apex:page>

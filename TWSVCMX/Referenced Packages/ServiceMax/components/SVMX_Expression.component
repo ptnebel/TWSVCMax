@@ -1,0 +1,125 @@
+<apex:component controller="SVMXC.SVMX_Expression" id="comp1" allowDML="true">
+<style>
+     .exprPopup
+     {
+         background-color: #F8F8F8;
+                border-style: solid;
+                border-width: 2px;
+                left: 50%;
+                padding:10px;
+                position: fixed;
+                z-index: 9999;
+                /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set            margin-left to negative half of what the width is. You can also add            the height property for a fixed size pop up.*/
+                width: 690px;
+                height:70%;
+                margin-left: -250px;
+                top:60px;
+                opacity:10;
+                overflow:scroll;
+     }
+
+.disableTab 
+     {
+        background-color : Lightgrey ;
+        color:LightGrey;
+        background-image:none;
+        font-size:1.2em;
+     }
+</style>
+<apex:attribute assignTo="{!objName}" required="true" name="objnme" type="string" id="objname" description="none"/>
+<apex:attribute assignTo="{!SelectedExpId}" required="false" name="SelectedCriteriaIs" type="String" id="selcriteria" description="none"/>
+<apex:attribute assignTo="{!CompMode}" required="false" name="Mode" type="String" id="CompMode" description="New or Edit Mode"/>
+
+<apex:outputPanel id="exprblock" rendered="true" layout="block" styleClass="exprPopup" >
+<apex:pageBlock id="tab2pblock1"  helpTitle="{!TAG013}" helpUrl="{!TAG014}" mode="edit" title="{!ObjLabel}">
+
+    <!-- Information display entities -->
+    
+    <apex:actionStatus id="status2" startText="{!TAG008}" style="font-Size:13px"/><!-- Processing... -->
+    
+    <!-- Command buttons -->
+    <apex:pageBlockButtons location="top" id="pbuttons">
+        <apex:commandButton value="{!TAG001}" action="{!SaveExpression}" id="svmxsavecomp" reRender="tab2section2,table1,exprmessages,exprblock" status="status2" disabled="{!DisableSave}"/>
+        <apex:commandButton value="{!TAG002}" onclick="javascript:document.getElementById('{!$Component.expressionpanel}').style.display = 'none';refreshExpressionList('{!savedExpressionResultId}');" reRender="SelectedIndex" status="status2"/>
+    </apex:pageBlockButtons>
+    <apex:pageMessages rendered="true" id="exprmessages"/>
+    <apex:actionStatus id="processing" startText="{!TAG008}"/><!-- Processing.... -->
+    <apex:actionFunction action="{!DoTheInitialJob}" name="DoTheInitialJob" status="processing" reRender="exprblock"/>
+    <!-- Section 1-->
+    <apex:pageBlockSection columns="2">
+        <apex:outputLabel value="{!TAG003}" style="font-weight:bold;"/>
+        <apex:outputLabel value="{!TAG004}" style="font-weight:bold;"/>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection >
+        <apex:outputPanel layout="block" styleClass="requiredInput">
+            <apex:inputText value="{!expwrapperObj.ExpHeader.SVMXC__Name__c}" style="width:200px;"/>
+            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" styleClass="requiredInput">
+            <apex:inputText value="{!expwrapperObj.ExpHeader.SVMXC__ProcessID__c}" style="width:200px;"/>
+            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+        </apex:outputPanel>
+    </apex:pageBlockSection>
+    
+    <!-- Selected Record index stored in input hidden field -->
+    <apex:inputHidden value="{!SelectedIndex}" id="SelectedIndex"/>
+    
+    <!-- Dummy section for UI purpose -->
+    <apex:pageblockSection columns="1"></apex:pageblockSection>
+    
+    <!-- Section 2 : Needed to display line in between sections  -->
+    <apex:pageBlockSection title="" collapsible="false"/>
+    
+    <!-- Section 3-->
+    <apex:pageBlockSection id="tab2section2" columns="3">
+    <apex:pageBlockSectionItem >
+        <apex:pageBlockTable id="table1" value="{!expwrapperObj.ExpDetailLst}" var="item" cellPadding="4" width="100%">
+            <apex:column rendered="true" style="font-Size:10px;">
+                <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}" style="font-Size:10px"/>
+            </apex:column>
+            <apex:column style="font-Size:12px;width:90%;">
+                <apex:facet name="header">{!TAG006}</apex:facet><!-- Field Name -->
+                <apex:selectList value="{!item.SVMXC__Field_Name__c}" Disabled="{!disableValue}" size="1" multiselect="false" style="font-Size:12px;">
+                    <apex:selectOptions value="{!Hdrfldlist}"/>
+                </apex:selectList>
+            </apex:column>
+            <apex:column style="font-Size:10px">
+                <apex:facet name="header">{!TAG015}</apex:facet><!-- Operator -->
+                <apex:selectList value="{!item.SVMXC__Operator__c}" Disabled="false" size="1" multiselect="false" style="font-Size:12px">
+                    <apex:selectOptions value="{!OperatorSelectLst}"/>
+                </apex:selectList>
+            </apex:column>
+            <apex:column style="font-Size:10px">
+                <apex:facet name="header">Operand</apex:facet><!-- {!TAG016} -->
+                <apex:inputText value="{!item.SVMXC__Operand__c}" Disabled="" style="font-Size:12px"/>
+            </apex:column>
+            <apex:column style="font-Size:10px;width:7px;height:7px;">
+                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!HdrDeleteRow}" Disabled="{!disableValue}" onclick="javascript:document.getElementById('{!$Component.SelectedIndex}').value = {!item.SVMXC__Sequence__c}" id="hdrdeleterow" status="status2" reRender="tab2pblock1"/>
+            </apex:column>
+            <apex:column style="font-Size:10px;width:7px;height:7px;">
+                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRow}" Disabled="{!disableValue}" rendered="{!if((ExpDetailSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" id="hdraddrow" reRender="tab2section2" status="status2"/>
+            </apex:column>
+        </apex:pageBlockTable>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRow}" Disabled="{!disableValue}" rendered="{!if((ExpDetailSize == 0 ) ,true,false)}" id="hdraddrow1" reRender="tab2section2" status="status2"/>
+            <br/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem ><br/></apex:pageBlockSectionItem>
+    </apex:pageblockSection>
+        <br/>
+        <br/>
+        <apex:pageblockSection columns="1" rendered="true">
+             <apex:outputText value="{!TAG005}"  style="font-Size:13px"/> 
+             <apex:inputText id="HdrAdvOption" Disabled="{!disableValue}"  value="{!expwrapperObj.ExpHeader.SVMXC__Advance_Expression__c}" size="80"/>
+        </apex:pageblockSection>
+    <!--<apex:pageblockSection columns="1">
+            <apex:outputText value="{!TAG006}" style="font-Size:13px"/> 
+           <apex:inputText id="HdrErrorMsg" Disabled="{!disableValue}"  value="{!expwrapperObj.ExpHeader.Parent_Error_Msg__c}" size="80"/> 
+         </apex:pageBlockSection> -->
+</apex:pageBlock>
+</apex:outputpanel>
+<script type="text/javascript">
+DoTheInitialJob();
+</script>
+</apex:component>

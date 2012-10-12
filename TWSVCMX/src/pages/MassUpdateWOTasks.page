@@ -1,0 +1,51 @@
+<apex:page controller="WorkOrderTasks"> 
+<apex:form > 
+	<apex:pageBlock title="Tasks for {!WorkOrderName}" id="editor">
+		<apex:pageBlockButtons >
+				<apex:commandButton action="{!QuickSaveTasks}" value="Quick Save" rerender="editor" status="Savestatus"></apex:commandButton>
+				<apex:commandButton action="{!SaveTasks}" value="Save & Close" rerender="editor" status="Savestatus"></apex:commandButton>
+				<apex:commandButton action="{!CancelTasks}" value="Cancel" rerender="editor"></apex:commandButton>
+		</apex:pageBlockButtons>				
+		<apex:pageBlockSection >
+			<apex:actionStatus id="refreshstatus" startstyle="color:green;" startText="Refreshing...." ></apex:actionStatus> 			
+			<apex:actionStatus id="Savestatus" startstyle="color:green;" startText="Saving...." ></apex:actionStatus> 
+		</apex:pageBlockSection>
+		 				
+		<apex:pageBlockTable value="{!WOTasks}" var="T" >
+               <apex:column style="width:80px" >
+             	<apex:facet name="header"><apex:outputText value="Task Completed"></apex:outputText></apex:facet>       
+                   <apex:inputField value="{!T.Task_Completed__c}"/>
+               </apex:column>
+			   <apex:column style="width:150px" >
+				<apex:facet name="header">
+             		<apex:commandLink rerender="editor" action="{!ViewWOTasks}" value="Name"/>
+             		</apex:facet>       
+                    <a href="/{!T.Id}" target="_new">{!T.Name}</a>
+               </apex:column>
+               <apex:column style="width:80px" >
+             		<apex:facet name="header"><apex:outputText value="Task Order"></apex:outputText></apex:facet>       
+                   <apex:outputField value="{!T.Task_Order__c}"/>
+               </apex:column>
+               <apex:column style="width:200px" >
+             		<apex:facet name="header"><apex:outputText value="Task Description"></apex:outputText></apex:facet>       
+                   <apex:outputField value="{!T.Task_Description__c}"/>      
+               </apex:column>
+               <apex:column style="width:200px" >
+             		<apex:facet name="header"><apex:outputText value="Technician Description"></apex:outputText></apex:facet>       
+                   <apex:inputField value="{!T.Tech_Description__c}"/>      
+               </apex:column>
+               <apex:column style="width:150px" >
+             		<apex:facet name="header"><apex:outputText value="Associated Part"></apex:outputText></apex:facet>       
+                   <apex:outputField value="{!T.Associated_Part__c}"/>
+               </apex:column>    
+               <apex:column >
+             		<apex:commandButton action="{!CreateFollowupWO}" value="Create Followup Work Order" rerender="hiddenBlock">
+             			<apex:param name="id" value="{!T.Id}" assignTo="{!relatingtaskId}"/>
+             			<apex:param name="name" value="{!T.Name}" assignTo="{!relatingtaskName}"/>
+             		</apex:commandButton>
+               </apex:column>              
+		</apex:pageBlockTable>	
+	</apex:pageBlock>
+	<apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock>	
+</apex:form>
+</apex:page>

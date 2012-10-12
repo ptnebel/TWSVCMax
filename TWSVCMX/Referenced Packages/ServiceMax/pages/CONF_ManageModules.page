@@ -1,0 +1,78 @@
+<apex:page id="manage_mod" controller="SVMXC.CONF_ManageModules"  tabStyle="SVMXC__ServiceMax_Settings__c"> 
+
+<apex:form id="list_mod">
+ <!-- Standard Module Definitions PageBlock : Lists all Standard Modules -->
+    <apex:pageBlock id="std_module_block" title="{!TAG001}" helpTitle="{!TAG015}" helpUrl="{!HLPURL}" mode="edit">
+
+    <apex:pageMessages rendered="{!StdDisplayBlockLevelMessage}" showDetail="true" />
+    <apex:actionStatus id="LodingStdStatus"  startText="{!TAG024}" />
+
+        <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!MoveStdListSubmod}" title="{!TAG003}"  value="{!TAG003}" id="list_submod" status="LodingStdStatus"/> 
+                <apex:commandButton action="{!GoSetupHome}" title="{!TAG004}"  value="{!TAG004}" id="backtohomesetup"/>                            
+        </apex:pageBlockButtons>
+        <!-- Neeraj(Feb-7th-2012): Access new tags instead of {!$ObjectType.ServiceMax_Processes__c.fields.ModuleID__c.Label} to fix translation related issues. -->
+        <apex:pageBlockTable value="{!StandModule}" var="item">  
+               <apex:column style="width:10px">
+                    <apex:facet name="header"></apex:facet>
+                    <apex:inputField id="std_selected" value="{!item.SVMXC__Select__c}" rendered="true" />           
+                </apex:column>              
+                <apex:column >
+                  <apex:facet name="header" >{!TAG026}</apex:facet>                           
+                  <apex:outputField value="{!item.SVMXC__ModuleID__c}"/>                                          
+                </apex:column>
+                <apex:column >
+                  <apex:facet name="header" >{!TAG027}</apex:facet>                              
+                  <apex:outputField value="{!item.SVMXC__Name__c}"/>                                         
+                </apex:column>
+               <apex:column >
+                  <apex:facet name="header" >{!TAG028}</apex:facet>                           
+                  <apex:outputField value="{!item.SVMXC__Description__c}"/>                                          
+               </apex:column>                  
+        </apex:pageBlockTable>                        
+    </apex:pageBlock>
+
+ <!-- Standard Module Definitions PageBlock : Lists all Standard Modules -->
+    <apex:pageBlock id="custModuleBlock" title="{!TAG002}" mode="edit">
+    <apex:pageMessages rendered="{!CustDisplayBlockLevelMessage}" showDetail="true" />
+    <apex:actionStatus id="LodingStatus"  startText="{!Tag024}" />
+    <apex:outputLabel rendered="{!if(IsCustAvail==false,true,false)}" value="{!TAG023}" style="font-size:11px"/>
+                <apex:pageBlockButtons location="top">
+                       <apex:commandButton action="{!AddNewMod}" title="{!TAG005}"  value="{!TAG005}" id="new_mod" reRender="moduleTable"  reRender="list_mod"  status="LodingStatus" />  
+                       <apex:commandButton action="{!saveMod}"  title="{!TAG007}"  value="{!TAG007}" id="save_mod" reRender="moduleTable"  reRender="list_mod" status="LodingStatus" rendered="{!if(IsCustAvail==true,true,false)}" />  
+                       <apex:commandButton action="{!deleteMod}"  title="{!TAG008}" value="{!TAG008}" id="Del_mod" reRender="moduleTable"  reRender="list_mod" status="LodingStatus" rendered="{!if(IsCustAvail==true,true,false)}" />  
+                       <apex:commandButton action="{!MoveCustListSubmod}"  title="{!TAG006}" value="{!TAG006}" id="list_submod"  rendered="{!if(IsCustAvail==true,true,false)}" />                             
+                </apex:pageBlockButtons>
+
+                <apex:pageBlockTable id="moduleTable" value="{!CustModule}" var="item" rendered="{!if(IsCustAvail==true,true,false)}">
+
+                    <apex:column style="width:10px">
+                    <apex:facet name="header"></apex:facet> 
+                        <apex:inputField id="cust_selected" value="{!item.SVMXC__Select__c}"/>          
+                    </apex:column>                  
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG026}</apex:facet>                           
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:inputField value="{!item.SVMXC__ModuleID__c}"/>
+                        </apex:outputPanel>                                          
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG027}</apex:facet>                              
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                        <apex:inputField value="{!item.SVMXC__Name__c}"/>  
+                        </apex:outputPanel>                                      
+                    </apex:column>
+                    <apex:column style="width:40%;">
+                        <apex:facet name="header" >{!TAG028}</apex:facet>
+                        <apex:inputField value="{!item.SVMXC__Description__c}" style="width:98%;"/>                            
+                    </apex:column> 
+                                  
+                </apex:pageBlockTable>
+                              
+    </apex:pageBlock>
+    
+</apex:form>
+
+</apex:page>

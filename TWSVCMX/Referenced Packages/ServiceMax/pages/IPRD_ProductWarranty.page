@@ -1,0 +1,63 @@
+<apex:page id="Warranty" standardController="SVMXC__Warranty__c" extensions="SVMXC.IPRD_ProductWarranty" tabStyle="SVMXC__Installed_Product__c">
+<apex:form id="WarrantyDef">
+<apex:pageBlock id="WarantyDetail" title="{!WarrantyName}"  helpTitle="{!TAG002}" helpUrl="{!HLPURL}">
+<apex:pageMessages showDetail="true" rendered="{!ProfDisplayBlockLevelMessage}"/> 
+    <apex:pageBlockButtons location="top">
+        <apex:commandButton title="{!TAG003}"  value="{!TAG003}" action="{!GoCreateW}" disabled="{!if(IsWCreatable==false,true,false)}" rendered="{!if(IsValid=true,true,false)}" status="LodingStatus"/>
+        <apex:commandButton title="{!TAG004}"  value="{!TAG004}" action="{!GoBack}"/>
+    </apex:pageBlockButtons>
+    <apex:actionStatus id="LodingStatus"  startText="{!TAG030}" />
+    <apex:pageBlockSection title="{!TAG015}" columns="1" rendered="{!if(IsValid=true,true,false)}">
+        <apex:outputLabel rendered="{!if(CoveredCount>0,false,true)}" value="{!TAG017}" style="font-size:11px"/>
+        <apex:pageBlockTable value="{!CoveredwarrantyTerm}" var="list" rendered="{!if(CoveredCount>0,true,false)}"> 
+               <apex:column width="25" style="{!list.RowStyle}">
+                   <apex:facet name="header" >{!TAG005}</apex:facet> 
+                   <input id="Checkbox" style="{!list.ButtonStyle}" name="Checkbox" type="radio" value="" onclick="javascript:document.getElementById('Warranty:WarrantyDef:GetwarrIdnField').value = '{!list.war.Id}';" />                                       
+               </apex:column>
+               <apex:column width="300" style="{!list.RowStyle}"> 
+                   <apex:facet name="header" >{!TAG034}</apex:facet>                           
+                   <apex:outputLink value="/{!list.war.Id}" target="_blank">{!list.war.Name}</apex:outputLink>                                       
+               </apex:column> 
+               <apex:column style="{!list.RowStyle}">
+                   <apex:facet name="header" >{!TAG035}</apex:facet>                           
+                   <apex:outputField value="{!list.war.SVMXC__Coverage_Effective_From2__c}"/>                                          
+               </apex:column> 
+               <apex:column style="{!list.RowStyle}">
+                   <apex:facet name="header" >{!TAG036}</apex:facet>                           
+                   <apex:outputField value="{!list.war.SVMXC__All_Products_Covered__c}"/>                                          
+               </apex:column> 
+               <apex:column style="{!list.RowStyle}">
+                   <apex:facet name="header" >{!TAG037}</apex:facet>                           
+                   <apex:outputField value="{!list.war.SVMXC__All_Services_Covered__c}"/>                                          
+               </apex:column> 
+        </apex:pageBlockTable>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="{!TAG016}" columns="1" rendered="{!if(IsValid=true,true,false)}">
+        <apex:outputLabel rendered="{!if(OtherCount>0,false,true)}" value="{!TAG017}" style="font-size:11px"/>
+        <apex:pageBlockTable value="{!OtherwarrantyTerm}" var="list" rendered="{!if(OtherCount>0,true,false)}"> 
+               <apex:column width="25" style="{!list.RowStyle}">
+                   <apex:facet name="header" >{!TAG005}</apex:facet>   
+                   <input id="Checkbox"  style="{!list.ButtonStyle}" name="Checkbox" type="radio" value="" onclick="javascript:document.getElementById('Warranty:WarrantyDef:GetwarrIdnField').value = '{!list.war.Id}'; " />
+               </apex:column> 
+               <apex:column width="300" style="{!list.RowStyle}">
+                   <apex:facet name="header" >{!TAG034}</apex:facet>                           
+                   <apex:outputLink value="/{!list.war.Id}" target="_blank">{!list.war.Name}</apex:outputLink> 
+               </apex:column> 
+               <apex:column style="{!list.RowStyle}">
+                   <apex:facet name="header" >{!TAG035}</apex:facet>                           
+                   <apex:outputField value="{!list.war.SVMXC__Coverage_Effective_From2__c}"/>
+               </apex:column> 
+               <apex:column style="{!list.RowStyle}">
+                   <apex:facet name="header" >{!TAG036}</apex:facet>                           
+                   <apex:outputField value="{!list.war.SVMXC__All_Products_Covered__c}"/>
+               </apex:column> 
+               <apex:column style="{!list.RowStyle}">
+                   <apex:facet name="header" >{!TAG037}</apex:facet>                           
+                   <apex:outputField value="{!list.war.SVMXC__All_Services_Covered__c}"/>
+               </apex:column> 
+        </apex:pageBlockTable>
+    </apex:pageBlockSection>
+</apex:pageBlock>
+<apex:inputHidden id="GetwarrIdnField" value="{!selectedId}"/>
+</apex:form>
+</apex:page>

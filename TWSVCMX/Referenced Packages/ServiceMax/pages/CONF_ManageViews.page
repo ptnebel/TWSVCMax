@@ -1,0 +1,76 @@
+<apex:page controller="SVMXC.CONF_ManageViews">
+    <apex:form >
+    <apex:pageBlock title="{!TAG001}" helpTitle="{!TAG002}" helpUrl="{!HLPURL}">
+            <apex:pageBlock title="{!TAG003}" id="SVMX_StrdPgBlck" >
+                <apex:pageblockButtons location="TOP" >
+                    <apex:commandButton value="{!TAG004}" action="{!ViewREditProcess}" status="SVMX_StrdStatus" reRender="SVMX_StrdPgBlck" disabled="{!chkStrdlst}" >
+                        <apex:param name="firstparam" value="View"  assignTo="{!strEditRView}"/>
+                    </apex:commandButton>
+                    <apex:commandButton value="{!TAG005}" action="{!cloneProcess}" status="SVMX_StrdStatus" reRender="SVMX_StrdPgBlck" disabled="{!chkStrdlst}" >
+                        <apex:param name="firstparam1" value="Clone1"  assignTo="{!strEditRView}"/>
+                    </apex:commandButton>
+                    <apex:commandButton value="{!TAG006}" action="{!managePermission}"  status="SVMX_StrdStatus" reRender="SVMX_StrdPgBlck"  >
+                        <apex:param name="firstparam4" value="lstStdViwCnfgr"  assignTo="{!strManagPrmmsin }"/>
+                    </apex:commandButton>
+                    <apex:commandButton value="{!TAG007}" action="{!backToSetup}" />
+                </apex:pageblockButtons>
+                <apex:pageMessages />
+                <apex:actionStatus startText="{!TAG019}" id="SVMX_StrdStatus" />
+                <apex:pageBlockTable value="{!lstStdViwCnfgr}" var="lstVal">
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG008}</apex:facet>
+                        <apex:inputCheckBox value="{!lstVal.SVMXC__Select__c}"/>
+                    </apex:column>
+                    <apex:column value="{!lstVal.SVMXC__ProcessID__c}">
+                        <apex:facet name="header" >{!TAG009}</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!lstVal.SVMXC__Name__c}">
+                        <apex:facet name="header" >{!TAG010}</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!lstVal.SVMXC__Description__c}">
+                        <apex:facet name="header" >{!TAG011}</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!lstVal.LastModifiedDate}">
+                        <apex:facet name="header" >{!TAG013}</apex:facet>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+            <apex:pageBlock title="{!TAG014}" id="SVMX_CustPgBlck"  >
+                <apex:pageblockButtons location="TOP" >
+                    <apex:commandButton value="{!TAG015}" action="{!newPrcss}"  />
+                    <apex:commandButton value="{!TAG016}" action="{!ViewREditProcess}" status="SVMX_CustStatus" reRender="SVMX_CustPgBlck" disabled="{!chkCustlst}" >
+                        <apex:param name="firstparam3" value="Edit"  assignTo="{!strEditRView}"/>
+                    </apex:commandButton>
+                    <apex:commandButton value="{!TAG017}" action="{!cloneProcess}" status="SVMX_CustStatus" reRender="SVMX_CustPgBlck" disabled="{!chkCustlst}" >
+                        <apex:param name="firstparam2" value="Clone2"  assignTo="{!strEditRView}"/>
+                    </apex:commandButton>
+                    <apex:commandButton value="{!TAG018}" action="{!deletPross}" status="SVMX_CustStatus" reRender="SVMX_CustPgBlck" disabled="{!chkCustlst}" onClick="{if(!confirm('{!TAG023}')){return false}}" />
+                   <!-- <apex:commandButton value="{!TAG006}" action="{!managePermission}"  disabled="{!chkCustlst}" status="SVMX_CustStatus" reRender="SVMX_CustPgBlck"  >
+                        <apex:param name="firstparam4" value="lstCustViwCnfgr"  assignTo="{!strManagPrmmsin }"/>
+                    </apex:commandButton>
+                   <apex:commandButton value="{!TAG007}" action="{!backToSetup}"/>-->
+                </apex:pageblockButtons>
+                <apex:pageMessages />
+                <apex:actionStatus startText="{!TAG019}" id="SVMX_CustStatus" />
+                <apex:pageBlockTable value="{!lstCustViwCnfgr}" var="lstVal">
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG008}</apex:facet>
+                        <apex:inputCheckBox value="{!lstVal.SVMXC__Select__c}"/>
+                    </apex:column>
+                    <apex:column value="{!lstVal.SVMXC__ProcessID__c}">
+                        <apex:facet name="header" >{!TAG009}</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!lstVal.SVMXC__Name__c}">
+                        <apex:facet name="header" >{!TAG010}</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!lstVal.SVMXC__Description__c}">
+                        <apex:facet name="header" >{!TAG011}</apex:facet>
+                    </apex:column>
+                    <apex:column value="{!lstVal.LastModifiedDate}">
+                        <apex:facet name="header" >{!TAG013}</apex:facet>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+    </apex:pageBlock>
+    </apex:form>
+</apex:page>

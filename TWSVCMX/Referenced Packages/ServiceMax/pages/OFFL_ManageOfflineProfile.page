@@ -1,0 +1,235 @@
+<apex:page id="O_conf_prof" controller="SVMXC.OFFL_ManageOfflineProfile" tabStyle="SVMXC__ServiceMax_Settings__c">
+  <script type="text/javascript">
+
+  function customSelectChecked( form,type,value)
+    {  
+        var i = 0;
+        for (i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].name.search(type+'_selected') > 0 && form.elements[i].disabled == false) {
+                form.elements[i].checked = value;
+            }
+        }
+    }   
+    function customSelectAllOrNoneByCheckbox(form,type,control)
+    {  customSelectChecked( form,type,control.checked); }
+   
+  </script>
+
+<apex:pageBlock id="popup">
+<script type="text/javascript">
+  if('{!showMessage}'!=''){
+   window.alert('{!showMessage}'); 
+}
+</script>
+</apex:pageBlock>
+<apex:form rendered="{!if((CriticalErr==false),true,false)}">
+<apex:pageBlock >
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton title="{!TAG004}"  value="{!TAG004}" action="{!cancelProf}"/>
+        </apex:pageBlockButtons> 
+        <apex:pageMessages rendered="{!if((CriticalErr==false),true,false)}" showDetail="true" /> 
+</apex:pageBlock>
+</apex:form>
+<apex:outputPanel id="Whole_page" rendered="{!CriticalErr}">
+<apex:form id="O_conf_prof"> 
+   <apex:pageBlock id="ProfDetail" title="{!TAG001}"  helpTitle="{!TAG002}" helpUrl="{!HLPURL}">
+   <apex:pageMessages rendered="{!ProfDisplayBlockLevelMessage}" showDetail="true" />
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton title="{!TAG003}"  value="{!TAG003}" action="{!MSaveProf}"/>
+            <apex:commandButton title="{!TAG005}"  value="{!TAG005}" action="{!MQSaveProf}" reRender="Whole_page"/>
+            <apex:commandButton title="{!TAG004}"  value="{!TAG004}" action="{!cancelProf}"/>
+        </apex:pageBlockButtons> 
+        <apex:pageBlockSection title="{!TAG015}" columns="2">
+        <apex:pageBlockSectionItem >
+            <!--<apex:outputLabel for="ProfileName" value="{!Tag016}" styleClass="labelCol"></apex:outputLabel>
+            -->
+             <apex:outputText value="{!TAG016}" />
+            <apex:outputPanel layout="block" styleClass="requiredInput">
+            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+            <apex:inputField id="OtrProfile_Name" value="{!Prof_Detail.SVMXC__Profile_Name__c}"/>  
+            </apex:outputPanel> 
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+             <apex:outputText value="{!TAG057}"/>
+            <apex:inputField id="Profile_Active" value="{!Prof_Detail.SVMXC__Active__c}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+                        <apex:outputText value="{!TAG048}" />
+                        <apex:outputPanel >
+                        <apex:inputtext value="{!Prof_Detail.SVMXC__Remove_Events_Older_Than2__c}" size="2"/> 
+                         <apex:outputlabel value="{!TAG056}" style="font-Size:13px"/>
+                         </apex:outputPanel>
+         </apex:pageBlockSectionItem>
+        
+        <apex:pageBlockSectionItem >
+             <apex:outputText value="{!TAG058}"/>
+            <apex:inputField id="Profile_Task" value="{!Prof_Detail.SVMXC__Enable_Task__c}"/>   
+        </apex:pageBlockSectionItem>
+               
+        <apex:pageBlockSectionItem >
+                        <apex:outputText value="{!TAG049}" />
+                        <apex:outputPanel >
+                        <apex:inputtext value="{!Prof_Detail.SVMXC__Remove_Records_Older_Than2__c}" size="2"/>
+                        <apex:outputlabel value="{!TAG056}" style="font-Size:13px"/>
+                        </apex:outputPanel>
+         </apex:pageBlockSectionItem>
+        
+        <apex:pageBlockSectionItem >
+             <apex:outputText value="{!TAG059}"/>
+            <apex:inputField id="Profile_Calender" value="{!Prof_Detail.SVMXC__Enable_Calendar__c}"/>  
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+                        <apex:outputText value="{!TAG063}" />
+                        <apex:outputPanel >
+                        <apex:inputtext value="{!Prof_Detail.SVMXC__Validate_User_Credentials_Every__c}" size="2"/>
+                        <apex:outputlabel value="{!TAG056}" style="font-Size:13px"/>
+                        </apex:outputPanel>
+         </apex:pageBlockSectionItem>
+        
+        <apex:pageBlockSectionItem >
+             <apex:outputText value="{!TAG062}"/>
+            <apex:inputField id="Profile_AllowAPIAccess" value="{!Prof_Detail.SVMXC__Allow_API_Access__c}"/>  
+        </apex:pageBlockSectionItem>
+        
+        <apex:pageBlockSectionItem >
+             <apex:outputText value="{!TAG060}"/>
+            <apex:inputField id="OtrProfile_Desc" value="{!Prof_Detail.SVMXC__Description__c}" style="width:200px;height:100px"/>
+        </apex:pageBlockSectionItem>
+        
+        <apex:pageBlockSectionItem >
+          <apex:outputText value="{!TAG064}"/>
+         <apex:outputPanel >
+          <apex:selectList id="recent" size="1" style="width:150px" multiselect="false" value="{!selval}" >
+          <apex:selectOptions value="{!userlist}"/>   
+          </apex:selectList>
+          &nbsp;&nbsp;<apex:commandButton title="{!TAG065}" value="{!TAG065}" style="width:110px" action="{!GenKey}" reRender="popup" />   
+         </apex:outputPanel>           
+        </apex:pageBlockSectionItem>
+        
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="{!TAG013}" columns="1">
+            <apex:pageBlockSectionItem >
+                 <apex:outputText value="{!TAG061}"/>
+                <apex:inputField id="Profile_Tracking" value="{!Prof_Detail.SVMXC__Enable_Activity_Tracking_On__c}" />
+            </apex:pageBlockSectionItem>
+         </apex:pageBlockSection>   
+        <apex:pageBlockSection title="{!$Label.svmxc__OFFL008_TAG051}" columns="2">
+           <apex:pageBlockSectionItem >
+                        <apex:panelGroup >
+                           <apex:outputlabel value="{!$Label.svmxc__OFFL008_TAG052}" styleClass="labelCol" style="margin:0px 15px 0px 70px;"/>
+                           <apex:inputtext value="{!Prof_Detail.SVMXC__Auto_Sync_Duration2__c}" size="2"/>  
+                        <apex:selectList id="Profile_AutoSyncUnit" value="{!Prof_Detail.SVMXC__Auto_Sync_Duration_Unit__c}" multiselect="false" style="width:25%" size="1">
+                                <apex:selectOptions value="{!Profile_AutoSyncUnit}"/>
+                         </apex:selectList>
+                         </apex:panelGroup>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+          <apex:outputText value="{!$Label.svmxc__OFFL008_TAG061}"/>  
+         <apex:inputField id="Profile_SyncDataOnLogin" value="{!Prof_Detail.SVMXC__Sync_Data_On_Login__c}"/>
+         </apex:pageBlockSectionItem>
+         </apex:pageBlockSection>
+        
+        
+        <apex:pageBlockSection id="ProfileList" title="{!TAG014}" columns="1">
+        <apex:actionStatus id="LodingStdStatus"  startText="{!TAG017}" />
+        <apex:pageMessages rendered="{!AccessMessage}" showDetail="true" />
+            <apex:pageBlockSectionItem dataStyleClass="centerTA"   labelStyleClass="centerTA" >
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" >
+                        <apex:outputLabel for="ProfileName" value="{!TAG018}"  styleClass="labelCol" style="margin:0px 15px 0px 70px;"></apex:outputLabel>
+                        <apex:outputText >
+                           <td>
+                           <apex:selectList title="{!TAG027}" value="{!profile}" size="8" id="Profiles" multiselect="true" style="width:250px" >
+                           <apex:selectOptions value="{!AvailProf}" />
+                           </apex:selectList>
+                           </td>
+                           
+                           <td style="width:17px;height:100%;vertical-align:middle">
+                                <apex:panelGrid cellspacing="7" cellpadding="0" width="40%" columns="1" style="text-align: center;">
+                                    <div>
+                                        <apex:commandButton action="{!onAddProfile}" id="Add" rerender="ProfileList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Arrow_Right_Bttn.JPG')}"  title="{!TAG029}" status="LodingStdStatus"/>
+                                        <apex:commandButton action="{!onRemProfile}" id="remove" rerender="ProfileList" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Arrow_Left_Bttn.JPG')}" title="{!TAG030}" status="LodingStdStatus"/>
+                                    </div>
+                                </apex:panelGrid>     
+                            </td>
+                           
+                           
+                       <!-- <td style="width:17px;height:100%;background-color:#AAAAAA;vertical-align:middle">
+                        
+                        <apex:outputLink value="#" onclick="RemoveProfile()" ><img src="/img/arrow2_picklist_left.gif" alt="" title="{!TAG030}"/></apex:outputLink></td>                
+                        <apex:actionFunction name="AddProfile" action="" rerender="ProfileList" status="LodingStdStatus"/>
+                        <apex:actionFunction name="RemoveProfile" action="" rerender="ProfileList" status="LodingStdStatus"/>-->
+                           <td>
+                           <apex:selectList title="{!TAG028}" value="{!Sprofile}" size="8" id="SProfiles" multiselect="true" style="width:250px">
+                           <apex:selectOptions value="{!SelectedProf}" />
+                           </apex:selectList>
+                           </td>
+                        </apex:outputText>
+
+                    </apex:panelGrid>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+   </apex:pageBlock> 
+</apex:form>
+
+<!-- This is the page that we want to display to the user -->
+<apex:outputPanel id="output">
+        <apex:form id="managedatasets" rendered="{!if((Clone!='i'&&Clone!='s'),true,false)}"> 
+        <apex:pageBlock title="{!TAG021}" id="pblock1">
+    <apex:pageMessages rendered="{!ObjDisplayBlockLevelMessage}" showDetail="true" />
+    <apex:actionStatus id="LodingStatus"  startText="{!Tag017}" />
+    <apex:outputLabel rendered="{!if(IsListAvail==false,true,false)}" value="{!TAG026}" style="font-size:11px" />
+            <apex:pageBlockButtons id="Pbutton1" Location="Top">
+                
+                <apex:commandButton action="{!GoAddObj}" id="add_dataset" value="{!TAG022}"/>
+                <apex:commandButton action="{!EditObj}" id="Edit" value="{!TAG023}"/>
+                <apex:commandButton action="{!delObj}" id="Delete" value="{!TAG025}" onClick="if(!confirm('{!TAG053}')){return false}" status="LodingStatus" reRender="managedatasets" />
+                <apex:commandButton id="Tab_Order" value="{!TAG024}" action="{!taborder}"/>
+            </apex:pageBlockButtons>  
+            <apex:outputPanel layout="block">
+           
+            <apex:pageBlockTable value="{!OfflineObjlst}" var="obj" rendered="{!if(IsListAvail==true,true,false)}">
+
+                <apex:column width="10px" >
+                <apex:facet name="header">
+                    <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['O_conf_prof:managedatasets'],'ds',this);">  
+                    </apex:inputCheckbox>
+                </apex:facet>
+                    <apex:inputCheckbox value="{!obj.SVMXC__Select__c}" id="ds_selected"/>
+                </apex:column>          
+                <apex:column >
+                    <apex:facet name="header" >{!$ObjectType.SVMXC__Offline_Object__c.fields.SVMXC__Object_Name__c.Label}</apex:facet>  
+                    <apex:outputField value="{!obj.SVMXC__Object_Name__c}"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header" >{!$ObjectType.SVMXC__Offline_Object__c.fields.SVMXC__Use_Object_As_Home_Tab__c.Label}</apex:facet>  
+                    <apex:outputField value="{!obj.SVMXC__Use_Object_As_Home_Tab__c}"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header" >{!$ObjectType.SVMXC__Offline_Object__c.fields.SVMXC__Allow_Tab__c.Label}</apex:facet>  
+                    <apex:outputField value="{!obj.SVMXC__Allow_Tab__c}"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header" >{!$ObjectType.SVMXC__Offline_Object__c.fields.SVMXC__Allow_Upload__c.Label}</apex:facet>  
+                    <apex:outputField value="{!obj.SVMXC__Allow_Upload__c}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >{!$ObjectType.SVMXC__Offline_Object__c.fields.SVMXC__Allow_API_Access__c.Label}</apex:facet>  
+                    <apex:outputField value="{!obj.SVMXC__Allow_API_Access__c}"/>
+                </apex:column>
+                
+                <apex:column >
+                    <apex:facet name="header" >{!$ObjectType.SVMXC__Offline_Object__c.fields.SVMXC__Ownership_Limit__c.Label}</apex:facet>  
+                    <apex:outputField value="{!obj.SVMXC__Ownership_Limit__c}"/>
+                </apex:column>
+            </apex:pageBlockTable>           
+        </apex:outputPanel>
+        
+        </apex:pageBlock>
+        </apex:form>
+        </apex:outputPanel>
+</apex:outputPanel>
+</apex:page>

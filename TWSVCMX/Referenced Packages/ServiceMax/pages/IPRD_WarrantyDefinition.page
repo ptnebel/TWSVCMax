@@ -1,0 +1,47 @@
+<apex:page controller="SVMXC.IPRD_WarrantyDefinition"  showHeader="false" sidebar="false" tabStyle="SVMXC__Service_Template__c">
+<apex:sectionHeader title="{!TAG024}" subtitle="{!warrantyTerm.Name}"/>
+       <script type="text/javascript">
+               /*function SaveWarranty()
+               {
+                        //var a = SaveMethod();
+                        SaveMethod();
+                        sleep(5);
+                        //parent.window.opener.location.href = '/{!WId}';
+                        parent.window.close();
+               }
+                function sleep(naptime)
+                {
+                      naptime = naptime * 1000;
+                      var sleeping = true;
+                      var now = new Date();
+                      var alarm;
+                      var startingMSeconds = now.getTime();
+                      while(sleeping)
+                      { 
+                         alarm = new Date();
+                         alarmMSeconds = alarm.getTime();
+                         if(alarmMSeconds - startingMSeconds > naptime){ sleeping = false; }
+                      }
+                } */
+       </script> 
+<apex:form id="WarrantyDef"> <apex:actionStatus id="LodingStatus"  startText="{!TAG030}" />
+<apex:pageBlock id="WarantyDetail" helpTitle="{!TAG021}" helpUrl="{!HLPURL}">
+<apex:pageMessages rendered="true"/>
+<apex:pageBlockButtons location="top">
+<apex:commandButton title="{!TAG022}"  value="{!TAG022}" rerender="WarantyDetail" status="LodingStatus" action="{!GoSave}"/>
+<apex:commandButton value="{!TAG023}" title="{!TAG023}" action="javascript:self.close()"/><!-- onclick="javascript:SaveWarranty()" rendered="{!if(IsValid=true,true,false)}" -->
+</apex:pageBlockButtons>
+
+<apex:pageMessages rendered="{!if(IsValid=false,true,false)}" showDetail="true" />
+<apex:pageBlockSection columns="1" rendered="{!if(IsValid=true,true,false)}" >
+     <apex:pageBlockSectionItem >
+     <apex:outputLabel value="{!TAG025}"/>
+     <apex:selectList title="{!TAG027}" value="{!Datec}" size="1" id="Dates">
+     <apex:selectOptions value="{!AvailDate}" />
+     </apex:selectList>
+     </apex:pageBlockSectionItem>
+</apex:pageBlockSection>
+<!--  <apex:actionFunction name="SaveMethod" action="{!GoSave}"/>-->
+</apex:pageBlock> 
+</apex:form>
+</apex:page>

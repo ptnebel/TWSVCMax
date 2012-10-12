@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Sample service report for use in ServiceMax Offline client.</description>
+    <internalUseOnly>true</internalUseOnly>
+    <keywords>SVMXC__Service_Order__c</keywords>
+    <name>Offline Service Report</name>
+    <public>false</public>
+</Document>

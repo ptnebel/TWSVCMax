@@ -1,0 +1,11 @@
+<apex:page controller="SVMX_USRLatLng" showheader="false" sidebar="false">
+    <apex:form id="frm">
+        <apex:pageBlock title="Marking User Location" id="mapBlk">
+        <center><apex:image url="{!URLFOR($Resource.Loadingmap)}" rendered="{!show}"/></center>
+        <apex:messages />
+         <apex:actionStatus startText="Processing..." id="myStatus"/>
+        <apex:actionFunction name="calUsr" action="{!fnUSRLatLng}" rerender="mapBlk" status="myStatus"/>   
+        </apex:pageBlock>   
+    </apex:form>
+    <script>window.setTimeout(calUsr,2000)</script>
+</apex:page>

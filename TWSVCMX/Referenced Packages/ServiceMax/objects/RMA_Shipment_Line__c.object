@@ -1,0 +1,1123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>ServiceMax uses a common tab Parts Orders as a home for RMA and Shipment orders both. Parts Order Line lists parts returned or shipped.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Actual_Quantity2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Actual number of units shipped/received vs. expected quantity</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Actual number of units shipped/received vs. expected quantity</inlineHelpText>
+        <label>Actual Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>true</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Actual_Receipt_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which the product was actually received</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the product was actually received</inlineHelpText>
+        <label>Actual Receipt Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Actual_Ship_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which the product was actually shipped</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the product was actually shipped</inlineHelpText>
+        <label>Actual Ship Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Canceled_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that canceled this shipment line. This is set automatically when a user cancels the shipment line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>User that canceled this shipment line. This is set automatically when a user cancels the shipment line.</inlineHelpText>
+        <label>Canceled By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>RMA_Shipment_Line_Canceled_By</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Canceled_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when this shipment line was canceled. This is set automatically when a user cancels the shipment line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/time when this shipment line was canceled. This is set automatically when a user cancels the shipment line.</inlineHelpText>
+        <label>Canceled On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Case_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the originating Case Line record</description>
+        <externalId>false</externalId>
+        <label>Case Line</label>
+        <referenceTo>Case_Line__c</referenceTo>
+        <relationshipLabel>Parts Order Lines</relationshipLabel>
+        <relationshipName>Parts_Order_Lines</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Closed_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that closed this RMA/shipment order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>User that closed this RMA/shipment order.</inlineHelpText>
+        <label>Closed By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>RMA_Shipment_Line_Closed_By</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Closed_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when this RMA/Shipment line was closed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/time when this RMA/Shipment line was closed.</inlineHelpText>
+        <label>Closed On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Delivered_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that delivered the product</description>
+        <externalId>false</externalId>
+        <label>Delivered By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Parts_Order_Lines1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Delivered_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the product was delivered</description>
+        <externalId>false</externalId>
+        <label>Delivered On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Delivered__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the product has been delivered or not</description>
+        <externalId>false</externalId>
+        <label>Delivered?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Delivery_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Delivery Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>Parts Order Lines (Delivery Location)</relationshipLabel>
+        <relationshipName>Parts_Order_Lines</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Discount_Percentage__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Percentage discount to be applied on the Parts Order Line Price</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Percentage discount to be applied on the Parts Order Line Price</inlineHelpText>
+        <label>Discount %</label>
+        <precision>5</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Disposition_Instructions__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any special handling notes for product disposition</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Any special handling notes for product disposition</inlineHelpText>
+        <label>Disposition Instructions</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Disposition__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of action to be taken by receiving department when the product arrives</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of action to be taken by receiving department when the product arrives</inlineHelpText>
+        <label>Disposition</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Scrap</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Repair</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Salvage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Restock</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Material Review</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Entitled_Exchange_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Entitled Exchange Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Advance Exchange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Return Exchange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Entitlement_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Entitlement Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Entitled To Warranty</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Not Entitled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Expected_Condition__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Condition of the product returned</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Condition of the product returned</inlineHelpText>
+        <label>Expected Condition</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Good/Working</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Defective</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shipping Damage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Expected_Quantity2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of products returned. Usually 1 for serialized products</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of products returned. Usually 1 for serialized products</inlineHelpText>
+        <label>Expected Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>true</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Expected_Receipt_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which the product is expected to be received at the depot/factory/warehouse</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the product is expected to be received at the depot/factory/warehouse</inlineHelpText>
+        <label>Expected Receipt Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Expected_Ship_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which the product is expected to be shipped to the customer/field location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the product is expected to be shipped to the customer/field location</inlineHelpText>
+        <label>Expected Ship Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Fulfillment_Qty__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Fulfillment Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Line_Price2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Price for Line Item.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for Line Item.</inlineHelpText>
+        <label>Line Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>true</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Line_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Current status of the RMA/Shipment line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Current status of the RMA/Shipment line.</inlineHelpText>
+        <label>Line Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Allocated</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Back Ordered</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fulfilled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Picked</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shipped</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>true</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Line_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal line type of the RMA/Shipment line. Not displayed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Internal line type of the RMA/Shipment line. Not displayed.</inlineHelpText>
+        <label>Line Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Inbound (RMA)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Outbound (Shipment)</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Master_Order_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Master Order Line</label>
+        <referenceTo>RMA_Shipment_Line__c</referenceTo>
+        <relationshipLabel>Parts Order Lines</relationshipLabel>
+        <relationshipName>Parts_Order_Lines</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Packing_Instructions__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any special handling notes for shipping department</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Any special handling notes for shipping department</inlineHelpText>
+        <label>Packing Instructions</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Parts_Request_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The ServiceMax parts request line for which this shipment line was created.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The ServiceMax parts request line for which this shipment line was created.</inlineHelpText>
+        <label>Parts Request Line</label>
+        <referenceTo>Parts_Request_Line__c</referenceTo>
+        <relationshipName>RMA_Shipment_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Picked_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that picked the product for shipment</description>
+        <externalId>false</externalId>
+        <label>Picked By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Parts_Order_Lines2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Picked_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the product was picked for shipment</description>
+        <externalId>false</externalId>
+        <label>Picked On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Picked_Qty__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Quantity picked for shipment</description>
+        <externalId>false</externalId>
+        <label>Picked Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Picked__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the product has been picked for shipment or not</description>
+        <externalId>false</externalId>
+        <label>Picked?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Posted_To_Inventory__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag Indicates if this RMA/Shipment line has been posted to inventory or not.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag Indicates if this RMA/Shipment line has been posted to inventory or not.</inlineHelpText>
+        <label>Posted To Inventory</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the product to be shipped/received. Is a lookup to an existing salesforce product record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the product to be shipped/received. Is a lookup to an existing salesforce product record</inlineHelpText>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipName>RMA_Shipment_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>RMA_Shipment_Order__c</fullName>
+        <deprecated>false</deprecated>
+        <description>RMA/Shipment number. Is a lookup to an existing RMA/Shipment record in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>RMA/Shipment number. Is a lookup to an existing RMA/Shipment record in ServiceMax</inlineHelpText>
+        <label>Parts Order</label>
+        <referenceTo>RMA_Shipment_Order__c</referenceTo>
+        <relationshipName>RMA_Shipment_Line</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <trackHistory>true</trackHistory>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Received_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that received the product</description>
+        <externalId>false</externalId>
+        <label>Received By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Parts_Order_Lines</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Received_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the product was received</description>
+        <externalId>false</externalId>
+        <label>Received On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Received__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the product has been received or not</description>
+        <externalId>false</externalId>
+        <label>Received?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Reconciliation_Action__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Action performed by the user to reconcile an unexpected product or serial number</description>
+        <externalId>false</externalId>
+        <label>Reconciliation Action</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Add</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Remove</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Hold</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Replace</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Returned_Condition__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Condition of the product when received (As expected or otherwise)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Condition of the product when received (As expected or otherwise)</inlineHelpText>
+        <label>Returned Condition</label>
+        <picklist>
+            <picklistValues>
+                <fullName>As Expected</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shipping Damage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Route_Card__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Route Card</label>
+        <referenceTo>Route_Card__c</referenceTo>
+        <relationshipLabel>Parts Order Lines</relationshipLabel>
+        <relationshipName>Route_Card</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Route_Stop__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Route Stop</label>
+        <referenceTo>Route_Stop__c</referenceTo>
+        <relationshipLabel>Parts Order Lines</relationshipLabel>
+        <relationshipName>Parts_Order_Lines</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Sales_Order_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Sales order number for this shipment if available.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Sales order number for this shipment if available.</inlineHelpText>
+        <label>Sales Order Number</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Field to bind checkbox in List of Parts Order Line records on Visualforce page with controller.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Field to bind checkbox in List of Parts Order Line records on Visualforce page with controller.</inlineHelpText>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Serial_Number_List__c</fullName>
+        <deprecated>false</deprecated>
+        <description>List of serial numbers expected/received/shipped separated by a configurable delimiter</description>
+        <externalId>false</externalId>
+        <label>Serial Number List</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Serial_Number__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>ID of the installed product returned/shipped. Is a lookup to an existing installed product record in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>ID of the installed product returned/shipped. Is a lookup to an existing installed product record in ServiceMax</inlineHelpText>
+        <label>Serial Number</label>
+        <referenceTo>Installed_Product__c</referenceTo>
+        <relationshipName>RMA_Shipment_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Contract_End_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Serial_Number__r.Service_Contract_End_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Service Contract End Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Service_Contract_Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Serial_Number__r.Service_Contract_Start_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Service Contract Start Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Service_Engineer__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the service engineer associated with this RMA/shipment order. Is a lookup to an existing salesforce user record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the service engineer associated with this RMA/shipment order. Is a lookup to an existing salesforce user record</inlineHelpText>
+        <label>Service Engineer</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>RMA_Shipment_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Order_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The ServiceMax service order parts request line for which this shipment line was created.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The ServiceMax service order parts request line for which this shipment line was created.</inlineHelpText>
+        <label>Work Details</label>
+        <referenceTo>Service_Order_Line__c</referenceTo>
+        <relationshipName>RMA_Shipment_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Work Order</label>
+        <referenceTo>Service_Order__c</referenceTo>
+        <relationshipLabel>Parts Order Lines</relationshipLabel>
+        <relationshipName>RMA_Shipment_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Ship_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The actual site/location where the product was shipped/received. Is a lookup to an existing site record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The actual site/location where the product was shipped/received. Is a lookup to an existing site record</inlineHelpText>
+        <label>Return/Ship Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipName>RMA_Shipment_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Shipped_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that shipped the product</description>
+        <externalId>false</externalId>
+        <label>Shipped By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Parts_Order_Lines3</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Shipped_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the product was shipped</description>
+        <externalId>false</externalId>
+        <label>Shipped On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Shipped__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the product has been shipped or not</description>
+        <externalId>false</externalId>
+        <label>Shipped?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Total_Line_Price2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Line Price</description>
+        <externalId>false</externalId>
+        <formula>IF( ISPICKVAL( Line_Status__c ,&apos;Completed&apos;), (Actual_Quantity2__c * Line_Price2__c) - ( Discount_Percentage__c * (Actual_Quantity2__c * Line_Price2__c)), IF(ISPICKVAL( Line_Status__c ,&apos;Canceled&apos;), 0,(Expected_Quantity2__c * Line_Price2__c) - ( Discount_Percentage__c * (Expected_Quantity2__c * Line_Price2__c))))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Line Price</inlineHelpText>
+        <label>Total Line Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Use_Price_From_Pricebook__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Leave this box checked if you want the price to be filled automatically from the default price book. If you like to enter a price manually for this part, simply uncheck this box.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Leave this box checked if you want the price to be filled automatically from the default price book. If you like to enter a price manually for this part, simply uncheck this box.</inlineHelpText>
+        <label>Use Price From Pricebook</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Warehouse__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Name/number of the warehouse from which the products will be shipped</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name/number of the warehouse from which the products will be shipped</inlineHelpText>
+        <label>Warehouse</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Warranty_End_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Serial_Number__r.Warranty_End_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Warranty End Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Warranty_Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <formula>Serial_Number__r.Warranty_Start_Date__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Warranty Start Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Work_Order_Created__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if a work order was created upon receipt/delivery</description>
+        <externalId>false</externalId>
+        <label>Work Order Created?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <label>Parts Order Line</label>
+    <nameField>
+        <displayFormat>LN-{00000000}</displayFormat>
+        <label>Line Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Parts Order Lines</pluralLabel>
+    <recordTypeTrackHistory>false</recordTypeTrackHistory>
+    <recordTypes>
+        <fullName>RMA</fullName>
+        <active>true</active>
+        <label>RMA</label>
+        <picklistValues>
+            <picklist>Disposition__c</picklist>
+            <values>
+                <fullName>Material Review</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Repair</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Restock</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Salvage</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scrap</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Expected_Condition__c</picklist>
+            <values>
+                <fullName>Defective</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Good%2FWorking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipping Damage</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Line_Status__c</picklist>
+            <values>
+                <fullName>Allocated</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Back Ordered</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fulfilled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Picked</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipped</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Line_Type__c</picklist>
+            <values>
+                <fullName>Inbound %28RMA%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Outbound %28Shipment%29</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Returned_Condition__c</picklist>
+            <values>
+                <fullName>As Expected</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipping Damage</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Shipment</fullName>
+        <active>true</active>
+        <label>Shipment</label>
+        <picklistValues>
+            <picklist>Disposition__c</picklist>
+            <values>
+                <fullName>Material Review</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Repair</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Restock</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Salvage</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Scrap</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Expected_Condition__c</picklist>
+            <values>
+                <fullName>Defective</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Good%2FWorking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipping Damage</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Line_Status__c</picklist>
+            <values>
+                <fullName>Allocated</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Back Ordered</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fulfilled</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Picked</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipped</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Line_Type__c</picklist>
+            <values>
+                <fullName>Inbound %28RMA%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Outbound %28Shipment%29</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Returned_Condition__c</picklist>
+            <values>
+                <fullName>As Expected</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipping Damage</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

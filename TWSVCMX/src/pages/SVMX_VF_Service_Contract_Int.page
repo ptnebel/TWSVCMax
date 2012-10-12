@@ -1,0 +1,8 @@
+<apex:page standardController="SVMXC__Service_Contract__c"  recordSetVar="opportunities" extensions="SVMX_VF_Service_Contract_Int" >
+	<apex:form id="form1">
+	 <apex:pageMessages />
+		<apex:actionfunction name="insertRecord" action="{!insertRec}" reRender=""/>
+		<apex:commandButton action="{!SVMX_Back}" value="{!REPTAG010}" rendered="{!ButtonDisp}" id="theButton"/>
+	</apex:form>
+	<script type="text/javascript">if({!isInsert}) insertRecord();</script>
+</apex:page>

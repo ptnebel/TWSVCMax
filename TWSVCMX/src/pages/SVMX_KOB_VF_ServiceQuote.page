@@ -1,0 +1,412 @@
+<apex:page standardController="SVMXC__Quote__c"  extensions="SVMX_VF_ServiceQuote" contenttype="{!contype}" renderAs="pdf">    
+<style>
+.hr3{
+    border: 0;          
+    height: 1px;             
+    color: #000000;
+    background-color: #000000;
+}
+
+.hr4{
+    border: 0; 
+    height: 1.5px;             
+    color: #4A4A4A
+    background-color: #4A4A4A;
+}
+
+.blackbgcolor{
+    background-color:#CCCCCC;
+}
+
+.blackbgcolor1{
+background-color:#E5E5E5;
+}
+
+.center {
+    text-align:center;
+    vertical-align:top;
+}
+
+.font10 {
+    font-size:10px;
+}
+
+.font11 {
+    font-size:11px;
+}
+
+.font12 {
+    font-size:14px; 
+}
+
+.font13 {
+    font-size:13px;
+}
+
+.font14 {
+    font-size:14px; 
+}
+
+.fontbold {
+    font-weight:bold;
+    font-size:13px;
+    margin:5px 2px;
+}
+
+.fontbold11 {
+    font-weight:bold;
+    font-size:11px;
+    margin:5px 2px;
+}
+
+.fontbold11B4:before {
+    content: "Page :   " counter(page);
+    font-size:11px;
+}
+
+.fontbold14 {
+    
+    font-weight:bold;
+    font-size:14px;
+}
+
+.fontbold15 {
+    
+    font-weight:bold;
+    font-size:15px;
+}
+
+.font16 {
+    font-size:16px; 
+    margin:5px 2px;
+}
+
+
+
+.fontbold19 {
+    
+    font-weight:bold;
+    font-size:19px;
+    margin:5px 2px;
+    text-align:center;
+    vertical-align:top;
+}
+
+.fontbold22 {
+    font-weight:bold;
+    font-size:22px; 
+}
+
+.fontbold24 {
+    font-weight:bold;
+    font-size:24px; 
+}
+
+.colspan2{
+    width:2%;
+}
+
+.colspan3{
+    width:3%;
+}
+
+.colspan4{
+    width:4%;
+}
+
+.colspan5{
+    width:5%;
+}
+
+.colspan6bgcol{
+    width:6%;
+    background-color:#E5E5E5;
+}
+
+.colspan10 {
+    width:10%;
+    
+}
+
+.colspan10bgcol{
+    width:10%;
+    background-color:#E5E5E5;
+}
+
+.colspan12 {
+    width:12%;
+    
+}
+
+.colspan14 {
+    width:14%;
+    
+}
+
+.colspan15 {
+    width:15%;
+}
+
+.colspan15bgcol {
+    width:15%;
+    background-color:#E5E5E5;   
+}
+.colspan18 {
+    width:18%;
+    text-align:left;
+}
+
+.colspan20 {
+    width:20%;
+}
+
+.colspan20bgcol{
+    width:20%;
+    background-color:#D4D4D4;
+}
+
+.colspan24 {
+    width:24%;
+}
+
+.colspan25 {
+    width:25%;
+}
+
+.colspan30 {
+    width:30%;
+}
+
+.colspan36 {
+    width:36%;
+    text-align:left;
+}
+
+.colspan38 {
+    width:38%;
+    text-align:left;
+}
+
+.colspan40 {
+    width:40%;
+}
+
+.colspan50 {
+    width:50%;
+}
+
+.colspan60 {
+    width:60%;
+}
+
+.colspan66 {
+    width:66%;
+}
+
+.colspan70 {
+    width:70%;
+}
+
+.colspan80 {
+    width:80%;
+    text-align:left;
+}
+
+.colspan86 {
+    width:86%;
+}
+
+.colspan89 {
+    width:89%;
+}
+
+.colspan95 {
+    width:95%;
+}
+
+.line { 
+    height:20px;    
+}
+
+.line10 {   
+    height:10px;    
+}
+
+.line15 {   
+    height:15px;    
+}
+
+.line30{    
+    height:30px;    
+}
+
+.bordernone {   
+    border-top: hidden;
+    border-bottom: hidden;  
+    border-left: hidden;
+    border-right: hidden;
+}
+
+.smallfont {
+	font-size: 9px;
+}
+
+.title1{
+	font-size: 12px;
+}
+</style>
+   
+    <apex:pageMessages rendered="false">
+        <apex:pageMessage rendered="false" strength="2" severity="error" title="{!REPTAG001}">
+        </apex:pageMessage>
+    </apex:pageMessages>
+    <apex:stylesheet value="{!$Resource.SVMXVF_Resources1}" />
+   <!-- <apex:variable var="m" value="{!$User.Alias}"/> -->
+    <apex:repeat value="{!SVQuote}" var="svq">
+        <apex:panelGrid columns="2" cellpadding="0" columnClasses="colspan66" cellspacing="0" width="100%" border="0">
+            <apex:outputText styleClass="fontbold19" style="font-family: Arial Unicode MS;" value="{!REPTAG002}"/>
+            <apex:panelGroup id="theGroup" styleClass="left">
+                <apex:image url="{!$Resource.ServiceMaxLogo}" />          
+            </apex:panelGroup>           
+        </apex:panelGrid>
+        <br></br>
+        <apex:repeat value="{!svq.sObj}" var="svqrpt">
+        <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" style="border-bottom: hidden; font-family: Arial Unicode MS; " columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" styleClass="font13" width="100%" border="1">
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote__c.fields.Name.Label}"/>
+            <apex:outputText value="{!svqrpt.Name}"/>
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote__c.fields.CreatedDate.Label}"/>
+            <apex:outputText value="{!svq.SVQDate}"/>
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote__c.fields.SVMXC__Company__c.Label}"/>
+            <apex:outputText value="{!svqrpt.SVMXC__Company__r.Name}"/>
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote__c.fields.SVMXC__Contact__c.Label}"/>
+            <apex:outputText value="{!svqrpt.SVMXC__Contact__r.Name}"/>
+        </apex:panelGrid>
+        <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" style="border-top: hidden;font-family: Arial Unicode MS; " columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" rowClasses="line" styleClass="font13" width="100%" border="1">
+            <apex:outputText styleClass="font13" value="{!REPTAG003}"/>
+            <apex:outputText value="">
+                    {!svqrpt.SVMXC__Company__r.BillingStreet}<br/>
+                    {!svqrpt.SVMXC__Company__r.BillingCity}<br/>
+                    {!svqrpt.SVMXC__Company__r.BillingState}, {!svqrpt.SVMXC__Company__r.BillingPostalCode}<br/>
+                    {!svqrpt.SVMXC__Company__r.BillingCountry}
+            </apex:outputText>
+            <apex:outputText value="">
+                <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" rowClasses="line15" styleClass="font13" style="margin:0px 2px; font-family: Arial Unicode MS; " width="100%" border="0">
+                    <apex:outputText value="{!$ObjectType.SVMXC__Quote__c.fields.SVMXC__Quote_Amount2__c.Label}"/>
+                    <hr class="hr3" ></hr> 
+                    <apex:outputText value="{!$ObjectType.SVMXC__Quote__c.fields.SVMXC__Valid_Until__c.Label}"/>
+                    </apex:panelGrid>
+            </apex:outputText>
+            <apex:outputText value="">
+                <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" rowClasses="line15" styleClass="font13" width="100%" border="0" style="margin:0px 2px; font-family: Arial Unicode MS; ">
+                	<apex:outputText value="{0, number, $###,###,##0.00}">
+                		<apex:param value="{!svqrpt.SVMXC__Quote_Amount2__c}" />
+                	</apex:outputText>
+                    <hr class="hr3" ></hr> 
+                    <apex:outputText value="{!svq.ValUnll}"/>
+                </apex:panelGrid>
+            </apex:outputText>
+        </apex:panelGrid>
+        <br/>
+        <apex:panelGrid columns="7" cellpadding="0" cellspacing="0" style="background-color:#D4D4D4; font-family: Arial Unicode MS; " columnClasses="colspan10,colspan30,colspan20,colspan10,colspan10,colspan10,colspan10" style="border-bottom: hidden; background-color:#D4D4D4;" styleClass="font13" width="100%" border="1">
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote_Line__c.fields.SVMXC__Line_Type__c.Label}"/>
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote_Line__c.fields.SVMXC__Line_Description__c.Label}"/>
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote_Line__c.fields.SVMXC__Product__c.Label}"/>
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote_Line__c.fields.SVMXC__Unit_Price2__c.Label}"/>    	        
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote_Line__c.fields.SVMXC__Quantity2__c.Label}"/>
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote_Line__c.fields.SVMXC__Discount__c.Label}"/>
+            <apex:outputText value="{!$ObjectType.SVMXC__Quote_Line__c.fields.SVMXC__Line_Price2__c.Label}"/>
+             
+        </apex:panelGrid>
+        </apex:repeat>
+        <apex:repeat value="{!svq.lstsObj}" var="svqrptLine">
+        <apex:panelGrid columns="7" cellpadding="0" cellspacing="0" columnClasses="colspan10,colspan30,colspan20,colspan10,colspan10,colspan10,colspan10" style=" border-top: hidden; font-family: Arial Unicode MS; " styleClass="font13" width="100%" border="1">
+            <apex:outputText value="{!svqrptLine.SVMXC__Line_Type__c}"/>
+            <apex:outputText value="{!svqrptLine.SVMXC__Line_Description__c}"/>
+            <apex:outputText value="{!svqrptLine.SVMXC__Product__r.Name}"/>
+        	<apex:outputText value="{0, number, $###,###,##0.00}">
+            	<apex:param value="{!svqrptLine.SVMXC__Unit_Price2__c}" />
+            </apex:outputText>        
+            <apex:outputText value="{!svqrptLine.SVMXC__Quantity2__c}"/>
+            <apex:outputText value="{!svqrptLine.SVMXC__Discount__c}"/>
+            <apex:outputText value="{0, number, $###,###,##0.00}">
+            	<apex:param value="{!svqrptLine.SVMXC__Line_Price2__c}" />
+            </apex:outputText>
+        </apex:panelGrid>
+        </apex:repeat>  
+	</apex:repeat>
+	
+	<br></br>
+	
+	<apex:panelGrid style="border-bottom: hidden; font-family: Arial Unicode MS; " styleClass="font11" width="100%" border="1">
+    	<apex:outputText styleClass="font14" style="font-family: Arial Unicode MS;" value="Included"/>
+    	<apex:outputText styleClass="font11" style="font-family: Arial Unicode MS;" value="• Materials as mentioned on the bill of materials."/>
+    </apex:panelGrid>
+	
+	<br></br>
+	
+	<apex:panelGrid style="border-bottom: hidden; font-family: Arial Unicode MS; " styleClass="font11" width="100%" border="1">
+    	<apex:outputText styleClass="font14" style="font-family: Arial Unicode MS;" value="Not Included"/>
+    	<apex:outputText styleClass="font11" style="font-family: Arial Unicode MS;" value="• Overtime or weekend labor."/>
+		<apex:outputText styleClass="font11" style="font-family: Arial Unicode MS;" value="• Digital communicator required phone lines."/>
+		<apex:outputText styleClass="font11" style="font-family: Arial Unicode MS;" value="• Phased Work."/>
+    </apex:panelGrid>
+
+	<br></br>
+
+	<apex:panelGrid style="border-bottom: hidden; font-family: Arial Unicode MS; " styleClass="font11" width="100%" border="1">
+    	<apex:outputText styleClass="font14" style="font-family: Arial Unicode MS;" value="Terms of Payment"/>
+    	<apex:outputText styleClass="font11" style="font-family: Arial Unicode MS;" value="COD or Net 10 Days with credit approval.  An initial invoice of 30% of the total contract price is required for project mobilization. The balance of payments for technical services, materials and labor will be progressively invoiced as materials are delivered and work is completed."/>
+    </apex:panelGrid>	
+	
+	<br></br>
+
+	<apex:panelGrid style="border-bottom: hidden; font-family: Arial Unicode MS; " styleClass="font11" width="100%" border="1">
+    	<apex:outputText styleClass="font14" style="font-family: Arial Unicode MS;" value="Acceptance of Proposal"/>
+    	<apex:outputText styleClass="font11" style="font-family: Arial Unicode MS;" value="The above prices, scope of work and conditions are satisfactory and are hereby accepted.  You are authorized to do the work as specified on this proposal."/>
+    </apex:panelGrid>		
+	
+	<br></br>
+	
+	<apex:panelGrid columns="2" cellpadding="0" cellspacing="0" style="border-top: hidden;" styleClass="font13" width="475px" border="0">
+		<apex:outputText value="COMPANY NAME"/>		
+		<apex:outputText value="CUSTOMER"/>
+	</apex:panelGrid>
+	
+	<br></br>
+	
+	<apex:panelGrid columns="2" cellpadding="0" cellspacing="0" style="border-top: hidden;" styleClass="font13" width="100%" border="0">
+		<apex:outputText value="________________________________"/>	
+		<apex:outputText value="________________________________"/>			
+		<apex:outputText value="Signature"/>
+		<apex:outputText value="Signature"/>
+	</apex:panelGrid>	
+	
+	<br></br>
+	
+	<apex:panelGrid columns="2" cellpadding="0" cellspacing="0" style="border-top: hidden;" styleClass="font13" width="100%" border="0">
+		<apex:outputText value="________________________________"/>	
+		<apex:outputText value="________________________________"/>	
+		<apex:outputText value="Date"/>
+		<apex:outputText value="Date"/>
+	</apex:panelGrid>
+	
+	<br></br>
+	<apex:panelGrid columns="2" cellpadding="0" cellspacing="0" style="border-top: hidden;" styleClass="font13" width="100%" border="0">
+		<apex:outputText value=" "/> 
+		<apex:outputText value="________________________________"/>	
+		<apex:outputText value=" "/>
+		<apex:outputText value="Purchase Order Number"/>			
+	</apex:panelGrid>
+	
+	<br></br>
+	
+	<apex:panelGrid styleClass="smallfont">							
+		Alterations from the above scope of work involving extra costs will be executed only upon written authorization, and will become an extra charge over and above the proposed price.  Should default in required payment occur, any balance shall be forthwith payable.  All materials supplied may then be removed, and all losses sustained because of such default shall be borne by the customer.  NOTE:  This proposal may be withdrawn if not accepted within  30  days.
+	</apex:panelGrid>
+	
+	<br></br>
+	
+	<apex:panelGrid border="1" width="100%" style="text-align:center;">
+		<apex:outputText style="text-align:center;" value="Please sign and fax to 123-555-7110"/>
+	</apex:panelGrid>	    
+</apex:page>

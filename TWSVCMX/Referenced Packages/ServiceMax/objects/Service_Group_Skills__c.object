@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Service Group enables definition of your entire service organization. Service group definition includes details of group members, products in which the group specializes in, the skills available in the group, typical service delivery costs as well as geographies covered by the group.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Availability_End_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date up to which this skill is available in this group</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date up to which this skill is available in this group</inlineHelpText>
+        <label>Availability End Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Availability_Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date from which this skill is available in this group</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date from which this skill is available in this group</inlineHelpText>
+        <label>Availability Start Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Group_Member__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the service group member. Is a lookup to an existing service group member in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the service group member. Is a lookup to an existing service group member in ServiceMax</inlineHelpText>
+        <label>Technician/Equipment</label>
+        <referenceTo>Service_Group_Members__c</referenceTo>
+        <relationshipLabel>Expertise</relationshipLabel>
+        <relationshipName>Service_Group_Skills</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Checkbox used in ServiceMax screens to manage record selection</description>
+        <externalId>false</externalId>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Service_Group__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Name of the service group. Is a lookup to an existing service group in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the service group. Is a lookup to an existing service group in ServiceMax</inlineHelpText>
+        <label>Service Team</label>
+        <referenceTo>Service_Group__c</referenceTo>
+        <relationshipLabel>Expertise</relationshipLabel>
+        <relationshipName>Service_Group_Skills</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <trackHistory>false</trackHistory>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Skill_Level__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Proficiency level at which this skill is available. See skill definition for low, medium and high benchmarks of this skill.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Proficiency level at which this skill is available. See skill definition for low, medium and high benchmarks of this skill.</inlineHelpText>
+        <label>Skill Level</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Skill__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the skill. Is a lookup to an existing skill record in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the skill. Is a lookup to an existing skill record in ServiceMax</inlineHelpText>
+        <label>Skill</label>
+        <referenceTo>Skill__c</referenceTo>
+        <relationshipName>Service_Group_Skills</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <label>Expertise</label>
+    <nameField>
+        <displayFormat>SGSK-{00000000}</displayFormat>
+        <label>Record Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Expertise</pluralLabel>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Service_Group__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Group_Member__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Skill__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Skill_Level__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Availability_Start_Date__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Availability_End_Date__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Group__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Group_Member__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Skill__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Skill_Level__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Availability_Start_Date__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Availability_End_Date__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Service_Group__c</searchFilterFields>
+        <searchFilterFields>Group_Member__c</searchFilterFields>
+        <searchFilterFields>Skill__c</searchFilterFields>
+        <searchFilterFields>Skill_Level__c</searchFilterFields>
+        <searchFilterFields>Availability_Start_Date__c</searchFilterFields>
+        <searchFilterFields>Availability_End_Date__c</searchFilterFields>
+        <searchFilterFields>CREATEDBY_USER</searchFilterFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

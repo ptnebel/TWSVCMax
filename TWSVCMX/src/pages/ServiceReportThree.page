@@ -1,0 +1,178 @@
+<apex:page standardController="SVMXC__Service_Order__c" extensions="SVMX_VF_ServiceReport"  contenttype="{!contype}" renderAs="{!render}" >
+<form>
+<apex:stylesheet value="{!$Resource.SVMXVF_Resources1}" />
+
+<apex:pageMessages rendered="false">
+<apex:pageMessage rendered="false" strength="2" severity="error" title="No Work Order data.">
+</apex:pageMessage>
+</apex:pageMessages>
+   
+    <apex:panelGrid columns="3" cellpadding="0" columnClasses="colspan50" cellspacing="0" width="100%" border="0">
+       <apex:panelGroup >
+       		<apex:outputText styleClass="fontbold16" style="font-family: Arial Unicode MS;" value="Global Corporation"/><br></br>
+       		<apex:outputText styleClass="font14" style="font-family: Arial Unicode MS;" value="16 Wakefield Avenue, Unit 1   Nion, CA 93063-1023"/><br></br>
+       		<apex:outputText styleClass="font14" style="font-family: Arial Unicode MS;" value="P: (800) 588-1111  "/>
+       		<apex:outputText styleClass="font14" style="font-family: Arial Unicode MS;" value=" F: (800) 421-2222"/><br></br>
+       		<apex:outputText styleClass="font14" style="font-family: Arial Unicode MS;" value="www.globalmicro.com"/><br></br>
+       		<apex:outputText styleClass="font14" style="font-family: Arial Unicode MS;" value="service@globalmicro.com"/><br></br>       		
+       </apex:panelGroup>
+       <apex:panelGroup id="theGroup" styleClass="left">
+            <apex:image url="{!$Resource.ServiceMaxLogo}"/>          
+       </apex:panelGroup> 
+       <apex:panelGroup >
+       		<apex:outputText styleClass="fontbold22" style="font-family: Arial Unicode MS;" value="{!REPTAG005}"/>
+       </apex:panelGroup>   
+    </apex:panelGrid>
+    <br/><br/><br/><br/>
+    
+    <apex:repeat value="{!WorkOrders}" var="wos"> 
+ 
+    <apex:repeat value="{!wos.sObj}" var="svcrpt">
+
+    <apex:variable var="m" value="{!$User.Alias}"/>
+
+    <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" style="border-bottom: hidden; font-family: Arial Unicode MS;" columnClasses="colspan15bgcol,colspan15,colspan15bgcol,colspan15" styleClass="font11" width="100%" border="1">     
+            <apex:outputText value="Work Order Number"/>
+            <apex:outputText id="WOName" value="{!svcrpt.Name}"/>
+            <apex:outputText value="Date:"/>
+            <apex:outputText value="{!wos.WOCreatedDate}"/>
+	</apex:panelGrid>
+	<apex:panelGrid columns="6" cellpadding="0" cellspacing="0" style="border-bottom: hidden; font-family: Arial Unicode MS;" columnClasses="colspan15bgcol,colspan15,colspan15bgcol,colspan15,colspan15bgcol,colspan15" styleClass="font11" width="100%" border="1">     
+            <apex:outputText value="{!$ObjectType.SVMXC__Service_Order__c.fields.SVMXC__Company__c.Label}"/>
+            <apex:outputText value="{!svcrpt.SVMXC__Company__r.Name}"/>
+            <apex:outputText value="Purchase Order #:"/>
+            <apex:outputText value=" "/>
+            <apex:outputText value="EXP #"/>
+            <apex:outputText value=" "/>
+            <apex:outputText value="{!$ObjectType.SVMXC__Service_Order__c.fields.SVMXC__Contact__c.Label}"/>
+            <apex:outputText value="{!svcrpt.SVMXC__Contact__r.Name}"/>
+            <apex:outputText value="Credit Card #:"/>
+            <apex:outputText value=" "/>
+            <apex:outputText value="CID #"/>
+            <apex:outputText value=" "/>   
+            <apex:outputText value="Location:"/>
+            <apex:outputText value=" "/>
+            <apex:outputText value="Billing Address:"/>
+            <apex:outputText value=" "/>  
+            <apex:outputText value="Follow Up Date:"/>
+            <apex:outputText value=" "/>
+            <apex:outputText value="Address:"/>
+            <apex:outputText value=" "/>
+            <apex:outputText value=" "/>
+            <apex:outputText value=" "/>
+            <apex:outputText value=" "/>
+            <apex:outputText value=" "/>
+            <apex:outputText value="Phone"/>
+            <apex:outputText value="{!svcrpt.SVMXC__Contact__r.Phone}"/>
+            <apex:outputText value="Fax"/>
+            <apex:outputText value="{!svcrpt.SVMXC__Contact__r.Fax}"/>
+            <apex:outputText value="Email"/>
+            <apex:outputText value="{!svcrpt.SVMXC__Contact__r.Email}"/>
+            <apex:outputText value=" "/>
+            <apex:outputText value=" "/>
+            <apex:outputText value=" "/>
+            <apex:outputText value=" "/>
+    </apex:panelGrid>
+ 
+    <br/>
+      
+    <apex:panelGrid columns="7" cellpadding="0" cellspacing="0" columnClasses="colspan10,colspan10,colspan10,colspan24,colspan28,colspan10,colspan10" style="border-bottom: hidden; background-color:#D4D4D4; font-family: Arial Unicode MS; " styleClass="font13" width="100%" border="1">
+        <apex:outputText value="{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Line_Type__c.Label}"/>
+        <apex:outputText value="{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Activity_Type__c.Label}"/>
+        <apex:outputText value="{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Expense_Type__c.Label}"/>
+        <apex:outputText value="{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Product__c.Label}"/>
+        <apex:outputText value="{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Reference_Information__c.Label}"/>
+        <apex:outputText value="Quantity"/>
+    	<apex:outputText value="Price"/>	
+    </apex:panelGrid> 
+    
+   <apex:repeat value="{!wos.lstsObj}" var="svcrptLine">    
+   <apex:panelGrid columns="7" cellpadding="0" cellspacing="0" columnClasses="colspan10,colspan10,colspan10,colspan24,colspan28,colspan10,colspan10" style="border-bottom: hidden;  font-family: Arial Unicode MS; " styleClass="font13" width="100%" border="1">
+        <apex:outputText value="{!svcrptLine.SVMXC__Line_Type__c}"/>
+        <apex:outputText value="{!svcrptLine.SVMXC__Activity_Type__c}"/>
+        <apex:outputText value="{!svcrptLine.SVMXC__Expense_Type__c}"/>
+        <apex:outputText value="{!svcrptLine.SVMXC__Product__r.Name}"/>
+        <apex:outputText value="{!svcrptLine.SVMXC__Reference_Information__c}"/>
+        <apex:outputField value="{!svcrptLine.SVMXC__Actual_Quantity2__c}"/>
+        <apex:outputText value="${0, number, ###,###,###,##0.00}">
+			<apex:param value="{!svcrptLine.SVMXC__Actual_Price2__c}"/>
+		</apex:outputText> 
+	</apex:panelGrid>     
+    </apex:repeat>
+    
+    <br/>
+
+	<apex:panelGrid columns="2" cellpadding="0" cellspacing="0" style="text-align: center; align: center; border-top: hidden; border-bottom: hidden; font-family: Arial Unicode MS; " columnClasses="colspan20bgcol,colspan30,colspan20bgcol,colspan30" rowClasses="line" styleClass="font13" width="100%" border="0">
+        <apex:outputText value="">
+        <!-- 
+	        <apex:outputText value="SERVICE KEY:"/><br/>
+            <apex:outputText value="CPM=Cleaning & Preventative Maintenance"/><br/>
+            <apex:outputText value="LOH=Limited Overhaul / COH=Complete Overhaul"/><br/>
+            <apex:outputText value="CF=Coarse Focus / FF=Fine Focus"/><br/>
+            <apex:outputText value="ST=Stage / NP=Nosepiece / EP=Eyepiece"/><br/>
+            <apex:outputText value="BN=Binocular / CN=Condenser / V=Video"/><br/>
+            <apex:outputText value="EL=Electrical / FI=Field Iris / CL=Clamp"/><br/>
+            <apex:outputText value="DF=Dark Field / RF=Reflective / EPI=Fluor"/><br/>
+        -->
+        </apex:outputText>   
+		<apex:outputText value="">
+        <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" rowClasses="line15" styleClass="font13" style="margin:0px 2px; font-family: Arial Unicode MS; " width="99%" border="1">
+        	<apex:outputText value="Item"/>
+        	<apex:outputText value="Quantity"/>
+        	<apex:outputText value="Rate"/>
+        	<apex:outputText value="Price"/>
+        	
+        	<apex:outputText value="Bench:"/>
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            
+            <apex:outputText value="Travel:"/>
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            
+            <apex:outputText value="Parking:"/>
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            
+            <apex:outputText value="Misc:"/> 
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            <apex:outputText value="Subtotal:"/>
+            <apex:outputText value=""/>
+            
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            <apex:outputText value="$ Discount:"/>
+            <apex:outputText value=""/>
+            
+            <apex:outputText value=""/>
+            <apex:outputText value=""/>
+            <apex:outputText value="Total Price:"/>
+            <apex:outputText value=""/>
+        </apex:panelGrid>   
+
+        </apex:outputText>
+	</apex:panelGrid> 
+	
+	<br/>
+	<apex:panelGrid columns="2" cellpadding="3" cellspacing="3" style="text-align: center; align: center; border-top: hidden; border-bottom: hidden; font-family: Arial Unicode MS; " columnClasses="colspan40,colspan60" rowClasses="line" styleClass="font14" width="100%" border="1">
+    	<apex:outputText value="Customer Signature:"/>
+    	<apex:outputText value=""/>
+    </apex:panelGrid>	
+    
+    <br/>
+	<apex:panelGrid columns="1" cellpadding="0" cellspacing="0" rowClasses="line15" styleClass="font13" style="text-align: center; align: center; margin:0px 2px; font-family: Arial Unicode MS; " width="100%" border="1">
+		<apex:outputText value="Global WARRANTY: 90 DAYS MECHANICAL REPAIRS / 30 DAYS ELECTRICAL REPAIRS"/>
+	</apex:panelGrid>
+	
+</apex:repeat>  
+</apex:repeat>   
+</form>
+</apex:page>

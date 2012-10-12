@@ -1,0 +1,58 @@
+<html>
+<head>
+<link  href="/dCSS/Theme2/default/elements.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/dCSS/Theme2/default/common.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/dCSS/Theme2/default/custom.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/ie7/rlHovers.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/css/assistive.css" media="aural,braille,embossed" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/dStandard.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/{!SUBSTITUTE(SUBSTITUTE($Organization.Id,'<','&lt;'),'>','&gt;')}/{!SUBSTITUTE(SUBSTITUTE(User.Id,'<','&lt;'),'>','&gt;')}/dCustom0.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/extended.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="/js/functions.js"></script>
+<script  src="/dJS/en/library.js" type="text/javascript"></script>
+<script src="/soap/ajax/10.0/connection.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/setup.js"></script>
+<script  src="/static/081407/js/picklist.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(Scontrol.URL,'<','&lt;'),'>','&gt;'),'"','&quot;')}"></script>
+
+
+<STYLE>
+
+/*                                                          */
+/* Styles for the tree.                                     */
+/*                                                          */
+SPAN.TreeviewSpanArea A {
+ font-size: 9pt; 
+ font-family: verdana,helvetica; 
+ text-decoration: none;
+ color: black;}
+SPAN.TreeviewSpanArea A:hover {
+ color: '#820082';}
+
+/*                                                          */
+/* Styles for the remainder of the document.                */
+/*                                                          */
+BODY {
+ background-color: white;}
+TD {
+ font-size: 9pt; 
+ font-family: verdana,helvetica;}
+
+</STYLE>
+</head>
+
+<body onload="SVMXC_IB_ShowIBConfiguration('{!SUBSTITUTE(SUBSTITUTE(Installed_Product__c.Id,'<','&lt;'),'>','&gt;')}');">
+<div class="pbBody">
+    <div id="ibtree" class="label">
+	<SPAN class="label">
+	    <NOSCRIPT>
+		An Installed Product tree will open here if you enable JavaScript in your browser.
+	    </NOSCRIPT>
+	</SPAN>
+    </div>
+</div>
+</body>
+<div id="domRoot"></div>
+</html>

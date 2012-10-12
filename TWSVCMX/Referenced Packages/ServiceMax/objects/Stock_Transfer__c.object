@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object is used to capture transfer of inventory between two locations through hand-pick/delivery. This is used when Field engineers drop by at a warehouse for picking up inventory or when parts are moved between a warehouse and a repair facility both located in the same building.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Additional_Information__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any additional information relevant to this stock transfer.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Any additional information relevant to this stock transfer..</inlineHelpText>
+        <label>Additional Information</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Destination_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Physical Location where stock is transfered to. This is a lookup to an existing site record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Physical Location where stock is transfered to. This is a lookup to an existing site record.</inlineHelpText>
+        <label>Destination Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>Stock Transfer (Destination Location)</relationshipLabel>
+        <relationshipName>Stock_Transfer_To</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>IsPartnerRecord__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if transaction is for/ by a Partner or not.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if transaction is for/ by a Partner or not.</inlineHelpText>
+        <label>IsPartnerRecord</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>IsPartner__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if transaction is for/ by a Partner or not.</description>
+        <externalId>false</externalId>
+        <formula>IF( IsPartnerRecord__c ,&quot;True&quot;, &quot;False&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Flag indicates if transaction is for/ by a Partner or not.</inlineHelpText>
+        <label>IsPartner</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Not_Posted_Item_Count__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Count of line items that are not posted.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Count of line items that are not posted.</inlineHelpText>
+        <label>Not Posted Item Count</label>
+        <summaryFilterItems>
+            <field>Stock_Transfer_Line__c.Posted_To_Inventory__c</field>
+            <operation>equals</operation>
+            <value>False</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Stock_Transfer_Line__c.Stock_Transfer__c</summaryForeignKey>
+        <summaryOperation>count</summaryOperation>
+        <trackHistory>false</trackHistory>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Account__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Account, set by trigger</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Account.</inlineHelpText>
+        <label>Partner Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Stock Transfer</relationshipLabel>
+        <relationshipName>Stock_Transfer</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Partner_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Contact, set by trigger</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Partner Contact.</inlineHelpText>
+        <label>Partner Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Stock Transfer</relationshipLabel>
+        <relationshipName>Stock_Transfer</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Source_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Physical Location from where stock is transfered. This is a lookup to an existing site record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Physical Location from where stock is transfered. This is a lookup to an existing site record.</inlineHelpText>
+        <label>Source Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>Stock Transfer (Source Location)</relationshipLabel>
+        <relationshipName>Stock_Transfer_From</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <label>Stock Transfer</label>
+    <listViews>
+        <fullName>All_Stock_Transfers</fullName>
+        <columns>NAME</columns>
+        <columns>Source_Location__c</columns>
+        <columns>Destination_Location__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Stock Transfers</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <displayFormat>SXFR-{00000000}</displayFormat>
+        <label>Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Stock Transfer</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Source_Location__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Destination_Location__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CREATEDBY_USER</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Source_Location__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Destination_Location__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CREATEDBY_USER</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Source_Location__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Destination_Location__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CREATEDBY_USER</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Destination_Location__c</searchFilterFields>
+        <searchFilterFields>Source_Location__c</searchFilterFields>
+        <searchFilterFields>CREATEDBY_USER</searchFilterFields>
+        <searchResultsAdditionalFields>Source_Location__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Destination_Location__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CREATEDBY_USER</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <validationRules>
+        <fullName>SVMXC_ValidateDestinationStockable</fullName>
+        <active>true</active>
+        <description>Destination location should be a stocking location.</description>
+        <errorConditionFormula>( Destination_Location__r.Stocking_Location__c = false)</errorConditionFormula>
+        <errorDisplayField>Destination_Location__c</errorDisplayField>
+        <errorMessage>Destination location is not a stocking location. Please select stocking locations only.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>SVMXC_ValidateSourceStockable</fullName>
+        <active>true</active>
+        <description>Source location should be a stocking location.</description>
+        <errorConditionFormula>( Source_Location__r.Stocking_Location__c = false)</errorConditionFormula>
+        <errorDisplayField>Source_Location__c</errorDisplayField>
+        <errorMessage>Source location is not a stocking location. Please select stocking locations only.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>SVMXC_ValidateTransferLocations</fullName>
+        <active>true</active>
+        <description>Source and destination locations cannot be the same.</description>
+        <errorConditionFormula>( Source_Location__c =  Destination_Location__c)</errorConditionFormula>
+        <errorDisplayField>Source_Location__c</errorDisplayField>
+        <errorMessage>Source and destination locations cannot be the same.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Add_Lines</fullName>
+        <availability>online</availability>
+        <description>Launch Screen to add Stock Transfer Lines</description>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Create/Edit Lines</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SFM_TDM_Delivery?SVMX_recordId={!Stock_Transfer__c.Id}&amp;SVMX_processId=TDM013&amp;SVMX_retURL=/{!Stock_Transfer__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Post_To_Inventory</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Post To Inventory</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__INVT_SmartEngine?hdrId={!Stock_Transfer__c.Id}&amp;SMid=SXFR001</url>
+    </webLinks>
+</CustomObject>

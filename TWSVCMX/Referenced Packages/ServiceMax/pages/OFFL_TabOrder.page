@@ -1,0 +1,33 @@
+<apex:page standardController="SVMXC__Offline_Object__c" Extensions="SVMXC.OFFL_TabOrder">
+	<div id="myPanel" >
+		<div class="bd">
+			<apex:form >     
+				<apex:pageBlock id="pb1" title="{!TAG038}">
+					<apex:actionStatus id="LodingStatus"  startText="{!TAG045}" />
+					<apex:panelGrid cellpadding="0" cellspacing="1" columns="2" width="31%" border="0"  >
+						<apex:pageBlockSection columns="1" id="list1">
+							<apex:panelGrid cellspacing="0" cellpadding="0" width="65%" columns="1" border="0" >
+								<apex:selectList value="{!items}" multiselect="true" style="height:200px;width:250px">
+									<apex:selectOptions value="{!options}"/>                
+								</apex:selectList><p/>
+							</apex:panelGrid>
+						</apex:pageBlockSection>
+						<apex:panelGrid cellspacing="7" cellpadding="0" width="35%" columns="1" style="text-align: center;">
+							<apex:outputText value="  " /><apex:outputText value="  " /> <apex:outputText value="  "/>  <apex:outputText value="  "/><apex:outputText value="  "/><apex:outputText value="  "/> 
+							<div>
+								<apex:commandButton action="{!Top}" id="top" rerender="pb1" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Top_Bttn.JPG')}" title="{!TAG040}" status="LodingStatus"/>
+								<apex:commandButton action="{!Up}" id="up" rerender="pb1" style="width:18px;height:18px;background:white"  image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Up_Bttn.JPG')}" title="{!TAG041}" status="LodingStatus"/>
+								<apex:commandButton action="{!Down}" id="down" rerender="pb1" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Down_Bttn.JPG')}" title="{!TAG042}" status="LodingStatus"/>
+								<apex:commandButton action="{!Bottom}" id="Bottom" rerender="pb1" style="width:18px;height:18px;background:white" image="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXC_resources/images/Bottom_Bttn.JPG')}" title="{!TAG043}" status="LodingStatus"/>
+							</div>
+						</apex:panelGrid>                   
+					</apex:panelGrid>  
+				</apex:pageBlock>
+				<div style="text-align: Left;" >
+					<apex:commandButton value="{!TAG039}" action="{!sel}"/>
+					<apex:commandButton value="{!TAG040}" immediate="true" action="{!cancel}"rerender="output"/>
+				</div>      
+			</apex:form>
+		</div>
+	</div> 
+</apex:page>

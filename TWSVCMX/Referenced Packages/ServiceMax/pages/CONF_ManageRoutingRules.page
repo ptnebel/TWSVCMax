@@ -1,0 +1,101 @@
+<apex:page id="page1" controller="SVMXC.CONF_ManageRoutingRules">
+    <apex:form id="form1">
+       <!--  <center>
+            <div style="font-size: 18px; font-weight: bold; border-radius: 5px 5px 5px 5px; padding: 5px 85px 0px 0px; bottom: 4px; border-left-width: 0px; border-top-width: 0px;"> {!TAG001} </div>
+        </center> -->
+       <!--  <Br/> -->
+        <style> 
+            .customPopup
+            {
+                background-color: #B0BFD2;
+                border-style: solid;
+                border-width: 2px;
+                left: 50%;
+                padding:10px;
+                position: fixed;
+                z-index: 9999;
+                /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set            margin-left to negative half of what the width is. You can also add            the height property for a fixed size pop up.*/
+                width: 400px;
+                margin-left: -250px;
+                top:100px;
+                opacity:10;
+            }
+        </style>   
+    <!---------------------------------------------Rule Sequence Popup---------------------------------------------->
+    <apex:outputPanel id="popup" styleClass="customPopup" layout="block" rendered="{!displaySeqPopup}">
+            <apex:pageBlock id="Sequenceblock" mode="edit" title="{!TAG013}"> <!--  --> 
+                <apex:pageMessages rendered="true"/>
+                <b><apex:actionStatus id="LoadingSeqPopUp"  startText="{!TAG009}"/></b>
+                <apex:pageBlockButtons id="pbtns" location="Bottom">
+                    <apex:commandButton value="Save" id="SaveOnSeq" action="{!SVMX_SaveSequence}" reRender="form1" status="LoadingSeqPopUp" />                
+                    <apex:commandButton value="Cancel" action="{!SVMX_PopupCancel}" status="LoadingSeqPopUp" reRender="form1" />
+                </apex:pageBlockButtons>
+                <apex:panelGrid cellpadding="0" cellspacing="1" columns="2" width="31%" border="0"  >
+                    <apex:pageBlockSection columns="1" id="list1">
+                        <apex:panelGrid cellspacing="0" cellpadding="0" width="65%" columns="1" border="0" >
+                            <apex:selectList value="{!items}" multiselect="true" style="height:200px;width:250px">
+                                <apex:selectOptions value="{!Seqoptions}"/>                
+                            </apex:selectList><p/>
+                        </apex:panelGrid>
+                    </apex:pageBlockSection>
+                    <apex:panelGrid cellspacing="7" cellpadding="0" width="35%" columns="1" style="text-align: center;">
+                        <apex:outputText value="  " /><apex:outputText value="  " /> <apex:outputText value="  "/>  <apex:outputText value="  "/><apex:outputText value="  "/><apex:outputText value="  "/>
+                        <div>
+                            <apex:commandButton action="{!Top}" id="top" rerender="Sequenceblock" style="width:18px;height:18px;background:white"  image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Top_Bttn.JPG')}" alt="Top" title="Top" status="LoadingSeqPopUp"/>
+                            <apex:commandButton action="{!UP}" id="Up" rerender="Sequenceblock" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Up_Bttn.JPG')}" alt="Up" title="Up" status="LoadingSeqPopUp"/>
+                            <apex:commandButton action="{!Down}" id="down" rerender="Sequenceblock" style="width:18px;height:18px;background:white"   image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Down_Bttn.JPG')}" alt="Down" title="Down" status="LoadingSeqPopUp"/>
+                            <apex:commandButton action="{!Bottom}" id="Bottom" rerender="Sequenceblock" style="width:18px;height:18px;background:white"  image="{!URLFOR($Resource.SVMXC__COMM_Resources4, 'SVMXDC_resources/images/Bottom_Bttn.JPG')}" alt="Bottom" title="Bottom" status="LoadingSeqPopUp"/>
+                        </div>
+                    </apex:panelGrid> 
+                </apex:panelGrid>
+            </apex:pageBlock> 
+    </apex:outputPanel> 
+
+
+    <apex:pageBlock id="block1"  title="{!TAG001}" helptitle="{!HLPTITLE}" helpurl="{!HLPURL}">
+        <apex:pageMessages rendered="{!IsHdrMsg}"/> 
+        <apex:actionStatus id="status" startText="{!TAG009}"/>  
+        <apex:pageBlockButtons location="top">
+            <apex:commandButton value="{!TAG010}" action="{!SVMXNewRules}"/>
+            <apex:commandButton value="{!TAG012}" action="{!SVMXCloneRules}" Disabled="{!RuleLstSize}"/>
+            <apex:commandButton value="{!TAG011}" action="{!SVMXEditRules}" Disabled="{!RuleLstSize}"/>
+            <apex:commandButton value="{!TAG014}" action="{!SVMXdeleteRules}" Disabled="{!RuleLstSize}"  onClick="{if(!confirm('{!TAG019}')){return false}}"/> 
+            <apex:CommandButton value="{!TAG013}" action="{!SVMX_RuleSequence}" status="status" reRender="form1" Disabled="{!if(RulesProcessLst.size < 2,true,false)}"/> 
+            <apex:commandButton value="{!TAG015}" action="{!BackToSetupHome}"/>
+        </apex:pageBlockButtons>
+        <apex:pageblockSection rendered="{!RuleLstSize}">
+            <apex:outputLabel value="{!TAG016}" />  
+        </apex:pageblockSection> 
+            
+        <apex:pageBlockSection columns="1" rendered="{!NOT(RuleLstSize)}" ><!--  rendered="{!DisProLst}" -->
+            <apex:pageblockTable value="{!RulesProcessLst}" var="Rule">
+                <apex:column >
+                    <apex:facet name="header">{!TAG002}</apex:facet>
+                    <apex:inputfield value="{!Rule.SVMXC__Select__c}"/>   
+                    <!-- <apex:outputField value="{!Rule.Sequence__c}"/>   -->
+                </apex:column> 
+                <apex:column >
+                    <apex:facet name="header">{!TAG005}</apex:facet>  
+                    <apex:outputField value="{!Rule.SVMXC__Name__c}"/>
+                </apex:column>
+                <apex:column >
+                  <apex:facet name="header">{!TAG004}</apex:facet>
+                  <apex:outputField value="{!Rule.SVMXC__APL_Route_Rule_Type__c}"/>   <!-- SVMXPX1__Route_Rule_Type__c -->
+                </apex:column>
+                <apex:column >
+                  <apex:facet name="header">{!TAG006}</apex:facet>
+                  <apex:outputField value="{!Rule.SVMXC__Description__c}"/>  
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!TAG007}</apex:facet>
+                    <apex:outputField value="{!Rule.SVMXC__Active__c}"/>  
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!TAG008}</apex:facet>
+                    <apex:inputField value="{!Rule.LastModifiedBy.Name}"/> 
+                </apex:column>  
+            </apex:pageblockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

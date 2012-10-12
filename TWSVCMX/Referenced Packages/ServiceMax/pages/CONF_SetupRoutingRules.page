@@ -1,0 +1,187 @@
+<apex:page id="CONF_SetupRoutingRules" title="Setup Routing Rules" showHeader="true" controller="SVMXC.CONF_SetupRoutingRules" >
+    <apex:form id="form1"> <!--title="{!TAG001}"-->
+       
+        <apex:pageBlock id="MainBlock" title="{!TAG001}" helptitle="{!HLPTITLE}" helpurl="{!HLPURL}">
+             <apex:inputHidden value="{!StrDelIndex}" id="StrDelIndex"/>
+            <apex:pageMessages rendered="{!IsHdrMsg}"/>
+             <apex:actionStatus id="processing2" startText="{!TAG009}"/>
+            <apex:pageBlockButtons location="TOP">
+               <apex:commandButton value="{!TAG002}" action="{!QuickSaveRules}" reRender="form1" status="processing2"/>
+                <apex:commandButton value="{!TAG003}" action="{!SaveCloseRules}" reRender="form1" status="processing2"/>
+                <apex:commandButton value="{!TAG004}" action="{!CancelRules}" />
+            </apex:pageBlockButtons>
+            <apex:actionFunction id="RoutTypeAction" name="RoutTypeAction" reRender="form1" action="{!RoutTypeAction}" status="processing2"/>
+            <apex:pageBlockSection columns="2" collapsible="false">
+                <apex:pageblockSectionItem >
+                    <apex:pageBlockSection columns="1">
+                        <apex:outputPanel style="text-align:left;">
+                            <apex:outputtext value="{!TAG005}"  style="font-weight: bold; font-Size:12px;" />    <!-- color:#4A4A56 -->
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection columns="1"  >
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                            <apex:inputfield value="{!RoutRule.SVMXC__APL_Route_Rule_Type__c}" style="width:200px"  onchange="RoutTypeAction()" id="Ruletype"/>
+                                <script>
+                                     document.getElementById('{!$Component.Ruletype}').disabled = {!IsdisableValue};
+                                </script> 
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                </apex:pageblockSectionItem>
+            </apex:pageBlockSection>
+                
+            <apex:actionStatus id="status1" startText="{!TAG009}" style="font-weight: bold; font-Size:13px"/>   
+            <apex:pageBlockSection id="DetailSection" columns="1" collapsible="false"  rendered="{!IsRender}" > 
+                   
+                <style type="text/css">
+                    table.testTable td {width:575px; padding-right:40px;}
+                    h2.mainTitle {width:350px !important;}
+                </style>
+                <apex:panelGrid columns="2" styleClass="testTable" style="width:100%" >
+                    <apex:panelGroup style="align:left; width:400px;" >
+                        <apex:pageblock id="pageblock11" title="{!TAG007}" mode="edit">  
+                                <apex:pageBlockSection dir="LTR" columns="2" collapsible="false" >
+                                        <apex:pageBlockSection columns="1" >
+                                            <apex:outputPanel style="text-align:left;">
+                                                <apex:outputtext value="{!TAG008}" style="font-weight: bold;font-Size:12px;"/>  
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSection>
+                                        <apex:pageBlockSection columns="1"  >
+                                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                                <apex:inputField value="{!RoutRule.SVMXC__Name__c}"  style="width:200px"  id="hdrname"/>
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSection>
+                                       
+                                       <apex:pageBlockSection columns="1">
+                                            <apex:outputPanel style="text-align:left;">
+                                                <apex:outputtext value="{!TAG010}" style="font-weight: bold; font-Size:12px;"/>  
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSection>
+                                        <apex:pageBlockSection columns="1">
+                                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                            <apex:inputField value="{!RoutRule.SVMXC__Description__c}"  style="width:200px"  id="hdrname"/>
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSection>
+                                        
+                                        <apex:pageBlockSection columns="1">
+                                            <apex:outputPanel style="text-align:left;">
+                                                <apex:outputtext value="{!TAG040}" style="font-weight: bold; font-Size:12px;"/>  
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSection>
+                                        <apex:pageBlockSection columns="1">
+                                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                            <apex:inputField value="{!RoutRule.SVMXC__Active__c}"   id="ActId"/>
+                                            </apex:outputPanel>
+                                        </apex:pageBlockSection>
+                                </apex:pageBlockSection>
+                        </apex:pageblock>
+                   </apex:panelGroup>      
+                    
+                    <apex:panelGroup style="align:right; width:400px">                     
+                        <apex:pageBlock mode="Edit" Id="pageblock12" title="{!TAG006}">
+                            <apex:actionStatus id="status2" startText="{!TAG009}" style="font-Size:13px"/>      
+                                <apex:pageBlockSection dir="LTR" columns="1" collapsible="false" >
+                                    <apex:pageblocktable value="{!LocConfigLst}"  var="Loc" width="100%">
+                                        <apex:column style="font-Size:12px" >
+                                            <apex:facet name="header">{!TAG011}</apex:facet>
+                                            <apex:outputText value="{!Round(Loc.SVMXC__Sequence__c, 0)}"/>  
+                                        </apex:column>
+                                        <apex:column style="font-Size:12px" >
+                                            <apex:facet name="header">{!TAG012}</apex:facet>
+                                            <!--  <apex:inputField id="LocId" value="{!Loc.SVMXC__Location__c}"/> -->
+                                            <apex:selectList style="width:100%" size="1" value="{!Loc.SVMXC__Location__c}" id="LocId">
+                                                <apex:SelectOptions value="{!slctLstLocs}"/>
+                                            </apex:selectList>
+                                        </apex:column>
+                                        <apex:column style="font-Size:10px;width:7px;height:7px;"  >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" title="{!TAG044}" style="width:20px;height:18px;background:lightblue" value="DelLocRow" action="{!DelLocRow}" onclick="javascript:document.getElementById('CONF_SetupRoutingRules:form1:MainBlock:StrDelIndex').value = {!Loc.SVMXC__Sequence__c};" id="DelLocRow" status="status2" reRender="pageblock12" /> 
+                                        </apex:column>
+                                        <apex:column style="font-Size:10px;width:7px;height:7px;" >
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" title="{!TAG045}" style="width:20px;height:18px;background:lightblue" value="AddLocRow" action="{!AddLocRow}"  id="AddLoc"  status="status2" reRender="pageblock12"  rendered="{!if((LocLstSize == Round(Loc.SVMXC__Sequence__c, 0)) ,true,false)}"  />  
+                                        </apex:column>
+                                    </apex:pageblocktable>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection >
+                                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" title="{!TAG045}" style="width:20px;height:18px;background:lightblue" value="AddLocRow" action="{!AddLocRow}"  id="ExtraAddLoc"  status="status2" reRender="pageblock12"  rendered="{!if((LocLstSize == 0 ) ,true,false)}"  />  
+                                </apex:pageBlockSection>
+                        </apex:pageBlock>
+                    </apex:panelGroup>
+               </apex:panelGrid>
+            </apex:pageblockSection>  
+            
+            <center style="padding-right: 100px; height: 22px; border:1px solid #C0C0C0; background:LightGrey; display:none;" id="center1">
+                <apex:toolbar id="theToolbar3" styleClass="disableTab" width="5%" rendered="{!IsRender}">          
+                    <apex:toolbarGroup location="left" id="toolbarGroup1">
+                        <apex:outputText value=" " style=" background-color:LightGrey;"/>
+                    </apex:toolbarGroup> 
+                    <apex:toolbarGroup location="left" id="toolbarGroup2">
+                        <apex:outputText value="{!TAG013}"  style="background-color: LightGrey; font-weight: bold; font-size: 13px; padding: 3px 75px; border-left-width: 0px; margin-left: -32px; margin-right: -12px; margin-top: 0px; border-top-width: 0px; height: 10px; width: 198px;"/>              
+                    </apex:toolbarGroup> 
+                </apex:toolbar>
+            </center>
+            <script>
+                function show()
+                {
+                    if({!IsRender})
+                        document.getElementById('center1').style.display = 'block';
+                    else
+                        document.getElementById('center1').style.display = 'none';
+                }
+                show();
+            </script>
+                
+                <apex:pageMessages rendered="{!IsExpMsg}"/> 
+                <apex:actionStatus id="Processing1" startText="{!TAG009}" style="font-weight: bold; font-Size:13px"/>
+                <!--  <br/>    -->
+                <apex:pageblockSection columns="1" id="pageblockSec2" collapsible="false" dir="LTR" rendered="{!IsRender}">
+                    <apex:actionFunction id="ObjectFields" name="ObjectFields" reRender="pageblockSec2," action="{!ObjectFields}" status="Processing1">  
+                        <apex:param name="frstParametr" assignTo="{!IntIndex}" value="" />
+                    </apex:actionFunction>
+                        <apex:pageBlockTable width="100%"  id="pblocktable"  value="{!LstCriWrap}"  var="CriWrapObj" rendered="True" dir="LTR">  
+                            <apex:column rendered="true" style="font-Size:12px;">
+                                <apex:outputtext id="seqId" value="{!Round(CriWrapObj.Sequence, 0)}" style="font-Size:10px"/>
+                            </apex:column>
+                            <apex:column style="font-Size:12px" >
+                                <apex:facet name="header">{!TAG014}</apex:facet>
+                                <apex:selectList size="1" value="{!CriWrapObj.SelObj}" onclick="javascript:document.getElementById('CONF_SetupRoutingRules:form1:MainBlock:StrDelIndex').value = {!CriWrapObj.Sequence};" onchange="ObjectFields({!CriWrapObj.Sequence})" style="width:200px" >  
+                                    <apex:selectOptions value="{!ObjectLst}" />
+                                </apex:selectList>
+                            </apex:column>
+                            <apex:column style="font-Size:12px;">
+                                <apex:facet name="header">{!TAG015}</apex:facet>
+                                <apex:selectList size="1" value="{!CriWrapObj.SelFld}"  style="width:200px"> 
+                                        <apex:selectOptions value="{!CriWrapObj.ObjFlds}"/>
+                                </apex:selectList>  
+                            </apex:column>
+                            <apex:column style="font-Size:12px">
+                                <apex:facet name="header">{!TAG016}</apex:facet>
+                                 <apex:selectList value="{!CriWrapObj.Operator}" size="1" multiselect="false" style="width:200px"> 
+                                     <apex:selectOptions value="{!OperatorsSelectLst}"/>  
+                                </apex:selectList>
+                            </apex:column>
+                            <apex:column style="font-Size:12px">
+                                <apex:facet name="header">{!TAG017}</apex:facet>
+                                <apex:inputText value="{!CriWrapObj.Oprand}" style="width:200px"/>
+                            </apex:column>
+                            <apex:column style="font-Size:10px;width:7px;height:7px;" > 
+                                 <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" title="{!TAG044}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!DelCriRow}" onclick="javascript:document.getElementById('CONF_SetupRoutingRules:form1:MainBlock:StrDelIndex').value = {!CriWrapObj.Sequence};" id="DeleteRow" status="Processing1" reRender="pageblockSec2"  />  <!-- reRender="Pblock2,DetailSection" -->
+                            </apex:column>
+                            <apex:column style="font-Size:10px;width:7px;height:7px;" > 
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" title="{!TAG045}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!ADDCriRow}"  id="AddRow"  status="Processing1" reRender="pageblockSec2"  rendered="{!if((LstCriWrapSize == Round(CriWrapObj.Sequence, 0)) ,true,false)}"/> <!-- reRender="Pblock2,DetailSection" -->
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" title="{!TAG045}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!ADDCriRow}" rendered="{!if((LstCriWrapSize == 0 ) ,true,false)}" id="AddRow1" reRender="pageblockSec2" status="Processing1"/>
+                        <!-- <br/> -->
+                    </apex:pageBlockSectionItem> 
+                </apex:pageBlockSection>
+                <!-- <br/>  -->
+                <apex:pageblockSection columns="1" rendered="{!IsRender}">
+                    <apex:outputText value="{!TAG018}"  style="font-weight: bold; font-Size:12px;"/> 
+                    <apex:inputText id="HdrAdvOption" value="{!RoutRule.SVMXC__Advance_Expression__c}" size="100" /> 
+                </apex:pageblockSection>  
+        </apex:pageblock>
+    </apex:form>
+</apex:page>

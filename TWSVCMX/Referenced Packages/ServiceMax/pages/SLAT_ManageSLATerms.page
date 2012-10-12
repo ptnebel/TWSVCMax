@@ -1,0 +1,642 @@
+<apex:page id="page1" controller="SVMXC.SLAT_ManageSLATerms" tabstyle="SVMXC__Service_Level__c">
+<apex:form id="form1">
+<script type="text/javascript">
+
+        function customSelectChecked(form,value,Selected)
+        {   
+            var i = 0;
+            for (i = 0; i < form.elements.length; i++) {
+                if (form.elements[i].name.search(Selected) > 0 && form.elements[i].disabled == false) {
+                    form.elements[i].checked = value;
+                }
+            }
+        }  
+        
+        function customSelectAllOrNoneByCheckbox(form,control,Selected)
+        {  customSelectChecked( form,control.checked,Selected); }
+  
+      
+    </script>
+
+
+
+    <style type="text/css">
+       .customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+        .disableTab 
+     {
+        background-color : Lightgrey ;
+        color:LightGrey;
+        background-image:none;
+        font-size:1.2em;
+     }
+   .activeTab {background-color: #8599B1; color:white; background-image:none; font-size:14Px} 
+
+   .inactiveTab {background-color: #B0BFD2; color:black; background-image:none}
+    </style>
+
+<apex:pageBlock id="block1" mode="edit" helpTitle="{!TAG006}" helpUrl="{!HLPURL}">
+<apex:pageMessages rendered="{!HdrMsg}"/> 
+<apex:actionStatus id="status" startText="{!TAG005}"/>  
+    <apex:pageBlockButtons Location="Top">
+        <apex:commandButton value="{!TAG001}" action="{!SVMX_NewSLATerm}" reRender="form1" status="status" Disabled="{!DisbleNewBttn}"/>
+        <apex:commandButton value="{!TAG032}" action="{!SVMX_EditSLATerm}" reRender="form1" status="status"Disabled="{!DisbleEditBttn}"/>
+        <apex:commandButton value="{!TAG003}" action="{!SVMX_DeleteSLA}" Disabled="{!DisbleDeleteBttn}" onClick="{if(!confirm('{!TAG078}')){return false}}"/><!-- if({!IsWarn}) -->
+        <apex:commandButton value="{!TAG002}" action="{!SVMX_SaveSLA}"  reRender="form1" status="status" Disabled="{!DisbleSaveBttn}"/>
+        <apex:commandButton value="{!TAG033}" action="{!SVMX_Cancel}" reRender="form1" status="status" Disabled="{!DisbleCancleBttn}"/>
+        <apex:commandButton value="{!TAG004}" action="{!SVMX_BackToSetupHome}"/>
+    </apex:pageBlockButtons>
+    <apex:pageBlockSection columns="1">
+        <apex:pageblockTable value="{!SLATerms}" var="SLA" >
+            <apex:column >
+                <apex:facet name="header">{!TAG038}</apex:facet>
+                <apex:inputcheckbox value="{!SLA.SVMXC__Select__c}" rendered="{!if(SLA.SVMXC__Select__c==true,true,false)}" disabled="{!DisbaleChkBox}"/>       <!-- onclick="Selectchkbox();" -->
+                <apex:inputcheckbox value="{!SLA.SVMXC__Select__c}" rendered="{!if(SLA.SVMXC__Select__c==false,true,false)}" disabled="{!DisbaleChkBox}"/>
+            </apex:column> 
+            <apex:column >
+            <apex:facet name="header">{!TAG007}</apex:facet>  
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                    <apex:inputField value="{!SLA.Name}" rendered="{!if(SLA.SVMXC__Select__c==true,true,false)}"></apex:inputField>
+                </apex:outputPanel>  
+                <apex:outputfield value="{!SLA.Name}" rendered="{!if(SLA.SVMXC__Select__c==false,true,false)}"></apex:outputfield> 
+                </apex:column>
+           <apex:column >
+              <apex:facet name="header">{!TAG008}</apex:facet>
+              <apex:inputField value="{!SLA.SVMXC__Description__c}" style="width:200px;height:25px" rendered="{!if(SLA.SVMXC__Select__c==true,true,false)}"/>  
+              <apex:outputfield value="{!SLA.SVMXC__Description__c}" rendered="{!if(SLA.SVMXC__Select__c==false,true,false)}"></apex:outputfield> 
+           </apex:column>
+           <apex:column >
+                <apex:facet name="header">{!TAG009}</apex:facet>
+                <apex:inputField value="{!SLA.SVMXC__Active__c}" rendered="{!if(SLA.SVMXC__Select__c==true,true,false)}"/>  
+                <apex:outputfield value="{!SLA.SVMXC__Active__c}" rendered="{!if(SLA.SVMXC__Select__c==false,true,false)}"></apex:outputfield> 
+           </apex:column>
+           <apex:column >
+                <apex:facet name="header">{!TAG010}</apex:facet>
+                <apex:inputField value="{!SLA.SVMXC__Business_Hours__c}" rendered="{!if(SLA.SVMXC__Select__c==true,true,false)}"/> 
+                <apex:outputfield value="{!SLA.SVMXC__Business_Hours__c}" rendered="{!if(SLA.SVMXC__Select__c==false,true,false)}"></apex:outputfield> 
+           </apex:column>
+           <apex:actionfunction action="{!Selectchkbox}" name="Selectchkbox" status="status" reRender="block1"/>
+       </apex:pageblockTable>
+    
+    </apex:pageBlockSection>
+    <apex:pageblockSection id="DetailSection" Title="" collapsible="false" columns="1" rendered="{!DetailSection}">
+    <apex:tabpanel switchType="client" id="tabSLATeram" value="{!selectedTab}" tabClass="activeTab" inactiveTabClass="inactiveTab" disabledTabClass="disableTab">
+     
+    <!-- Start of TAB1 -- Initial Response -->
+    
+        <apex:tab label="{!TAG012}" name="{!TAG012}" id="tabInitialResponse" style="font-Size:11px">
+            <apex:pageBlock id="tab1block1" mode="edit">
+            <apex:pageMessages rendered="{!Tab1Msg}"/> 
+              <apex:actionStatus id="status1" startText="{!TAG005}" style="font-Size:11px"/>
+                <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSectionItem >  
+                        <apex:outputlabel value="{!TAG017}"/ style="font-Size:11px">
+                        <apex:inputfield value="{!SLA.SVMXC__Initial_Response_Tracked_On__c}" onchange="SVMX_IR_ChangeCaseWo();"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="" rendered="False"/>
+                            <apex:commandButton value="" rendered="False"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="{!TAG018}"  action="{!SVMX_IR_AddRecord}" reRender="tab1block1" status="status1" style="font-Size:11px" style="float: right;"/>
+                            <apex:commandButton value="{!TAG019}"  action="{!SVMX_IR_Delete}" reRender="tab1block1" status="status1" style="font-Size:11px" onClick="{if(!confirm('{!TAG079}')){return false}}" style="float: right;"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="" collapsible="false"/>
+                <apex:pageBlockSection columns="1" id="SectionIR">
+                    <apex:pageblockTable value="{!InitialResponse}" var="IR" id="Tab1_Table">
+                        <apex:column >
+                            <apex:facet name="header"> 
+                            <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox( document.forms['page1:form1'],this,'tab1selected');"/>  
+                            </apex:facet> 
+                            <apex:inputField value="{!IR.SVMXC__Select__c}" id="tab1selected" />    
+                        </apex:column> 
+                        
+                        <apex:column >
+                            <apex:facet name="header">{!TAG020}</apex:facet>  
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:SelectList Value="{!IR.SVMXC__Type__c}" size="1" multiselect="false">
+                                    <apex:SelectOptions value="{!IrType}"/>
+                                </apex:SelectList>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG021}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:SelectList Value="{!IR.SVMXC__Priority__c}" size="1" multiselect="false">
+                                    <apex:SelectOptions value="{!IrPriority}"/>
+                                </apex:SelectList>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG022}</apex:facet>
+                            <apex:SelectList Value="{!IR.SVMXC__Clock_Starts_From__c}" size="1" multiselect="false">
+                            <apex:SelectOptions value="{!IrClock}"/>
+                            </apex:SelectList>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG023}</apex:facet>
+                            <apex:inputField value="{!IR.SVMXC__Internal_Goal__c}"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG024}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!IR.SVMXC__Customer_Commitment__c}"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG025}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!IR.SVMXC__Business_Hours_Source__c}" onchange="SVMX_IR_CustomeBH();"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!IR.SVMXC__Business_Hours__c}" rendered="{!if((IR.SVMXC__Business_Hours_Source__c == 'Custom'),true,false)}"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                    </apex:pageblockTable>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="" collapsible="false"/>
+                <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSectionItem />
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="" rendered="False"/>
+                            <apex:commandButton value="" rendered="False"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >  
+                            <apex:commandButton value="{!TAG027}" action="{!SVMX_NextToOR}" reRender="form1" status="status1" style="font-Size:11px" style="float: right;"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSectionItem>  
+               </apex:pageBlockSection>
+            </apex:pageBlock>
+        <apex:actionFunction action="{!SVMX_IR_CustomBH}" name="SVMX_IR_CustomeBH" reRender="Tab1_Table" status="status1"/>
+        <apex:actionFunction action="{!SVMX_IR_ChangeCaseWo}" name="SVMX_IR_ChangeCaseWo" reRender="tab1block1" status="status1"/>
+        </apex:tab>
+        <!-- End of TAB1 -- Initial Response -->
+        
+        <!-- Start of TAB2 -- Onsite Response -->
+        
+        <apex:tab label="{!TAG013}" name="{!TAG013}" id="tabOnsiteResponse" style="font-Size:11px">
+            <apex:pageBlock id="tab2block1" mode="edit">
+            <apex:pageMessages rendered="{!Tab2Msg}"/> 
+            <apex:actionStatus id="status2" startText="{!TAG005}" style="font-Size:11px"/>
+            <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSectionItem >  
+                        <apex:outputlabel value="{!TAG028}"/ style="font-Size:11px">
+                        <apex:inputfield value="{!SLA.SVMXC__Onsite_Response_Tracked_On__c}" onchange="SVMX_OR_ChangeCaseWo();"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="" rendered="False"/>
+                            <apex:commandButton value="" rendered="False"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="{!TAG018}"  action="{!SVMX_OR_AddRecord}" reRender="tab2block1" status="status2" style="font-Size:11px" style="float: right;"/>
+                            <apex:commandButton value="{!TAG019}"  action="{!SVMX_OR_Delete}" reRender="tab2block1" status="status2" onClick="{if(!confirm('{!TAG079}')){return false}}" style="font-Size:11px" style="float: right;"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="" collapsible="false"/>
+                <apex:pageBlockSection columns="1">
+                    <apex:pageblockTable value="{!OnsiteResponse}" var="OR" id="Tab2_Table">
+                        <apex:column >
+                            <apex:facet name="header"> 
+                            <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox( document.forms['page1:form1'],this,'tab2selected');"/>  
+                            </apex:facet> 
+                            <apex:inputField value="{!OR.SVMXC__Select__c}" id="tab2selected" />    
+                        </apex:column> 
+                        
+                        <apex:column >
+                            <apex:facet name="header">{!TAG020}</apex:facet>  
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:SelectList Value="{!OR.SVMXC__Type__c}" size="1" multiselect="false">
+                                    <apex:SelectOptions value="{!OrType}"/>
+                                </apex:SelectList>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG021}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:SelectList Value="{!OR.SVMXC__Priority__c}" size="1" multiselect="false">
+                                    <apex:SelectOptions value="{!OrPriority}"/>
+                                </apex:SelectList>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG022}</apex:facet>
+                            <apex:SelectList Value="{!OR.SVMXC__Clock_Starts_From__c}" size="1" multiselect="false">
+                            <apex:SelectOptions value="{!OrClock}"/>
+                            </apex:SelectList>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG023}</apex:facet>
+                            <apex:inputField value="{!OR.SVMXC__Internal_Goal__c}"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG024}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!OR.SVMXC__Customer_Commitment__c}"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG025}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!OR.SVMXC__Business_Hours_Source__c}" onchange="SVMX_OR_CustomeBH();"/>
+                            </apex:outputPanel>
+                        </apex:column>
+                        <apex:column >
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!OR.SVMXC__Business_Hours__c}" rendered="{!if((OR.SVMXC__Business_Hours_Source__c == 'Custom'),true,false)}"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                    </apex:pageblockTable>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="" collapsible="false"/>
+                <apex:pageBlockSection columns="2">
+                    <apex:pageblockSectionitem />
+                    <apex:pageblockSectionitem >
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="" rendered="False"/>
+                            <apex:commandButton value="" rendered="False"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageblockSectionitem >
+                            <apex:commandButton value="{!TAG027}" action="{!SVMX_NextToRestoration}" status="status2"  reRender="form1" style="font-Size:10px" style="float: right;"/>
+                            <apex:commandButton value="{!TAG026}" action="{!SVMX_BackToIR}" status="status2" reRender="form1" style="font-Size:11px" style="float: right;"/>
+                        </apex:pageblockSectionitem>
+                    </apex:pageblockSectionitem>        
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        <apex:actionFunction action="{!SVMX_OR_CustomBH}" name="SVMX_OR_CustomeBH" reRender="Tab2_Table" status="status2"/>
+        <apex:actionFunction action="{!SVMX_OR_ChangeCaseWo}" name="SVMX_OR_ChangeCaseWo" reRender="tab2block1" status="status2"/>
+            
+        
+        </apex:tab>
+        
+        <!-- End of TAB2 -- Onsite Response -->
+        
+        <!-- Start of TAB3-- Restoration -->
+        
+        <apex:tab label="{!TAG014}" name="{!TAG014}" id="tabRestoration" style="font-Size:11px">
+            <apex:pageBlock id="tab3block1" mode="edit">
+            <apex:pageMessages rendered="{!Tab3Msg}"/> 
+            <apex:actionStatus id="status3" startText="{!TAG005}" style="font-Size:11px"/>
+            <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSectionItem >  
+                        <apex:outputlabel value="{!TAG029}"/ style="font-Size:11px">
+                        <apex:inputfield value="{!SLA.SVMXC__Restoration_Tracked_On__c}" onchange="SVMX_Restoration_ChangeCaseWo();"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="" rendered="False"/>
+                            <apex:commandButton value="" rendered="False"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="{!TAG018}"  action="{!SVMX_Restoration_AddRecord}" reRender="tab3block1" status="status3" style="font-Size:11px" style="float: right;"/>
+                            <apex:commandButton value="{!TAG019}"  action="{!SVMX_Restoration_Delete}" reRender="tab3block1" status="status3" style="font-Size:11px" onClick="{if(!confirm('{!TAG079}')){return false}}" style="float: right;"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="" collapsible="false"/>
+                <apex:pageBlockSection columns="1">
+                    <apex:pageblockTable value="{!Restoration}" var="Resto" id="Tab3_Table">
+                        <apex:column >
+                            <apex:facet name="header"> 
+                            <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox( document.forms['page1:form1'],this,'tab3selected');"/>  
+                            </apex:facet> 
+                            <apex:inputField value="{!Resto.SVMXC__Select__c}" id="tab3selected" />    
+                        </apex:column> 
+                        
+                        <apex:column >
+                            <apex:facet name="header">{!TAG020}</apex:facet>  
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:SelectList Value="{!Resto.SVMXC__Type__c}" size="1" multiselect="false">
+                                    <apex:SelectOptions value="{!RestorationType}"/>
+                                </apex:SelectList>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG021}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:SelectList Value="{!Resto.SVMXC__Priority__c}" size="1" multiselect="false">
+                                    <apex:SelectOptions value="{!RestorationPriority}"/>
+                                </apex:SelectList>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG022}</apex:facet>
+                            <apex:SelectList Value="{!Resto.SVMXC__Clock_Starts_From__c}" size="1" multiselect="false">
+                            <apex:SelectOptions value="{!RestorationClock}"/>
+                            </apex:SelectList>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG023}</apex:facet>
+                            <apex:inputField value="{!Resto.SVMXC__Internal_Goal__c}"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG024}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!Resto.SVMXC__Customer_Commitment__c}"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG025}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!Resto.SVMXC__Business_Hours_Source__c}" onchange="SVMX_Restoration_CustomeBH();"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!Resto.SVMXC__Business_Hours__c}" rendered="{!if((Resto.SVMXC__Business_Hours_Source__c == 'Custom'),true,false)}"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                    </apex:pageblockTable>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="" collapsible="false"/>
+                <apex:pageBlockSection columns="2">
+                    <apex:pageblockSectionitem />
+                    <apex:pageblockSectionitem >
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="" rendered="False"/>
+                            <apex:commandButton value="" rendered="False"/>
+                        </apex:pageBlockSectionItem>     
+                        <apex:pageblockSectionitem >
+                            <apex:commandButton value="{!TAG027}" action="{!SVMX_NextToResolution}" status="status3"  reRender="form1" style="font-Size:10px" style="float: right;"/>
+                            <apex:commandButton value="{!TAG026}" action="{!SVMX_BackToOR}" status="status3" reRender="form1" style="font-Size:11px" style="float: right;"/>
+                        </apex:pageblockSectionitem>
+                    </apex:pageblockSectionitem>        
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        <apex:actionFunction action="{!SVMX_Restoration_CustomBH}" name="SVMX_Restoration_CustomeBH" reRender="Tab3_Table" status="status3"/>
+        <apex:actionFunction action="{!SVMX_Restoration_ChangeCaseWo}" name="SVMX_Restoration_ChangeCaseWo" reRender="tab3block1" status="status3"/>
+            
+        
+        </apex:tab>
+        <!-- End of TAB3 -- Restoration -->
+        
+        <!-- Start of TAB4 -- Resolution -->
+        
+        <apex:tab label="{!TAG015}" name="{!TAG015}" id="tabResolution" style="font-Size:11px">
+            <apex:pageBlock id="tab4block1" mode="edit">
+            <apex:pageMessages rendered="{!Tab4Msg}"/> 
+            <apex:actionStatus id="status4" startText="{!TAG005}" style="font-Size:11px"/>
+            <apex:pageBlockSection columns="2">
+                    <apex:pageBlockSectionItem >  
+                        <apex:outputlabel value="{!TAG030}"/ style="font-Size:11px">
+                        <apex:inputfield value="{!SLA.SVMXC__Resolution_Tracked_On__c}" onchange="SVMX_Resolution_ChangeCaseWo();"/>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="" rendered="False"/>
+                            <apex:commandButton value="" rendered="False"/>
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="{!TAG018}"  action="{!SVMX_Resolution_AddRecord}" reRender="tab4block1" status="status4" style="font-Size:11px" style="float: right;"/>
+                            <apex:commandButton value="{!TAG019}"  action="{!SVMX_Resolution_Delete}" reRender="tab4block1" status="status4" onClick="{if(!confirm('{!TAG079}')){return false}}" style="font-Size:11px" style="float: right;"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="" collapsible="false"/>
+                <apex:pageBlockSection columns="1">
+                    <apex:pageblockTable value="{!Resolution}" var="Reso" id="Tab4_Table">
+                        <apex:column >
+                            <apex:facet name="header"> 
+                            <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox( document.forms['page1:form1'],this,'tab4selected');"/>  
+                            </apex:facet> 
+                            <apex:inputField value="{!Reso.SVMXC__Select__c}" id="tab4selected" />    
+                        </apex:column> 
+                        
+                        <apex:column >
+                            <apex:facet name="header">{!TAG020}</apex:facet>  
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:SelectList Value="{!Reso.SVMXC__Type__c}" size="1" multiselect="false">
+                                    <apex:SelectOptions value="{!ResolutionType}"/>
+                                </apex:SelectList>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG021}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>   
+                                <apex:SelectList Value="{!Reso.SVMXC__Priority__c}" size="1" multiselect="false">
+                                    <apex:SelectOptions value="{!ResolutionPriority}"/>
+                                </apex:SelectList>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG022}</apex:facet>
+                            <apex:SelectList Value="{!Reso.SVMXC__Clock_Starts_From__c}" size="1" multiselect="false">
+                            <apex:SelectOptions value="{!ResolutionClock}"/>
+                            </apex:SelectList>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG023}</apex:facet>
+                            <apex:inputField value="{!Reso.SVMXC__Internal_Goal__c}"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG024}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!Reso.SVMXC__Customer_Commitment__c}"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!TAG025}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!Reso.SVMXC__Business_Hours_Source__c}" onchange="SVMX_Resolution_CustomeBH();"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!Reso.SVMXC__Business_Hours__c}" rendered="{!if((Reso.SVMXC__Business_Hours_Source__c == 'Custom'),true,false)}"/>
+                            </apex:outputPanel> 
+                        </apex:column>
+                    </apex:pageblockTable>
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="" collapsible="false"/>
+                <apex:pageBlockSection columns="2">
+                    <apex:pageblockSectionitem />
+                    <apex:pageblockSectionitem >
+                        <apex:pageBlockSectionItem >
+                            <apex:commandButton value="" rendered="False"/>
+                            <apex:commandButton value="" rendered="False"/>
+                        </apex:pageBlockSectionItem> 
+                        <apex:pageblockSectionitem >
+                            <apex:commandButton value="{!TAG027}" action="{!SVMX_NextToServices}" status="status4"  reRender="form1" style="font-Size:11px" style="float: right;"/>
+                            <apex:commandButton value="{!TAG026}" action="{!SVMX_BackToRestoration}" status="status4" reRender="form1" style="font-Size:11px" style="float: right;"/>
+                        </apex:pageblockSectionitem>
+                    </apex:pageblockSectionitem>        
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        <apex:actionFunction action="{!SVMX_Resolution_CustomBH}" name="SVMX_Resolution_CustomeBH" reRender="Tab4_Table" status="status4"/>
+        <apex:actionFunction action="{!SVMX_Resolution_ChangeCaseWo}" name="SVMX_Resolution_ChangeCaseWo" reRender="tab4block1" status="status4"/>
+            
+        
+        </apex:tab>
+        <!-- End of TAB4 -- Resolution -->
+        
+        <!-- Start of TAB5 -- Services -->
+        
+        <apex:tab label="{!TAG016}" id="tab5" name="{!TAG016}" id="tabServices" style="font-Size:11px">
+            <apex:actionStatus id="status5" startText="{!TAG005}" style="font-Size:11px"/>
+            <apex:panelGrid columns="2" width="100%">
+                <apex:panelGroup style="align:left;width:75%">
+                    <apex:pageblock id="tab5block1" mode="edit">  
+                    <apex:pageMessages rendered="{!Tab5Msg}"/> 
+                    <apex:pageBlockButtons Location="Top">
+                        <apex:CommandButton value="{!TAG037}" action="{!SVMX_AddService}" status="status5" reRender="tab5block1"/>
+                        <apex:CommandButton value="{!TAG003}" action="{!SVMX_DeleteService}" onClick="{if(!confirm('{!TAG079}')){return false}}" status="status5" reRender="tab5block1"/>
+                    </apex:pageBlockButtons>
+                     <apex:pageblockTable value="{!ServiceWrapper}" var="sw">
+                            <apex:column >
+                                <apex:facet name="header">{!TAG038}</apex:facet>
+                                <apex:inputField value="{!sw.SLADetail.SVMXC__Select__c}"/>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG039}</apex:facet>
+                                <apex:inputField value="{!sw.SLADetail.SVMXC__Available_Services__c}" onblur="SVMX_ChangeOfService();"/>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG040}</apex:facet>
+                                <apex:outputLink value="#" style="font-Size:11px" onclick="getid('{!JSENCODE(sw.SLADetail.SVMXC__Available_Services__c)}')" disabled="{!sw.SLADetail.SVMXC__Available_Services__c == null}">{!TAG046}</apex:outputLink>
+                                <apex:actionfunction action="{!SVMX_OpenPopup}" name="SVMX_OpenPopup" status="status" reRender="popup"/>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG041}</apex:facet>
+                                <apex:outputLabel value="{!sw.Commitment}" style="font-Size:11px"/>
+                            </apex:column>
+                    </apex:pageblockTable>
+                    <apex:inputhidden id="Getselected_ID" value="{!ParameterID}"/> 
+                    <script>
+                    function getid(id)
+                    {
+                      document.getElementById('{!$Component.Getselected_ID}').value=id; 
+                      SVMX_OpenPopup();
+                    }
+                    </script>
+                    </apex:pageblock> 
+                    <apex:actionfunction action="{!SVMX_ChangeOfService}" name="SVMX_ChangeOfService" status="status5" reRender="tab5block1"/>
+                </apex:panelGroup>
+                <apex:panelGroup style="align:right;width:25%">
+                    <apex:pageblock id="tab5block2" mode="edit">  
+                    <apex:pageMessages rendered="{!panelMsg}"/> 
+                    <apex:actionStatus id="status6" startText="{!TAG005}" style="font-Size:11px"/>  
+                        <apex:panelBar id="PanelBarPr1">
+                            <apex:panelBarItem label="{!TAG042}" headerClass="inactiveTab" Id="PBItem1">
+                                <apex:inputText value="{!SearchKeyword}"/>
+                                <apex:commandButton value="{!TAG043}" action="{!SVMX_GO}" status="status6" reRender="tab5block2"/>
+                            </apex:panelBarItem>
+                        </apex:panelBar>
+                        <apex:pageblockTable value="{!ApplicableService}" var="ap">
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG038}</apex:facet>
+                                    <apex:inputField value="{!ap.SVMXC__Select__c}"/>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG039}</apex:facet>
+                                    <apex:outputlabel value="{!ap.name}"/>
+                                </apex:column>  
+                        </apex:pageblockTable>
+                        <apex:pageBlockButtons id="pbtn3" location="Bottom">
+                            <apex:CommandButton value="{!TAG044}" action="{!SVMX_AddSelected}" status="status5" reRender="form1" /> 
+                        </apex:pageBlockButtons>
+                    </apex:pageblock>
+                </apex:panelGroup>
+            </apex:panelGrid>
+            
+            <hr size="3" color="darkblue"/>
+            
+                <apex:commandButton value="{!TAG026}" action="{!SVMX_BackToResolution}" status="status5" reRender="form1" style="font-Size:11px"/>
+            <br/>
+        </apex:tab>
+
+    </apex:tabpanel>
+    </apex:pageblockSection>
+</apex:pageBlock>  
+       
+        <!-- End of TAB5 -- Services -->
+        
+        <!--  Start of popup -->
+         <apex:outputPanel id="popup">
+         <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+            <apex:pageBlock id="popupblock" mode="edit">
+            <apex:pageMessages rendered="{!PopupMsg}"/> 
+            <apex:actionStatus id="popupstatus" startText="{!TAG005}" style="font-Size:11px"/>
+                <apex:pageblockSection columns="1">
+                    <apex:pageblocksectionitem >
+                        <apex:outputLabel value="{!TAG039}" style="font-Size:11px"/> 
+                        <apex:outputlabel value="{!popupservice.name}" style="font-Size:13px"/>
+                    </apex:pageblocksectionitem>  
+                    <apex:pageblocksectionitem rendered="{!if((popupservice.SVMXC__Data_Type__c == 'Text'),true,false)}">
+                        <apex:outputLabel value="{!TAG041}" style="font-Size:11px"/> 
+                        <apex:inputfield value="{!popupdetail.SVMXC__Service_Details__c}" style="font-Size:11px" />
+                    </apex:pageblocksectionitem>  
+                    <apex:pageblocksectionitem rendered="{!if((popupservice.SVMXC__Data_Type__c == 'Boolean'),true,false)}">
+                        <apex:outputLabel value="{!TAG041}" style="font-Size:11px"/> 
+                        <apex:selectList value="{!popupdetail.SVMXC__Included_Or_Not__c}" size="1" multiselect="false">
+                            <apex:selectOptions value="{!Options}"/>
+                        </apex:selectList>
+                    </apex:pageblocksectionitem>  
+                </apex:pageblockSection>
+                <apex:pageblockSection columns="2"> 
+                    <apex:pageblockSectionitem rendered="{!if(OR(popupservice.SVMXC__Data_Type__c == 'Number',popupservice.SVMXC__Data_Type__c == 'Frequency'),true,false)}">
+                        <apex:outputLabel value="{!TAG041}" style="font-Size:11px"/> 
+                        <apex:inputfield value="{!popupdetail.SVMXC__Number_Of_Units__c}" style="float: right;" /> 
+                    </apex:pageblockSectionitem>
+                     <apex:pageblockSectionitem rendered="{!if((popupservice.SVMXC__Data_Type__c == 'Frequency'),true,false)}">
+                        <apex:outputlabel value="{!TAG045}"/>
+                        <apex:inputfield value="{!popupdetail.SVMXC__Frequency__c}"/>   
+                    </apex:pageblockSectionitem>
+                    
+                </apex:pageblocksection>
+                <apex:pageBlockSection title=""  collapsible="false"/>
+                <apex:pageblockSection >
+                        <apex:commandButton value="{!TAG049}" action="{!SVMX_Submit}" style="font-Size:11px" reRender="tab5block1,popup" status="popupstatus"  style="float: right;"/>
+                        <apex:commandButton value="{!TAG033}" action="{!SVMX_CancelPopup}"  style="font-Size:10px" status="popupstatus" reRender="popup"/>
+                </apex:pageblockSection>
+            </apex:pageBlock>
+         </apex:outputPanel>
+         </apex:outputPanel>
+         
+         
+         <!--  Start of popup -->
+</apex:form>
+</apex:page>

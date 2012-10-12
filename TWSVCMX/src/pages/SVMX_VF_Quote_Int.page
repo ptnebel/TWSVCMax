@@ -1,0 +1,6 @@
+<apex:page standardController="SVMXC__Quote__c"  recordSetVar="opportunities" extensions="SVMX_VF_Quote_Int" >
+	<apex:form id="form1">
+		<apex:actionfunction name="insertRecord" action="{!insertRec}" reRender=""/>
+	</apex:form>
+	<script type="text/javascript">if({!isInsert}) insertRecord();</script>
+</apex:page>

@@ -1,0 +1,249 @@
+<apex:page controller="SVMXC.CONF_SetupForwardShipment" id="page1">
+    <apex:form id="form1">
+        <apex:actionStatus id="processing" startText="{!Tag007}"/>
+            <style>
+                .activeTab {background-color: #8599B1; color:white; background-image:none; font-size:14px;}
+                .inactiveTab {background-color: #B0BFD2; color:black; background-image:none;font-size:14px;}
+                .disableTab
+                 {
+                    background-color : Lightgrey ;
+                    color:LightGrey;
+                    background-image:none;
+                    font-size:14px;
+                 }
+                 .rowcls
+                 {
+                    height:80px;
+                    text-align:center;
+                 }
+                 
+            </style>
+            <apex:pageBlock id="mainpblock" mode="edit" title="{!Tag017}" helptitle="Help" helpurl="http://www.servicemax.com">
+                <apex:pageMessages rendered="true"/>
+                <apex:pageBlockSection columns="1">
+                    <apex:pageBlockSectionItem datastyle="text-align:center;">
+                        <apex:outputpanel style="text-align:center;">
+                            <apex:commandButton value="{!TAG018}" action="{!QuickSave}" rerender="form1" status="processing"/>
+                            <apex:commandButton value="{!TAG019}" action="{!SaveNClose}" rerender="form1" status="processing"/>
+                            <apex:commandButton value="{!TAG020}" action="{!Cancel}" rerender="form1" status="processing"/>
+                        </apex:outputpanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:actionStatus id="processing" startText="{!Tag007}"/>
+                <apex:tabPanel switchType="client" activeTabClass="activeTab" inactiveTabClass="inactiveTab" disabledTabClass="disableTab" id="tabpanel1" value="{!selectedTab}">
+                <apex:tab id="generalinfo" label="{!TAG021}">
+                    <apex:pageblock id="tab1pblock1" mode="edit">
+                        <apex:pageBlockSection columns="1" collapsible="false" dir="LTR">
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;margin-left:0px;">
+                                <apex:pageBlockSection columns="1">
+                                <apex:outputPanel style="text-align:left;">
+                                    <apex:outputtext value="{!TAG023}" style="font-Size:12px;" />
+                                </apex:outputPanel>
+                                </apex:pageBlockSection>
+                                <apex:pageBlockSection >
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                        <apex:selectList style="width:500px" size="1" value="{!ForwardShipment_Header.SVMXC__Location__c}" id="LocId">
+                                            <apex:SelectOptions value="{!AvailableDepotOptns}"/>
+                                        </apex:selectList>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                        
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;margin-left:0px;">
+                            <apex:pageBlockSection columns="1">
+                            <apex:outputPanel style="text-align:left;">
+                                <apex:outputtext value="{!TAG022}" style="font-Size:12px;" />
+                            </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            <apex:pageBlockSection >
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                    <apex:inputText value="{!ForwardShipment_Header.SVMXC__Name__c}" style="width:500px;" id="hdrname"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                      
+                            <apex:pageBlockSectionItem dataStyle="text-align:left;margin-left:0px;">
+                            <apex:pageBlockSection columns="1">
+                            <apex:outputPanel style="text-align:left;">
+                                <apex:outputText value="{!TAG024}" style="font-Size:12px;" />
+                            </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            <apex:pageBlockSection >
+                                <apex:outputPanel layout="block" >
+                                    <apex:inputTextarea value="{!ForwardShipment_Header.SVMXC__Description__c}" style="width:500px;" id="hdrname"/>
+                                </apex:outputPanel>
+                            </apex:pageBlockSection>
+                            </apex:pageBlockSectionItem>
+                            <br/>
+                            <apex:pageBlockSectionItem dataStyle="margin-left:34%;left:34%;padding-left:34%;" datastyleClass="disableTab">
+                                    <apex:outputText value="{!TAG025}" style="font-weight: bold;font-Size:12px;color:#000000;"/>
+                            </apex:pageBlockSectionItem>
+
+                            <apex:actionFunction name="onchangeObjectName" action="{!onchangeObjectName}" rerender="ShipmentOrderCriteriaTable" status="processing">
+                                <apex:param name="selectedrow0" value="" assignTo="{!SelectedRow}"/>
+                            </apex:actionFunction>
+                            <apex:pageBlockSection id="tab1PBSection2" columns="1">
+                                    <apex:pageBlockSectionItem dataStyle="text-align:center;width:100%;">
+                                        <apex:pageBlockTable style="font-Size:12px;" id="ShipmentOrderCriteriaTable" value="{!LstPreFilterCriteria}" var="item">
+                                            <apex:column style="width:5%;text-align:left;font-size:12px;">
+                                                <!-- <apex:facet name="header">{!TAG026}</apex:facet> -->
+                                                <apex:outputText value="{!Round(item.ExpressionRec.SVMXC__Sequence__c, 0)}"/>
+                                            </apex:column>
+                                            <apex:column style="font-Size:12px;width:21%;text-align:left;">
+                                                <apex:facet name="header"><apex:outputtext style="font-Size:12px;font-weight:bold;text-align:center;">{!TAG027}</apex:outputtext></apex:facet>
+                                                <apex:selectList size="1" value="{!item.ExpressionRec.SVMXC__Object_Name2__c}" onchange="onchangeObjectName('{!Round(item.ExpressionRec.SVMXC__Sequence__c, 0)}')">
+                                                    <apex:selectOptions value="{!lstObjectsAllowedForCriteria}" />
+                                                </apex:selectList>
+                                            </apex:column>
+                                            <apex:column style="font-Size:12px;width:21%;text-align:left;">
+                                                <apex:facet name="header">{!TAG028}</apex:facet>
+                                                <apex:selectList size="1" value="{!item.ExpressionRec.SVMXC__Field_Name__c}" style="width:80%;">
+                                                    <apex:selectOptions value="{!item.ObjectFields}" />
+                                                </apex:selectList>
+                                            </apex:column>
+                                            <apex:column style="font-Size:12px;width:18%;text-align:left;">
+                                                <apex:facet name="header">{!TAG029}</apex:facet>
+                                                <apex:selectList size="1" value="{!item.ExpressionRec.SVMXC__Operator__c}">
+                                                    <apex:selectOptions value="{!OperatorSelectLst}" />
+                                                </apex:selectList>
+                                            </apex:column>
+                                            <apex:column style="font-Size:12px;width:20%;text-align:left;">
+                                                <apex:facet name="header">{!TAG030}</apex:facet>
+                                                <apex:inputText value="{!item.ExpressionRec.SVMXC__Operand__c}"/>
+                                            </apex:column>
+                                            <apex:column style="font-Size:12px;width:10%;text-align:left;">
+                                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue;" value="ShipmentOrderCriteriaTableDeleteRow" action="{!LstPreFilterCriteria_DelRow}" status="processing" rerender="tab1PBSection2" title="{!TAG067}" >
+                                                    <apex:param name="selectedrow2" value="{!Round(item.ExpressionRec.SVMXC__Sequence__c, 0)}" assignTo="{!SelectedRow}"/>
+                                                </apex:commandButton>
+                                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="ShipmentOrderCriteriaTableAddRow" action="{!LstPreFilterCriteria_AddRow}" rerender="tab1PBSection2" status="processing" rendered="{!if((LstPreFilterCriteria_HighestSeqNum == Round(item.ExpressionRec.SVMXC__Sequence__c, 0)) ,true,false)}" title="{!TAG066}" />
+                                            </apex:column>
+                                        </apex:pageBlockTable>
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem >
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="ShipmentOrderCriteriaTableAddRow" action="{!LstPreFilterCriteria_AddRow}" rerender="tab1PBSection2" status="processing" rendered="{!if(LstPreFilterCriteria_HighestSeqNum == 0 ,true,false)}" id="forwardshipmentcriMainAddBtn" title="{!TAG066}" />
+                                    </apex:pageBlockSectionItem>
+                                    <br/>
+                                    <apex:pageBlockSectionItem dataStyle="text-align:left;width:100%;font-size:12px;">
+                                        <apex:outputText style="font-Size:12px;">
+                                            <b> {!TAG031} </b> &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <apex:inputText id="HdrAdvOption" value="{!ForwardShipment_Header.SVMXC__Advance_Expression__c}" size="80" disabled="{!ForwardShipment_Header.SVMXC__IsStandard__c}"/>
+                                        </apex:outputText>
+                                    </apex:pageBlockSectionItem>
+                                    <br/>
+                            </apex:pageBlockSection>
+                        
+                            <apex:pageBlockSectionItem dataStyle="margin-left:34%;left:34%;padding-left:34%;" datastyleClass="disableTab">
+                                <apex:outputText value="{!TAG032}" style="font-weight: bold;font-Size:12px;color:#000000;"/>
+                            </apex:pageBlockSectionItem>
+                                <br/>
+                            <apex:pageBlockSection id="tab1PBSection3" columns="1">
+                                    <apex:pageBlockSectionItem dataStyle="width:100%;text-align: left;font-size:12px;">
+                                        <apex:outputText style="font-Size:12px;">
+                                        <b> {!TAG033} </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:selectList style="width:50%;" value="{!ForwardShipment_Header.SVMXC__Module__c}" size="1" >
+                                            <apex:SelectOptions value="{!slctLst_objectMappingPO_PO}"/>
+                                        </apex:selectList>
+                                        </apex:outputText>
+                                    </apex:pageBlockSectionItem>
+                                    
+                                    <apex:pageBlockSectionItem dataStyle="text-align:center;width:100%;text-align: left;font-size:12px;">
+                                        <apex:outputText style="padding-left:3%; font-Size:12px;margin-left:28%;width:50%;">
+                                        <b> {!TAG034} </b> &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:selectList style="width:50%;" value="{!ForwardShipment_Header.SVMXC__Node_Parent__c}" size="1" >
+                                            <apex:SelectOptions value="{!slctLst_objectMappingPOL_POL}"/>
+                                        </apex:selectList>
+                                        </apex:outputText>
+                                    </apex:pageBlockSectionItem>
+                                <apex:pageBlockSection title="" collapsible="false"/>
+                                <apex:pageblockSection columns="1">
+                                    <apex:pageBlockSectionItem datastyle="text-align:right;font-Size:12px;">
+                                        <apex:commandButton status="processing" action="{!gotoScheduleTab}"  value="{!TAG035} >>" rerender="tabpanel1" immediate="true"/>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageblockSection>
+                
+                            </apex:pageBlockSection>
+                            <br/>
+                        </apex:pageBlockSection>
+                    </apex:pageblock>
+                </apex:tab>
+            
+                <apex:tab id="Schedule" label="{!TAG035}">
+                    <apex:pageBlock id="tab3pblock1" mode="edit">
+                        <apex:pageBlockSection columns="1">
+                            <apex:pageBlockSectionItem dataStyle="text-align:center;" datastyleClass="disableTab">
+                                <apex:outputText value="{!TAG036}" style="font-weight: bold;font-Size:12px;color:#000000;" styleclass="disableTab"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection columns="1" id="tab3pblock1sec1">
+                            <apex:pageBlockSectionItem dataStyle="text-align:center;">
+                                <apex:pageBlockTable id="schedulefrequenciestable" value="{!lstScheduleFrequencies}" var="item" style="width:80%;margin-left:10%;margin-right:10%;font-size:12px;" rowClasses="rowcls">
+                                        <apex:column style="font-Size:12px;width:5%;text-align:left;">
+                                           <!-- <apex:facet name="header">{!TAG037}</apex:facet> -->
+                                            <apex:outputText value="{!Round(item.SVMXC__Sequence__c, 0)}"/>
+                                        </apex:column>
+                                        <apex:column style="font-Size:12px;width:15%;text-align:left;">
+                                            <apex:facet name="header"><apex:outputtext style="font-Size:12px;font-weight:bold;">{!TAG038}</apex:outputtext></apex:facet>
+                                        <apex:inputField value="{!item.SVMXC__Run_At__c}"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;width:40%;text-align:left;">
+                                        <apex:facet name="header">{!TAG039}</apex:facet>
+                                        <apex:inputField value="{!item.SVMXC__Schedule_Days__c}"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;width:10%;text-align:left;">
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue;" value="schedulefrequenciestableDeleteRow" action="{!lstScheduleFrequencies_DelRow}" status="processing" rerender="tab3pblock1sec1" title="{!TAG067}" >
+                                            <apex:param name="selectedrow2" value="{!Round(item.SVMXC__Sequence__c, 0)}" assignTo="{!SelectedRow}"/>
+                                        </apex:commandButton>
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="schedulefrequenciestableAddRow" action="{!lstScheduleFrequencies_AddRow}" rerender="tab3pblock1sec1" status="processing" rendered="{!if((lstScheduleFrequencies_HighestSeqNum == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" title="{!TAG066}" />
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="schedulefrequenciestableAddRow" action="{!lstScheduleFrequencies_AddRow}" rerender="tab3pblock1sec1" status="processing" rendered="{!if((lstScheduleFrequencies_HighestSeqNum == 0) ,true,false)}" id="schedulefrequenciesMainAddBtn" title="{!TAG066}" />
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageBlockSection columns="1">
+                            <apex:pageBlockSectionItem dataStyle="text-align:center;" datastyleClass="disableTab">
+                                <apex:outputText value="{!TAG044}" style="font-weight: bold;font-Size:12px;color:#000000;" styleclass="disableTab"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection columns="1">
+                            <apex:outputtext style="font-Size:12px;">
+                                <div style="font-size:12px;text-align:left; width:78%; margin:0 auto; overflow:hidden">
+                                    <b style="float:left; width:50%; padding:5px 0 0 0; display:block">{!TAG045}</b>
+                                    <div style="float:left; width:50%">
+                                          <apex:inputField id="successemail" value="{!ForwardShipment_Header.SVMXC__Email_On_Success__c}" style="width: 50%"/>          
+                                    </div>                            
+                                </div>
+                            </apex:outputtext>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockSection columns="1">
+                            <apex:outputtext style="font-Size:12px;">
+                                <div style="font-size:12px;text-align:left; width:78%; margin:0 auto; overflow:hidden">
+                                    <b style="float:left; width:50%; padding:5px 0 0 0; display:block"> {!TAG046}</b>                        
+                                    <div style="float:left; width:50%">
+                                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                            <apex:inputField id="successemail" value="{!ForwardShipment_Header.SVMXC__Email_On_Error__c}" style="width: 50%"/>
+                                        </apex:outputPanel>
+                                    </div>
+                                </div>
+                            </apex:outputtext>
+                        </apex:pageBlockSection>
+                        
+                        
+                        <apex:pageBlockSection title="" collapsible="false"/>
+                        <apex:pageblockSection columns="1">
+                            <apex:pageBlockSectionItem datastyle="text-align:Left;font-Size:12px;">
+                                <apex:commandButton status="processing" action="{!gotoGeneralInfoTab}" value="<< {!TAG021}" rerender="tabpanel1" immediate="true"/>
+                            </apex:pageBlockSectionItem>
+                        </apex:pageblockSection>
+                        <br/>
+                    </apex:pageBlock>
+                </apex:tab>
+            </apex:tabPanel>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

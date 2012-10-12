@@ -1,0 +1,42 @@
+<apex:page controller="WorkOrderTasks">
+<apex:form > 
+	<apex:variable value="{!Task}" var="chdr"/>
+	<apex:pageBlock title="Create Related Work Order to {!WorkTaskName}" id="editor">
+		<apex:pageBlockButtons >				
+				<apex:commandButton action="{!SaveChildWO}" value="Save" rerender="editor" status="Savestatus"></apex:commandButton>
+				<apex:commandButton action="{!CancelChildWO}" value="Cancel" rerender="editor" status="Savestatus"></apex:commandButton>
+		</apex:pageBlockButtons>	
+		<apex:pageBlockSection >
+			<apex:actionStatus id="refreshstatus" startstyle="color:green;" startText="Refreshing...." ></apex:actionStatus> 			
+			<apex:actionStatus id="Savestatus" startstyle="color:green;" startText="Saving...." ></apex:actionStatus> 
+		</apex:pageBlockSection>
+
+		<apex:pageBlockSection title="Task Details" collapsible="true" columns="1">  
+            	<apex:outputField id="AssociatedPart" value="{!WOrderHeader.SVMXC__Product__c}" rendered="true"/>            	
+            	<apex:pageBlockSectionItem >
+            		<apex:outputLabel >Problem Description</apex:outputLabel>
+            		<apex:inputTextArea style="width:400px; height:50px;" id="WorkDescription" value="{!WOrderHeader.SVMXC__Problem_Description__c}" rendered="true"/>            	  	        		
+        		</apex:pageBlockSectionItem>
+        		<apex:pageBlockSectionItem >
+            		<apex:outputLabel >Related Work Order</apex:outputLabel>
+        			<apex:outputText id="ParentWO" value="{!task.Work_Order__r.Name}" rendered="true"/> 
+        		</apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+		 
+		<apex:pageBlockSection title="Order Details" collapsible="true">  
+            	<apex:inputField id="OrderStatus" value="{!WOrderHeader.SVMXC__Order_Status__c}" rendered="true"/>
+            	<apex:inputField id="OrderPriority" value="{!WOrderHeader.SVMXC__Priority__c}" rendered="true" />   
+            	<apex:inputField id="OrderType" value="{!WOrderHeader.SVMXC__Order_Type__c}" rendered="true" />        		
+        </apex:pageBlockSection>
+            
+        <apex:pageblockSection title="Service Location" columns="1" dir="LTR">
+	            <apex:inputField id="Street" value="{!WOrderHeader.SVMXC__Street__c}" rendered="true" />       
+	            <apex:inputField id="City" value="{!WOrderHeader.SVMXC__City__c}" rendered="true" /> 
+	            <apex:inputField id="State" value="{!WOrderHeader.SVMXC__State__c}" rendered="true" /> 
+	            <apex:inputField id="Country" value="{!WOrderHeader.SVMXC__Country__c}" rendered="true" /> 
+	            <apex:inputField id="Zip" value="{!WOrderHeader.SVMXC__Zip__c}" rendered="true" />  
+	    </apex:pageblockSection> 
+		 
+	</apex:pageBlock>
+</apex:form>
+</apex:page>

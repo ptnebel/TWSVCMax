@@ -1,0 +1,122 @@
+<apex:page sidebar="false" showHeader="false" controller="CV_IP_Controller" >
+<link type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/ui-lightness/jquery-ui.css" rel="Stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+<apex:form >
+<apex:pageBlock >
+<apex:image id="theImage" value="{!$Resource.ServiceMax_Logo}" onclick="window.open('https://www.servicemax.com');" width="240" height="50"/>
+
+<apex:pageBlockSection title="Chatter Filters" columns="1">
+<div class="date_fields">
+<apex:panelGrid columns="2">
+<apex:panelGroup >
+<label for="volumeOn">Scope : </label>
+<input type="radio" name="volumeOn" value="All">All</input>
+<input type="radio" name="volumeOn" value="ips" checked="true">Devices</input>
+<input type="radio" name="volumeOn" value="Case"> Service</input>
+<input type="radio" name="volumeOn" value="Opportunity" > Sales</input>
+<br/>
+
+<label for="from">Activity Date Range : From</label>
+<input type="text" id="from" name="from"/>
+<label for="to">To</label>
+<input type="text" id="to" name="to"/>
+<br/>
+</apex:panelGroup>
+<apex:panelGroup >
+<apex:commandButton action="{!refresh}" value="Refresh" id="theButton" onComplete="gmapComplete();" onclick="setValues();" rerender="gmap" />
+<br/>
+</apex:panelGroup>
+<label for="clevel">Chatter Threshold - </label>
+<input type="text" id="clevel" style="border:0; color:#f6931f; font-weight:bold;" />
+<br/> 
+</apex:panelGrid>
+<div id="slider"></div>
+</div>
+</apex:pageBlockSection>
+</apex:pageBlock>
+<apex:outputPanel id="gmap">
+<apex:inputHidden value="{!ipData}" id="ipd"/>
+<c:GoogleMap mapType="normal" mapkey="{!forcekey}" data="{!ipData}"/>
+</apex:outputPanel>
+
+ 
+<style>
+#slider {
+        float: left;
+        clear: left;
+        width: 900px;
+    }
+
+#slider .ui-slider-range { background: #729fcf; }
+#slider .ui-slider-handle { border-color: #729fcf; }
+
+</style>
+    <script type="text/javascript">
+
+
+    jQuery.noConflict();
+    jQuery(document).ready(function() {
+        jQuery("#slider").slider({
+            range: true,
+            min: 0,
+            max: 100,
+            step: 1,
+            values: [5, 10],
+            animate:true,
+            slide: function(event, ui) {
+                jQuery("#clevel").val(ui.values[0] + ' - ' + ui.values[1]);
+                document.getElementById('{!$Component.minC}').value = ui.values[0];
+                document.getElementById('{!$Component.cc}').value = ui.values[1];
+//              refresh();
+                g_chat_cnt = ui.values[0];
+                g_max_chat_cnt = ui.values[1];
+                refreshMarkers();
+//              window.setTimeout(redrawMap, 2000);
+            }
+        });
+        jQuery("#clevel").val(jQuery("#slider").slider("values", 0) + ' - ' + jQuery("#slider").slider("values", 1));
+        var dates = jQuery('#from, #to').datepicker({
+            defaultDate: "-1m",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onSelect: function(selectedDate) {
+                var option = this.id == "from" ? "minDate" : "maxDate";
+                var instance = jQuery(this).data("datepicker");
+                var date = jQuery.datepicker.parseDate(instance.settings.dateFormat || jQuery.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                dates.not(this).datepicker("option", option, date);
+                if (option == "minDate")
+                    document.getElementById('{!$Component.fdate}').value = selectedDate;
+                else
+                    document.getElementById('{!$Component.tdate}').value = selectedDate;
+            }
+        });
+        jQuery("#from").datepicker("setDate", "-1d");
+        jQuery("#to").datepicker("setDate", "+0d");
+        jQuery(function() {
+            jQuery("#accordion").accordion({
+                collapsible: true
+            }); 
+        });
+        
+        
+    });
+
+    function gmapComplete() {
+        g_chat_cnt = jQuery("#slider").slider("values", 0);
+        g_max_chat_cnt = jQuery("#slider").slider("values", 1);
+        drawMap();
+    }
+    function setValues() {
+        var rlist = document.getElementsByName("volumeOn");
+        var rval = rlist[0].checked? "All": rlist[1].checked? "ips" : rlist[2].checked? "Case": "Opportunity";
+        document.getElementById('{!$Component.volumeOn}').value = rval;
+    }
+</script>
+<apex:inputHidden value="{!chatterCount}" id="cc"/>
+<apex:inputHidden value="{!minChatter}" id="minC"/>
+<apex:inputHidden value="{!fromDate}" id="fdate"/>
+<apex:inputHidden value="{!toDate}" id="tdate"/>
+<apex:inputHidden value="{!volumeObj}" id="volumeOn"/>
+</apex:form>
+</apex:page>

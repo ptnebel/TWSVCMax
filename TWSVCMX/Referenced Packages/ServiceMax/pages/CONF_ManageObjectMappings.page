@@ -1,0 +1,69 @@
+<apex:page controller="SVMXC.CONF_ManageObjectMappings" sidebar="true" showHeader="true" tabStyle="SVMXC__ServiceMax_Settings__c">    
+<apex:form id="pageForm">           
+            <apex:pageBlock id="standardinvprocesses" title="{!TAG001}" helpTitle="{!TAG004}" helpUrl="{!HLPURL}"  >
+                
+                <apex:pageBlockButtons location="top">                   
+                    <apex:commandButton action="{!view}" value="{!TAG002}" id="view"/>
+                    <apex:commandButton action="{!StandardClone}" value="{!TAG003}" id="sclone"/>   
+                    <apex:commandButton action="{!BackToHomePage}" value="{!TAG013}" id="backtohome"/>                                           
+                </apex:pageBlockButtons> 
+                <apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" /> 
+            
+            <!-- Neeraj(Feb-7th-2012): Access the tags instead of {!$ObjectType.ServiceMax_Processes__c.fields.MapID__c.Label} -->
+            <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" width="100%" border="0" rowClasses="line80,line80" columnClasses="colspan50,colspan50">              
+                <apex:pageBlockTable value="{!standAutomation}" var="item"> 
+                    <apex:column width="10px"> 
+                        
+            
+                          <apex:inputField value="{!item.SVMXC__Select__c}" id="selected" /> 
+                    </apex:column>                  
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG015}</apex:facet>                           
+                        <apex:outputField value="{!item.SVMXC__MapID__c}"/>                                          
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG016}</apex:facet>                              
+                        <apex:outputField value="{!item.SVMXC__Name__c}"/>                                         
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG017}</apex:facet>                           
+                        <apex:outputField value="{!item.SVMXC__Description__c}"/>                                          
+                    </apex:column>                  
+                </apex:pageBlockTable> 
+            </apex:panelGrid>                               
+            </apex:pageBlock>
+     
+            <apex:pageBlock id="customObjectMapping" title="{!TAG005}" >
+             <apex:pageMessages rendered="{!CustomDisplayBlockLevelMessage}" showDetail="true" />
+
+                <apex:pageBlockButtons location="top">                   
+                    <apex:commandButton action="{!NewButton}" value="{!TAG006}"  id="new"/>   
+                    <apex:commandButton action="{!EditButton}" rendered="{!DisplayTableColumns}"   value="{!TAG007}" id="edit"/> 
+                    <apex:commandButton action="{!CloneButton}" rendered="{!DisplayTableColumns}"   value="{!TAG003}" id="clone"/> 
+                     
+                    <apex:commandButton action="{!RemoveCustomObjectMapping}" rendered="{!DisplayTableColumns}"  value="{!TAG009}"   id="delete"/>                                                         
+                </apex:pageBlockButtons>
+                <apex:pageBlockTable value="{!customAutomation}"  rendered="{!DisplayTableColumns}"  var="item"> 
+                    <apex:column width="10px"> 
+                        
+            
+                          <apex:inputField value="{!item.SVMXC__Select__c}" id="selected" /> 
+                    </apex:column> 
+                                   
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG015}</apex:facet>                           
+                        <apex:outputField value="{!item.SVMXC__MapID__c}"/>                                          
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG016}</apex:facet>                              
+                        <apex:outputField value="{!item.SVMXC__Name__c}"/>                                         
+                    </apex:column>
+                    <apex:column >
+                        <apex:facet name="header" >{!TAG017}</apex:facet>                           
+                        <apex:outputField value="{!item.SVMXC__Description__c}"/>                                          
+                    </apex:column>                  
+                </apex:pageBlockTable>                                       
+            </apex:pageBlock>
+    </apex:form>
+
+</apex:page>

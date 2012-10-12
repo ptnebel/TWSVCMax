@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Object helps to track waiting periods encountered during the life cycle of a Case or Service Order.</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Assigned_To__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that owns the issue. Reference to standard user object.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the ServiceMax user responsible for tracking and resolving this issue.</inlineHelpText>
+        <label>Assigned To</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>R00N70000001hzYXEAY</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Case__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Reference to the support case in which issues are tracked</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Case number for which this issue is tracked.</inlineHelpText>
+        <label>Case</label>
+        <referenceTo>Case</referenceTo>
+        <relationshipName>R00N70000001hzYGEAY</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <trackHistory>false</trackHistory>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>End_Date_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date and time when this issue was resolved.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date and time when this issue was resolved.</inlineHelpText>
+        <label>End Date &amp; Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Issue_Area__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Broad area that identifies where the issue is.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Broad area that identifies where the issue/bottleneck is.</inlineHelpText>
+        <label>Issue Area</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Case</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Work Order</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>ERP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Customer</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Documentation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Process</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Issue_Description__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Detailed description of the issue/bottleneck.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Detailed description of the issue/bottleneck.</inlineHelpText>
+        <label>Issue Description</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Issue_Subcategory__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Classification of the issue within an issue area.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Classification of the issue within an issue area.</inlineHelpText>
+        <label>Issue Subcategory</label>
+        <picklist>
+            <controllingField>Issue_Area__c</controllingField>
+            <picklistValues>
+                <fullName>Missing Information</fullName>
+                <controllingFieldValues>Case</controllingFieldValues>
+                <controllingFieldValues>Documentation</controllingFieldValues>
+                <controllingFieldValues>ERP</controllingFieldValues>
+                <controllingFieldValues>Work Order</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Wrong Information</fullName>
+                <controllingFieldValues>Case</controllingFieldValues>
+                <controllingFieldValues>Documentation</controllingFieldValues>
+                <controllingFieldValues>ERP</controllingFieldValues>
+                <controllingFieldValues>Work Order</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Need Review</fullName>
+                <controllingFieldValues>Case</controllingFieldValues>
+                <controllingFieldValues>Customer</controllingFieldValues>
+                <controllingFieldValues>Documentation</controllingFieldValues>
+                <controllingFieldValues>Process</controllingFieldValues>
+                <controllingFieldValues>Work Order</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Need Approval</fullName>
+                <controllingFieldValues>Case</controllingFieldValues>
+                <controllingFieldValues>Customer</controllingFieldValues>
+                <controllingFieldValues>Documentation</controllingFieldValues>
+                <controllingFieldValues>Process</controllingFieldValues>
+                <controllingFieldValues>Work Order</controllingFieldValues>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>RMA_Shipment_Ref__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>RMA or Shipment linked to this process bottleneck. Reference to an existing Parts Order record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Parts Order Reference</label>
+        <referenceTo>RMA_Shipment_Order__c</referenceTo>
+        <relationshipLabel>Process Bottlenecks</relationshipLabel>
+        <relationshipName>Case_Tracker</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Service_Order__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Service order number connected to this issue. Is a lookup to an existing service order in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Service order number connected to this issue. Is a lookup to an existing service order in ServiceMax</inlineHelpText>
+        <label>Work Order</label>
+        <referenceTo>Service_Order__c</referenceTo>
+        <relationshipLabel>Process Bottlenecks</relationshipLabel>
+        <relationshipName>Case_Tracker</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Start_Date_Time__c</fullName>
+        <defaultValue>Now()</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Date and time when this issue/bottleneck started</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date and time when this issue/bottleneck started</inlineHelpText>
+        <label>Start Date &amp; Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Waiting_On_Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the customer contact responsible for resolving this issue.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the customer contact responsible for resolving this issue.</inlineHelpText>
+        <label>Waiting On Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipName>R00N70000001hzZFEAY</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <label>Process Bottlenecks</label>
+    <nameField>
+        <displayFormat>CT-{000000}</displayFormat>
+        <label>Record ID</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Process Bottlenecks</pluralLabel>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Case__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Issue_Area__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Issue_Subcategory__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Start_Date_Time__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>End_Date_Time__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Assigned_To__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Waiting_On_Contact__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Case__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Issue_Area__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Issue_Subcategory__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Start_Date_Time__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>End_Date_Time__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Assigned_To__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Waiting_On_Contact__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Case__c</searchFilterFields>
+        <searchFilterFields>Issue_Area__c</searchFilterFields>
+        <searchFilterFields>Issue_Subcategory__c</searchFilterFields>
+        <searchFilterFields>Start_Date_Time__c</searchFilterFields>
+        <searchFilterFields>End_Date_Time__c</searchFilterFields>
+        <searchFilterFields>Assigned_To__c</searchFilterFields>
+        <searchFilterFields>Waiting_On_Contact__c</searchFilterFields>
+        <searchFilterFields>CREATEDBY_USER</searchFilterFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

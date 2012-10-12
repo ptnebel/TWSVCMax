@@ -1,0 +1,6 @@
+<apex:page standardController="SVMXC__Service_Order__c"  recordSetVar="Service_Order" extensions="SVMX_VF_Work_Order_Int" >
+	<apex:form id="form1">
+   		<apex:actionfunction name="insertRecord" action="{!insertRec}" reRender=""/>
+    </apex:form>
+    <script type="text/javascript">if({!isInsert}) insertRecord();</script>
+</apex:page>

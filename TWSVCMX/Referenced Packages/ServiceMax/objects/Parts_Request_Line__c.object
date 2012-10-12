@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object is used to capture parts and quantities in a parts request. Parts requests do not have the context of a service event.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Additional_Information__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any additional information relevant to this parts request line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Any additional information relevant to this parts request line.</inlineHelpText>
+        <label>Additional Information</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Canceled_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that canceled this parts request. This is set automatically when the user cancels the parts request.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>User that canceled this parts request. This is set automatically when the user cancels the parts request.</inlineHelpText>
+        <label>Canceled By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Parts_Request_Line_Canceled_By</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Canceled_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when this part request was canceled. This is set automatically when the user cancels the parts request.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/time when this part request was canceled. This is set automatically when the user cancels the parts request.</inlineHelpText>
+        <label>Canceled On</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Closed_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that closed this parts request line. This is set automatically when the receipt is processed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>User that closed this parts request line. This is set automatically when the receipt is processed.</inlineHelpText>
+        <label>Closed By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Parts_Request_Line_Closed_By</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Closed_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when this parts request line was closed. This is set automatically when the receipt is processed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/time when this parts request line was closed. This is set automatically when the receipt is processed.</inlineHelpText>
+        <label>Closed On</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Date_Received__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date when the requested part was received at the requested location.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date when the requested part was received at the requested location.</inlineHelpText>
+        <label>Date Received</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Date_Required__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date when this part is required at the requesting location.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date when this part is required at the requesting location.</inlineHelpText>
+        <label>Date Required</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Date_Shipped__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date when the requested part was shipped using a shipment order.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date when the requested part was shipped using a shipment order.</inlineHelpText>
+        <label>Date Shipped</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Line_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Status of the parts request line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Status of the parts request line.</inlineHelpText>
+        <label>Line Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Allocated</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Back Ordered</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Fulfilled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Picked</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Received</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shipped</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>true</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Parts_Request__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Parent Parts request for this request line. Reference to an existing Parts Request in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Parts Request</label>
+        <referenceTo>Parts_Request__c</referenceTo>
+        <relationshipLabel>Parts Request Lines</relationshipLabel>
+        <relationshipName>Parts_Request_Line</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <trackHistory>true</trackHistory>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Posted_To_Inventory__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicating if this receipt has been posted to product inventory.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicating if this receipt has been posted to product inventory.</inlineHelpText>
+        <label>Posted To Inventory</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the product. This is a lookup to an existing salesforce product record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the product. This is a lookup to an existing salesforce product record.</inlineHelpText>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipName>Parts_Request_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quantity_Received2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Received quantity of product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Received quantity of product.</inlineHelpText>
+        <label>Qty Received</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_Required2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Required quantity of product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Required quantity of product.</inlineHelpText>
+        <label>Qty Required</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_Shipment_Initiated2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Quantity of product for which shipment has been initiated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Quantity of product for which shipment has been initiated.</inlineHelpText>
+        <label>Qty Shipment Initiated</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_Shipped2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Actual shipped quantity of product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Actual shipped quantity of product.</inlineHelpText>
+        <label>Qty Shipped</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag to control selection of a record in data list.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag to control selection of a record in data list.</inlineHelpText>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Total_Line_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total Line Price</description>
+        <externalId>false</externalId>
+        <formula>IF(ISPICKVAL( Line_Status__c ,&apos;Completed&apos;), Unit_Price2__c * Quantity_Received2__c ,IF(ISPICKVAL( Line_Status__c ,&apos;Canceled&apos;),0, Unit_Price2__c * Quantity_Required2__c ))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Total Line Price</inlineHelpText>
+        <label>Total Line Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Unit_Price2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Unit Price for Line Item.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Unit Price for Line Item.</inlineHelpText>
+        <label>Unit Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Use_Price_From_Pricebook__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Leave this box checked if you want the price to be filled automatically from the default price book. If you like to enter a price manually for this part, simply uncheck this box.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Leave this box checked if you want the price to be filled automatically from the default price book. If you like to enter a price manually for this part, simply uncheck this box.</inlineHelpText>
+        <label>Use Price From Pricebook</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <label>Parts Request Line</label>
+    <nameField>
+        <displayFormat>PRQL-{00000000}</displayFormat>
+        <label>Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Parts Request Lines</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>SVMXC_ValidateDateRequired</fullName>
+        <active>true</active>
+        <description>Required date must be a future date.</description>
+        <errorConditionFormula>AND(ISNEW(),  Date_Required__c &lt;  TODAY())</errorConditionFormula>
+        <errorDisplayField>Date_Required__c</errorDisplayField>
+        <errorMessage>Date required cannot be a past date.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>SVMXC_ValidateQuantityChange</fullName>
+        <active>true</active>
+        <description>Quantity Required cannot be changed.</description>
+        <errorConditionFormula>AND(!ISNEW(),   OR(Quantity_Shipment_Initiated2__c &gt; 0,  Quantity_Shipped2__c &gt; 0), ISCHANGED( Quantity_Required2__c ))</errorConditionFormula>
+        <errorDisplayField>Quantity_Required2__c</errorDisplayField>
+        <errorMessage>Quantity Required cannot be changed once shipment activity has been initiated. Create a new Parts request instead.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>SVMXC_ValidateQuantityRequired</fullName>
+        <active>true</active>
+        <description>Required Quantity must be greater than zero.</description>
+        <errorConditionFormula>Quantity_Required2__c &lt;= 0</errorConditionFormula>
+        <errorDisplayField>Quantity_Required2__c</errorDisplayField>
+        <errorMessage>Required Quantity must be greater than zero.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Find_Stock</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>800</height>
+        <isResizable>true</isResizable>
+        <linkType>sControl</linkType>
+        <masterLabel>Find Stock</masterLabel>
+        <openType>newWindow</openType>
+        <position>fullScreen</position>
+        <protected>false</protected>
+        <scontrol>StockLookupPR</scontrol>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <width>650</width>
+    </webLinks>
+</CustomObject>

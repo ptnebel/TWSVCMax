@@ -1,0 +1,35 @@
+<apex:page standardcontroller="SVMXC__Service_Contract__c" extensions="SVMXC.SCON_Renewal"  sidebar="true" showHeader="true"  tabStyle="SVMXC__Service_Contract__c"> 
+    <apex:stylesheet value="{!$Resource.SVMXC__SVMX_resources}" />
+    <apex:form >
+        <apex:variable value="{!NewSContHeader}" var="sch"/> 
+        <apex:variable value="{!SMaxListHeader}" var="smlist"/>  
+    <apex:pageBlock id="block" title="{!TAG001} {!sch.Name}" helpTitle="{!TAG002}   " helpUrl="{!HLPURL}" >
+        <apex:pageBlockButtons location="top" style="text-align:center;">
+                <apex:commandButton action="{!RenewSContract}" value="{!TAG004}" id="renewBtid" rendered="{!IstoDisplay}"/>&nbsp;&nbsp;&nbsp; 
+                <apex:commandButton action="{!RenewSContract}" value="Continue the Renewal" id="conactid" rendered="{!DisplayContinue}"/>
+                <apex:commandButton action="{!Cancel}" value="{!TAG005}" id="cancelBtid"/>
+        </apex:pageBlockButtons> 
+        <apex:pageMessages showDetail="true"/>
+            <apex:panelGrid cellspacing="0" cellpadding="0" width="100%" columns="1" style="text-align: center;" border="0" rowClasses="line10">
+            <apex:pageMessage rendered="{!showUpsellMessage}" severity="info" strength="3" title="{!TAG007}" summary="{!TAG006}"/>
+            </apex:panelGrid>
+            <apex:pageBlockSection title="{!TAG008}" dir="LTR" rendered="{!showDetailBlock}"> 
+                <apex:inputField id="check1" value="{!SMaxList.SVMXC__Copy_Covered_Products__c}"/>
+                <apex:inputField id="check2" value="{!SMaxList.SVMXC__Copy_Included_Services__c}"/>
+                <apex:inputField id="check3" value="{!SMaxList.SVMXC__Copy_Covered_Locations__c}"/>
+                <apex:inputField id="check4" value="{!SMaxList.SVMXC__Copy_Entitled_Contacts__c}"/>
+            </apex:pageBlockSection>      
+            <apex:pageBlockSection title="{!TAG010}" columns="1" rendered="{!showDetailBlock}">
+                <apex:inputField id="name" value="{!sch.Name}" rendered="true" style="width:30%" />
+                <apex:inputField id="sdate" value="{!sch.SVMXC__Start_Date__c}" rendered="true" />
+                <apex:inputField id="edate" value="{!sch.SVMXC__End_Date__c}" rendered="true" />
+                <apex:inputField style="Width:80%" value="{!sch.SVMXC__Renewal_Notes__c}" /> 
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!TAG009}" id="results" columns="1" rendered="{!showDetailBlock}">
+                <apex:inputField id="check5" value="{!SMaxList.SVMXC__Activate_Contract_Upon_Renewal__c}"/>
+                <apex:inputField style="Height:100px;Width:80%" value="{!sch.SVMXC__Activation_Notes__c}" />   
+            </apex:pageBlockSection>
+      </apex:pageBlock>  
+      <!--  <apex:detail relatedList="false" title="false" rendered="{!showDetailBlock}" /> -->
+    </apex:form>
+</apex:page>

@@ -1,0 +1,2 @@
+<apex:page controller="Reset_WO" action="{!reset}" showHeader="false" sidebar="false">
+</apex:page>

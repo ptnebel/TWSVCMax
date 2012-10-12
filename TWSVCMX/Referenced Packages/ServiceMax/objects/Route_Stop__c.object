@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Route stop contains specific stops within a route card along with the receiving, repair and shipment statuses</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Delivered_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that delivered the product at the current location</description>
+        <externalId>false</externalId>
+        <label>Delivered By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Route_Stops1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Delivered_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the product was delivered at the current location</description>
+        <externalId>false</externalId>
+        <label>Delivered On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Delivered__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the product has been delivered at the current location or not</description>
+        <externalId>false</externalId>
+        <label>Delivered?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Next_Stop__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Next location (hub or depot)</description>
+        <externalId>false</externalId>
+        <label>Next Stop</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>Route Stops (Next Stop)</relationshipLabel>
+        <relationshipName>Route_Stops1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Picked_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that picked the product for shipment at the current location</description>
+        <externalId>false</externalId>
+        <label>Picked By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Route_Stops2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Picked_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the product was picked for shipment at the current location</description>
+        <externalId>false</externalId>
+        <label>Picked On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Picked__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the product has been picked for shipment at the current location or not</description>
+        <externalId>false</externalId>
+        <label>Picked?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Received_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that received the product at the current location</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Received By</inlineHelpText>
+        <label>Received By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Route_Stops</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Received_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the product was received at the current location</description>
+        <externalId>false</externalId>
+        <label>Received On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Received__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the product has been received at the current location or not</description>
+        <externalId>false</externalId>
+        <label>Received?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Record_Card__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Route Card</label>
+        <referenceTo>Route_Card__c</referenceTo>
+        <relationshipLabel>Route Stops</relationshipLabel>
+        <relationshipName>Route_Stop</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <trackHistory>false</trackHistory>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Shipment_Initiated__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Shipment Initiated?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Shipped_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>User that shipped the product from the current location</description>
+        <externalId>false</externalId>
+        <label>Shipped By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>Route_Stops3</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Shipped_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time when the product was shipped from the current location</description>
+        <externalId>false</externalId>
+        <label>Shipped On</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Shipped__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if the product has been shipped from the current location or not</description>
+        <externalId>false</externalId>
+        <label>Shipped?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Stop_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Current location (hub or depot)</description>
+        <externalId>false</externalId>
+        <label>Stop Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>Route Stops</relationshipLabel>
+        <relationshipName>Route_Stops</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Stop_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Stop number</description>
+        <externalId>false</externalId>
+        <label>Stop Number</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Work_Order_Created__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if a work order was created upon receipt/delivery at the current location</description>
+        <externalId>false</externalId>
+        <label>Work Order Created?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <label>Route Stop</label>
+    <nameField>
+        <displayFormat>{0000000000}</displayFormat>
+        <label>Record Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Route Stops</pluralLabel>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Stop_Location__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Stop_Number__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Next_Stop__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Record_Card__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Stop_Location__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Stop_Number__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Next_Stop__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Record_Card__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Stop_Location__c</searchFilterFields>
+        <searchFilterFields>Stop_Number__c</searchFilterFields>
+        <searchFilterFields>Next_Stop__c</searchFilterFields>
+        <searchFilterFields>Record_Card__c</searchFilterFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

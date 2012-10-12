@@ -1,0 +1,62 @@
+<apex:page id="page1" title="{!TAG001}" controller="SVMXC.WORD_CreateWOFromCase" sidebar="true" showHeader="true" tabStyle="SVMXC__Service_Order__c"> 
+
+    <apex:stylesheet value="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXP_Resources/css/SVMXP_resources.css')}" />
+    <apex:pageMessages rendered="{!NOT(DisplayBlockLevelMessage)}" showDetail="true" /> 
+    
+    <apex:form id="createwo" rendered="{!ShowValidData}" >
+    <script type="text/javascript">
+            function saveaction()
+            {
+                dosave();
+                document.getElementById('page1:createwo:block:pgblockbuttons:createchildbutton').disabled=true;
+                document.getElementById('page1:createwo:block:pgblockbuttons:createchildbutton').className = 'btnDisabled';
+            }
+            function oncompleteofsubmit()
+            {
+                if(!{!btnisdisabled})
+                {
+                   document.getElementById('page1:createwo:block:pgblockbuttons:createchildbutton').className = 'btn';
+                   document.getElementById('page1:createwo:block:pgblockbuttons:createchildbutton').disabled=false;
+                }
+            }
+        </script>
+
+       <!--   <apex:actionFunction name="newTargetObj()" action="{!newTargetObj}"  status="myStatus"/> -->
+        <apex:variable value="{!CaseHeader}" var="chdr"/>
+
+         <apex:pageBlock id="block" title="{!TAG002} {!CaseHeader.CaseNumber}" helpTitle="{!TAG003}" mode="edit" helpUrl="{!HLPURL}"><br/>
+            <apex:pageBlockButtons location="top" style="text-align:center;" id="pgblockbuttons">   
+             <!-- Newly added line to deal with defect no. 1297 26/04/2011 -->
+                <apex:commandButton value="{!TAG005}" id="createchildbutton" onclick="saveaction()"  rerender="pgblockbuttons" status="Status1"/>
+            <!--    <apex:commandButton action="{!newTargetObj}" value="{!TAG005}" id="createchildbutton"/> -->
+                <apex:commandButton action="{!Cancel}" value="{!TAG006}" immediate="true"/>              
+            </apex:pageBlockButtons><br/>
+             <!-- Newly added line to deal with defect no. 1297 26/04/2011 -->
+           <apex:actionFunction action="{!newTargetObj}" name="dosave" status="Status1" rerender="msg1" oncomplete="oncompleteofsubmit()"/>
+            
+            
+            <apex:pageBlockSection columns="1">
+                
+                 <apex:pageBlockSectionItem rendered="{!if(RecTypSize>0,true,false)}">                 
+                    <apex:outputlabel style="font:bold" value="{!TAG004}"/> 
+                    <apex:selectList style="width:25%" value="{!SelectedRecordType}" size="" multiselect="false">       <apex:selectOptions value="{!ObjectRecordTypes}"/>                
+                    </apex:selectList>     
+                </apex:pageBlockSectionItem>  
+
+                <apex:inputField id="Owner" value="{!WOHeader.OwnerId}" rendered="true" />
+                <apex:inputField id="OrderType" style="height:24px;" value="{!WOHeader.SVMXC__Order_Type__c}" rendered="true" />
+                <apex:inputField id="Priority" style="height:24px;" value="{!WOHeader.SVMXC__Priority__c}" rendered="true" />
+                <apex:inputField id="Billing" style="height:24px;" value="{!WOHeader.SVMXC__Billing_Type__c}" rendered="true" />
+
+            </apex:pageBlockSection>   
+         <apex:pageblockSection title="{!TAG010}" columns="1" dir="LTR">
+             <apex:inputfield value="{!WOHeader.SVMXC__Problem_Description__c}" style="width:450px;height:100px"/>     
+        </apex:pageBlockSection>
+        
+        </apex:pageBlock> 
+      
+       <!-- <apex:detail relatedList="false" title="Case Record" rendered="true"/> -->
+        
+    </apex:form>
+
+</apex:page>

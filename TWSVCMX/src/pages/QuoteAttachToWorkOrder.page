@@ -1,0 +1,62 @@
+<apex:page controller="Quote1" action="{!AttachToWorkOrder}" > 
+	<apex:form >
+		<apex:pageBlock id="block1" title="Create Work Order from Quote: {!quoteName}">                 
+            <apex:pageBlockButtons location="top" style="text-align:center;">   
+                <apex:commandButton action="{!Save}" value="Create Order"/>
+                <apex:commandButton action="{!Cancel}" value="Cancel/Return to Quote"/>              
+            </apex:pageBlockButtons> 
+            <apex:pageBlockSection columns="2">
+				<apex:outputField value="{!quote.Name}"/>	
+				<apex:outputField value="{!quote.Status}"/>				
+				<apex:outputField value="{!quote.Opportunity.Name}"/>				
+				<apex:outputField value="{!quote.GrandTotal}"/>		
+				<apex:outputField value="{!quote.Opportunity.AccountId}"/>											       
+			</apex:pageBlockSection>                      
+        </apex:pageBlock>
+        
+        <apex:pageBlock id="block3" title="Work Order">
+			<apex:pageBlockSection columns="1">				
+				<apex:inputField value="{!wo.SVMXC__Priority__c}"/>
+				<apex:inputField value="{!wo.SVMXC__Order_Type__c}"/>
+				<apex:pageBlockSectionItem >
+					<apex:outputText value="Problem Description"/>
+					<apex:inputTextArea value="{!wo.SVMXC__Problem_Description__c}" style="width:600px; height:100px;"/>
+				</apex:pageBlockSectionItem>	
+			</apex:pageBlockSection> 
+		</apex:pageBlock>
+		 
+        <apex:pageBlock id="block2" title="Quote Lines">                 
+            <apex:pageBlockTable value="{!quotelines}" var="quoteLine">
+            	<apex:column width="80px">
+					<apex:facet name="header"><apex:outputText value="Product"/></apex:facet>
+					<apex:outputField value="{!quoteLine.PricebookEntry.Product2Id}"/>
+				</apex:column>
+				<apex:column width="80px">
+					<apex:facet name="header"><apex:outputText value="List Price"/></apex:facet>
+					<apex:outputField value="{!quoteLine.ListPrice}"/>
+				</apex:column>
+				<apex:column width="80px">
+					<apex:facet name="header"><apex:outputText value="Sales Price"/></apex:facet>
+					<apex:outputField value="{!quoteLine.UnitPrice}"/>
+				</apex:column>
+				<apex:column width="80px">
+					<apex:facet name="header"><apex:outputText value="Quantity"/></apex:facet>
+					<apex:outputField value="{!quoteLine.Quantity}"/>
+				</apex:column>
+				<apex:column width="80px">
+					<apex:facet name="header"><apex:outputText value="Total Price"/></apex:facet>
+					<apex:outputField value="{!quoteLine.TotalPrice}"/>
+				</apex:column>
+            </apex:pageBlockTable>                     
+        </apex:pageBlock> 
+		 
+	</apex:form>
+</apex:page>
+  
+<!-- 
+	<apex:outputPanel > 
+		<b><font color="red"><apex:messages /></font></b>
+	</apex:outputPanel> 		
+	<apex:detail ></apex:detail>  
+--> 
+ <!-- <apex:page ></apex:page>-->

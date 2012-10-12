@@ -1,0 +1,309 @@
+<apex:page controller="SVMXC.CONF_SetupAction">
+    <apex:form >
+        <style>
+.disableTab {
+    background-color: Lightgrey;
+    color: LightGrey;
+    background-image: none;
+    font-size: 1.2em;
+}
+
+.titleFont {
+    fint-size: 8px;
+    font-weight: bold;
+    allign: center;
+}
+</style>
+        <apex:pageBlock helpTitle="{!TAG024}" helpUrl="{!HLPURL}" id="BLOCK1" mode="edit" >
+            <apex:actionStatus id="processing" startText="{!TAG019}" />
+            <apex:actionFunction id="func" name="func" reRender="BLOCK1"
+                action="{!WndwHgtWdt}" status="processing" />
+            <apex:actionFunction id="func2" name="func2" reRender="BLOCK1"
+                action="{!isFullWindow}" status="processing" />
+                <apex:pageBlockSection columns="1">
+                    <apex:pageblockSectionItem >
+                        <apex:outputLabel value="{!PageBlockTitle}" style="font-size: 1.3em;font-family: Arial, Helvetica, sans-serif;font-weight: bold;"></apex:outputLabel>
+                    </apex:pageblockSectionItem>
+                </apex:pageBlockSection>
+            <apex:pageBlockSection columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockSection columns="2">
+                            <apex:outputLabel value="{!TAG058}" styleClass="titleFont"></apex:outputLabel>
+                            <apex:selectList size="1" value="{!strActnType}" style="width:200px"  disabled="{!chkActnTyp}" onchange="onChngActnType()"><!-- disabled="true" -->
+                                <apex:selectOptions value="{!ActnTypeOptns}" />
+                            </apex:selectList>
+                    </apex:pageBlockSection>
+                    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                </apex:pageBlockSectionItem>
+                
+            </apex:pageBlockSection>
+            <apex:pageMessages id="MSG" />
+            <apex:actionFunction id="func3" name="onChngActnType" reRender="BLOCK1" action="{!onChngActnType}" status="processing" />
+            <apex:pageBlock rendered="{!chkActnTyp}">
+                <apex:pageBlockButtons location="top">
+                    <apex:commandButton value="{!TAG002}" disabled="{!disabled}"
+                        action="{!quickSave}" status="processing" reRender="BLOCK1,MSG" />
+                    <apex:commandButton value="{!TAG003}" disabled="{!disabled}"
+                        action="{!saveAndClose}" />
+                    <apex:commandButton value="{!cancelBack}" action="{!cancel}" />
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection columns="2">
+                    <apex:pageblockSectionItem >
+                        <apex:pageBlockSection columns="2">
+                            <!-- Row 1 starts here -->
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="{!TAG005}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:selectList size="1" value="{!SelectedSourceObject}"
+                                    disabled="true">
+                                    <apex:selectOptions value="{!ObjectsWithAction}" />
+                                </apex:selectList>
+                            </apex:pageBlockSectionItem>
+                            <!-- Row 1 ends here -->
+
+                            <!-- Row 2 starts here -->
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="{!TAG009}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                    <apex:inputText value="{!actnTitle}" disabled="{!disabled}"></apex:inputText>
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                            <!-- Row 2 ends here -->
+                            <!-- Row 3 starts here -->
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="{!TAG011}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                    <apex:inputText value="{!actnId}" disabled="{!disabled}"
+                                        id="actnId"></apex:inputText>
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                            <!-- Row 3 ends here -->
+                            <!-- Row 4 starts here -->
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="{!TAG010}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                                <apex:inputTextArea style="width:200px;" value="{!description}"
+                                    disabled="{!disabled}"></apex:inputTextArea>
+                            </apex:pageBlockSectionItem>
+                            <!-- Row 4 ends here -->
+                        </apex:pageBlockSection>
+                    </apex:pageblockSectionItem>
+
+                    <apex:pageblockSectionItem >
+                        <apex:pageBlockSection columns="2">
+                            <!-- Row 1 starts here -->
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:outputLabel value="{!TAG006}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:selectList size="1" style="width:200px;"
+                                    value="{!URLTrgtType}" disabled="{!disabled}" onchange="func()">
+                                    <apex:selectOptions value="{!URLType}" />
+                                </apex:selectList>
+                            </apex:pageBlockSectionItem>
+                            <!-- Row 1 ends here -->
+                            <!-- Row 2 starts here -->
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:outputLabel value="{!TAG007}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                    <apex:inputText value="{!URL}" disabled="{!disabled}"></apex:inputText>
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                            <!-- Row 2 ends here -->
+                            <!-- Row 3 starts here -->
+                            <!-- check box for the full screen -->
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:outputLabel value="{!TAG057}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:inputCheckbox value="{!openAsFullWindow}"
+                                    onclick="func2()" disabled="{!disabled}" />
+                            </apex:pageBlockSectionItem>
+
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:outputLabel value="{!TAG012}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:inputText style="width:200px;" value="{!wndwHgt}"
+                                    disabled="{!DisableHeightWidthFields}"></apex:inputText>
+                            </apex:pageBlockSectionItem>
+                            <!-- Row 3 ends here -->
+                            <!-- Row 4 starts here -->
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:outputLabel value="{!TAG013}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:inputText style="width:200px;" value="{!wndwWdt}"
+                                    disabled="{!DisableHeightWidthFields}"></apex:inputText>
+                            </apex:pageBlockSectionItem>
+                            <!-- Row 4 ends here -->
+                            <!-- Row 5 starts here -->
+                            <!-- <apex:pageBlockSectionItem > 
+                                <apex:outputLabel value="{!TAG016}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem> -->
+                            <!--  Uncomment to implement isActive feature -->
+                            <!-- <apex:pageBlockSectionItem > 
+                                <apex:inputCheckbox value="{!isActive}" disabled="{!disabled}"/>
+                            </apex:pageBlockSectionItem> -->
+                            <!--  Uncomment to implement isActive feature -->
+                            <!-- Row 5 ends here -->
+                            <!-- Row 6 starts here -->
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:outputLabel value="{!TAG055}" style="font-weight:bold;"></apex:outputLabel>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem rendered="{!chkActnTypURL}">
+                                <apex:inputCheckbox value="{!showScrollbars}"
+                                    disabled="{!disabledScrollbar}" />
+                            </apex:pageBlockSectionItem>
+                            <!-- Row 6 ends here -->
+                            <!-- Row 7 for Name Space Start-->
+                                <apex:pageBlockSectionItem rendered="{!NOT(chkActnTypURL)}">
+                                    <apex:outputLabel value="{!TAG060}" style="font-weight:bold;"></apex:outputLabel>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem rendered="{!NOT(chkActnTypURL)}">
+                                    <apex:outputPanel >
+                                        <apex:inputText value="{!strNmSps}" disabled="{!disabled}"></apex:inputText>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                            <!-- Row 7 for Name Space End-->
+                            <!-- Row 7 for Class Start-->
+                                <apex:pageBlockSectionItem rendered="{!NOT(chkActnTypURL)}">
+                                    <apex:outputLabel value="{!TAG061}" style="font-weight:bold;"></apex:outputLabel>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem rendered="{!NOT(chkActnTypURL)}">
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                        <apex:inputText value="{!strClsNm}" disabled="{!disabled}"></apex:inputText>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                            <!-- Row 7 for Class End-->
+                            <!-- Row 7 for Method Start-->
+                                <apex:pageBlockSectionItem rendered="{!NOT(chkActnTypURL)}">
+                                    <apex:outputLabel value="{!TAG062}" style="font-weight:bold;"></apex:outputLabel>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem rendered="{!NOT(chkActnTypURL)}">
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                        <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                        <apex:inputText value="{!strMethNm}" disabled="{!disabled}"></apex:inputText>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                            <!-- Row 7 for Method End-->
+                            <!-- Row 7 for Processing MSG Start-->
+                                <apex:pageBlockSectionItem rendered="{!NOT(chkActnTypURL)}">
+                                    <apex:outputLabel value="{!TAG063}" style="font-weight:bold;"></apex:outputLabel>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem rendered="{!NOT(chkActnTypURL)}">
+                                    <apex:outputPanel >
+                                        <apex:inputText value="{!strPrcssingMsg}" disabled="{!disabled}"></apex:inputText>
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                            <!-- Row 7 for Processing MSG End-->
+                        </apex:pageBlockSection>
+                    </apex:pageblockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            <!-- Section 1 ends here -->
+
+            <!-- Section 2 starts here -->
+            <apex:pageBlock id="BLOCK2" rendered="{!chkActnTyp}">
+                <apex:actionFunction id="func1" name="func1"
+                    action="{!onChngParamType}" reRender="TABLE" status="processing1">
+                    <!--  -->
+                    <apex:param name="paramType" assignTo="{!paramType}" value="" />
+                </apex:actionFunction>
+                <apex:pageBlockSection columns="3" collapsible="false">
+                    <center>
+                        <apex:toolbar id="theToolbar" styleClass="disableTab" width="75%"
+                            style="text-align:left">
+                            <apex:toolbarGroup location="left" id="toolbarGroupForm">
+                                <apex:outputText value=" " />
+                            </apex:toolbarGroup>
+                            <apex:toolbarGroup location="left" id="toolbarGroupForm1">
+                                <apex:outputText value="{!TAG014}"
+                                    style="font-weight: bold;font-Size:13px" />
+                            </apex:toolbarGroup>
+                        </apex:toolbar>
+                    </center>
+                </apex:pageBlockSection>
+
+                <center>
+                    <apex:pageBlockSection columns="1">
+                        <apex:pageBlockSectionItem dataStyle="text-align:center;">
+                            <apex:outputText value="     "
+                                style="width:10%;padding-left:0px;left:0px;"></apex:outputText>
+                            <apex:pageBlockSection columns="6">
+                                <apex:pageBlockSectionItem dataStyle="text-align:right;">
+                                    <apex:commandButton value="{!TAG027}" style="font-weight:bold;"
+                                        action="{!addLines}" disabled="{!disabled}" reRender="TABLE"
+                                        status="processing1" />
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                                    <apex:commandButton value="{!TAG017}" action="{!delLines}"
+                                        onClick="{if(!confirm('{!TAG018}')){return false}}"
+                                        disabled="{!disabled}" reRender="BLOCK2,MSG"
+                                        status="processing1" />
+                                </apex:pageBlockSectionItem>
+                                &nbsp;&nbsp;&nbsp;
+                            </apex:pageBlockSection>
+                        </apex:pageBlockSectionItem>
+                        <!-- Table for Parameter Information Starts Here-->
+                        <apex:actionStatus id="processing1" startText="{!TAG019}" />
+                        <apex:pageBlockTable value="{!ActionParam}" var="ParaInfo"
+                            align="Left" columns="5" id="TABLE">
+                            <apex:column >
+                                <apex:facet name="header">{!TAG008}</apex:facet>
+                                <apex:inputField value="{!ParaInfo.SVMXC__Select__c}" id="cstSelected" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG015}</apex:facet>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                    <apex:inputField value="{!ParaInfo.SVMXC__Parameter_Name__c}"
+                                        id="cstName"></apex:inputField>
+                                </apex:outputPanel>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG021}</apex:facet>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                    <apex:selectList size="1" value="{!ParaInfo.SVMXC__Parameter_Type__c}"
+                                        onchange="func1(this.value);" id="parameterType">
+                                        <apex:selectOptions value="{!ParamTypePckLst}" />
+                                    </apex:selectList>
+                                </apex:outputPanel>
+                            </apex:column>
+                            <apex:column id="valueColumn">
+                                <apex:facet name="header">{!TAG022}</apex:facet>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                    <apex:outputPanel layout="block" styleClass="requiredBlock" />
+                                    <apex:selectList size="1"
+                                        value="{!ParaInfo.SVMXC__Parameter_Value__c}"
+                                        rendered="{!if((ParaInfo.SVMXC__Parameter_Type__c == TAG042),true,false)}">
+                                        <apex:selectOptions value="{!FieldsOfObjectWithAction}" />
+                                    </apex:selectList>
+                                    <apex:inputField value="{!ParaInfo.SVMXC__Parameter_Value__c}"
+                                        id="cstValue"
+                                        rendered="{!if((ParaInfo.SVMXC__Parameter_Type__c == TAG043),true,false)}"></apex:inputField>
+                                </apex:outputPanel>
+                            </apex:column>
+                        </apex:pageBlockTable>
+                        <!-- Table for Parameter Information Ends Here-->
+                    </apex:pageBlockSection>
+                </center>
+            </apex:pageBlock>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

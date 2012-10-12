@@ -1,0 +1,55 @@
+<apex:page controller="SVMXC.SFM_TDM_Designer" id="page1" >
+<apex:form id="form1" style="scroll:auto" >
+<style type="text/css" media="screen">
+    html, body { width:100%;height:100%; background-color: #ffffff;}
+    body { margin:0;  padding:0; }
+    #flashContent { width:100%; height:100%;}
+</style>
+    <script type="text/javascript">
+        var usrTimeFormat = UserContext.timeFormat;
+        var swf = document.getElementById('SFM_DesignerSWF');
+        var swf1 = document.getElementById('SFM_DesignerSWF1');
+        if( swf != null && swf != "" )
+            swf.height = screen.height - 130;
+        else if(swf1 != null && swf1 != "")
+            swf1.height = screen.height - 130;
+        
+        function getTimeFormat()
+        {
+            return usrTimeFormat; 
+        }
+    
+        function getStaticResourceURL(lang)
+        {
+            var url = "";
+            
+            if(lang == "zh_CN")
+            {
+                url = "{!$Resource.SFM_LANG_zh_CN}";
+            }
+            else if(lang == "zh_TW")
+            {
+                url = "{!$Resource.SFM_LANG_zh_TW}";
+            }
+            else if(lang == "ja_JP")
+            {
+                url = "{!$Resource.SFM_LANG_ja_JP}";
+            }
+            
+            return url;
+        }
+    </script>
+    <div id="flashContent"> 
+        <object id="SFM_DesignerSWF" width="100%" height="680Px" align="middle" >
+            <param name="wmode" value="window"/>
+            <param name="allowScriptAccess" value="always" />
+            <param name="movie" value="{!URLFOR($Resource.SFM_TDM_Designer,'SFM_Designer/bin-release/Main.swf')}" />
+            <param name="quality" value="high" />
+            <param name="bgcolor" value="#ffffff" />
+            <param name="FlashVars" value="sessionID={!$Api.Session_ID}&serverURL={!$Api.Partner_Server_URL_90}&SVMX_retURL={!returnURL}&userAuthTag={!userAuthTag}&loadingTag={!loadingTag}&loadingProcTag={!loadingProcTag}&welcomeTag={!welcomeTag}&SVMX_ShowPrivate={!ShowPrivate}"/>
+            <embed id="SFM_DesignerSWF1" src="{!URLFOR($Resource.SFM_TDM_Designer,'SFM_Designer/bin-release/Main.swf')}" width="100%" height="680Px" autostart="false" quality="high" bgcolor="#ffffff" FlashVars="sessionID={!$Api.Session_ID}&serverURL={!$Api.Partner_Server_URL_90}&SVMX_retURL={!returnURL}&userAuthTag={!userAuthTag}&loadingTag={!loadingTag}&loadingProcTag={!loadingProcTag}&welcomeTag={!welcomeTag}&SVMX_ShowPrivate={!ShowPrivate}" name="main" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="window"/>
+         </object>
+    </div>
+
+</apex:form>
+</apex:page>

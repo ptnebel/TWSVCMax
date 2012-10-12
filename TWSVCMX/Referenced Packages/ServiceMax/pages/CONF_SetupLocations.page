@@ -1,0 +1,234 @@
+<apex:page controller="SVMXC.CONF_SetupLocations" id="CONF_SetupLocations">
+    <script src="{!URLFOR($Resource.SVMX_resources,'SVMXC_resources/SVMX_Tree/Dynatree/jquery.min.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.SVMX_resources,'SVMXC_resources/SVMX_Tree/Dynatree/jquery-ui.custom.min.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.SVMX_resources,'SVMXC_resources/SVMX_Tree/Dynatree/jquery.dynatree.min.js')}" type="text/javascript"></script>    
+    <link rel="stylesheet" href="{!URLFOR($Resource.SVMX_resources,'SVMXC_resources/SVMX_Tree/Dynatree/skin/ui.dynatree.css')}"/>
+    <apex:form id="SVMX_FORM">
+        <style type="text/css">
+            .sectionHeading {background:LightGrey; width:100%}
+            .sectionHeadingTxt {font-weight: bold; font-size: 13px; padding:2px 0; display:block; text-align:center;}
+            .lblCLass {display:inline-block; padding:3px 0 0 0; font-size:12px; color: #000000;font-weight: bold;text-align: left;}
+            .bPageBlock .detailList .labelCol {border:none !important;}
+            .inputField {width:80%;}
+            .selectListH {width:50%; height:23px; padding-top:3px 0 1px}
+            ul.dynatree-container {border:none; background-color: none}
+            span.dynatree-node {display:block}
+            ul.dynatree-container {font-family:inherit; background-color: none}
+            .bPageBlock .labelCol {text-align: left;}
+            ul.dynatree-container {background-color:none !important;}
+            .bPageBlock .detailList tr td, .bPageBlock .detailList tr th, .hoverDetail .bPageBlock .detailList tr td, .hoverDetail .bPageBlock .detailList tr th {border:none !important}
+            span.dynatree-folder a {
+                background:url("https://svmxc.na5.visual.force.com/resource/1323183812000/SVMXC__Dynatree/Dynatree/skin/icons.gif")
+                font-weight: bold;
+            
+            }
+        </style>
+        <apex:actionfunction id="QuerySelLoc" name="QuerySelLoc" action="{!QuerySelLoc}" reRender="Sec" status="status1">
+            <apex:param assignTo="{!locID}" id="locID" value="locID" name="locID"/>
+        </apex:actionfunction>
+        
+        <apex:pageBlock title="{!TAG001}" id="pgBlock" helptitle="{!HLPTITLE}" helpurl="{!HLPURL}">
+            <apex:inputhidden value="{!delindex}" id="delindex"/>
+            <apex:inputhidden value="{!JSONString}" id="JSONString"/>
+            <script type="text/javascript">
+                var stringFromJSON = '';
+                function getJSONStringFromClass()
+                {   
+                    stringFromJSON = document.getElementById('{!$Component.JSONString}').value;
+                }
+                getJSONStringFromClass();
+                
+                $(function(){ 
+                    $("#tree").dynatree({                                                
+                        onActivate: function(node) {
+                            node.expand(true);
+                            QuerySelLoc(node.data.ID);
+                        },
+                        children: eval(stringFromJSON),
+                        classNames: {nodeIcon: "dynatree-icon-custom"}
+                    });
+                });
+                
+                
+                
+            </script>
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="{!TAG002}" action="{!quickSave}" reRender="SVMX_FORM" status="status1" id="saveButton"/>
+                <apex:commandButton value="{!TAG003}" action="{!saveClose}" status="status1"/>
+                <apex:commandButton value="{!TAG034}" action="{!cancel}" status="status1"/>
+                <apex:commandButton value="{!TAG031}" action="{!addTopLevel}" status="status1" reRender="SVMX_FORM"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageMessages id="pgMsg"/>
+            <apex:actionStatus id="status1" startText="{!TAG020}"/>
+    
+            <!-- <center style="background:LightGrey" id="center">
+                <apex:toolbar id="theToolbar1" width="100%">
+                    <apex:toolbarGroup location="left" id="theToolbar1toolbarGroup1" styleClass="sectionHeading">
+                        <apex:outputText value="{!TAG034}" styleClass="sectionHeadingTxt" />
+                    </apex:toolbarGroup>
+                </apex:toolbar>
+            </center> -->
+            
+            <div style="clear:both; width:100%; margin:10px 0; overflow:hidden;">
+                <div style="float:left; width:100%;overflow:auto;height:200px">
+                    <div id="tree"></div>
+                </div>
+                <div style="float:left; width:60%;"></div>
+            </div>
+            
+            <apex:actionStatus id="status3" startText="{!TAG020}"/>
+            <apex:pageblockSection columns="1" id="Sec">
+                
+                <center style="background:LightGrey; clear:both;" id="center1">
+                    <apex:toolbar id="theToolbar2" width="100%" rendered="{!renderDetail}">
+                        <apex:toolbarGroup location="left" id="theToolbar1toolbarGroup2" styleClass="sectionHeading">
+                            <apex:outputText value="{!TAG006}" styleClass="sectionHeadingTxt" />
+                        </apex:toolbarGroup>
+                    </apex:toolbar>
+                </center>
+            
+                <apex:pageblockSection columns="1">
+                    <apex:pageBlockSectionItem dataStyle="text-align:center;">
+                        <apex:outputPanel >
+                            <apex:commandButton value="{!TAG024}" action="{!addLevel}" reRender="Sec,pgMsg" rendered="{!renderDepotParentBtns}" status="status3"/>
+                            <apex:commandButton value="{!TAG025}" action="{!addDepot}" reRender="Sec,pgMsg" rendered="{!renderDepotParentBtns}" status="status3"/>
+                            <apex:commandButton value="{!TAG026}" action="{!outboundRouting}" rendered="{!renderOutboundBtn}" status="status3"/>
+                            <apex:commandButton value="{!TAG053}" action="{!deliveryRule}" rendered="{!renderOutboundBtn}" status="status3"/>
+                            <apex:commandButton value="{!TAG041}" rendered="{!renderDepotChild}" status="status3" onclick="javascript:window.open('{!ValidateAddress}','','width=600,height=250')"/>
+                            <apex:commandButton value="{!TAG042}" action="{!deleteLoc}" rendered="{!((renderDepotChild || renderDepotParentBtns) && NOT(renderCancelBtn))}" status="status3" onClick="javascript:{if(!confirm('{!TAG010}')){return false;}}" reRender="SVMX_FORM"/>
+                            <apex:commandButton value="{!TAG004}" action="{!cancelToNew}" reRender="Sec" rendered="{!renderCancelBtn}" status="status3"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageblockSection>
+                
+                <apex:actionFunction id="onChngLocType" name="onChngLocType" action="{!onChngLocType}" rerender="SecSec1,pgMsg" status="status3"/>
+                <apex:pageblockSection columns="2" rendered="{!renderDetail}" id="SecSec1">
+                    <apex:pageBlockSectionItem dataStyle="text-align:left;">
+                            <apex:outputLabel value="{!TAG007}" styleClass="lblCLass"/>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!locToDisplay.Name}" styleClass="inputField"/>
+                            </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!renderDepotChild}" dataStyle="text-align:left;">
+                        <apex:outputLabel value="{!TAG008}" styleClass="lblCLass"/>
+                        <apex:selectList value="{!locToDisplay.SVMXC__Location_Type__c}" onChange="onChngLocType()" size="1" style="width:80%">
+                            <apex:selectOptions value="{!lstLocType}"/>
+                        </apex:selectList>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!renderDepotChild}">
+                        <apex:outputLabel value="{!TAG011}" styleClass="lblCLass"></apex:outputLabel>                          
+                        <apex:inputTextarea value="{!locToDisplay.SVMXC__Street__c}" style="width:80%; height:60px" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!renderAccountLookup}">
+                        <apex:outputLabel value="{!TAG009}" styleClass="lblCLass"/>
+                        <apex:inputField id="theLookup" styleClass="inputField"  value="{!locToDisplay.SVMXC__Account__c}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!(NOT(renderAccountLookup))}">
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!renderDepotChild}">
+                       <apex:outputLabel value="{!TAG014}" styleClass="lblCLass"></apex:outputLabel>
+                       <apex:inputField value="{!locToDisplay.SVMXC__City__c}" styleClass="inputField" />
+                    </apex:pageBlockSectionItem>
+                   <apex:pageBlockSectionItem rendered="{!renderDepotChild}">
+                       <apex:outputLabel value="{!TAG015}" styleClass="lblCLass"></apex:outputLabel>
+                       <apex:inputField value="{!locToDisplay.SVMXC__Latitude__c}" styleClass="inputField" />
+                   </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!renderDepotChild}">
+                       <apex:outputLabel value="{!TAG016}" styleClass="lblCLass"></apex:outputLabel>
+                       <apex:inputField value="{!locToDisplay.SVMXC__State__c}" styleClass="inputField" />
+                    </apex:pageBlockSectionItem>
+                   <apex:pageBlockSectionItem rendered="{!renderDepotChild}">
+                       <apex:outputLabel value="{!TAG017}" styleClass="lblCLass"></apex:outputLabel>
+                       <apex:inputField value="{!locToDisplay.SVMXC__Longitude__c}" styleClass="inputField" />
+                   </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!renderDepotChild}">
+                       <apex:outputLabel value="{!TAG012}" styleClass="lblCLass"></apex:outputLabel>
+                       <apex:inputField value="{!locToDisplay.SVMXC__Zip__c}" styleClass="inputField" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!renderDepotChild}">
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!renderDepotChild}">
+                        <apex:outputLabel value="{!TAG013}" styleClass="lblCLass"></apex:outputLabel>
+                        <apex:inputField styleClass="inputField"  value="{!locToDisplay.SVMXC__Country__c}"/>
+                    </apex:pageBlockSectionItem>
+                </apex:pageblockSection>
+                
+                <center style="background:LightGrey" id="center3">
+                    <apex:toolbar id="theToolbar4" width="100%" rendered="{!renderDepotChild}">
+                        <apex:toolbarGroup location="left" id="theToolbar1toolbarGroup4" styleClass="sectionHeading">
+                            <apex:outputText value="{!TAG018}" styleClass="sectionHeadingTxt" />
+                        </apex:toolbarGroup>
+                    </apex:toolbar>
+                </center>
+                
+                <apex:actionFunction id="IsGoodLocAction" name="IsGoodLocAction" reRender="Sec3" action="{!IsGoodLocAction}" status="status2">
+                	<apex:param name="frstParametr" assignTo="{!LstIndex}" value="" />
+                </apex:actionFunction>
+                
+                <apex:pageblockSection columns="1" rendered="{!renderDepotChild}" id="Sec3">
+                    <apex:actionStatus id="status2" startText="{!TAG020}"/>
+                    <apex:pageBlockTable id="DepotChildTable" value="{!LstDepotChildLocWrap}" var="item" cellPadding="4" width="100%" rendered="{!renderDepotChild}">
+                        <apex:column style="font-Size:12px;width:30%;">
+                            <apex:facet name="header">{!TAG019}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:inputField value="{!item.Loc.Name}" styleClass="inputField"/>
+                            </apex:outputPanel>
+                        </apex:column>
+                        <apex:column style="font-Size:12px;width:30%;">
+                            <apex:facet name="header">{!TAG021}</apex:facet>
+                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                <apex:selectList value="{!item.selFunction}" size="1" onchange="IsGoodLocAction({!item.index})">
+                                    <apex:selectOptions value="{!lstFunction}"/>
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </apex:column>
+                        <apex:column style="font-Size:12px;width:30%;">
+                            <apex:facet name="header">{!TAG022}</apex:facet>
+                            <apex:inputCheckBox id="IsGoodLocId" value="{!item.IsGoodLoc}" styleClass="inputField" disabled="{!if((item.selFunction == 'Is Delivery Location' || item.selFunction == 'Is Default Delivery'),false,true)}"/> <!--(!item.selFunction == 'Is Delivery Location');-->
+                       
+							
+                        </apex:column>
+                        <apex:column style="font-Size:10px;width:7px;height:7px;width:8%;">
+                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!deleteDepotChild}" id="deleteRow" title="{!Tag055}" status="status2" reRender="Sec3" onclick="javascript:{if(!confirm('{!TAG010}')){return false;}}document.getElementById('{!$Component.DelIndex}').value = {!item.index}"/>
+                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="addRow" action="{!addDepotChild}" id="addRow" status="status2" reRender="Sec3" title="{!Tag054}" rendered="{!if((lstDipotChildLocSize > 0 && lstDipotChildLocSize == item.index),true,false)}"/>
+                        </apex:column>
+                    </apex:pageBlockTable>
+                    <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!addDepotChild}" id="addRow1" status="status2" reRender="Sec3" title="{!Tag054}" rendered="{!if((lstDipotChildLocSize == 0 ) ,true,false)}"/>
+                </apex:pageblockSection>
+                
+                <script>
+                    function showBar()
+                    {
+                        if({!renderDepotChild})
+                        {
+                            document.getElementById('center1').style.display = 'block';
+                            document.getElementById('center2').style.display = 'block';
+                        }
+                        else
+                        {
+                            document.getElementById('center1').style.display = 'none';
+                            document.getElementById('center2').style.display = 'none';
+                        }
+                    }
+                    showBar();
+                </script>
+                
+                <script>
+                    function showBar3()
+                    {   
+                        if({!renderDepotChild})
+                            document.getElementById('center3').style.display = 'block';
+                        else
+                            document.getElementById('center3').style.display = 'none';
+                    }
+                    showBar3();
+                </script>
+                
+            </apex:pageblockSection>
+        </apex:pageBlock>
+    </apex:form>    
+</apex:page>

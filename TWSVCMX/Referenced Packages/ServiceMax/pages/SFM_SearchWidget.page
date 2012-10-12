@@ -1,0 +1,71 @@
+<apex:page id="SearchId" controller="SVMXC.SFM_SearchWidget">
+    <apex:form id="SFMSearchFrm1" style="background:none !important;">
+        <style type="text/css">           
+            body {                
+                margin: 0;
+                padding: 0;
+                width:100%;
+                background: none !important;
+                }
+                .outer td.oRight{background: none !important;}
+                .selectBox{
+                    margin-bottom: 5px; width: 90%; font-size: 100%;
+                }
+                .inputBox{
+                    width: 70%; margin-left: 1px; margin-right: 3px; font-size: 100%; padding:2px;
+                }
+                .goBtn{
+                    color: #333;
+                    padding: 2px 3px;
+                    border: 1px solid #B5B5B5;
+                    border-bottom-color: #7F7F7F;
+                    background: #efefef; /* Old browsers */
+                    background: -moz-linear-gradient(top, #ffffff 0%, #efefef 100%); /* FF3.6+ */
+                    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#efefef)); /* Chrome,Safari4+ */
+                    background: -webkit-linear-gradient(top, #ffffff 0%,#efefef 100%); /* Chrome10+,Safari5.1+ */
+                    background: -o-linear-gradient(top, #ffffff 0%,#efefef 100%); /* Opera11.10+ */
+                    background: -ms-linear-gradient(top, #ffffff 0%,#efefef 100%); /* IE10+ */
+                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#efefef',GradientType=0 ); /* IE6-9 */
+                    background: linear-gradient(top, #ffffff 0%,#efefef 100%); /* W3C */
+                    font-weight: bold;
+                    font-size: 12px;
+                    -moz-border-radius: 3px;
+                    -webkit-border-radius: 3px;
+                    border-radius: 3px;
+                    text-decoration:none;                    
+                }
+                .goBtn:hover{
+                    background: #e6f4ff; /* Old browsers */
+                    background: -moz-linear-gradient(top, #feffff 0%, #e6f4ff 100%); /* FF3.6+ */
+                    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#feffff), color-stop(100%,#e6f4ff)); /* Chrome,Safari4+ */
+                    background: -webkit-linear-gradient(top, #feffff 0%,#e6f4ff 100%); /* Chrome10+,Safari5.1+ */
+                    background: -o-linear-gradient(top, #feffff 0%,#e6f4ff 100%); /* Opera11.10+ */
+                    background: -ms-linear-gradient(top, #feffff 0%,#e6f4ff 100%); /* IE10+ */
+                    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#feffff', endColorstr='#e6f4ff',GradientType=0 ); /* IE6-9 */
+                    background: linear-gradient(top, #feffff 0%,#e6f4ff 100%); /* W3C */
+                    text-decoration:none;                    
+                }   
+                
+        </style>
+        
+        <script type="text/javascript">
+            window.onload = setFocus
+            function setFocus()
+            {
+                document.getElementById('hiddenElement').focus()
+            }
+        </script>
+        
+        <div id="SrchDivId" class="srchFormContainer">
+            <input id="hiddenElement" type="hidden" />
+            <apex:outputText style="font-weight:bold;display: block; padding: 0 0 5px;" value="{!$Label.svmxc__SFM003_TAG001}"/>
+            <apex:selectList size="1" value="{!selectedSearch}" styleClass="selectBox">
+                <apex:SelectOptions value="{!SearchDefLst}"/>
+            </apex:selectList>
+            <apex:inputText id="SearchKWId" value="{!keyWord}" styleClass="inputBox"  />
+            <apex:commandLink id="GoBtnId" title="{!$Label.svmxc__SFM003_TAG004}" value="{!$Label.svmxc__SFM003_TAG004}" styleClass="goBtn" action="{!launchSearchDelivery}" target="_parent"  />
+             
+        </div> 
+        
+   </apex:form>
+</apex:page>

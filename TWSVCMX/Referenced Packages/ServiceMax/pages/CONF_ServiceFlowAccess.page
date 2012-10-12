@@ -1,0 +1,168 @@
+<apex:page controller="SVMXC.CONF_ServiceFlowAccess" id="ProcessAccessPage">
+    <apex:form Id="FORM">
+        <script>
+            .titleFont
+                {
+                    fint-size : 8px;
+                    font-weight:bold;
+                    allign : center;
+                }
+        </script>
+        <!---------------------------------------- Upper Page Block for the List of the Profiles ---------------------------------------------->
+        <apex:pageBlock helpTitle="{!TAG020}" helpUrl="{!HlpUrl}" id="BLOCK1" title="{!TAG001}">
+            <apex:actionStatus id="processing" startText="{!TAG019}"/>
+            <apex:actionFunction id="func" name="func" reRender="PAGEBLOCK,pMsg1" action="{!OnChangeProfile}" status="processing"/>
+            <apex:pageMessages id="pMsg1" rendered="{!ShowMessage1}"/>
+            <apex:pageBlockButtons location="TOP">
+                <apex:commandButton value="{!TAG002}" action="{!quickSave}" status="processing" reRender="BLOCK1"/>
+                <apex:commandButton value="{!TAG004}" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection columns="2" id="SECTION1">
+                <apex:pageblockSectionItem >
+                    <apex:pageblockSection >
+                        <apex:outputText value="{!TAG018}" style="font-weight:bold;"/>
+                        <apex:selectList size="1" value="{!SelectedProfile}" onchange="func()">
+                            <apex:selectOptions value="{!profiles}"/>
+                        </apex:selectList>
+                    </apex:pageblockSection>
+                </apex:pageblockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+        <!-------------------------------- Lower Page Block Rendered only when one Profile is Selected from the Upper Block ----------------------------->
+        <apex:pageBlock id="PAGEBLOCK">
+            <apex:pageMessages id="pMsg2" rendered="{!ShowMessage2}"/>
+            <apex:commandButton value="{!TAG014}" action="{!onClickYes}" status="processing1" rendered="{!ShowButton}" reRender="PAGEBLOCK"/>
+            <apex:commandButton value="{!TAG015}" action="{!onClickNo}" status="processing1" rendered="{!ShowButton}" reRender="PAGEBLOCK"/>
+            
+            <!------------------------------------ Section for Listing the Objects -------------------------------------->
+            <apex:pageBlockSection columns="2" collapsible="false" rendered="{!Render}">
+                <apex:actionStatus id="processing1" startText="{!TAG019}"/>
+                <apex:actionFunction id="func1" name="func1" reRender="PAGEBLOCK,pMsg1" action="{!onChngObject}" status="processing1"/>
+                <apex:pageblockSectionItem >
+                    <apex:pageblockSection >
+                        <apex:outputText value="{!TAG009}" style="font-weight:bold;"/>
+                        <apex:selectList size="1" value="{!SelectedSourceObject}" onChange="func1()">
+                            <apex:selectOptions value="{!ObjectsWithAction}"/>
+                        </apex:selectList>
+                    </apex:pageblockSection>
+                </apex:pageblockSectionItem>
+            </apex:pageBlockSection>
+            
+            <!------------------------------------ Section for the Title -------------------------------------->
+            <apex:pageBlockSection columns="1" collapsible="false" rendered="{!Render}">
+                <center>
+                    <apex:toolbar id="theToolbar" width="40%" style="text-align:left;color:Lightgrey;background-color:Lightgrey;background-image:none;font-size:1.2em;">    
+                        <apex:toolbarGroup location="left" id="toolbarGroupForm1">
+                            <apex:outputText value="{!TAG010}" style="font-weight: bold;font-Size:13px;"/>
+                        </apex:toolbarGroup>
+                    </apex:toolbar>
+                </center>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="1" collapsible="false" rendered="{!Render}">
+                <apex:pageBlockSectionItem >
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="1" border="0" rowClasses="line">
+                        <apex:outputText >
+                            <td>
+                                <apex:outputText value="{!TAG011}" style="font-weight:bold;"/>
+                            </td>
+                            <td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                <apex:outputText value="{!TAG012}" style="font-weight:bold;"/>
+                            </td>
+                        </apex:outputText>
+                    </apex:panelGrid>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <!------------------------------------ Section for Listing the available and assigned Processes for view Process -------------------------------------->
+            <apex:pageBlockSection columns="1" id="processLst" collapsible="false" rendered="{!Render}">
+                <apex:pageBlockSectionItem >
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="1" border="0" rowClasses="line">
+                        <apex:outputText > 
+                            <td>
+                                <apex:selectList value="{!ViewProcess}" size="12" multiselect="true" style="width:275px">
+                                    <apex:selectOptions value="{!AvalViewProcess}" />
+                                </apex:selectList>
+                            </td>
+                            <td style="width:10px;height:100%;background-color:#FFFFFF;vertical-align:middle">    
+                                <apex:panelGrid cellspacing="7" cellpadding="0" width="40%" columns="1" style="text-align: center;">
+                                    <div>
+                                        <apex:commandButton action="{!OnAddViewProcess}" reRender="processLst,pMsg1" status="processing1" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Right_Bttn.JPG')}"/>
+                                        <apex:commandButton action="{!OnRemoveViewProcess}" reRender="processLst,pMsg1" status="processing1" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Left_Bttn.JPG')}"/>
+                                    </div>
+                                </apex:panelGrid>   
+                            </td>
+                            <td id="ablock">
+                                <apex:selectList value="{!ProcessAssigned}" size="12"  multiselect="true" style="width:275px">
+                                    <apex:selectOptions value="{!AssignedViewProcess}"/>
+                                </apex:selectList>
+                            </td>
+                        </apex:outputText>
+                    </apex:panelGrid>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <!------------------------------------ Section for the Title -------------------------------------->
+            <apex:pageBlockSection columns="1" collapsible="false" rendered="{!Render}">
+                <center>
+                    <apex:toolbar id="theToolbar" width="47%" style="text-align:left;color:Lightgrey;background-color:Lightgrey;background-image:none;font-size:1.2em;">
+                        <apex:toolbarGroup location="left" id="toolbarGroupForm1">
+                            <apex:outputText value="{!TAG013}" style="font-weight: bold;font-Size:13px;background-color:Lightgrey;" />
+                        </apex:toolbarGroup>
+                    </apex:toolbar>
+                </center>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection columns="1" collapsible="false" rendered="{!Render}">
+                <apex:pageBlockSectionItem >
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="1" border="0" rowClasses="line">
+                        <apex:outputText >
+                            <td>
+                                <apex:outputText value="{!TAG011}" style="font-weight:bold;"/>
+                            </td>
+                            <td>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </td>
+                            <td>
+                                <apex:outputText value="{!TAG012}" style="font-weight:bold;"/>
+                            </td>
+                        </apex:outputText>
+                    </apex:panelGrid>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <!------------------------------------ Section for Listing the available and assigned Processes for create Process -------------------------------------->
+            <apex:actionFunction name="AddProfile" action="{!OnAddCreateProcess}" rerender="createProcessLst" status="processing1"/>
+            <apex:actionFunction name="RemoveProfile" action="{!OnRemoveCreateProcess}" rerender="createProcessLst" status="processing1"/>
+                
+            <apex:pageBlockSection columns="1" id="createProcessLst" rendered="{!Render}">
+                <apex:pageBlockSectionItem >
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line">
+                        <apex:outputText > 
+                            <td>
+                                <apex:selectList value="{!ViewCreateProcess}" size="12" multiselect="true" style="width:275px" >
+                                    <apex:selectOptions value="{!AvalCreateProcess}" />
+                                </apex:selectList>
+                            </td>
+                            <td style="width:17px;height:100%;background-color:#FFFFFF;vertical-align:middle">
+                                <apex:panelGrid cellspacing="7" cellpadding="0" width="40%" columns="1" style="text-align: center;">
+                                    <div>
+                                        <apex:commandButton action="{!OnAddCreateProcess}" rerender="createProcessLst,pMsg1" status="processing1" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Right_Bttn.JPG')}"/>
+                                        <apex:commandButton action="{!OnRemoveCreateProcess}" rerender="createProcessLst,pMsg1" status="processing1" image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/Arrow_Left_Bttn.JPG')}"/>
+                                    </div>
+                                </apex:panelGrid>
+                            </td>
+                            <td id="ablock">
+                                <apex:selectList value="{!ProcessCreateAssigned}" size="12"  multiselect="true" style="width:275px">
+                                    <apex:selectOptions value="{!AssignedCreateProcess}"/>
+                                </apex:selectList>
+                            </td>
+                        </apex:outputText>
+                    </apex:panelGrid>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

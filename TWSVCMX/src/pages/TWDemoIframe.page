@@ -1,0 +1,4 @@
+<apex:page showHeader="false" sidebar="false">
+<iframe style="height:1000px; width:1000px;" src='https://DevAdmin:deVadM1n@rsdemo.thingworx.com/Thingworx/Runtime/index.html#master=ThingWorxSystemTarget&mashup=PlatformStats'/>
+
+</apex:page>

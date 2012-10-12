@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Service Group enables definition of your entire service organization. Service group definition includes details of group members, products in which the group specializes in, the skills available in the group, typical service delivery costs as well as geographies covered by the group.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Billable_Cost2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Average billable cost of service for this group or member</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Average billable cost of service for this group or member</inlineHelpText>
+        <label>Billable Amount</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Cost_Category__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of cost used for this group/member.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of cost used for this group/member.</inlineHelpText>
+        <label>Cost Category</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Straight</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Double Time</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Time and a Half</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>After Hours</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>On Call</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Travel</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Group_Member__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the group member. Is a lookup to an existing service group member in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the group member. Is a lookup to an existing service group member in ServiceMax</inlineHelpText>
+        <label>Technician/Equipment</label>
+        <referenceTo>Service_Group_Members__c</referenceTo>
+        <relationshipLabel>Team Labor Costs</relationshipLabel>
+        <relationshipName>Service_Group_Costs</relationshipName>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Hourly_Cost2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Average internal cost of service for this group or member</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Average internal cost of service for this group or member</inlineHelpText>
+        <label>Hourly Cost</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Checkbox used in ServiceMax screens to manage record selection</description>
+        <externalId>false</externalId>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Service_Group__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Name of the service group. Is a lookup to an existing service group in ServiceMax</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the service group. Is a lookup to an existing service group in ServiceMax</inlineHelpText>
+        <label>Service Team</label>
+        <referenceTo>Service_Group__c</referenceTo>
+        <relationshipLabel>Team Labor Costs</relationshipLabel>
+        <relationshipName>Service_Group_Costs</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <trackHistory>true</trackHistory>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <label>Team Labor Cost</label>
+    <nameField>
+        <displayFormat>SGCS-{00000000}</displayFormat>
+        <label>Record Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Team Labor Costs</pluralLabel>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Service_Group__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Group_Member__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Cost_Category__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Hourly_Cost2__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Billable_Cost2__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CREATEDBY_USER</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Service_Group__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Group_Member__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Cost_Category__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Hourly_Cost2__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Billable_Cost2__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CREATEDBY_USER</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Service_Group__c</searchFilterFields>
+        <searchFilterFields>Group_Member__c</searchFilterFields>
+        <searchFilterFields>Cost_Category__c</searchFilterFields>
+        <searchFilterFields>CREATEDBY_USER</searchFilterFields>
+        <searchFilterFields>Hourly_Cost2__c</searchFilterFields>
+        <searchFilterFields>Billable_Cost2__c</searchFilterFields>
+        <searchFilterFields>CREATED_DATE</searchFilterFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

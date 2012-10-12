@@ -1,0 +1,910 @@
+<apex:page id="TrackTechTeam" controller="SVMXC.SORG_ManageTeamTech"> 
+   <apex:sectionHeader title="{!TAG086}" subtitle="{!$User.FirstName}"/>   
+   <style type="text/css"> 
+        .customPopup{
+           background-color: #B0BFD2; 
+           border-style: solid;
+           border-width: 2px; 
+           left: 50%;
+           padding:10px;
+           position: absolute;
+           z-index: 9999;
+           /* These are the 3 css properties you will need to tweak so the popup displays in the center of the screen. First set the width. Then set            margin-left to negative half of what the width is. You can also add            the height property for a fixed size pop up.*/
+           width: 750px;
+           margin-left: -250px;
+           top:100px;
+       }
+       .activeTab {background-color: #8599B1 ;
+            margin:8px;
+            color: White;
+            background-image:none;
+            no-repeat;
+            font-size:1.2em;
+        }
+        .inactiveTab {
+            background-color : #B0BFD2 ;
+            color:Black;
+            background-image:none;
+            font-size:1.2em;
+        }
+        .disableTab {
+            background-color : Lightgrey ;
+            color:Black;           
+            font-size:1.2em;
+        }
+    </style>  
+    <script type="text/javascript">
+        function stopRKey(evt)
+        {
+            var evt = (evt) ? evt : ((event) ? event : null);
+            var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+            if ((evt.keyCode == 13) && (node.type=="text"))  
+            {
+                return false;
+            }
+        }
+        document.onkeypress = stopRKey;
+    </script>
+     
+    <script type="text/javascript">
+        function customSelectChecked( formname,type,value)
+        {  
+            var form = document.getElementById(formname);
+            var i = 0;
+            for (i = 0; i < form.elements.length; i++) {
+                if (form.elements[i].name.search(type) > 0 && form.elements[i].disabled == false) {
+                    form.elements[i].checked = value;
+                }
+            }
+        }  
+
+        function customSelectAllOrNoneByCheckbox(form,type,control)
+        {  customSelectChecked( form,type,control.checked); }   
+    
+        
+        function checkSelectAll(formname,type)
+        {
+            var form = document.getElementById(formname);
+            var isChecked = false;
+            for (i = 1; i < form.elements.length; i++) {
+                    if (form.elements[i].name.search(type) > 0 && form.elements[i].checked == true) {
+                        isChecked = true;
+                    }
+                }
+                if(isChecked == true)
+                return true;
+                else
+                return false;
+        }
+    </script>
+    <script  src="{!googleUrl}" type="text/javascript"></script> 
+    <script>
+        var ilstIndex2 = 0;
+        function SVMXC_GetAddress(street, city, state, country, zip,ObjectId) //By GM
+        {           
+            ilstIndex2 = 0;
+            var StreetVal = document.getElementById(street).value;
+            var CityVal = document.getElementById(city).value;
+            var StateVal = document.getElementById(state).value;
+            var CountryVal = document.getElementById(country).value;
+            var ZipVal = document.getElementById(zip).value;
+            //string ObjectId = ObjectId;
+            //alert(StreetVal);
+            var Address='' ;
+            if(StreetVal!=null){
+                Address = StreetVal+',';       
+            }
+            if(CityVal!=null){
+                Address = Address+CityVal+',';
+            }
+            if(StateVal!=null){
+                Address = Address+StateVal+',';
+            }
+            if(CountryVal!=null){
+                Address = Address+CountryVal+',';
+            }
+            if(ZipVal!=null){
+                Address = Address+ZipVal;
+            }
+            //alert(Address);
+            myGeocoder = new GClientGeocoder();
+            if (!myGeocoder){
+                return null;
+            }
+            myGeocoder.getLocations(Address,
+                function(response){
+                    //alert(response.Status.code );
+                    if (response && response.Status.code == 200){
+                        var place = response.Placemark[0];
+                        document.getElementById('TrackTechTeam:selected_ID:TTree:lstlat').value += ObjectId+'~'+place.Point.coordinates[1]+',';
+                        document.getElementById('TrackTechTeam:selected_ID:TTree:lstlon').value += ObjectId+'~'+place.Point.coordinates[0]+',';
+                    }
+                    if(ilstIndex2 == (document.getElementById('TrackTechTeam:selected_ID:REFRESHTABPANEL:PbHomeBase:addline').value - 1)){
+                        //alert(ilstIndex2);
+                        SaveHomBaseMthod();
+                    }
+                    ilstIndex2++;
+                    if(ObjectId=='Team'){
+                    SaveTeam();
+                    }                   
+                }
+            );     
+        } 
+        function SVMXC_GetAddressForTeamTech(street, city, state, country, zip,ObjectId) //By GM
+        {           
+            //alert('Test');
+            ilstIndex2 = 0;
+            var StreetVal = document.getElementById(street).value;
+            var CityVal = document.getElementById(city).value;
+            var StateVal = document.getElementById(state).value;
+            var CountryVal = document.getElementById(country).value;
+            var ZipVal = document.getElementById(zip).value;            
+            //alert(StreetVal);
+            var Address='' ;
+            if(StreetVal!=null){
+                Address = StreetVal+',';       
+            }
+            if(CityVal!=null){
+                Address = Address+CityVal+',';
+            }
+            if(StateVal!=null){
+                Address = Address+StateVal+',';
+            }
+            if(CountryVal!=null){
+                Address = Address+CountryVal+',';
+            }
+            if(ZipVal!=null){
+                Address = Address+ZipVal;
+            }
+            //alert(Address);
+            myGeocoder = new GClientGeocoder();
+            if (!myGeocoder){
+                return null;
+            }
+            myGeocoder.getLocations(Address,
+                function(response){
+                    //alert(response.Status.code );
+                    if (response && response.Status.code == 200){
+                        var place = response.Placemark[0];
+                        document.getElementById('TrackTechTeam:selected_ID:TTree:lat').value = place.Point.coordinates[1];
+                        document.getElementById('TrackTechTeam:selected_ID:TTree:lon').value = place.Point.coordinates[0];
+                    }                   
+                    if(ObjectId=='Tech'){
+                        SaveTech();
+                    }
+                    else if(ObjectId=='Team'){
+                        SaveTeam();
+                    }                           
+                }
+            );     
+        }       
+    </script>
+                
+    <link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/global.css')}"/> 
+    <link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxgrid.css')}"/> 
+    <link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxgrid_dhx_skyblue.css')}"/> 
+    <link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxgrid_dhx_black.css')}"/> 
+    <link rel="STYLESHEET" type="text/css" href="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxgrid_dhx_blue.css')}"/> 
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxcommon.js')}" type="text/javascript"></script> 
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxgrid.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxgridcell.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxgrid_excell_link.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxgrid_selection.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxgrid_nxml.js')}" type="text/javascript"></script>
+    <script src="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/dhtmlxtreegrid.js')}" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript" >
+		function RefreshSearch() {
+			setTimeout("location.reload(true);",1500);
+		}
+	</script>
+   
+    <apex:form id="selected_ID">            
+        <apex:pageBlock id="TTree" helpTitle="{!TAG161}" helpUrl="{!HLPURL}">         
+            <apex:PageMessages rendered="{!ParentPage}"/>
+            <b><apex:actionStatus id="LodingStatus"  startText="{!TAG087}" /></b>
+            <apex:pageBlockButtons id="pbtns" location="Top">
+                <apex:commandButton value="{!TAG001}" action="{!SVMX_AddnewTeam}" reRender="selected_ID" status="LodingStatus" disabled="{!DisableButtons}"/>               
+                <apex:commandButton value="{!TAG002}" action="{!SVMX_AddnewTech}" reRender="selected_ID" status="LodingStatus" disabled="{!DisableButtons}"/>             
+                <apex:commandButton value="{!TAG003}"  action="{!SVMX_EditTeamTech}" reRender="selected_ID" status="LodingStatus" disabled="{!DisableButtons}"/>                
+                <apex:commandButton value="{!TAG004}" id="DelButton" action="{!SVMX_DelTeamTechwithChild}" onClick="if(isttselected())if(!confirm('{!ConfirmMesg}')){return false;}" status="LodingStatus" disabled="{!DisableButtons}" tabindex="9"/>
+                <apex:commandButton value="{!TAG005}" action="{!SVMX_GoSetupHome}"status="LodingStatus" reRender="selected_ID"/>
+            </apex:pageBlockButtons>            
+            <apex:panelBar id="PanelBar">
+                <apex:panelBarItem label="{!TAG006}" headerClass="inactiveTab" Id="PBItem" expanded="true">            
+                    <apex:panelGrid columns="10" id="theMainGrid" width="100%">                        
+                        <apex:panelGroup id="theGroup1" style="align:right" id="PnlGrp2">
+                            <apex:outputText value="{!TAG007}"/>
+                            &nbsp;&nbsp;<apex:inputText id="Text" value="{!Keyword}" />              
+                            <apex:commandButton id="Search" value="{!TAG008}" action="{!SVMX_AdvTeamSearch}" status="LodingStatus" reRender="selected_ID" tabindex="1"/>
+                            <apex:commandButton value="{!TAG171}" onclick="javascript:RefreshSearch();" rendered="{!displayResetBtn}"/>
+                        </apex:panelGroup>                        
+                        <apex:panelGroup id="theGroup" style="align:left" id="PnlGrp1">             
+                            <apex:outputLabel value="{!TAG009}" for="Expertise"/>
+                            <apex:inputCheckbox id="ExprtChk" value="{!ExptSearch}"/>
+                            &nbsp;<apex:outputLabel value="{!TAG010}" for="Product"/>
+                            <apex:inputCheckbox id="ProChk" value="{!PrdctSearch}"/>
+                        </apex:panelGroup>    
+                
+                    </apex:panelGrid>      
+                </apex:panelBarItem>
+            </apex:panelBar>            
+            <apex:inputhidden id="Getselected_ID" value="{!TeamId}"/>            
+            <div style="width:100px;height:10px"></div>            
+            <div id="treeboxbox_tree" style="width:99%;height:180px;"></div>
+            <div style="width:100px;height:10px"></div>            
+            <script>            
+                /*DHTMLX*/
+                var mygrid;
+                var activeTheme="dhx_skyblue";
+                
+                function jr(){mygrid=new D('treeboxbox_tree');mygrid.eP=jD;buildGrid();};
+                
+                function dynamicDHTMLXinit(){
+                mygrid.setHeader(",{!JSENCODE(TAG160)},{!JSENCODE(TAG148)},{!JSENCODE(TAG149)},{!JSENCODE(TAG150)}");
+                mygrid.setInitWidths("20,250,200,200,*");
+                mygrid.setColAlign("center,left,left,left,left");
+                mygrid.setColTypes("ra,tree,ro,ro,ro");
+                mygrid.setColSorting(",str,str,str,str");                
+                mygrid.setSkin(activeTheme);
+                mygrid.init();
+                }
+                
+                var selectedId;
+                            
+                function buildGrid(){
+                mygrid.gN=true;
+                mygrid.eg="{!URLFOR($Resource.COMM_Resources4, 'SVMXDC_resources/dhtmlx/grid_tree/imgs/')}";
+                mygrid.attachEvent("onCheckbox",doOnCheck);
+                dynamicDHTMLXinit();
+                mygrid.bE('{!XMLResult}');
+                mygrid.xa();
+
+                if(document.getElementById('{!$Component.Getselected_ID}')){
+                selectedId=document.getElementById('{!$Component.Getselected_ID}').value;               
+                //tree.setCheck(selectedId,true);
+                }
+                };
+                
+                function setSkin(skinName){
+                if(skinName==activeTheme)return;
+                var cTh=document.getElementById(activeTheme);
+                var nTh=document.getElementById(skinName);
+                cTh.className="skinbutton sb_inactive";
+                nTh.className="skinbutton sb_active";
+                activeTheme=skinName;
+                mygrid.setSkin(skinName);
+                mygrid.eP("");
+                mygrid.setSizes();
+                mygrid.ahx();
+                return true;};
+                
+                function jD(colorsList){
+                this.setColumnColor(colorsList);
+                var colsNum=this.So();
+                for(var i=0;i<this.P.length;i++){
+                for(var j=0;j<colsNum;j++){
+                this.P[i].cells[j].bgColor=this.columnColor[j]||"";
+                }
+                }
+                };
+                
+                function jA(code,ctrl,shift){
+                if(code==67&&ctrl){
+                mygrid.lW("\t");
+                mygrid.wO()
+                }
+                if(code==86&&ctrl){
+                mygrid.ug()
+                }
+                return true;
+                };
+                //dE(window,"load",jr);
+                jr();
+                
+                function EnableChkbox(){
+                    if(document.getElementById('{!$Component.Getselected_ID}').value!=null){
+                        document.getElementById('{!$Component.Getselected_ID}').Checked=true;
+                    }
+                }
+                function doOnCheck(rowId,cellInd,state){                    
+                    //alert("User clicked on checkbox or radiobutton on row "+rowId+" and cell with index "+cellInd+".State changed to "+state);
+                        if(rowId!='undefined'){
+                            if(state==true){
+                               setId(rowId);
+                               }
+                            else{
+                                resetid();
+                               }
+                           }
+                    return true;
+                }
+                         
+               function setId(id){
+                document.getElementById('{!$Component.Getselected_ID}').value=id;
+                
+                //alert(id);
+                btnMove = document.getElementById("{!$Component.LISTATTRIBUTE}");
+                btnMove.click();
+               }
+               function resetid(){
+                btnMove = document.getElementById("{!$Component.HIDETTATTRIBUTE}");
+                btnMove.click();
+               }
+               
+            function isttselected(){
+            if(document.getElementById('{!$Component.Getselected_ID}').value!='')
+            return true;
+            else
+            return false;
+            }
+
+
+            function ClearFields(formname,pageblock,fieldids){
+            var form = document.getElementById(formname);
+                var fields=new Array();
+                fields = fieldids.split(",");
+                for (i = 0; i < form.elements.length; i++) {
+                    for(j = 0; j < fields.length; j++){
+                        if (form.elements[i].name.search(fields[j]) > 0 && form.elements[i].name.search(pageblock) > 0){
+                            form.elements[i].value = '';
+                            }
+                    }
+                }
+            }
+            
+        </script>
+        <apex:inputHidden value="{!latitude}" id="lat"/>
+        <apex:inputHidden value="{!longitude}" id="lon"/>
+        <apex:inputHidden value="{!lstlatitude}" id="lstlat"/>
+        <apex:inputHidden value="{!lstlongitude}" id="lstlon"/>
+        <apex:commandButton value="Test" id="LISTATTRIBUTE"  action="{!loadTeam}" reRender="TTree,REFRESHTABPANEL" status="LodingStatus" style="display:none"/>
+        <apex:commandButton value="Test" id="HIDETTATTRIBUTE"  action="{!UnloadTeam}" reRender="TTree,REFRESHTABPANEL" status="LodingStatus" style="display:none"/>
+        
+        <!--  -->
+        
+         <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayTeamPopup}"> 
+            <apex:pageBlock id="PTeam" mode="edit">
+                 <apex:actionFunction action="{!SVMX_SaveTeam}" name="SaveTeam" status="LoadingTeamPopUp"/>
+                <!--  <apex:actionFunction action="{!SVMX_SaveTeam}" name="SaveTeamMthod" />-->
+                <apex:PageMessages rendered="true"/>
+                <b><apex:actionStatus id="LoadingTeamPopUp"  startText="{!TAG088}" /></b>
+                <apex:pageBlockButtons id="pbtns" location="Top">
+                <apex:commandButton value="{!TAG011}"  id="SaveOnTeam" reRender="selected_ID" status="LoadingTeamPopUp" onClick="SVMXC_GetAddressForTeamTech('{!$Component.PTeam.TeamSec.ItmStrt.TStreet}','{!$Component.PTeam.TeamSec.ItmCity.TCity}','{!$Component.PTeam.TeamSec.ItmState.TState}','{!$Component.PTeam.TeamSec.ItmCntry.TCntry}','{!$Component.PTeam.TeamSec.ItmZip.TZip}','Team')"/>                
+                <apex:commandButton value="{!TAG012}" action="{!TeamPopUpCancel}"status="LoadingTeamPopUp" reRender="selected_ID" />              
+               
+                
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection Id="TeamSec" title="{!TAG013}" columns="2" collapsible="false">                      
+                    <apex:pageBlockSectionItem >
+                        <apex:OutputLabel Value="{!TAG014}"/>                       
+                        <apex:selectList id="Rtpe" value="{!RecTypeName}"size="1" tabindex="1">
+                            <apex:selectOptions value="{!TeamRecType}" />
+                        </apex:selectList>                     
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmStrt">
+                        <apex:OutputLabel Value="{!TAG015}" for="TStreet"/>                        
+                        <apex:inputField Value="{!Team.SVMXC__Street__c}"id="TStreet"/>
+                    </apex:pageBlockSectionItem>                     
+                    <apex:pageBlockSectionItem id="ItmName">
+                        <apex:OutputLabel Value="{!TAG016}" for="TName"/>                       
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                            <apex:inputField Value="{!Team.Name}"id="TName" />
+                        </apex:outputPanel>                       
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="ItmCity">
+                        <apex:OutputLabel Value="{!TAG017}" for="TCity"/>                        
+                        <apex:inputField Value="{!Team.SVMXC__City__c}"id="TCity"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="ItmGC">
+                        <apex:OutputLabel Value="{!TAG018}" for="TGCd"/>                       
+                        <apex:inputField Value="{!Team.SVMXC__Group_Code__c}"id="TGCd"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="ItmState">
+                        <apex:OutputLabel Value="{!TAG019}" for="TState"/>                      
+                        <apex:inputField Value="{!Team.SVMXC__State__c}"id="TState"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="ItmGT">
+                        <apex:OutputLabel Value="{!TAG020}" for="TGtyp"/>                      
+                         <apex:inputField Value="{!Team.SVMXC__Group_Type__c}"id="TGtyp"/>
+                       <!--  <apex:selectList id="Rtpe" value="{!GroupType}"size="1" >
+                            <apex:selectOptions value="{!GrpTypeVal}" />
+                        </apex:selectList>-->
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="ItmZip">
+                        <apex:OutputLabel Value="{!TAG021}" for="TZip"/>                      
+                        <apex:inputField Value="{!Team.SVMXC__Zip__c}"id="TZip"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="ItmActv">
+                        <apex:OutputLabel Value="{!TAG022}" for="TActive"/>                        
+                        <apex:inputField Value="{!Team.SVMXC__Active__c}"id="TActive"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="ItmCntry">
+                        <apex:OutputLabel Value="{!TAG023}" for="TCntry"/>                        
+                        <apex:inputField Value="{!Team.SVMXC__Country__c}"id="TCntry"/>
+                    </apex:pageBlockSectionItem>   
+                    <apex:pageBlockSectionItem id="ItmDesc">
+                        <apex:OutputLabel Value="{!TAG024}" for="TDesc"/>                     
+                        <apex:inputField Value="{!Team.SVMXC__Description__c}"id="TDesc"/>
+                    </apex:pageBlockSectionItem>                                     
+                    <apex:pageBlockSectionItem id="ItmPhn">                        
+                            <apex:OutputLabel Value="{!TAG025}" for="TPhone"/>                      
+                            <apex:inputField Value="{!Team.SVMXC__Phone__c}"id="TPhone"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="ItmEmail">
+                        <apex:OutputLabel Value="{!TAG026}" for="TEmail"/>                      
+                        <apex:inputField Value="{!Team.SVMXC__Email__c}"id="TEmail"/>
+                    </apex:pageBlockSectionItem> 
+                    
+                                  
+                </apex:pageBlockSection>
+                
+            </apex:pageBlock>
+        </apex:outputPanel>
+        
+        <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayTechPopup}"> 
+            <apex:pageBlock id="PbTechBlock" mode="edit">                
+                <apex:actionFunction action="{!SVMX_SaveTech}" name="SaveTech" status="LoadingTechPopUp"/>
+                <!-- <apex:actionFunction action="{!SVMX_SaveTech}" name="SaveTechMethod" status="LoadingTechPopUp"/>-->
+                <apex:PageMessages rendered="true"/>
+                <b><apex:actionStatus id="LoadingTechPopUp"  startText="{!TAG088}" /></b>
+                <apex:pageBlockButtons id="pbtns" location="Top">
+                <apex:commandButton value="{!TAG027}" id="SaveOnTech" reRender="selected_ID" status="LoadingTechPopUp" onclick=" SVMXC_GetAddressForTeamTech('{!$Component.PbTechBlock.TechSec.ItmStret.TStreet}','{!$Component.PbTechBlock.TechSec.ItmCity.TCity}','{!$Component.PbTechBlock.TechSec.ItmState.TState}','{!$Component.PbTechBlock.TechSec.ItmCntry.TCntry}','{!$Component.PbTechBlock.TechSec.ItmZip.TZip}','Tech')"/>                
+                <apex:commandButton value="{!TAG028}" action="{!TechPopUpCancel}"status="LoadingTechPopUp" reRender="selected_ID" onClick="ClearFields('TrackTechTeam:selected_ID','PbTechBlock','Sfuser,Trtryl,TLoc,TWhours,TBhours,Hldys');"/>
+                </apex:pageBlockButtons>
+                <apex:actionFunction action="{!DisableAutoChkbox}" name="setChkBox" status="LoadingTechPopUp" reRender="PbTechBlock" /> 
+                <apex:actionFunction action="{!showBreakDuration}" name="setDuration" status="LoadingTechPopUp" reRender="PbTechBlock" />
+                <apex:actionFunction action="{!showEnableScheduling}" name="ShowEnbleSchedule" status="LoadingTechPopUp" reRender="PbTechBlock" />  
+                <apex:pageBlockSection Id="TechSec" title="{!TAG029}" columns="2" collapsible="false">
+                    <apex:pageBlockSectionItem Id="ItmNm"> 
+                        <apex:OutputLabel Value="{!TAG030}" for="TName"/>                     
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                            <apex:inputField Value="{!Tech.Name}"id="TName" /> 
+                        </apex:outputPanel>                     
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmStret">
+                        <apex:OutputLabel Value="{!TAG031}" for="TStreet"/>                        
+                        <apex:inputField Value="{!Tech.SVMXC__Street__c}"id="TStreet"/>
+                    </apex:pageBlockSectionItem> 
+                    <apex:pageBlockSectionItem Id="ItmST">
+                        <apex:OutputLabel Value="{!TAG032}" for="TTeam"/>                        
+                        <apex:outputField Value="{!Tech.SVMXC__Service_Group__c}" id="TTeam"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmCity">
+                        <apex:OutputLabel Value="{!TAG033}" for="TCity"/>                        
+                        <apex:inputField Value="{!Tech.SVMXC__City__c}"id="TCity"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmRole">
+                        <apex:OutputLabel Value="{!TAG034}" for="TRole"/>                        
+                        <apex:inputField Value="{!Tech.SVMXC__Role__c}"id="TRole"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmState">
+                        <apex:OutputLabel Value="{!TAG035}" for="TState"/>                      
+                        <apex:inputField Value="{!Tech.SVMXC__State__c}"id="TState"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmActv">
+                        <apex:OutputLabel Value="{!TAG036}" for="TActive"/>                        
+                        <apex:inputField Value="{!Tech.SVMXC__Active__c}"id="TActive"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmZip">
+                        <apex:OutputLabel Value="{!TAG037}" for="TZip"/>                      
+                        <apex:inputField Value="{!Tech.SVMXC__Zip__c}"id="TZip"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmSf">
+                        <apex:OutputLabel Value="{!TAG038}" for="Sfuser"/>                        
+                        <apex:inputField Value="{!Tech.SVMXC__Salesforce_User__c}"id="Sfuser" onblur="ShowEnbleSchedule()"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmCntry"> 
+                        <apex:OutputLabel Value="{!TAG039}" for="TCntry"/>                        
+                        <apex:inputField Value="{!Tech.SVMXC__Country__c}"id="TCntry" style="width:70%"/>
+                    </apex:pageBlockSectionItem>                                    
+                    <apex:pageBlockSectionItem Id="ItmES">
+                        <apex:OutputLabel Value="{!TAG040}" for="TCal" rendered="{!EnableScheduling}"/>                      
+                        <apex:inputField Value="{!Tech.SVMXC__Enable_Scheduling__c}"id="TCcal" rendered="{!EnableScheduling}"/>
+                    </apex:pageBlockSectionItem>                    
+                    <apex:pageBlockSectionItem Id="ItmPhn">                        
+                            <apex:OutputLabel Value="{!TAG041}" for="TPhone"/>                      
+                            <apex:inputField Value="{!Tech.SVMXC__Phone__c}"id="TPhone"/>
+                    </apex:pageBlockSectionItem>                    
+                    <apex:pageBlockSectionItem Id="ItmTrty">
+                        <apex:OutputLabel Value="{!TAG042}" for="Trtry1"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Service_Territory__c}"id="Trtryl"/>
+                    </apex:pageBlockSectionItem>                    
+                    <apex:pageBlockSectionItem Id="ItmMail">
+                        <apex:OutputLabel Value="{!TAG043}" for="TEmail"/>                      
+                        <apex:inputField Value="{!Tech.SVMXC__Email__c}"id="TEmail"/>
+                    </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection> 
+                                       
+                    <apex:pageBlockSection Id="TechSec2" title="" collapsible="false" columns="2">
+                    <apex:pageBlockSectionItem Id="ItmIL">
+                        <apex:OutputLabel Value="{!TAG044}" for="TLoc"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Inventory_Location__c}"id="TLoc" onblur="setChkBox()"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmAuto">
+                        <apex:OutputLabel Value="{!TAG045}" for="TAutoCrt" rendered="{!EnableAutoCheckBox}"/>                     
+                        <apex:inputCheckBox id="TAutoCrt" rendered="{!EnableAutoCheckBox}" value="{!CreateAutoLoc}"/>
+                    </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                     <apex:pageBlockSection Id="TechSec3" title="" collapsible="false" columns="2">
+                    <apex:pageBlockSectionItem Id="ItmWH">
+                        <apex:OutputLabel Value="{!TAG046}" for="TWhours"/>                     
+                        <apex:inputField Value="{!Tech.SVMXC__Working_Hours__c}"id="TWhours"/>
+                    </apex:pageBlockSectionItem>
+                    <!--  Holiday Field Removed
+                    <apex:pageBlockSectionItem Id="ItmHd">
+                        <apex:OutputLabel Value="{!TAG047}" for="Hldys"/>                        
+                        <apex:inputField Value="{!Tech.SVMXC__Working_Hours__c}"id="Hldys"/>
+                    </apex:pageBlockSectionItem>
+                     
+                    <apex:pageBlockSectionItem Id="ItmHd">
+                       <apex:OutputLabel Value="{!TAG047}" for="Hldys"/>                        
+                        <apex:inputField Value="{!Tech.Overtime_Hours__c}"id="Hldys"/> 
+                    </apex:pageBlockSectionItem>   
+                    -->
+                    <apex:pageBlockSectionItem Id="ItmBS">
+                        <apex:OutputLabel Value="{!TAG048}" for="TBhours"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Break_Hours__c}"id="TBhours"/>
+                    </apex:pageBlockSectionItem> 
+                                    
+                    <!--  <apex:pageBlockSectionItem Id="ItmBT">
+                        <apex:OutputLabel value="{!TAG049}"for="Breaktyp"/>
+                        <apex:inputField Value="{!Tech.Break_Type__c}"id="Breaktyp"  onChange="setDuration()"/>                        
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="ItmBD">
+                        <apex:OutputLabel value="{!TAG050}"for="Duration" rendered="{!renderBreakDuration}"/>
+                        <apex:inputField Value="{!Tech.Break_Duration__c}"id="Duration" style="width:50px" rendered="{!renderBreakDuration}"/>                        
+                    </apex:pageBlockSectionItem>-->
+                    <apex:pageBlockSectionItem Id="ItmAI">
+                        <apex:OutputLabel Value="{!TAG051}" for="Info"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Member_information__c}"id="Info"/>
+                    </apex:pageBlockSectionItem>   
+                         
+                </apex:pageBlockSection>
+                <apex:pageBlockSection Id="TechSec4" title="{!TAG159}" collapsible="false" columns="2"> 
+                    
+                    <apex:pageBlockSectionItem Id="ItmAS">
+                        <apex:OutputLabel Value="{!Speed}" for="Aspeed"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Average_Speed__c}"id="Aspeed"/>
+                    </apex:pageBlockSectionItem> 
+                    <apex:pageBlockSectionItem Id="Pmilec">
+                        <apex:OutputLabel Value="{!Cost}" for="Pmilecost"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Per_Mile_Cost__c}"id="Pmilecost"/>
+                    </apex:pageBlockSectionItem>  
+                    <apex:pageBlockSectionItem Id="MDist">
+                        <apex:OutputLabel Value="{!Distance}" for="MDist"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Max_Distance__c}" id="MDist"/>
+                    </apex:pageBlockSectionItem>  
+                    <apex:pageBlockSectionItem Id="PHCost">
+                        <apex:OutputLabel Value="{!TAG154}" for="PHC"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Per_Hour_Cost__c}" id="PHC"/>
+                    </apex:pageBlockSectionItem>
+                     <!--  <apex:pageBlockSectionItem Id="MDHour">
+                        <apex:OutputLabel Value="{!TAG155}" for="MDhour"/>                       
+                        <apex:inputField Value="{!Tech.Max_Daily_Hours__c}" id="MDhour"/>
+                    </apex:pageBlockSectionItem> -->  
+                    <apex:pageBlockSectionItem Id="Fcost">
+                        <apex:OutputLabel Value="{!TAG156}" for="FixCost"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Fixed_Cost__c}" id="FixCost"/>
+                    </apex:pageBlockSectionItem>  
+                    <!-- <apex:pageBlockSectionItem Id="MWH">
+                        <apex:OutputLabel Value="{!TAG157}" for="MaxWeekHours"/>                       
+                        <apex:inputField Value="{!Tech.Max_Hours__c}" id="MaxWeekHours"/>
+                    </apex:pageBlockSectionItem>  -->  
+                    <apex:pageBlockSectionItem Id="ADT">
+                        <apex:OutputLabel Value="{!TAG170}" for="AvgDriveTime"/>                       
+                        <apex:inputField Value="{!Tech.SVMXC__Average_Drive_Time__c}" id="AvgDriveTime"/>
+                    </apex:pageBlockSectionItem> 
+                    <!-- <apex:pageBlockSectionItem Id="BT">
+                        <apex:OutputLabel Value="{!TAG162}" for="BreaktimeinHours"/>                       
+                        <apex:inputField Value="{!Tech.Daily_Break_Time_Minutes__c}" id="BreaktimeinHours"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem Id="WHP">
+                        <apex:OutputLabel Value="{!TAG163}" for="WorkHourDay"/>                       
+                        <apex:inputField Value="{!Tech.Max_Working_Hours_Per_Day__c}" id="WorkHourDay"/>
+                    </apex:pageBlockSectionItem>                    
+                     <apex:pageBlockSectionItem Id="capcty">
+                        <apex:OutputLabel Value="{!TAG158}" for="Capacity"/>                       
+                        <apex:inputField Value="{!Tech.Capacity__c}" id="Capacity"/>
+                    </apex:pageBlockSectionItem>--> 
+                </apex:pageBlockSection>
+                
+            </apex:pageBlock>
+        </apex:outputPanel>       
+    </apex:pageBlock>
+    <!-- This Div Block is used to show Date Picker as there were some challenges to use date picker in a Rendered Block 
+    <div style="VISIBILITY: hidden;"> 
+    <apex:inputField value="{!HomeBaseObj.Start_Date__c}"/></div> -->
+    <apex:PageBlock id="REFRESHTABPANEL">   
+        <b><apex:actionStatus id="LodingMoveStatus"  startText="{!TAG088}" /></b>
+        <apex:tabPanel switchType="ajax" selectedTab="{!TAG052}" id="TabPanel1"  rendered="{!RenderAllTabs}" tabClass="activeTab" inactiveTabClass="inactiveTab" disabledTabClass="disableTab">
+            <apex:tab label="{!TAG052}" name="{!TAG052}" id="tabOne" style="font-Size:12px" status="LodingMoveStatus">
+                  
+                <apex:panelGrid columns="2" id="theGrid" width="90%">                   
+                    <apex:panelGroup id="theGroup" style="align:left;width:50%" >
+                        <apex:pageBlock mode="Edit" Id="PbExprt">                        
+                        <apex:PageMessages rendered="{!ChildTabs}"/>
+                        <b><apex:actionStatus id="LodingStatus2"  startText="{!TAG088}" /></b>
+                        <apex:pageBlockButtons id="pbtn3" location="Top">
+                            <apex:commandButton value="{!TAG053}" action="{!SVMX_AddExprt}" reRender="PbExprt,ExpertiseList" status="LodingStatus2"/>              
+                            <apex:commandButton value="{!TAG054}" action="{!SVMX_DelExprt}"  onClick="if(checkSelectAll('TrackTechTeam:selected_ID','ExList_selected'))if(!confirm('{!TAG105}')){return false;}" status="LodingStatus2" reRender="PbExprt"/>
+                            <apex:commandButton value="{!TAG055}" action="{!SVMX_SaveExptToTeam}" status="LodingStatus2" reRender="PbExprt,ExpertiseList"/>
+                        </apex:pageBlockButtons>
+                        
+                        <apex:pageBlockTable value="{!ExprtList}" var="tch" id="ExpertiseList" styleClass="tableClass">                            
+                            <apex:column >
+                                <apex:facet name="header">                              
+                                    <apex:inputCheckbox value="{!CheckAllExprt}" onclick="javascript:customSelectAllOrNoneByCheckbox('TrackTechTeam:selected_ID','ExList_selected',this);">  
+                                    </apex:inputCheckbox>                      
+                                </apex:facet>               
+                                <apex:inputCheckbox id="ExList_selected" value="{!tch.SVMXC__Select__c}"/>
+                            </apex:column>          
+                            <apex:column >
+                                <apex:facet name="header">{!TAG057}</apex:facet>                
+                                <apex:inputfield value="{!tch.SVMXC__Skill__c}"></apex:inputfield>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG058}</apex:facet>              
+                                <apex:inputfield value="{!tch.SVMXC__Skill_Level__c}"/>
+                            </apex:column>          
+                        </apex:pageBlockTable>          
+                        </apex:pageBlock>           
+                    </apex:panelGroup>
+                    
+                            
+                        
+                    <apex:panelGroup id="theGroup1" style="align:right;width:50%" >
+                        <b><apex:actionStatus id="LodingStatus3"  startText="{!TAG088}" /></b>
+                        <apex:panelBar id="PanelBar1">
+                            <apex:panelBarItem label="{!TAG059}" headerClass="inactiveTab" Id="PBItem1">
+                                <apex:inputText id="Text" value="{!ExprtKywrd}"/>
+                                <apex:commandButton value="{!TAG060}" action="{!SVMX_ExprtSearch}" status="LodingStatus3" reRender="SkillList,PbSkill"/>
+                            </apex:panelBarItem>
+                        </apex:panelBar>
+                        
+                        <apex:pageBlock mode="Edit" Id="PbSkill">
+                            <apex:PageMessages rendered="{!ChildTabs}"/>
+                            <apex:pageBlockButtons id="pbtn3" location="Bottom">
+                            <apex:commandButton value="{!TAG061}" action="{!SVMX_AddSkilltoExpertise}"  status="LodingStatus3" reRender="ExpertiseList,PbSkill"/>
+                            <apex:commandButton value="{!TAG062}" action="{!SkillSearchCancel}" status="LodingStatus3" reRender="theGroup1,ExpertiseList,PbSkill"/>
+                        </apex:pageBlockButtons>
+                            <apex:pageBlockTable value="{!SkillList}" var="skl" id="SkillList" styleClass="tableClass">
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG063}</apex:facet>               
+                                    <apex:inputCheckbox value="{!skl.SVMXC__Select__c}"/>
+                                </apex:column>          
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG064}</apex:facet>                
+                                    <apex:outputText value="{!skl.Name}"/>
+                                </apex:column>
+                            </apex:pageBlockTable>
+                        </apex:pageBlock>                   
+                    </apex:panelGroup>                  
+                </apex:panelGrid>               
+            </apex:tab>
+            
+            <apex:tab label="{!TAG065}" name="{!TAG065}" id="tabTwo" style="font-Size:12px" status="LodingMoveStatus">
+                <apex:panelGrid columns="2" id="theGridPr" width="90%">                 
+                    <apex:panelGroup id="theGroupPr" style="align:left;width:50%" >
+                        <apex:pageBlock mode="Edit" Id="PbsrvcPrdct">
+                            <apex:pageMessages rendered="{!ChildTabs}"/>
+                            <b><apex:actionStatus id="LodStatus"  startText="{!TAG088}" /></b>
+                            <apex:pageBlockButtons id="pbtn4" location="Top">
+                                <apex:commandButton value="{!TAG066}" action="{!SVMX_AddPrdct}" status="LodStatus" reRender="PbsrvcPrdct,SrvcPrdLst"/>             
+                                <apex:commandButton value="{!TAG067}" action="{!SVMX_DelPrdct}"  onClick="if(checkSelectAll('TrackTechTeam:selected_ID','PrdList_selected'))if(!confirm('{!TAG105}')){return false;}" status="LodStatus" reRender="PbsrvcPrdct"/>
+                                <apex:commandButton value="{!TAG068}" action="{!SVMX_SaveProdToTeam}" status="LodStatus" reRender="PbsrvcPrdct,SrvcPrdLst"/>
+                            </apex:pageBlockButtons>                            
+                            
+                            <apex:pageBlockTable value="{!prodList}" var="tch" id="SrvcPrdLst" styleClass="tableClass">         
+                                <apex:column >
+                                    <apex:facet name="header">
+                                    <apex:inputCheckbox value="{!CheckAllPrdct}" onclick="javascript:customSelectAllOrNoneByCheckbox('TrackTechTeam:selected_ID','PrdList_selected',this);">  
+                                    </apex:inputCheckbox>
+                                    </apex:facet>               
+                                    <apex:inputCheckbox Id="PrdList_selected" value="{!tch.SVMXC__Select__c}"/>
+                                </apex:column>          
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG070}</apex:facet>              
+                                    <apex:inputField value="{!tch.SVMXC__Product__c}"/>
+                                </apex:column>                  
+                            </apex:pageBlockTable>          
+                        </apex:pageBlock>
+                    </apex:panelGroup>
+                    <apex:panelGroup id="theGroupPr1" style="align:right;width:50%" >
+                        <b><apex:actionStatus id="LodingStatus4"  startText="{!TAG088}" /></b>
+                        <apex:panelBar id="PanelBarPr1">
+                            <apex:panelBarItem label="{!TAG071}" headerClass="inactiveTab" Id="PBItem1">
+                                <apex:inputText id="Text" value="{!PrdctKywrd}"/>
+                                <apex:commandButton value="{!TAG072}" action="{!SVMX_PrdctSearch}" status="LodingStatus4" reRender="PrdLst,PbPrdct"/>
+                            </apex:panelBarItem>
+                        </apex:panelBar>
+                        
+                        <apex:pageBlock mode="Edit" Id="PbPrdct">
+                             <apex:PageMessages rendered="{!ChildTabs}"/>
+                            <apex:pageBlockButtons id="pbtn3" location="Bottom">
+                            <apex:commandButton value="{!TAG073}" action="{!SVMX_AddPrdcttoSrvcPrdct}"  status="LodingStatus4" reRender="SrvcPrdLst,PbPrdct"/>
+                            <apex:commandButton value="{!TAG074}" action="{!PrdctSearchCancel}" status="LodingStatus4" reRender="theGroupPr1,PbsrvcPrdct,PbPrdct"/>
+                        </apex:pageBlockButtons>
+                            <apex:pageBlockTable value="{!Prdcts}" var="skl" id="PrdLst" styleClass="tableClass">
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG075}</apex:facet>               
+                                    <apex:inputCheckbox value="{!skl.SVMXC__Select__c}"/>
+                                </apex:column>          
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG076}</apex:facet>                
+                                    <apex:outputText value="{!skl.Name}"/>
+                                </apex:column>
+                            </apex:pageBlockTable>
+                        </apex:pageBlock>           
+                        
+                    </apex:panelGroup>                  
+                </apex:panelGrid>            
+            </apex:tab>
+            
+            <apex:tab label="{!TAG077}" name="{!TAG077}" id="tabThree" style="font-Size:12px" status="LodingMoveStatus">
+                <apex:pageBlock mode="Edit" Id="PbCost">
+                    <apex:PageMessages rendered="{!ChildTabs}"/> 
+                    <b><apex:actionStatus id="LoadingCost"  startText="{!TAG088}" /></b>
+                    <apex:pageBlockButtons id="pbtn4" location="Top">                        
+                        <apex:commandButton value="{!TAG078}" action="{!SVMX_AddnewCostRec}" reRender="PbCost,LaborCostList" status="LoadingCost"/>               
+                        <apex:commandButton value="{!TAG079}"  action="{!SVMX_DelCostRec}" onClick="if(checkSelectAll('TrackTechTeam:selected_ID','CostList_selected'))if(!confirm('{!TAG105}')){return false;}" status="LoadingCost" reRender="PbCost,LaborCostList"/>
+                        <apex:commandButton value="{!TAG080}" action="{!SVMX_SaveCostToTeam}" status="LoadingCost" reRender="PbCost,LaborCostList"/>
+                    </apex:pageBlockButtons>
+                    
+                    
+                    <apex:pageBlockTable value="{!LaborCostList}" var="tch" id="LaborCostList" styleClass="tableClass">         
+                        <apex:column >
+                            <apex:facet name="header">
+                            <apex:inputCheckbox value="{!CheckAllCost}" onclick="javascript:customSelectAllOrNoneByCheckbox('TrackTechTeam:selected_ID','CostList_selected',this);">  
+                            </apex:inputCheckbox>
+                            </apex:facet>               
+                            <apex:inputCheckbox id="CostList_selected" value="{!tch.SVMXC__Select__c}"/>
+                        </apex:column>
+                            
+                        <apex:column >
+                            <apex:facet name="header">{!TAG082}</apex:facet>                
+                            <apex:inputfield value="{!tch.SVMXC__Cost_Category__c}"/>
+                        </apex:column>
+                        
+                        <apex:column >
+                            <apex:facet name="header">{!TAG083}</apex:facet>              
+                            <apex:inputfield value="{!tch.SVMXC__Hourly_Cost2__c}"/>
+                        </apex:column>  
+                        
+                        <apex:column >
+                            <apex:facet name="header">{!TAG084}</apex:facet>              
+                            <apex:inputfield value="{!tch.SVMXC__Billable_Cost2__c}"/>
+                        </apex:column>
+                             
+                    </apex:pageBlockTable>          
+                </apex:pageBlock>                                 
+            </apex:tab>  
+            
+            <apex:tab label="{!TAG122}" name="{!TAG122}" id="tabfive" style="font-Size:12px" rendered="{!RenderDispatchTab}" status="LodingMoveStatus">
+                <apex:panelGrid columns="2" id="theGridDisp" width="90%">                 
+                    <apex:panelGroup id="theGroupDisp" style="align:left;width:50%" >
+                        <apex:pageBlock mode="Edit" Id="PbDispatch">
+                            <apex:pageMessages rendered="{!ChildTabs}"/>
+                            <b><apex:actionStatus id="LodStatusDispatch"  startText="{!TAG088}" /></b>
+                            <apex:pageBlockButtons id="pbtnDispatch4" location="Top">
+                                <apex:commandButton value="{!TAG123}" action="{!SVMX_AddDisptacher}" status="LodStatusDispatch" reRender="PbDispatch,DsptchrLst"/>             
+                                <apex:commandButton value="{!TAG067}" action="{!SVMX_DelDisptch}"  onClick="if(checkSelectAll('TrackTechTeam:selected_ID','DispList_selected'))if(!confirm('{!TAG105}')){return false;}" status="LodStatusDispatch" reRender="PbDispatch"/>
+                                <apex:commandButton value="{!TAG068}" action="{!SVMX_SaveDispToTeam}" status="LodStatusDispatch" reRender="PbDispatch,DsptchrLst"/>
+                            </apex:pageBlockButtons>                            
+                              
+                            <apex:pageBlockTable value="{!DsptchrList}" var="tch" id="DsptchrLst" styleClass="tableClass">         
+                                <apex:column >
+                                    <apex:facet name="header">
+                                    <apex:inputCheckbox value="{!CheckAllDisp}" onclick="javascript:customSelectAllOrNoneByCheckbox('TrackTechTeam:selected_ID','DispList_selected',this);">  
+                                    </apex:inputCheckbox>
+                                    </apex:facet>               
+                                    <apex:inputCheckbox Id="DispList_selected" value="{!tch.SVMXC__Select__c}"/>
+                                </apex:column>          
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG124}</apex:facet>              
+                                    <apex:inputField value="{!tch.SVMXC__Dispatcher__c}"/>
+                                </apex:column>                  
+                            </apex:pageBlockTable>          
+                        </apex:pageBlock>
+                    </apex:panelGroup>
+                    <apex:panelGroup id="theGroupDisp1" style="align:right;width:50%" >
+                        <b><apex:actionStatus id="LodingStatusDisp"  startText="{!TAG088}" /></b>
+                        <apex:panelBar id="PanelBarDisp">
+                            <apex:panelBarItem label="{!TAG126}" headerClass="inactiveTab" Id="PBItem1">
+                                <apex:inputText id="TextDisp" value="{!DispKywrd}"/>
+                                <apex:commandButton value="{!TAG072}" action="{!SVMX_DispatchSearch}" status="LodingStatusDisp" reRender="UsrLst,PbUsr"/>
+                            </apex:panelBarItem>
+                        </apex:panelBar>
+                        
+                        <apex:pageBlock mode="Edit" Id="PbUsr">
+                             <apex:PageMessages rendered="{!ChildTabs}"/>
+                            <apex:pageBlockButtons id="pbtn3Usr" location="Bottom">
+                            <apex:commandButton value="{!TAG073}" action="{!SVMX_AddUsertoDispatch}"  status="LodingStatusDisp" reRender="DsptchrLst,PbUsr"/>
+                            <apex:commandButton value="{!TAG074}" action="{!UserSearchCancel}" status="LodingStatusDisp" reRender="theGroupDisp1,PbDispatch,PbUsr"/>
+                        </apex:pageBlockButtons>
+                            <apex:pageBlockTable value="{!UserList}" var="skl" id="UsrLst" styleClass="tableClass">
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG075}</apex:facet>               
+                                    <apex:inputCheckbox value="{!skl.SVMXC__Select__c}"/>
+                                </apex:column>          
+                                <apex:column >
+                                    <apex:facet name="header">{!TAG125}</apex:facet>                
+                                    <apex:outputText value="{!skl.Name}"/>
+                                </apex:column>
+                            </apex:pageBlockTable>
+                        </apex:pageBlock>           
+                       
+                    </apex:panelGroup>                  
+                </apex:panelGrid>            
+            </apex:tab>
+            
+                   
+            <apex:tab label="{!TAG108}" name="{!TAG108}" id="tabfour" style="font-Size:12px"  rendered="{!HomeBaseTab}" status="LodingMoveStatus">                 
+                <apex:pageBlock mode="Edit" Id="PbHomeBase">
+                <script>       
+                
+                    function getaddress()
+                    {
+                        var ilstIndex = 0;
+                        for(ilstIndex = 0; ilstIndex < document.getElementById('TrackTechTeam:selected_ID:REFRESHTABPANEL:PbHomeBase:addline').value ; ilstIndex++)
+                        {
+                            var streetId = 'TrackTechTeam:selected_ID:REFRESHTABPANEL:PbHomeBase:HomeBaseList:'+ilstIndex+':TStreet';
+                            var cityId = 'TrackTechTeam:selected_ID:REFRESHTABPANEL:PbHomeBase:HomeBaseList:'+ilstIndex+':TCity';
+                            var StateId = 'TrackTechTeam:selected_ID:REFRESHTABPANEL:PbHomeBase:HomeBaseList:'+ilstIndex+':TState';
+                            var CntryId = 'TrackTechTeam:selected_ID:REFRESHTABPANEL:PbHomeBase:HomeBaseList:'+ilstIndex+':TCntry';
+                            var ZipId = 'TrackTechTeam:selected_ID:REFRESHTABPANEL:PbHomeBase:HomeBaseList:'+ilstIndex+':TZip';
+                            SVMXC_GetAddress(streetId, cityId, StateId, CntryId, ZipId,ilstIndex);
+                        }
+                    }
+                    </script>
+                
+                    <apex:PageMessages rendered="{!ChildTabs}"/> 
+                    <apex:inputHidden value="{!addline}" id="addline"/>
+                    <b><apex:actionStatus id="LoadingCost"  startText="{!TAG088}" /></b>  
+                    <apex:actionFunction action="{!SVMX_SaveHomeBase}" name="SaveHomBaseMthod" status="LoadingCost" reRender="PbHomeBase" />                      
+                    <apex:pageBlockButtons id="pbtn4" location="Top">                        
+                        <apex:commandButton value="{!TAG109}" action="{!SVMX_AddHomeBase}" reRender="PbHomeBase" status="LoadingCost"/>               
+                        <apex:commandButton value="{!TAG079}" status="LoadingCost" action="{!SVMX_DelHomeBaseRec}" onClick="if(checkSelectAll('TrackTechTeam:selected_ID','HBList_selected'))if(!confirm('{!TAG105}')){return false;}" status="LoadingCost" reRender="PbHomeBase"/>
+                        <apex:commandButton value="{!TAG080}" onclick="getaddress()" reRender="PbHomeBase"/>
+                        <!--<apex:commandButton value="Save" reRender="PbHomeBase" status="LoadingCost" onclick="SVMXC_GetAddress('{!$Component.PbHomeBase.HomeBaseList.Colstreet.Street}','{!$Component.PbHomeBase.HomeBaseList.Colcity.TCity}','{!$Component.PbHomeBase.HomeBaseList.Colstate.TState}','{!$Component.PbHomeBase.HomeBaseList.ColCntry.TCntry}','{!$Component.PbHomeBase.HomeBaseList.ColZip.TZip}','HomeBaseId')"/>-->
+                    </apex:pageBlockButtons>                    
+                    <apex:pageBlockTable value="{!HomeBaseList}" var="HBL" id="HomeBaseList" styleClass="tableClass"  >         
+                        <apex:column id="select">
+                            <apex:facet name="header">
+                                <apex:inputCheckbox value="{!CheckAllHmeBase}" onclick="javascript:customSelectAllOrNoneByCheckbox('TrackTechTeam:selected_ID','HBList',this);">  
+                                </apex:inputCheckbox>
+                            </apex:facet>               
+                            <apex:inputCheckbox Id="HBList_selected" value="{!HBL.SVMXC__Select__c}"/>
+                        </apex:column>                                  
+                        <apex:column id="Colstreet">
+                            <apex:facet name="header">{!TAG114}</apex:facet>                
+                            <apex:inputfield id="TStreet" value="{!HBL.SVMXC__Street__c}"/>
+                        </apex:column>                              
+                        <apex:column id="Colcity"> 
+                            <apex:facet name="header">{!TAG115}</apex:facet>              
+                            <apex:inputfield id="TCity" value="{!HBL.SVMXC__City__c}"/>
+                        </apex:column>
+                        <apex:column id="Colstate"> 
+                            <apex:facet name="header">{!TAG116}</apex:facet>              
+                            <apex:inputfield id="TState" value="{!HBL.SVMXC__State__c}"/>
+                        </apex:column>
+                        <apex:column id="ColCntry"> 
+                        <apex:facet name="header">{!TAG118}</apex:facet>              
+                            <apex:inputfield id="TCntry" value="{!HBL.SVMXC__Country__c}"/>
+                        </apex:column>
+                        <apex:column id="ColZip"> 
+                            <apex:facet name="header">{!TAG117}</apex:facet>              
+                            <apex:inputfield id="TZip"  value="{!HBL.SVMXC__Zip__c}"/>
+                        </apex:column>
+                        <apex:column id="ColCurrnt"> 
+                            <apex:facet name="header">{!TAG113}</apex:facet>              
+                            <apex:inputfield value="{!HBL.SVMXC__IsCurrent__c}"/>
+                        </apex:column>
+                    </apex:pageBlockTable>                       
+                </apex:pageBlock>
+            </apex:tab>
+        </apex:tabPanel>
+    </apex:PageBlock>
+</apex:form>   
+</apex:page>

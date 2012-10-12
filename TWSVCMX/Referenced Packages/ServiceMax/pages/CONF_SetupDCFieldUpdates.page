@@ -1,0 +1,184 @@
+<apex:page id="SetupDCWorkOrderFields" title="Setup DC Work Order Fields" showHeader="true" controller="SVMXC.CONF_SetupDCFieldUpdates" >
+<!-- .................................... Styles used for active and inactive TABS ............................................ -->
+    <style>
+        .boldText {color: black; font-weight: bold; font-size:12px;}
+        
+        .disableTab{
+        background-color : Lightgrey ;
+        color:LightGrey;
+        background-image:none;
+        font-size:1.2em;}
+        .activeTab {background-color: #8599B1; color:white; background-image:none; font-size:14Px} 
+        .inactiveTab {background-color: #B0BFD2; color:black; background-image:none}
+    </style>
+    
+<!-- ......................................... Form starts here ................................................. -->
+    <apex:form id="FORM" title="SetupDCFieldUpdates">
+    <!-- ...................................... PageMessages to make messages active on VF Page ....................................... -->
+        <apex:pageMessages />
+        
+    <!-- .............................................. Main PageBlock starts here ......................................... -->
+        <apex:pageBlock id="blockIPAD" helpTitle="{!TAG019}" helpUrl="{!HLPURL}">
+        
+        <!-- ....................................... Buttons for TAB 1 ................................................... -->
+            <apex:pageBlockButtons location="TOP">
+                <apex:commandButton value="{!TAG003}" action="{!reset}" reRender="FORM" status="status" />
+                <apex:commandButton value="{!TAG004}" action="{!save}" status="status" />
+                <apex:commandButton value="{!TAG005}" reRender="FORM" status="status" action="{!cancel}"/>  <!-- action="{!cancel}" -->
+            </apex:pageBlockButtons>
+            
+        <!-- ...................................................ActionStatus for Button Clicks ............................................... -->
+            <apex:actionStatus id="status" startText="{!TAG006}" style="font-Size:13px"/>
+            
+        <!-- ...................................................Main PageBlockSection starts here ................................................. -->
+            <apex:pageBlockSection id="blocksec" columns="1" collapsible="false">
+                <apex:pageBlockSection columns="1" id="tab3block1sec1" collapsible="false">
+                            <apex:pageblockSectionItem >
+                                <apex:outputText value="{!TAG002}" styleClass="boldText"/>
+                            </apex:pageblockSectionItem>
+                    </apex:pageBlockSection>
+                
+                <!-- ..................................... PageBlockSection for Updatable Fields ....................................... -->
+                    <apex:pageBlockSection columns="2" id="tab3block1sec2" collapsible="false">
+                    
+                    <!-- ................................. PageBlockSection for View Fields appears to the Left Side ....................... -->
+                        <apex:pageBlockSection dir="LTR" columns="2" collapsible="false">
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG007}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField1" multiselect="false" size="1" value="{!updateField1}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG009}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField3" multiselect="false" size="1" value="{!updateField3}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel> 
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG011}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField5" multiselect="false" size="1" value="{!updateField5}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel> 
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG013}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField7" multiselect="false" size="1" value="{!updateField7}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel> 
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG015}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField9" multiselect="false" size="1" value="{!updateField9}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel> 
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                    
+                    <!-- ................................. PageBlockSection for View Fields appears to the Right Side ....................... -->
+                        <apex:pageBlockSection dir="LTR" columns="2" collapsible="false">
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG008}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField2" multiselect="false" size="1" value="{!updateField2}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel> 
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG010}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField4" multiselect="false" size="1" value="{!updateField4}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel> 
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG012}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField6" multiselect="false" size="1" value="{!updateField6}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel> 
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG014}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField8" multiselect="false" size="1" value="{!updateField8}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TAG016}" style="font-weight: bold;"/>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:outputPanel layout="block">
+                                    <apex:outputPanel layout="block" rendered="true"/>
+                                    <apex:selectList id="UpdateField10" multiselect="false" size="1" value="{!updateField10}">
+                                        <apex:selectOptions value="{!WorkOrderUpdatableFields}"/>
+                                    </apex:selectList>
+                                </apex:outputPanel> 
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                    </apex:pageBlockSection>
+                
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

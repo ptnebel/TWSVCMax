@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <description>Installed Product represents one or a collection of product units delivered to a customer and installed at the customer’s location(s). Depending upon the tracking needs of an organization, installed products are tracked using a serial number, a lot/batch number or simply by the product number. In ServiceMax, Installed Product record drives entitlement, material movement and service delivery activities.</description>
+    <mobileReady>false</mobileReady>
+    <motif>Custom67: Gears</motif>
+</CustomTab>

@@ -1,0 +1,126 @@
+<apex:page controller="SVMXC.CONF_ManageActions" id="ManageAction">
+    <apex:form id="form1">
+        <!------------------------------------------------- Page Block for the PickList to select Object --------------------------------------------------->
+        <apex:pageBlock title="{!TAG001}" helpTitle="{!TAG002}"
+            helpUrl="{!HLPURL}">
+            <apex:pageMessages id="pMsg1" />
+            <apex:pageBlockButtons location="TOP">
+                <apex:commandButton value="{!TAG007}" action="{!Stdbacktosetuphme}" />
+            </apex:pageBlockButtons>
+            <apex:actionStatus id="processing" startText="{!TAG019}" />
+            <apex:actionFunction id="func" name="func" reRender="form1"
+                action="{!selectedObjectActions}" status="processing" />
+            <apex:pageBlockSection columns="2" collapsible="false">
+                <apex:pageblockSectionItem >
+                    <apex:pageblockSection >
+                        <apex:outputText value="{!TAG003}" style="font-weight:bold;" />
+                        <apex:selectList size="1" value="{!SelectedSourceObject}"
+                            onchange="func()">
+                            <apex:selectOptions value="{!ObjectsWithAction}" />
+                        </apex:selectList>
+                    </apex:pageblockSection>
+                </apex:pageblockSectionItem>
+            </apex:pageBlockSection>
+            </apex:pageblock>
+
+            <!-------------------------------------------------- PageBlock for the Standard Actions ------------------------------------------------------------>
+            <apex:pageBlock mode="edit" title="{!TAG004}" id="pblock1"
+                rendered="{!Render}">
+                <apex:inputHidden id="GetstdRecIdnField" />
+                <apex:pageBlockButtons location="top" rendered="{!Render}">
+                    <apex:commandButton value="{!TAG005}" action="{!StdView}"
+                        disabled="{!DisableStdBtn}" />
+                    <apex:commandButton value="{!TAG006}" action="{!StdClone}"
+                        disabled="{!DisableStdBtn}" />
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection columns="1" rendered="{!Render}">
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockTable id="pblocktable"
+                            value="{!standardActionsLst}" var="stdRecords" rendered="True">
+                            <apex:column >
+                                <apex:facet name="header">{!TAG008}</apex:facet>
+                                <apex:inputField value="{!stdRecords.SVMXC__Select__c}"
+                                    id="stdselected" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG009}</apex:facet>
+                                <apex:outputText value="{!stdRecords.SVMXC__Name__c}" id="stdName" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG034}</apex:facet>
+                                <apex:outputText value="{!stdRecords.SVMXC__Custom_Action_Type__c}" id="stdActnTyp" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG010}</apex:facet>
+                                <apex:outputText value="{!stdRecords.SVMXC__Description__c}"
+                                    id="stddesc" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG011}</apex:facet>
+                                <apex:outputText value="{!stdRecords.SVMXC__ProcessID__c}"
+                                    id="stdprocessid" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG012}</apex:facet>
+                                <apex:outputText value="{!stdRecords.LastModifiedBy.Name}"
+                                    id="stdlstmodifyBy" />
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+
+            <!-------------------------------------------------- PageBlock for the Custom Actions ------------------------------------------------------------>
+            <apex:pageBlock title="{!TAG013}" id="pblock2" rendered="{!Render}">
+                <apex:inputHidden id="GetcustRecIdnField" />
+                <apex:pageBlockButtons location="top" rendered="{!Render}">
+                    <apex:commandButton value="{!TAG014}" action="{!CustomNew}" />
+                    <apex:commandButton value="{!TAG015}" action="{!CustomEdit}"
+                        disabled="{!DisableCusBtn}" />
+                    <apex:commandButton value="{!TAG006}" action="{!CustomClone}"
+                        disabled="{!DisableCusBtn}" />
+                    <!-- To Perform delete action we need the following -->
+                    <apex:actionFunction action="{!CustomDelete}" name="confirmdel"
+                        status="processing" />
+                    <apex:commandButton value="{!TAG017}"
+                        onClick="if(window.confirm('{!TAG018}')) confirmdel();"
+                        reRender="pblock2,pMsg1" disabled="{!DisableCusBtn}" />
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection columns="1" rendered="{!Render}">
+                    <apex:pageBlockSectionItem >
+                        <apex:pageBlockTable id="pblocktablecustom"
+                            value="{!customActionLst}" var="custRecords">
+                            <apex:column >
+                                <apex:facet name="header">{!TAG008}</apex:facet>
+                                <apex:inputField value="{!custRecords.SVMXC__Select__c}"
+                                    id="cusselected" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG009}</apex:facet>
+                                <apex:outputText value="{!custRecords.SVMXC__Name__c}" id="cusName" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG034}</apex:facet>
+                                <apex:outputText value="{!custRecords.SVMXC__Custom_Action_Type__c}" id="cusActnTyp" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG010}</apex:facet>
+                                <apex:outputText value="{!custRecords.SVMXC__Description__c}"
+                                    id="cusdesc" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG011}</apex:facet>
+                                <apex:outputText value="{!custRecords.SVMXC__ProcessID__c}"
+                                    id="cusprocessid" />
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">{!TAG012}</apex:facet>
+                                <apex:outputText value="{!custRecords.LastModifiedBy.Name}"
+                                    id="cuslstmodifyon" />
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+    </apex:form>
+</apex:page>

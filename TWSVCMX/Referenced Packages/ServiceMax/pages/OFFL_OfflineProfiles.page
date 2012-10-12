@@ -1,0 +1,66 @@
+<apex:page controller="SVMXC.OFFL_OfflineProfiles" id="list_Offline_prof" tabStyle="SVMXC__ServiceMax_Settings__c"> 
+  <script type="text/javascript">
+  function customSelectChecked( form,type,value)
+    {  
+        var i = 0;
+        for (i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].name.search(type+'_selected') > 0 && form.elements[i].disabled == false) {
+                form.elements[i].checked = value;
+            }
+        }
+    }   
+    function customSelectAllOrNoneByCheckbox(form,type,control)
+    {  customSelectChecked( form,type,control.checked); }
+   
+  </script> 
+<apex:panelGroup id="theGroup" styleClass="left">
+        <center><apex:image value="{!$Resource.SVMXC__OFFL_Offline_Logo}"  url="{!$Resource.SVMXC__OFFL_Offline_Logo}" /></center>
+</apex:panelGroup> 
+<p/>
+<p/>
+<apex:form id="list_Offline_prof">
+
+ <!-- OrgWide Configuration Settings  -->
+    <apex:pageBlock id="OffProf" title="{!Tag001}" helpTitle="{!Tag002}" helpUrl="{!HLPURL}" >
+    <apex:pageMessages rendered="{!OfflineBlockLevelMessage}" showDetail="true" />
+    <apex:actionStatus id="LodingStatus"  startText="{!Tag024}" />
+    <apex:outputLabel rendered="{!if(IsListAvail==false,true,false)}" value="{!TAG023}" style="font-size:11px"/>
+                <apex:pageBlockButtons location="top">  
+                    <apex:commandButton action="{!NewProf}" title="{!Tag021}" value="{!Tag021}" id="new"/>                  
+                    <apex:commandButton action="{!EditProf}" title="{!Tag003}" value="{!Tag003}" id="edit" rendered="{!if(IsListAvail==true,true,false)}"/>
+                    <apex:commandButton action="{!CloneProf}" title="{!Tag004}" value="{!Tag004}" id="clone" rendered="{!if(IsListAvail==true,true,false)}"/>
+                    <apex:commandButton action="{!DelProf}" title="{!Tag005}" value="{!Tag005}" id="delete" onClick="if(!confirm('{!TAG026}')){return false}" reRender="list_Offline_prof" status="LodingStatus" rendered="{!if(IsListAvail==true,true,false)}"/>
+                    <apex:commandButton action="{!ActProf}" title="{!Tag006}" value="{!Tag006}" id="activate" reRender="list_Offline_prof" status="LodingStatus" rendered="{!if(IsListAvail==true,true,false)}"/>
+                    <apex:commandButton action="{!DeActProf}" title="{!Tag018}" value="{!Tag018}" id="deactivate" reRender="list_Offline_prof" status="LodingStatus" rendered="{!if(IsListAvail==true,true,false)}"/>
+                	<apex:commandButton action="{!GoSetupHome}" title="{!Tag025}" value="{!Tag025}" id="home"/> 
+                </apex:pageBlockButtons>    
+               
+        <apex:pageBlockTable value="{!OfflSVMXprofiles}" var="corgw" rendered="{!if(IsListAvail==true,true,false)}">
+                <apex:column style="width:10px">
+                <apex:facet name="header">
+                    <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['list_Offline_prof:list_Offline_prof'],'pro',this);">  
+                    </apex:inputCheckbox>
+                </apex:facet>
+                    <apex:inputField id="pro_selected" value="{!corgw.SVMXC__Select__c}"/>          
+                </apex:column>                 
+                <apex:column >
+                    <apex:facet name="header">{!Tag010}</apex:facet>
+                    <apex:outputField id="pname" value="{!corgw.SVMXC__Profile_Name__c}" rendered="true" />
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">{!Tag007}</apex:facet>
+                        <apex:outputText id="pstatus" value="{!if(corgw.SVMXC__Active__c=true, 'Active','Inactive')}" rendered="true" />
+                </apex:column>
+                <apex:column >  
+                       <apex:facet name="header">{!Tag009}</apex:facet>
+                       <apex:outputField id="mda1" value="{!corgw.CreatedBy.Username}" rendered="true" />
+                </apex:column>
+                <apex:column >
+                       <apex:facet name="header">{!$ObjectType.SVMXC__ServiceMax_Config_Data__c.fields.LastModifiedDate.Label}</apex:facet>
+                       <apex:outputField value="{!corgw.LastModifiedDate}" rendered="true" />
+                </apex:column>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+</apex:form>
+ 
+</apex:page>

@@ -1,0 +1,1757 @@
+<apex:page >
+    <apex:form >
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/fullResolution.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/dataTables_2-11-2011.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/jquery.ajaxLoader.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery-1.6.2.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.checkbox.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.dataTables.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.inherit-1.3.2.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Ajax.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_UIParser.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Utils.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/Tooltip/jquery.tipTip.minified.js')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/Tooltip/tipTip.css')}"/>
+        <script type="text/javascript">
+            var __sfdcSessionId = '{!GETSESSIONID()}';
+            var serialselectionholder;
+            var rmadetailholder;
+            $(document).ready(function(){
+                $('input:checkbox:not([safari])').checkbox();
+                $('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
+                $('input:radio').checkbox();
+            });
+            
+            var Browser = {
+			  Version: function() {
+			    var version = 999; // we assume a sane browser
+			    if (navigator.appVersion.indexOf("MSIE") != -1)
+			      // bah, IE again, lets downgrade version number
+			      version = parseFloat(navigator.appVersion.split("MSIE")[1]);
+			    return version;
+			  }
+			}
+
+            // Constants
+            var APL003_TAG004 = '{!$Label.APL003_TAG004}';
+            var APL003_TAG005 = '{!$Label.APL003_TAG005}';
+            var processId = '{!JSENCODE($CurrentPage.parameters.SVMX_processId)}';
+            var recordId = '{!JSENCODE($CurrentPage.parameters.SVMX_recordID)}';
+            var debugMode = '{!JSENCODE($CurrentPage.parameters.SVMX_debugMode)}';
+            
+        </script>
+        <script src="/soap/ajax/15.0/connection.js" type="text/javascript"></script>
+        <script src="/soap/ajax/15.0/apex.js" type="text/javascript"></script>
+        <script>
+        var response;
+        SVMXloader.loaderid = 'SVMXloader';
+        var isPartialRecordsDisplayed = false;
+        var isDeliveryMode = false;
+        var isAutoDeliveryMode = false;
+        var unExpectedSerialNumberLines = new Array();
+        var productIds = new Array();
+        var actualModel = new Object();
+        actualModel.orderLinefields = new Object();
+        actualModel.gridHeaderData = new Object();
+        actualModel.productsearchfields = ({name:{name:"Name"}, productcode:{name:"ProductCode"}});
+        actualModel.orderLines = new Object();
+        actualModel.orderLinesForSerialNumber = new Object();
+        actualModel.availableOrderLines = new Array();
+        actualModel.serialNumbers = new Object();
+        actualModel.serialNumberfield = ({Id:{name:"Id", label:"", displayable: false, type: 'text'}, name:{name:"serialNumber", label:"{!$Label.APL003_TAG013}", displayable: true, type: 'text'}, status:{name:"SVMXC__Expected_Quantity2__c", label:"{!$Label.APL003_TAG014}", displayable: true, type: 'text'}, reconciliationaction:{name:"SVMXC__Reconciliation_Action__c", label:"{!$Label.APL003_TAG015}", displayable: true, defaultvalue:{none:{key: 'None', value: 'None'}}, type: 'picklist'}});
+        // Map of product unique field and the order line ids
+        actualModel.mapProductRmaLines = new Object();
+        // Map of serial number and list of order line ids
+        actualModel.mapSerialRmaLines = new Object();
+        actualModel.latestUniqueId = 0;
+        actualModel.process = new Object();
+        actualModel.header = new Object();
+        actualModel.currentSelectedLine = null;
+        actualModel.processUI = {title: {object:'process', UIid: 'processtitle', field: 'SVMXC__ProcessID__c'}, documentname: {object:'header', UIid: 'documentname', field: 'Name'}, depotname: {object:'header', UIid: 'depotname', field: 'SVMXC__Warehouse__c'},
+                             receivinglocation: {object:'header', UIid: 'receivinglocation', field: 'SVMXC__Source_Street__c'}, orderstatus: {object:'header', UIid: 'orderstatus', field: 'SVMXC__Order_Status__c'}};
+        actualModel.unexpectedSerialNumbers = new Array();
+        actualModel.availableSN = new Object();
+        actualModel.additionalInformation = new Object();
+        // When ever product is selected, this gets the list of lines in which selected product is associated with.
+        actualModel.selectedProduct = new Array();
+        actualModel.mapKeyValue = new Array();
+        actualModel.errorMessage = "";
+        actualModel.batchCount = 100;
+        actualModel.persistentData = new Object();
+        actualModel.syncEvents = new Object();
+        actualModel.oncePushableIds = new Array();
+        actualModel.unExpectedSerialNumberLines = new Array();
+        actualModel.unResolvedLines = new Array();
+        actualModel.splitedOrderLines = new Object();
+        
+        var sr = new SOAPRequest({orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"});
+        
+        function populateUniqueId()
+        {
+            actualModel.latestUniqueId = actualModel.latestUniqueId + 1;
+            return actualModel.latestUniqueId;
+        }
+        
+        function addSerialSelection(lineId, serialNumbers)
+        {
+            for(key in serialNumbers)
+            {
+                var reconcilationOptions = "<select><option value='None'>{!$Label.COMM001_TAG035}</option></select>";
+                var status;
+                if(serialNumbers[key].isExpected == 'true')
+                {
+                    if(serialNumbers[key].isReceived == 'true')
+                        status = '<div id="Status_' + lineId + ':' + key + '">{!$Label.APL003_TAG037}</div>';
+                    else
+                        status = '<div id="Status_' + lineId + ':' + key + '">{!$Label.APL003_TAG038}</div>';
+                }
+                else
+                {
+                    if(serialNumbers[key].isReceived == 'true')
+                        status = '<div id="Status_' + lineId + ':' + key + '">{!$Label.APL003_TAG039}</div>';
+                    else
+                        status = '<div id="Status_' + lineId + ':' + key + '"></div>';
+                }
+                if(serialNumbers[key].isExpected == 'true')
+                {
+                    if(serialNumbers[key].isReceived == 'true')
+                    {
+                        reconcilationOptions = "<select  onchange='updateReconciliationAction( \"" + lineId + "\", \"" + key + "\", this.value, false)'><option value='Add'>{!$Label.APL003_TAG035}</option><option value='Remove'>{!$Label.COMM001_TAG038}</option></select>";
+                    }
+                    else
+                        reconcilationOptions = "<select><option value='None'>{!$Label.COMM001_TAG035}</option></select>";
+                }
+                if(status == 'Received')
+                {
+                    reconcilationOptions = "<select  onchange='updateReconciliationAction( \"" + lineId + "\", \"" + key + "\", this.value, false)'><option value='Add'>{!$Label.APL003_TAG035}</option><option value='Remove'>{!$Label.COMM001_TAG038}</option></select>";
+                }
+                else if((serialNumbers[key].isExpected == null && serialNumbers[key].isReceived == 'true') || (serialNumbers[key].isExpected == 'false' && serialNumbers[key].isReceived == 'true'))
+                {
+                    reconcilationOptions = "<select  onchange='updateReconciliationAction( \"" + lineId + "\", \"" + key + "\", this.value, true)'><option value='Add'>{!$Label.APL003_TAG035}</option><option value='Remove'>{!$Label.COMM001_TAG037}</option></select>";
+                }
+                serialselectionholder.fnAddData( [
+                    serialNumbers[key].serialNumber, status, reconcilationOptions
+                ] );
+            }
+        }
+        
+        function addNewProduct(product)
+        {
+            var record = buildProductOnlyRecord(product);
+            addProductToActualModel(record);
+            actualModel.selectedProduct[0] = record.Id;
+            var uX = new UIDesigner({});
+            var lineRecord = new Object();
+            lineRecord.SVMXC__Product__c = product.Id;
+            lineRecord['SVMXC__Product__r.Name'] = product.Name;
+            lineRecord['SVMXC__Product__r.ProductCode'] = product.ProductCode;
+            var productProperties = new Array;
+            for(key in actualModel.orderLinefields)
+            {
+                if(actualModel.orderLinefields[key].displayable == true)
+                    productProperties.push(uX.__populatedivStringForField(actualModel.orderLinefields[key], lineRecord, key, record.Id));
+            }
+            rmadetailholder.fnAddData(productProperties);
+            var lineIds = new Array();
+            lineIds.push(record.Id);
+            actualModel.mapProductRmaLines[product.Name] = lineIds;
+            actualModel.mapProductRmaLines[product.ProductCode] = lineIds;
+            clearSerialSelection();
+        }
+        
+        function buildProductOnlyRecord(product)
+        {
+            var record = new Object();
+            record.Id = 'UNIQUEID_' + populateUniqueId();
+            record.SVMXC__Product__r = product;
+            record.SVMXC__Actual_Quantity2__c = 1;
+            return record;
+        }
+        
+        // Adding product to local store whenever we add product
+        function addProductToActualModel(record)
+        {
+            var actualRecord = {};
+            for(key in actualModel.orderLinefields)
+            {
+                if(actualModel.orderLinefields[key].reference && record[actualModel.orderLinefields[key].reference] != null)
+                {
+                    var ref = record[actualModel.orderLinefields[key].reference];
+                    actualRecord[key] = record[actualModel.orderLinefields[key].name];
+                    for(refKey in actualModel.orderLinefields[key].referencefields)
+                    {
+                        actualRecord[actualModel.orderLinefields[key].reference+'.'+actualModel.orderLinefields[key].referencefields[refKey].name] = ref[actualModel.orderLinefields[key].referencefields[refKey].name];
+                    }
+                }
+                else if(record[actualModel.orderLinefields[key].name])
+                {
+                    actualRecord[actualModel.orderLinefields[key].name] = record[actualModel.orderLinefields[key].name];
+                }
+                else if(actualModel.orderLinefields[key].defaultvalue != null && (actualModel.orderLinefields[key].type == 'text' || actualModel.orderLinefields[key].type == 'number'))
+                {
+                    actualRecord[actualModel.orderLinefields[key].name] = actualModel.orderLinefields[key].defaultvalue;
+                }
+            }
+            actualModel.orderLines[record.Id] = actualRecord;
+        }
+
+        function populateSerialSelectionforProduct(product)
+        {
+            var uX = new UIDesigner({UIElement: 'serialSelection', paintFields: actualModel.serialNumberfield, displayRecords: null});
+            uX.__paintGridUI();
+            serialselectionholder = $('#tableserialSelection').dataTable( {
+                "bPaginate": false, "bSort": false
+            } );
+            actualModel.selectedProduct = new Array();
+            if(actualModel.mapProductRmaLines[product])
+            {
+                var isSerialNumberFound = false;
+                for (var j=0; j< actualModel.mapProductRmaLines[product].length; j++)
+                {
+                    // Do uniquness check
+                    if($.inArray(actualModel.mapProductRmaLines[product][j], actualModel.selectedProduct) > -1)
+                        continue;
+                    // Adding selected line id's for temp use
+                    actualModel.selectedProduct.push(actualModel.mapProductRmaLines[product][j]);
+                    if(actualModel.currentSelectedLine == null)
+                        addSerialSelection(actualModel.mapProductRmaLines[product][j], actualModel.serialNumbers[actualModel.mapProductRmaLines[product][j]]);
+                    isSerialNumberFound = false;
+                }
+            }
+            radioInitializer();
+        }
+        function initiateProductReceipt(product, ispopulateSerialNumbers)
+        {
+            rmadetailholder.fnFilter(product , null, false, false, false);
+            if(ispopulateSerialNumbers == true && (product != null || product != ''))
+            {
+                if(actualModel.mapProductRmaLines[product] != null)
+                {
+                    // Product is available and we need to find the serial numbers
+                    populateSerialSelectionforProduct(product);
+                }
+                
+                else if(actualModel.process.SVMXC__APL_Action_On_Unexpected_Product__c == 'ADD')
+                {
+                    // Go and find whether the product is available on order line
+                    var productResponse = findProductAvailability(product);
+                    if(productResponse.size > 0 && productResponse.records != null)
+                    {
+                        if(!productResponse.records.length)
+                            addNewProduct(productResponse.records);
+                        else
+                            addNewProduct(productResponse.records[0]);
+                    }
+                }
+            }
+        }
+        
+        function showLinesForSerialNumber(availableOrderLines)
+        {
+            actualModel.orderLinesForSerialNumber = new Object();
+            for (var prodCount = 0; prodCount < availableOrderLines.length; prodCount++)
+            {
+                actualModel.orderLinesForSerialNumber[availableOrderLines[prodCount]] = actualModel.orderLines[availableOrderLines[prodCount]];
+            }
+            
+            var uX = new UIDesigner({UIElement: 'rmadetails', paintFields: actualModel.orderLinefields, displayRecords: actualModel.orderLinesForSerialNumber});
+            uX.__paintGridUI();
+            isPartialRecordsDisplayed = true;
+            buildDataTableUI();
+        }
+        
+        // Call when we need to display all RMA lines, like clear filter
+        function showAllLines()
+        {
+            isPartialRecordsDisplayed = false;
+            var uX = new UIDesigner({UIElement: 'rmadetails', paintFields: actualModel.orderLinefields, displayRecords: actualModel.orderLines});
+            uX.__paintGridUI();
+            buildDataTableUI();
+        }
+        
+        // Call when we want to clear all serial numbers
+        function clearSerialSelection()
+        {
+            serialselectionholder.fnClearTable();
+        }
+        
+        function buildSerialNumberUI(rmaLineId)
+        {
+            clearSerialSelection();
+            addSerialSelection(rmaLineId, actualModel.serialNumbers[rmaLineId]);
+            radioInitializer();
+        }
+        
+        function radioInitializer()
+        {
+            $('input:checkbox:not([safari])').checkbox();
+            $('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
+            $('input:radio').checkbox();
+        }
+        
+        function onblurProductSelection(elementId)
+        {
+            var item = document.getElementById(elementId);
+            initiateProductReceipt(item.value, true);
+            if(item.value == null || item.value == '')
+            {
+                item.value = APL003_TAG005;
+                clearSerialSelection();
+                showAllLines();
+            }
+            var itemSerialSelection = document.getElementById('serialnumber');
+            itemSerialSelection.value = APL003_TAG004;
+            instantiateClickInterface();
+        }
+        
+        function updateReconciliationAction(lineDetailId, serialNumber, action, isDelete)
+        {
+            var availableSerialNumbers = actualModel.serialNumbers[lineDetailId];
+            if(availableSerialNumbers == null)
+                availableSerialNumbers = new Object;
+            else if(availableSerialNumbers[serialNumber] == null)
+                availableSerialNumbers[serialNumber] = new Object;
+            availableSerialNumbers[serialNumber].reconciliationAction = action;
+            if(action == 'Remove')
+            {
+                availableSerialNumbers[serialNumber].isReceived = 'false';
+                if(isDelete)
+                {
+                    delete actualModel.serialNumbers[lineDetailId][serialNumber];
+                    var uX = new UIDesigner({UIElement: 'serialSelection', paintFields: actualModel.serialNumberfield, displayRecords: null});
+                    uX.__paintGridUI();
+                    serialselectionholder = $('#tableserialSelection').dataTable( {
+                    "bPaginate": false,"bSort": false
+                    } );
+                    addSerialSelection(lineDetailId, actualModel.serialNumbers[lineDetailId]);
+                }
+                else
+                {
+                    updateUISerialNumberStatus(lineDetailId, serialNumber, 'Expected');
+                }
+                actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c = parseInt(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c) - 1;
+                updateUIActualQuantity(lineDetailId);
+            }
+            else if(action == 'Add')
+            {
+                availableSerialNumbers[serialNumber].isReceived = 'true';
+                actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c = parseInt(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c) + 1;
+                updateUIActualQuantity(lineDetailId);
+                updateUISerialNumberStatus(lineDetailId, serialNumber, 'Received');
+            }
+        }
+        
+        // To add new serial number if its new or already added
+        function addNewSerialNumber(lineDetailId, serialNumber)
+        {
+            // Just an additional check... Seial no should not be caption of serial number text area
+            if(serialNumber != '{!$Label.APL003_TAG004}')
+            {
+                actualModel.unexpectedSerialNumbers.push(serialNumber);
+                var availableSerialNumbers = actualModel.serialNumbers[lineDetailId];
+                // Create new serial number object
+                var newSerialNumber = new Object();
+                newSerialNumber.serialNumber = serialNumber;
+                newSerialNumber.isExpected = null;
+                newSerialNumber.isPicked = null;
+                newSerialNumber.isReceived = 'true';
+                newSerialNumber.isShipped = null;
+                newSerialNumber.reconciliationAction = 'Add';
+                if(availableSerialNumbers == null)
+                    availableSerialNumbers = new Object;
+                else if(availableSerialNumbers[serialNumber] == null)
+                    availableSerialNumbers[serialNumber] = new Object;
+                availableSerialNumbers[serialNumber] = newSerialNumber;
+                actualModel.serialNumbers[lineDetailId] = availableSerialNumbers;
+            }
+        }
+        
+        function onlyIncrementReceivedQuantity(lineDetailId)
+        {
+            var isValid = false;
+            if(actualModel.process.SVMXC__APL_Action_On_Excess_Qty__c == 'ADD')
+            {
+                actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c = parseInt(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c) + 1;
+                // Update the retrieved count
+                updateUIActualQuantity(lineDetailId);
+                isValid = true;
+            }
+            else if(actualModel.process.SVMXC__APL_Action_On_Excess_Qty__c == 'NOT ALLOWED')
+            {
+                if(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c < actualModel.orderLines[lineDetailId].SVMXC__Expected_Quantity2__c)
+                {
+                    actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c = parseInt(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c) + 1;
+                    // Update the retrieved count
+                    updateUIActualQuantity(lineDetailId);
+                    isValid = true;
+                }
+                else
+                {
+                    // Don't increment and don't add
+                    isValid = false;
+                }
+            }
+            return isValid;
+        }
+        
+        // Call to increment received quality for the selected serial number on line 
+        function incrementReceivedQuantity(lineDetailId, serialNumber)
+        {
+            var isValid = false;
+            if(actualModel.process.SVMXC__APL_Action_On_Excess_Qty__c == 'ADD')
+            {
+                actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c = parseInt(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c) + 1;
+                // Update the retrieved count
+                updateUIActualQuantity(lineDetailId);
+                isValid = true;
+            }
+            else if(actualModel.process.SVMXC__APL_Action_On_Excess_Qty__c == 'NOT ALLOWED')
+            {
+                if(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c < actualModel.orderLines[lineDetailId].SVMXC__Expected_Quantity2__c)
+                {
+                    actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c = parseInt(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c) + 1;
+                    // Update the retrieved count
+                    updateUIActualQuantity(lineDetailId);
+                    isValid = true;
+                }
+                else
+                {
+                    // Don't increment and don't add
+                    isValid = false;
+                }
+            }
+            if(isValid == true)
+            {
+                // If serial number is expected to receive
+                if(serialNumber != APL003_TAG004 && actualModel.serialNumbers[lineDetailId][serialNumber] != null && (actualModel.serialNumbers[lineDetailId][serialNumber].isReceived == null || actualModel.serialNumbers[lineDetailId][serialNumber].isReceived != 'true'))
+                {
+                    actualModel.serialNumbers[lineDetailId][serialNumber].isReceived = 'true';
+                }// If serial number already received
+                else
+                {
+                    //addNewSerialNumber(actualModel.selectedProduct[selectedProductCount], item.value);
+                    // Decrement the Actual Quantity that we have incremented earlier
+                    actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c = parseInt(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c) - 1;
+                    // Update the retrieved count
+                    updateUIActualQuantity(lineDetailId);
+                }
+            }
+            return isValid;
+        }
+        
+        // To update UI with actual quality update
+        function updateUIActualQuantity(lineDetailId)
+        {
+            try
+            {
+            var retrievedDiv = document.getElementById('SVMXC__Actual_Quantity2__c_' + lineDetailId);
+            retrievedDiv.innerHTML = actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c;
+            }catch(err){}
+        }
+        // To perform UI update for serial number status
+        function updateUISerialNumberStatus(lineDetailId, SerialNumber, Status)
+        {
+            try
+            {
+            var retrievedDiv = document.getElementById('Status_' + lineDetailId + ':' + SerialNumber);
+            retrievedDiv.innerHTML = Status;
+            }catch(err){}
+        }
+        
+        // Identify the serial number and do the following
+        //  Set received to true
+        //  Increment the received count on line
+        function onblurSerialSelection(elementId)
+        {
+            actualModel.availableOrderLines = new Array();
+            var item = document.getElementById(elementId);
+            var dontFadeErrorMessage = false;
+            if(actualModel.errorMessage != null && actualModel.errorMessage != "")
+            {
+                dontFadeErrorMessage = true;
+                actualModel.errorMessage = "";
+            }
+            else
+            {
+                hideMessage('FADEOUT');
+            }
+            
+            if(item.value == null || item.value == '')
+            {
+                var itemProduct = document.getElementById('productcode');
+                // Clear the serial number only if product is not available
+                item.value = APL003_TAG004;
+                if(isPartialRecordsDisplayed == true && (itemProduct.value == null || itemProduct.value == '' || itemProduct.value == '{!$Label.APL003_TAG005}'))
+                    showAllLines();
+            }
+            else
+            {
+                var itemAvailableProduct = document.getElementById('lstAvailableProduct');
+                itemAvailableProduct.options.length = 0;
+                $('#serialnumber').addClass('serialNumberLoader');
+                var requestedSerialNumbers = new Array();
+                var unprocessedSerialNumbers = '';
+                if(Browser.Version() == 8)
+                	requestedSerialNumbers = item.value.split('\r\n');
+                else
+                	requestedSerialNumbers = item.value.split('\n');
+                
+                actualModel.availableOrderLines = new Array();
+                if(requestedSerialNumbers.length > 0)
+                {
+                    var mode = "SINGLE";
+                    if(requestedSerialNumbers.length > 1)
+                        mode = "MULTIPLE";
+                    for(var serialNumberCount = 0; serialNumberCount < requestedSerialNumbers.length; serialNumberCount++)
+                    {
+                        var isSerialNumberFound = selectSerialNumberAction(requestedSerialNumbers[serialNumberCount], mode);
+                        if(isSerialNumberFound == false)
+                        {
+                            if(unprocessedSerialNumbers != '')
+                            {
+                            	if(Browser.Version() == 8)
+                                unprocessedSerialNumbers += '\r\n';
+                                else
+                                unprocessedSerialNumbers += '\n';
+                            }
+                            unprocessedSerialNumbers += requestedSerialNumbers[serialNumberCount]
+                        }
+                    }
+                    var itemSerialNumber = document.getElementById('serialnumber');
+                    if(unprocessedSerialNumbers != null && unprocessedSerialNumbers != '')
+                        itemSerialNumber.value = unprocessedSerialNumbers;
+                    else
+                    {
+                        if(itemAvailableProduct.options.length == 0)
+                            itemSerialNumber.value = APL003_TAG004;
+                        else
+                        {
+                            // Donot remove the serial number value
+                        }
+                    }
+                    
+                    //Show error message, saying the following serial numbers cannot be added
+                    if(actualModel.errorMessage != null && actualModel.errorMessage != "")
+                    {
+                        actualModel.errorMessage = escape('{!$Label.APL003_TAG060}') + actualModel.errorMessage;
+                        if(dontFadeErrorMessage == true)
+                            showError(actualModel.errorMessage)
+                        else
+                            showError(actualModel.errorMessage, 'FADEIN');
+                    }
+                    // If only serial selection, it would have added the available order lines
+                    //if(actualModel.availableOrderLines.length > 0)
+                        //showLinesForSerialNumber(actualModel.availableOrderLines);
+                }
+                removeSNProcessing();
+            }
+            if((actualModel.errorMessage == null || actualModel.errorMessage == "") && dontFadeErrorMessage == true)
+                hideMessage('FADEOUT');
+        }
+        
+        function removeSNProcessing()
+        {
+            $('#serialnumber').removeClass('serialNumberLoader');
+        }
+        
+        function clearSerialNumbers()
+        {
+            var uX = new UIDesigner({UIElement: 'serialSelection', paintFields: actualModel.serialNumberfield, displayRecords: null});
+            uX.__paintGridUI();
+            serialselectionholder = $('#tableserialSelection').dataTable( {
+               "bPaginate": false,"bSort": false
+            } );
+        }
+        
+        function selectSerialNumberAction(selectedSerialNumber, mode)
+        {
+            var itemProduct = document.getElementById('productcode');
+            showProductTextBox();
+            //serialselectionholder.fnFilter(item.value, 0);
+            if(selectedSerialNumber != null && selectedSerialNumber != '' && itemProduct.value != null && itemProduct.value != '' && itemProduct.value != '{!$Label.APL003_TAG005}')
+            {
+                var isAvailable = false;
+                var errorMessage = "";
+                // Reset the selected line
+                var availableLines = new Array();
+                if((actualModel.selectedProduct == null && actualModel.currentSelectedLine != null) || SVMXContains(actualModel.selectedProduct, actualModel.currentSelectedLine) == true)
+                {
+                    availableLines[0] = actualModel.currentSelectedLine;
+                }
+                else
+                {
+                    availableLines = actualModel.selectedProduct;
+                }
+                // Check whether requested serial number is equal to 1st element on the serial selection table
+                for (var selectedProductCount = 0; selectedProductCount < availableLines.length; selectedProductCount++)
+                {
+                    if(actualModel.serialNumbers[availableLines[selectedProductCount]] != null)
+                    if(actualModel.serialNumbers[availableLines[selectedProductCount]][selectedSerialNumber] != null)
+                    {
+                        if(isSerialNumberAvailableinProductStock(availableLines[selectedProductCount], selectedSerialNumber) == true)
+                        {
+                            if(errorMessage != "")
+                                errorMessage += ", ";
+                            errorMessage += actualModel.orderLines[availableLines[selectedProductCount]]['SVMXC__Product__r.Name'] + '(' + selectedSerialNumber + ')';
+                            actualModel.errorMessage += errorMessage;
+                            return false;
+                        }
+                        // Update the retrieved count
+                        var lineDetailId = availableLines[selectedProductCount];
+                        incrementReceivedQuantity(lineDetailId, selectedSerialNumber)
+                        isAvailable = true;
+                        break;
+                    }
+                }
+                if(errorMessage != null && errorMessage != "")
+                    actualModel.errorMessage = errorMessage;
+                // If serial number is not available, add it
+                if(!isAvailable && actualModel.process.SVMXC__APL_Action_On_Unexpected_SN__c == 'ADD')
+                {
+                    for (var selectedProductCount = 0; selectedProductCount < availableLines.length; selectedProductCount++)
+                    {
+                        if(availableLines[selectedProductCount] != null)
+                        {
+                            if(isSerialNumberAvailableinProductStock(availableLines[selectedProductCount], selectedSerialNumber) == true)
+                            {
+                                actualModel.errorMessage += actualModel.orderLines[availableLines[selectedProductCount]]['SVMXC__Product__r.Name'] + '(' + selectedSerialNumber + ')';
+                                return false;
+                            }
+                            // Update the retrieved count
+                            var isValid = onlyIncrementReceivedQuantity(availableLines[selectedProductCount])
+                            if(isValid == true)
+                            {
+                                addNewSerialNumber(availableLines[selectedProductCount], selectedSerialNumber);
+                            }
+                            break;
+                        }
+                    }
+                }
+                // If there is no selected line available
+                if(actualModel.currentSelectedLine == null)
+                {
+                    initiateProductReceipt(itemProduct.value, true);
+                }
+                else
+                {
+                    buildSerialNumberUI(actualModel.currentSelectedLine);
+                    loadTags();
+                }
+                // Clear the product and serial number
+                //selectedSerialNumber = APL003_TAG005;
+                //itemProduct.value = 'APL003_TAG004';
+                //itemProduct.focus();
+            }
+            else if(selectedSerialNumber != null && selectedSerialNumber != '' && (itemProduct.value == null || itemProduct.value == '' || itemProduct.value == '{!$Label.APL003_TAG005}'))
+            {
+                // Find whether the serial number is available
+                if(isNotNull(actualModel.mapSerialRmaLines, selectedSerialNumber))
+                {
+                    var availableOrderLines = actualModel.mapSerialRmaLines[selectedSerialNumber];
+                    if(availableOrderLines.length > 0)
+                    {
+                        var selectedLine;
+                        if(availableOrderLines.length == 1)
+                        {
+                            if(isSerialNumberAvailableinProductStock(availableOrderLines[0], selectedSerialNumber) == true)
+                            {
+                                actualModel.errorMessage += actualModel.orderLines[availableOrderLines[0]]['SVMXC__Product__r.Name'] + '(' + selectedSerialNumber + ')';
+                                return false;
+                            }
+                            incrementReceivedQuantity(availableOrderLines[0], selectedSerialNumber);
+                            actualModel.availableOrderLines.push(availableOrderLines[0]);
+                        }
+                        else
+                        {
+                            var itemAvailableProduct = document.getElementById('lstAvailableProduct');
+                            itemAvailableProduct.options.length = 0;
+                            var optionCursor = 1;
+                            for (var prodCount = 0; prodCount < availableOrderLines.length; prodCount++)
+                            {
+                                if(isSerialNumberAvailableinProductStock(availableOrderLines[prodCount], selectedSerialNumber) == true)
+                                {
+                                    actualModel.errorMessage += actualModel.orderLines[availableOrderLines[prodCount]]['SVMXC__Product__r.Name'] + '(' + selectedSerialNumber + ')';
+                                    continue;
+                                }
+                                actualModel.availableOrderLines.push(availableOrderLines[prodCount]);
+                                if(actualModel.serialNumbers[availableOrderLines[prodCount]][selectedSerialNumber].isReceived == null || actualModel.serialNumbers[availableOrderLines[prodCount]][selectedSerialNumber].isReceived == 'false')
+                                {
+                                    selectedLine = availableOrderLines[prodCount];
+                                    itemAvailableProduct.options[optionCursor] = new Option(getProductNameForLine(availableOrderLines[prodCount]), availableOrderLines[prodCount]);
+                                    optionCursor++;
+                                }
+                            }
+                            if(itemAvailableProduct.options.length == 2)
+                            {
+                                incrementReceivedQuantity(selectedLine, selectedSerialNumber);
+                                actualModel.availableOrderLines.push(selectedLine);
+                            }
+                            else if(itemAvailableProduct.options.length > 0 && itemAvailableProduct.options.length != 2)
+                            {
+                                if(mode != "SINGLE")
+                                    return false;
+                                showProductPicklist();
+                                itemAvailableProduct.options[0] = new Option('{!$Label.APL003_TAG061}', 'NONE');
+                            }
+                        }
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+                else
+                    return false;
+            }
+        }
+        
+        // Check whether serial number is already available in stock, If so then its an invalid Serial Number
+        function isSerialNumberAvailableinProductStock(lineId, SerialNumber)
+        {
+            var key = actualModel.orderLines[lineId].SVMXC__Product__c + '_' + SerialNumber;
+            if(actualModel.availableSN[key] != null)
+                return true;
+            else
+                return false;
+        }
+        
+        function getProductNameForLine(lineId)
+        {
+            if(actualModel.orderLines[lineId] != null)
+            {
+                var prodName = actualModel.orderLines[lineId]['SVMXC__Product__r.Name']
+                return prodName;
+            }
+            else
+            {
+                return '';
+            }
+        }
+        
+        // To clear the product code call this method
+        function clearProductCode()
+        {
+            var item = document.getElementById('productcode');
+            item.value = APL003_TAG005;
+        }
+        
+        // On focus of product element
+        function onfocusProductSelection(elementId)
+        {
+            var item = document.getElementById(elementId);
+            if(item.value == APL003_TAG005)
+                item.value ='';
+        }
+        
+        // On focus of serial number element
+        function onfocusSerialSelection(elementId)
+        {
+            var item = document.getElementById(elementId);
+            if(item.value == APL003_TAG004)
+                item.value ='';
+        }
+        
+        // To check whether the product is available in org
+        function findProductAvailability(productName)
+        {
+            return response = sforce.connection.query("Select Id, Name, ProductCode from Product2 where  Name = '" + productName + "'");
+        }
+        
+        function selectProductForSerialNumber(availableProduct)
+        {
+            var availableProductOptions = document.getElementById(availableProduct);
+            if (availableProductOptions.selectedIndex != -1)
+            {
+                var itemSerialNumber = document.getElementById('serialnumber');
+                incrementReceivedQuantity(availableProductOptions.options[availableProductOptions.selectedIndex].value, itemSerialNumber.value);
+                // Clear the serial number value once processing is done
+                itemSerialNumber.value = APL003_TAG004;
+                showProductTextBox();
+            }
+        }
+        </script>
+        <div class="container">
+            <div id="SVMXerrorConsole" class="mainContainer" style="display:none;">
+                <div  class="processContent">
+                    <span id="errorMessage" style="font-weight:bold;color:red"></span>
+                    <span id="showMessage" style="font-weight:bold;color:black"></span>
+                    <div class="closeLink"><a href="#" onclick="clearErrorMessage();hideMessage('FADEOUT');">{!$Label.COMM001_TAG065}</a></div>
+                </div>
+            </div>
+            <div id="SVMXloader" class="SVMXloader" style="display:none">
+                <span id="SVMXloaderMessage" style="font-weight:bold;color:black">{!$Label.COMM001_TAG041}</span>
+            </div>
+            <div id="onlyCancel" class="mainContainer processContent" style="display:none">
+                <div class="consolLinks">
+                     <div class="consoleBtnH"> 
+                        <input type="button" class="buttonH" value="{!$Label.APL003_TAG025}" onclick="invokeCancel()"/>
+                    </div>
+                </div>
+            </div>
+            <div id="SVMXcontentArea" class="mainContainer processContent" style="display:none">
+                    <div class="processtitle"><span id="processtitle"></span><span>: </span><span id="documentname" class="valueH"></span></div>
+                    <div class="consolLinks">
+                        <div class="consoleBtnH">   
+                            <input type="button" class="buttonH" value="{!$Label.APL003_TAG023}" onclick="doPreSaveUpdate()"/><!-- doPreSaveUpdate() -->
+<!--                             <input type="button" class="buttonH" value="{!$Label.APL003_TAG024}" onclick="doPreSaveUpdate(true)"/>  -->
+                            <input type="button" class="buttonH" value="{!$Label.APL003_TAG025}" onclick="invokeCancel()"/> 
+                        </div>
+                        <div class="helpLink"><a href="{!$Label.APL003_HLPURL}" target="_blank">{!$Label.APL003_TAG030}</a></div>
+                    </div>
+            <div class="mainContainer" style="padding:5px">
+                <div class="processContent" style="padding:5px">
+                    <div class="docDetails">
+                        <ul>
+                            <li><span>{!$Label.APL003_TAG001} </span> <span id="depotname" class="valueH"></span></li>
+                            <li><span>{!$Label.APL003_TAG002} </span> <span id="receivinglocation" class="valueH"></span></li>
+                            <li class="last"><span>{!$Label.APL003_TAG014}: </span><span id="orderstatus" class="valueH"></span></li>
+                        </ul>                        
+                    </div>
+                    <div class="orderStatus">
+                            <ul>
+                                <li id="docattribute1"></li>
+                                <li id="docattribute2"></li>
+                                <li id="docattribute3"></li>
+                            </ul>
+                    </div>
+                </div>
+                
+                <div class="serialNoContent">
+                    <div class="serialnoTxt">{!$Label.APL003_TAG003}</div>
+                    <div class="serialFieldContent">
+                        <div id="productCodeContainer" class="productCode"><input type="text" id="productcode" name="productcode" onblur="onblurProductSelection(this.id)" onfocus="onfocusProductSelection(this.id)" value="{!$Label.APL003_TAG005}" class="inputBox" style="width:60%" /></div>
+                        <div id="availableProductContainer" style="display:none" class="productCode"><select id="lstAvailableProduct" class="selectBoxH" onchange="selectProductForSerialNumber(this.id)"></select></div>
+                        <div class="serialNo"><textarea id="serialnumber" name="serialnumber" class="serialTxtArea" onblur="onblurSerialSelection(this.id);" onfocus="onfocusSerialSelection(this.id)" value="{!$Label.APL003_TAG004}">{!$Label.APL003_TAG004}</textarea></div>
+                    </div>
+                </div>
+                
+                <div class="prdContentTbl">
+                    <div class="filterFields">
+                        <div class="fieldsContentH">
+                            
+                        </div>
+                        <div class="tablesH">
+                            <div id="rmadetails" class="prdDetailsTbl">
+                                <table width="100%" id="tablermadetails" class="tablermadetails">
+                                </table>
+                            </div>
+                            <div class="serialNosTbl">
+                                <div class="headingTxt">{!$Label.APL003_TAG017}</div>
+                                <div id="serialSelection" class="clear">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+            </div> 
+        </div>
+        <script type="text/javascript">
+            var sui;
+            var isFirstCall = true;
+            hideMessage('FADEOUT');
+            
+            function updateSettings()
+            {
+                // Update settings
+                if(actualModel.mapKeyValue != null && actualModel.mapKeyValue['DELIVERYTYPE'] != null)
+                {
+                    isDeliveryMode = true;
+                 if(actualModel.mapKeyValue['DELIVERYTYPE'] == 'AUTOMATIC')
+                    isAutoDeliveryMode = true
+                 else if(actualModel.mapKeyValue['DELIVERYTYPE'] == 'MANUAL')
+                    isAutoDeliveryMode = false
+                }
+            }
+            function loadFromMemory()
+            {
+                var uX = new UIDesigner({UIElement: 'rmadetails', paintFields: actualModel.orderLinefields, displayRecords: actualModel.orderLines});
+                uX.__paintGridUI();
+                // Populate header details
+                uX.__paintElementUI({depo: {UIid: 'depotname', field: 'DEPOTNAME'}, receivinglocation: {UIid: 'receivinglocation', field: 'RECEIVINGLOCATION'}}, actualModel.gridHeaderData);
+                uX.__paintElementUI({title: {UIid: 'processtitle', field: 'SVMXC__ProcessID__c'}}, actualModel.process);
+                uX.__paintElementUI({documentname: {UIid: 'documentname', field: 'Name'}, orderstatus: {UIid: 'orderstatus', field: 'SVMXC__Order_Status__c'}}, actualModel.header);
+                updateSettings();
+                // Populate empty serial selection UI
+                populateSerialSelectionforProduct('');
+                buildDataTableUI();
+                var uiComp = document.getElementById('SVMXcontentArea');
+                uiComp.style.display = 'block';
+                uiComp = document.getElementById('SVMXerrorConsole');
+                uiComp.style.display = 'none';
+                
+                actualModel.availableSN = new Object();
+                //To get availalbe sotck
+                if(actualModel.orderLines != null)
+                {
+                    if(actualModel.orderLines.length && actualModel.orderLines.length() > 0)
+                        getAvailableStock(actualModel.orderLines,actualModel.header.SVMXC__Destination_Location__c);
+                    else
+                        getAvailableStock(actualModel.orderLines,actualModel.header.SVMXC__Destination_Location__c);
+                }
+                updateErrorForAllLines();
+                SVMXloader.loaded();    
+            }
+            function loadData()
+            {
+                if(localStorage.getItem("actualModel" + processId + recordId))
+                {
+                    actualModel = getLocalStorage("actualModel" + processId + recordId);
+                    
+                    if(confirm("{!$Label.APL003_TAG066}"))loadFromMemory();
+                    else
+                    {
+                        removeLocalStorage("actualModel" + processId + recordId);
+                        loadFromServer();
+                    }
+                }
+                else
+                    loadFromServer();
+            }
+            
+            function loadFromServer()
+            {
+                var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "PROCESSRECEIPT"),new SVMXMap("SVMX_debugMode", debugMode)];
+                var request = new INTF_SFMRequest('', 'INITIALSYNC', valueMap, null);
+                sr.errorHandler = {handler : function(e, me)
+                {
+                    SVMXloader.loaded();
+                    showError('{!$Label.COMM001_TAG070}' + me.status + ' :' + me.responseText);
+                    return false;
+                }}
+                sr.responseHandler = {handler : function(e, me)
+                {
+                    var result = sr.__getResponse(me);
+                    for (var j=0; j< result.length; j++)
+                    {
+                        debugger;
+                        if(result[j].success == 'true')
+                        {
+                            if(result[j].aplOrder != null)
+                            {
+                                actualModel.process = result[j].aplOrder.svmxProcess;
+                                actualModel.header = result[j].aplOrder.orderHdrRecord;
+                                if(isFirstCall == true)
+                                {
+                                    // Populate the config data from server
+                                    sui = new SVMXUIActualModel({searchFields : actualModel.productsearchfields, isRelatedTable: true, isAdditionalInfoAvailable: true, isSecondarySearchAllowed: true});
+                                    isFirstCall = false;
+                                }
+                                if(result[j].aplOrder.orderLines != null)
+                                {
+                                    sui.__buildModel(result[j].aplOrder.orderLines);
+                                }   
+                                sui.__populateConfigurationInformation(result[j].valueMap);
+                                actualModel.orderLinefields = sui.gridFields;
+                                actualModel.orderLines = sui.gridData;
+                                actualModel.serialNumbers = sui.relatedData;
+                                actualModel.mapProductRmaLines = sui.mapFilterData;
+                                actualModel.productReplacement = sui.mapSecondaryGrouping;
+                                actualModel.mapProductAvailability = sui.mapGroupTwoFields;
+                                actualModel.gridHeaderData = sui.gridHeaderData;
+                                actualModel.requestAttribute = sui.requestAttribute;
+                                actualModel.mapKeyValue = sui.mapKeyValue;
+                                actualModel.mapKeyValues = sui.mapKeyValues;
+                                actualModel.mapSerialRmaLines = sui.mapSecondaryPrimary;
+                                updateSettings();
+                            }
+                            if(actualModel.mapKeyValues != null && actualModel.mapKeyValues['LINEIDS'] != null)
+                            {
+                                var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_debugMode", debugMode), new SVMXMap("SVMX_processType", "PROCESSRECEIPT"), new SVMXMap("SVMX_BATCHIDS", "", null, null, actualModel.mapKeyValues['LINEIDS'])];
+                                var request = new INTF_SFMRequest('', 'BATCHCALL', valueMap, null);
+                                actualModel.mapKeyValues = new Array();
+                                sui.mapKeyValues = new Array();
+                                sr.invoke("INTF_APL_GetOrder_WS", request);
+                            }
+                            else
+                            {
+                               	getAvailableStock(actualModel.orderLines,actualModel.header.SVMXC__Destination_Location__c);
+                                postBuildData();
+                            }
+                        }
+                        else
+                        {
+                            SVMXloader.loaded();
+                            showContainer('onlyCancel');
+                            showError(result[j].message);
+                            break;
+                        }
+                    }
+                }}
+                sr.invoke("INTF_APL_GetOrder_WS", request);
+            }
+            function postBuildData()
+            {
+                SVMXloader.loaded();
+                var uX = new UIDesigner({UIElement: 'rmadetails', paintFields: sui.gridFields, displayRecords: actualModel.orderLines});
+                uX.__paintGridUI();
+                // Populate header details
+                uX.__paintElementUI({title: {UIid: 'processtitle', field: 'SVMXC__ProcessID__c'}}, actualModel.process);
+                uX.__paintElementUI({depo: {UIid: 'depotname', field: 'DEPOTNAME'}}, actualModel.gridHeaderData);
+                uX.__paintElementUI({documentname: {UIid: 'documentname', field: 'Name'}, orderstatus: {UIid: 'orderstatus', field: 'SVMXC__Order_Status__c'}}, actualModel.header);
+               
+                // Populate empty serial selection UI
+                populateSerialSelectionforProduct('');
+                buildDataTableUI();
+                showContent();
+            }
+            SVMXloader.action = 'loadData';
+            SVMXloader.loadWithMessage('{!$Label.APL003_TAG056}');
+            
+            function loadTags()
+            {
+                var txtt = "{!$Label.COMM001_TAG031}";
+                var showingTxt = "{!$Label.COMM001_TAG032}";
+                var toTxt = "-";
+                var ofTxt = "/";
+                var entriesTxt = "{!$Label.COMM001_TAG033}"
+                var noDataTable = "";
+                $("span#showLang").text(txtt);
+                $("span#entries2").text(entriesTxt);
+                $("span#showingTxt").text(showingTxt);
+                $("span#showingTxt2").text(showingTxt);
+                $("span#toTxt").text(toTxt);
+                $("span#ofTxt").text(ofTxt);
+                $("span#toTxt2").text(toTxt);
+                $("span#ofTxt2").text(ofTxt);
+                $("span#entries2").text(entriesTxt);
+                $("span#entriesTxt").text(entriesTxt);
+                $("span#entriesTxt2").text(entriesTxt);
+                $("span#tablermadetails_first").text("{!$Label.COMM001_TAG024}");
+                $("span#tablermadetails_previous").text("{!$Label.COMM001_TAG026}");
+                $("span#tablermadetails_next").text("{!$Label.COMM001_TAG025}");
+                $("span#tablermadetails_last").text("{!$Label.COMM001_TAG027}");
+                $("span#noMatchingRecords").text("");
+                $("span#noDataTable").text(noDataTable);
+            }
+            
+            
+            
+            function buildDataTableUI()
+            {
+                rmadetailholder = $('#tablermadetails').dataTable({
+                    	"sPaginationType": "full_numbers",
+                    	"bSort": false
+               	});
+                instantiateClickInterface();
+                loadTags();
+                
+                // Code for apply filter
+                var applyTxt = '{!$Label.APL003_TAG016}';
+                var inputTxtVal = $(".dataTables_filter label input:text").attr("value", applyTxt);
+                var inputBoxVal = inputTxtVal.val();
+                
+                $('table#tablermadetails').wrap('<div class="tablewrapper" />');
+                searchInput = $('.dataTables_filter label input:text');
+                searchDefault = inputBoxVal;
+                
+                searchInput.click(function () {
+                    if($(this).val() == searchDefault)
+                        $(this).val('');
+                });
+                
+                searchInput.blur(function () {
+                    if($(this).val() == '')
+                        $(this).val(searchDefault);
+                });
+        }
+
+        function updateErrorForAllLines()
+        {
+            var pushedKeys = new Object();
+            for(key in actualModel.persistentData)
+            {
+                var originalKey = key;
+                if(actualModel.orderLines[key] == null)
+                {
+                    if(actualModel.additionalInformation != null && actualModel.additionalInformation[key] != null && actualModel.additionalInformation[key].clonedFromId != null)
+                        key = actualModel.additionalInformation[key].clonedFromId;
+                    else
+                        continue;
+                    if(actualModel.persistentData[key] == null)
+                        actualModel.persistentData[key] = actualModel.persistentData[originalKey];
+                }
+                if(pushedKeys[key] == null)
+                {
+                    pushedKeys[key] = true;
+                    showErrorPopup(key);
+                }
+            }
+        }
+        
+        function showErrorPopup(key)
+        {
+            var errorLineInst = $('#Name_'+key);
+            errorLineInst[0].innerHTML = '<div class="errorConsole" title="' + actualModel.persistentData[key] + '">' + errorLineInst[0].innerHTML + '</div>';
+            $(".errorConsole").tipTip({defaultPosition: "top", edgeOffset: 1});
+            //showError(actualModel.persistentData[key]);
+        }
+        
+        function instantiateClickInterface()
+        {
+            if(actualModel.persistentData != null)
+                updateErrorForAllLines();
+            $('#tablermadetails thead>tr>th').unbind('click');
+            var trInstance = $('table#tablermadetails').find('tr');
+            trInstance.bind('click', function(event) 
+            {
+                trInstance.removeClass('activetr');
+                var tds = $(this).addClass('activetr').find('td');
+                if(actualModel.orderLines[this.id] != null)
+                {
+                    actualModel.currentSelectedLine = this.id;
+                    var prdCode = document.getElementById('productcode');
+                    if(prdCode.value != actualModel.orderLines[this.id]['SVMXC__Product__r.ProductCode'])
+                    {
+                        prdCode.value = actualModel.orderLines[this.id]['SVMXC__Product__r.ProductCode'];
+                        onblurProductSelection('productcode');
+                        //addSerialSelection(this.id, actualModel.serialNumbers[this.id]);
+                    }
+                    buildSerialNumberUI(this.id);
+                    loadTags();
+                }
+            });
+            
+            var onCountOptionChange = $('#tablermadetails_length')
+            onCountOptionChange.change(function () {
+                clearSerialNumbers();
+                var trInstance = $('table#tablermadetails').find('tr');
+                trInstance.removeClass('activetr');
+                instantiateClickInterface();
+            });
+            
+            var onPageChange = $('span[class^="paginate"]')
+            onPageChange.click(function () {
+                clearSerialNumbers();
+                var trInstance = $('table#tablermadetails').find('tr');
+                trInstance.removeClass('activetr');
+                instantiateClickInterface();
+                 loadTags();
+            });
+            
+            var onPageChange2 = $('span[id^="tablermadetails"]')
+            onPageChange2.click(function () {
+                clearSerialNumbers();
+                var trInstance = $('table#tablermadetails').find('tr');
+                trInstance.removeClass('activetr');
+                instantiateClickInterface();
+                 loadTags();
+            });
+            
+            var onFilterChange = $('.dataTables_filter').find('input');
+            onFilterChange.blur(function () {
+                clearSerialNumbers();
+                var trInstance = $('table#tablermadetails').find('tr');
+                trInstance.removeClass('activetr');
+                instantiateClickInterface();
+                 loadTags();
+            });
+        }
+        function getAvailableStock(orderLines,depotId)
+        {
+            for(key in orderLines)
+            {
+                productIds.push(orderLines[key].SVMXC__Product__c);
+            }
+            var valueMap = [new SVMXMap("DEPOTNAME", depotId), new SVMXMap("PRODUCTID", '', null, null, productIds)];
+            var request = new INTF_SFMRequest('', '', valueMap, null);
+            sr.errorHandler = {handler : function(e, me)
+            {
+                showError('{!$Label.COMM001_TAG071}' + me.status + ' :' + me.responseText);
+                return false;
+            }}
+            sr.responseHandler = {handler : function(e, me)
+            {
+                var result = sr.__getResponse(me);
+                for (var j=0; j< result.length; j++)
+                {
+                    if(result[j].success == 'true')
+                    {
+                        if(result[j].values != null)
+                        {
+                            if(result[j].values instanceof Array)
+                            {
+                                for (var k = 0; k < result[j].values.length; k++)
+                                    actualModel.availableSN[result[j].values[k]] = "";
+                            }
+                            else
+                            {
+                                actualModel.availableSN[result[j].values] = "";
+                            }
+                        }
+                    }   
+                }
+            }}
+            sr.invoke("INTF_APL_GetAvailableStockSerial_WS", request);
+        }
+        // Button Actions
+        function invokeCancel()
+        {
+            top.location = "{!JSENCODE($CurrentPage.parameters.SVMX_retURL)}";
+        }
+        function invokeDone()
+        {
+            SVMXloader.loaded();
+            if('{!JSENCODE($CurrentPage.parameters.SVMX_NxtStepID)}' != '')
+            {
+                SVMXBGProcessor.nextProcessId = '{!JSENCODE($CurrentPage.parameters.SVMX_NxtStepID)}';
+                SVMXBGProcessor.currentRecordId = '{!RIGHT($CurrentPage.parameters.SVMX_retURL, 18)}';
+                SVMXBGProcessor.message = '{!$Label.APL002_TAG045}';
+                SVMXBGProcessor.load();
+            }
+            else
+            {
+                if(isDeliveryMode == true)
+                {
+                    if(isAutoDeliveryMode == true)
+                    {
+                        top.location = "/apex/APL_DeliveryOnReceipt?SVMX_mode=BGMODE&SVMX_recordId={!RIGHT($CurrentPage.parameters.SVMX_retURL, 18)}&SVMX_retURL={!JSENCODE($CurrentPage.parameters.SVMX_retURL)}&SVMX_processId="+processId;
+                    }
+                    else
+                    {
+                        top.location = "/apex/APL_DeliveryOnReceipt?SVMX_recordId={!RIGHT($CurrentPage.parameters.SVMX_retURL, 18)}&SVMX_retURL={!JSENCODE($CurrentPage.parameters.SVMX_retURL)}&SVMX_processId="+processId;
+                    }
+                }
+                else
+                    top.location = "{!JSENCODE($CurrentPage.parameters.SVMX_retURL)}";
+            }
+        }
+        
+        function invokeSaveAndDeliveryCall()
+        {
+            //top.location = "/apex/APL_DeliveryOnReceipt?SVMX_recordId={!RIGHT($CurrentPage.parameters.SVMX_retURL, 18)}&SVMX_retURL={!JSENCODE($CurrentPage.parameters.SVMX_retURL)}&SVMX_processId="+processId;
+        }
+        
+        var isSavedOnce = false;
+        function trySavingOnce()
+        {
+            isSavedOnce = true;
+            doSave();
+        }
+        
+        function doSave()
+        {
+            SVMXloader.loadWithMessage('{!$Label.APL003_TAG065}');
+            var aplHeader = actualModel.header;
+            var aplOrderLines = new Array();
+            var aplOrderLineIds = new Array();
+            var count = 0;
+            var arrRequest = [];
+            var syncEventCount = 0;
+            var totalLineCount = 0;
+            var processingCount = 0;
+            for(recordKey in actualModel.splitedOrderLines)
+            {
+                count++;
+                totalLineCount++;
+                var serialNumbers = new Array();
+                var serialNos = actualModel.serialNumbers[recordKey];
+                serialNumbers.push(serialNos);
+                var orderLine = actualModel.splitedOrderLines[recordKey];
+                // If line has some error associated donot add the line
+                if(isSavedOnce == true && SVMXContains(actualModel.oncePushableIds, orderLine.Id) == false)
+                    continue;
+                var orderLineUniqueId = orderLine.Id;
+                aplOrderLineIds.push(orderLineUniqueId);
+                if(orderLine.Id != null && (orderLine.Id).indexOf('UNIQUE') != -1)
+                    orderLine.Id = null;
+                if(actualModel.additionalInformation[recordKey] != null)
+                    aplOrderLines.push(new APL_OrderLineCollection(serialNumbers, orderLine, null, actualModel.additionalInformation[recordKey].isEnableSerializedTracking, actualModel.additionalInformation[recordKey].isProductStockable, actualModel.additionalInformation[recordKey].clonedFromId, orderLineUniqueId));
+                else
+                    aplOrderLines.push(new APL_OrderLineCollection(serialNumbers, orderLine, null, false, false, null, orderLineUniqueId));
+                
+                if((count == actualModel.batchCount && isSavedOnce == false) || (count == actualModel.batchCount && isSavedOnce == true && aplOrderLines.length > 0) )
+                {
+                    var aplOrder = new APL_Order(aplHeader, null, aplOrderLines, null);
+                    var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_debugMode", debugMode), new SVMXMap("SVMX_processType", "PROCESSRECEIPT")];
+                    
+                    if(actualModel.unexpectedSerialNumbers.length && actualModel.unexpectedSerialNumbers.length > 0)
+                    {
+                        valueMap.push(new SVMXMap('UNEXPECTEDSERIALNUMBERS', null, null, null, actualModel.unexpectedSerialNumbers));
+                    }
+                    var request = new INTF_SFMRequest('EVENT' + syncEventCount, '', valueMap, aplOrder);
+                    arrRequest[arrRequest.length] = {
+                    props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                methodName : "INTF_APL_SaveOrder_WS", data : request , options : {async: false}};
+                    actualModel.syncEvents['EVENT' + syncEventCount] = aplOrderLineIds;
+                    // Reset data
+                    syncEventCount++;
+                    aplOrderLines = new Array();
+                    aplOrderLineIds = new Array();
+                    count = 0;
+                }
+            }
+            // If count is less than the batch, it will not create the request for last partial batch. To solve this we have added this code
+            if((count> 0 && count != actualModel.batchCount  && isSavedOnce == false) || (count> 0 && count != actualModel.batchCount && isSavedOnce == true && aplOrderLines.length > 0))
+            {
+                var aplOrder = new APL_Order(aplHeader, null, aplOrderLines, null);
+                var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_debugMode", debugMode), new SVMXMap("SVMX_processType", "PROCESSRECEIPT")];
+                
+                if(actualModel.unexpectedSerialNumbers.length && actualModel.unexpectedSerialNumbers.length > 0)
+                {
+                    valueMap.push(new SVMXMap('UNEXPECTEDSERIALNUMBERS', null, null, null, actualModel.unexpectedSerialNumbers));
+                }
+                var request = new INTF_SFMRequest('EVENT' + syncEventCount, '', valueMap, aplOrder);
+                arrRequest[arrRequest.length] = {
+                   props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                               methodName : "INTF_APL_SaveOrder_WS", data : request , options : {async: false}};
+                actualModel.syncEvents['EVENT' + syncEventCount] = aplOrderLineIds;
+                // Reset data
+                syncEventCount++;
+                aplOrderLines = new Array();
+                aplOrderLineIds = new Array();
+            }
+            
+            if(arrRequest.length > 0)
+            {
+                processingCount += (count > 0 ) ? count : actualModel.batchCount;
+                SVMXloader.loadWithMessage('{!$Label.APL003_TAG057}(' + processingCount + ' / ' + totalLineCount + ')...');
+                actualModel.oncePushableIds = new Array();
+                
+                var srSave = new SOAPRequestCollection(arrRequest);
+                srSave.requestCount = arrRequest.length;
+                srSave.allSuccess = true;
+                srSave.errorHandler = {handler : function(me)
+                {
+                    SVMXloader.loaded();
+                    showError('{!$Label.APL003_TAG054} ' + me.status + ' :' + me.responseText);
+                    srSave.allSuccess = false;
+                    return false;
+                }}
+                srSave.responseHandler = {handler : function(me)
+                {
+                    var allResponses = srSave.getAllResponses();
+                    var isAllSuccess = true;
+                    for(var resp in allResponses)
+                    {
+                        var result = sr.__getResponse(allResponses[resp]);
+                        for (var j=0; j< result.length; j++)
+                        {
+                            if(actualModel.syncEvents[result[j].eventName] == null)
+                                continue;
+                            
+                            SVMXloader.loadWithMessage('{!$Label.APL003_TAG057}(' + processingCount + ' / ' + totalLineCount + ')...');
+                            srSave.requestCount--;
+                            processingCount += (actualModel.syncEvents[result[j].eventName].length) ? actualModel.syncEvents[result[j].eventName].length : 1;
+                            if(result[j].success == 'true')
+                            {
+                                var lstSentIds = actualModel.syncEvents[result[j].eventName];
+                                for (var k = 0; k < lstSentIds.length; k++)
+                                {
+                                    delete actualModel.orderLines[lstSentIds[k]];
+                                }
+                                
+                                //Identify the unresolved lines
+                                if(result[j].valueMap != null)
+                                {
+                                    var IBEntitlementDetails = new Array();
+                                    if(!result[j].valueMap.length)
+                                    {
+                                        IBEntitlementDetails = [result[j].valueMap];
+                                    }
+                                    else
+                                        IBEntitlementDetails = result[j].valueMap;
+                                    var unResolvedLines = new Array();
+                                    var IBResolutionNameSpace;
+                                    var IBResolutionClass;
+                                    var IBResolutionMethod;
+                                    for (var i = 0; i < IBEntitlementDetails.length; i++)
+                                    {
+                                        if(IBEntitlementDetails[i].key == 'UNEXPECTEDLINES')
+                                        {
+                                            actualModel.unExpectedSerialNumberLines.push(new SVMXMap(IBEntitlementDetails[i].key, IBEntitlementDetails[i].value))
+                                        }
+                                        if(IBEntitlementDetails[i].key == 'UNRESOLVEDLINES')
+                                        {
+                                            actualModel.unResolvedLines.push(new SVMXMap(IBEntitlementDetails[i].key, IBEntitlementDetails[i].value))
+                                        }
+                                        if(IBEntitlementDetails[i].key == 'NAMESPACE')
+                                        {
+                                            actualModel.IBResolutionNameSpace = IBEntitlementDetails[i].value;
+                                        }
+                                        if(IBEntitlementDetails[i].key == 'CLASS')
+                                        {
+                                            actualModel.IBResolutionClass = IBEntitlementDetails[i].value;
+                                        }
+                                        if(IBEntitlementDetails[i].key == 'METHOD')
+                                        {
+                                            actualModel.IBResolutionMethod = IBEntitlementDetails[i].value;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                srSave.allSuccess = false;
+                                if(result[j].message != null && result[j].message != '')
+                                {
+                                    actualModel.persistentData[result[j].eventName] = result[j].message;
+                                }
+                                else if(result[j].errors )
+                                {
+                                    var lstErrors = new Array();
+                                    if(!result[j].errors.length)
+                                        lstErrors = [result[j].errors];
+                                    else
+                                        lstErrors = result[j].errors;
+                                    for (var k = 0; k < lstErrors.length; k++)
+                                    {
+                                        actualModel.persistentData[lstErrors[k].uniqueId] = lstErrors[k].errorMsg;
+                                    }
+                                    var lstSentIds = actualModel.syncEvents[result[j].eventName];
+                                    for (var k = 0; k < lstSentIds.length; k++)
+                                    {
+                                        if(actualModel.persistentData[lstSentIds[k]] == null)
+                                            actualModel.oncePushableIds.push(lstSentIds[k]);
+                                    }
+                                }
+                            }
+                            delete actualModel.syncEvents[result[j].eventName];
+                        }
+                    }
+                    
+                    if(srSave.requestCount == 0)
+                    {
+                        if(srSave.allSuccess == true)
+                        {
+                            // If there is errors previously occured, update the actual model and local cache as well
+                            if(isSavedOnce == true)
+                            {
+                                setLocalStorage("actualModel"+processId + recordId, actualModel);
+                            }
+                            else if(localStorage.getItem("actualModel" + processId + recordId))
+                            {// If there is no errors and if local data exist clear on next sucessful save
+                                removeLocalStorage("actualModel" + processId + recordId);
+                                performHeaderSave();
+                            }
+                            else
+                            {// Every thing went smooth in first call, so just do serial number resolution if any exist
+                                performHeaderSave();
+                            }
+                        }
+                        else
+                        {
+                            if(isSavedOnce == true)
+                            {
+                                setLocalStorage("actualModel"+processId + recordId, actualModel);
+                            }
+                            else
+                            {
+                                if(actualModel.oncePushableIds == null || actualModel.oncePushableIds.length == 0)
+                                    setLocalStorage("actualModel"+processId + recordId, actualModel);
+                                someFailureOnSave();
+                            }
+                        }
+                    }
+                }}
+                srSave.invokeAll();
+            }
+            else
+            {
+                invokeDone();
+            }
+        }
+        
+        function someFailureOnSave()
+        {
+            SVMXloader.loaded();
+            if(actualModel.oncePushableIds != null && actualModel.oncePushableIds.length > 0)
+            {
+                showError('{!$Label.COMM001_TAG070}');
+                trySavingOnce();
+            }
+            else
+            {
+                updateErrorForAllLines();
+                var errorMsg = '';
+                for(key in actualModel.persistentData)
+                {
+                    if(key.indexOf('EVENT') != -1)
+                    {
+                        errorMsg += actualModel.persistentData[key];
+                    }
+                }
+                errorMsg = '{!$Label.COMM001_TAG070}' + (errorMsg != '') ? '\n' + ':' + errorMsg : '';
+                showError(errorMsg);
+            }
+            return false;
+        }
+        
+        
+        
+        function performSerialNumberResolution()
+        {
+            if(actualModel.unResolvedLines != null && actualModel.IBResolutionNameSpace != null && actualModel.IBResolutionNameSpace != '' && actualModel.IBResolutionClass != null && actualModel.IBResolutionClass != '' && actualModel.IBResolutionMethod != null && actualModel.IBResolutionMethod != '')
+            {
+                var srIB = new SOAPRequest({orgNameSpace: actualModel.IBResolutionNameSpace, sessionId : __sfdcSessionId, endPointName: actualModel.IBResolutionClass});
+                var requestIB = new INTF_SFMRequest('', '', actualModel.unResolvedLines, null);
+                srIB.errorHandler = {handler : function(e, me)
+                {
+                    SVMXloader.loaded();
+                    updateErrorForAllLines();
+                    showError('{!$Label.COMM001_TAG070}' + me.status + ' :' + me.responseText);
+                    return false;
+                }}
+                srIB.responseHandler = {handler : function(e, me)
+                {
+                    var result = srIB.__getResponse(me);
+                    for (var j=0; j< result.length; j++)
+                    {
+                        if(result[j].success == 'true')
+                        {
+                            performEntitlement(actualModel.unExpectedSerialNumberLines);
+                        }
+                        else
+                        {
+                            performCustomEvent('EVENT_AFTER RECEIPT', 'PROCESSRECEIPT');
+                            //invokeDone();
+                        }
+                        break;
+                    }
+                }}
+                srIB.invoke(actualModel.IBResolutionMethod, requestIB);
+            }
+            else if(actualModel.unExpectedSerialNumberLines != null && actualModel.unExpectedSerialNumberLines.length > 0)
+            {
+                performEntitlement(actualModel.unExpectedSerialNumberLines);
+            }
+            else
+            {
+                performCustomEvent('EVENT_AFTER RECEIPT', 'PROCESSRECEIPT');
+                //invokeDone();
+            }
+        }
+        
+        // Perform Entitlement for unexpected serial numbers
+        function performEntitlement(unExpectedSN)
+        {
+            var request = new INTF_SFMRequest('', '', unExpectedSN, null);
+            sr.errorHandler = {handler : function(e, me)
+            {
+                SVMXloader.loaded();
+                updateErrorForAllLines();
+                showError('{!$Label.APL003_TAG054}' + me.status + ' :' + me.responseText);
+                return false;
+            }}
+            sr.responseHandler = {handler : function(e, me)
+            {
+                var result = sr.__getResponse(me);
+                for (var j=0; j< result.length; j++)
+                {
+                    if(result[j].success == 'true')
+                    {
+                        performCustomEvent('EVENT_AFTER RECEIPT', 'PROCESSRECEIPT');
+                        //invokeDone();
+                    }
+                    else
+                    {
+                        updateErrorForAllLines();
+                        SVMXloader.loaded();
+                        showError('{!$Label.APL003_TAG067}' + result[j].message);
+                        return false;
+                    }
+                    break;
+                }
+            }}
+            sr.invoke("INTF_APL_PerformEntitlement_On_PD", request)
+        }
+        
+        // Pre save actions are invoked to split lines and for apply mapping
+        function doPreSaveUpdate()
+        {
+            debugger;
+            SVMXloader.loadWithMessage('{!$Label.APL003_TAG064}');
+            var aplHeader = actualModel.header;
+            var aplOrderLines = new Array();
+            var uniqueCount = 0;
+            for(recordKey in actualModel.orderLines)
+            {
+                var serialNumbers = new Array();
+                var serialNos = actualModel.serialNumbers[recordKey];
+                var isFirstItem = true;
+                var expectedSerialNoCount = 0;
+                //Set the RMa record Id for RMA lines
+                actualModel.orderLines[recordKey].SVMXC__RMA_Shipment_Order__c = actualModel.header.Id;
+                if(actualModel.orderLines[recordKey].SVMXC__Actual_Quantity2__c > 0)//if Actual Quantity is greater then one then need to do spliting..
+                {
+                    for(serialKey in serialNos)
+                    {
+                        var currentOrderLine = new Object;
+                        currentOrderLine = JSON.parse( JSON.stringify( actualModel.orderLines[recordKey] ) );
+                        var selectedSerialNumber = serialNos[serialKey];
+                        // Donot send removed serial numbers to save
+                        if(!selectedSerialNumber.reconciliationAction || selectedSerialNumber.reconciliationAction != 'Remove')
+                        {
+                            //Expected and Received..
+                            if(selectedSerialNumber.isReceived != null && selectedSerialNumber.isReceived && selectedSerialNumber.isExpected != null && selectedSerialNumber.isExpected)
+                            {
+                                //Update the Exsisting PO Line Record..
+                                expectedSerialNoCount++;
+                                currentOrderLine.SVMXC__Expected_Quantity2__c  = 1;
+                                currentOrderLine.SVMXC__Actual_Quantity2__c = 1;
+                                currentOrderLine.SVMXC__Serial_Number_List__c = selectedSerialNumber.serialNumber;
+                                currentOrderLine.SVMXC__Received__c = true;
+                                currentOrderLine.Id = recordKey;
+                                if(isFirstItem == true)
+                                {
+                                    actualModel.splitedOrderLines[recordKey] = currentOrderLine;
+                                    actualModel.serialNumbers[recordKey] = selectedSerialNumber;
+                                    isFirstItem = false;
+                                }
+                                else
+                                {
+                                    var uniqueId = 'UNIQUEID_' + uniqueCount;
+                                    uniqueCount++;
+                                    currentOrderLine.SVMXC__Serial_Number__c = null;
+                                    currentOrderLine.Id = uniqueId;
+                                    actualModel.splitedOrderLines[uniqueId] = currentOrderLine;
+                                    actualModel.serialNumbers[uniqueId] = selectedSerialNumber;
+                                    
+                                    //Setup additiona information
+                                    var additionalInfo = new Object;
+                                    additionalInfo.clonedFromId = recordKey;
+                                    actualModel.additionalInformation[uniqueId] = additionalInfo;
+                                }
+                            }
+                            // Not Expected but Received
+                            else if((selectedSerialNumber.isExpected == null || selectedSerialNumber.isExpected == 'false') && selectedSerialNumber.isReceived != null && selectedSerialNumber.isReceived == 'true')
+                            {
+                                //Update the Exsisting PO Line Record..
+                                currentOrderLine.SVMXC__Expected_Quantity2__c  = 0;
+                                currentOrderLine.SVMXC__Actual_Quantity2__c = 1;
+                                currentOrderLine.SVMXC__Serial_Number_List__c = selectedSerialNumber.serialNumber;
+                                currentOrderLine.SVMXC__Received__c = true;
+                                currentOrderLine.SVMXC__Serial_Number__c = null;
+                                if(isFirstItem == true)
+                                {
+                                    actualModel.splitedOrderLines[recordKey] = currentOrderLine;
+                                    actualModel.serialNumbers[recordKey] = selectedSerialNumber;
+                                    isFirstItem = false;
+                                }
+                                else
+                                {
+                                    var uniqueId = 'UNIQUEID_' + uniqueCount;
+                                    uniqueCount++;
+                                    currentOrderLine.Id = uniqueId;
+                                    actualModel.splitedOrderLines[uniqueId] = currentOrderLine;
+                                    actualModel.serialNumbers[uniqueId] = selectedSerialNumber;
+                                    
+                                    //Setup additiona information
+                                    var additionalInfo = new Object;
+                                    additionalInfo.clonedFromId = recordKey;
+                                    actualModel.additionalInformation[uniqueId] = additionalInfo;
+                                }
+                                //Setup additiona information
+                                var additionalInfo = new Object;
+                                additionalInfo.clonedFromId = recordKey;
+                                actualModel.additionalInformation[uniqueId] = additionalInfo;
+                            }
+                            // Expected but not Received
+                            else if((selectedSerialNumber.isExpected != null && selectedSerialNumber.isExpected == 'true') && (selectedSerialNumber.isReceived == null || selectedSerialNumber.isReceived == 'false'))
+                            {
+                                expectedSerialNoCount++;
+                                currentOrderLine.SVMXC__Serial_Number_List__c = selectedSerialNumber.serialNumber;
+                                currentOrderLine.SVMXC__Serial_Number__c = null;
+                                currentOrderLine.SVMXC__Received__c = false;
+                                currentOrderLine.SVMXC__Expected_Quantity2__c = 1;
+                                currentOrderLine.SVMXC__Actual_Quantity2__c = 0;
+                                selectedSerialNumber.isReceived = false;
+                                if(isFirstItem == true)
+                                {
+                                    actualModel.splitedOrderLines[recordKey] = currentOrderLine;
+                                    actualModel.serialNumbers[recordKey] = selectedSerialNumber;
+                                    isFirstItem = false;
+                                }
+                                else
+                                {
+                                    var uniqueId = 'UNIQUEID_' + uniqueCount;
+                                    uniqueCount++;
+                                    currentOrderLine.Id = uniqueId;
+                                    actualModel.splitedOrderLines[uniqueId] = currentOrderLine;
+                                    actualModel.serialNumbers[uniqueId] = selectedSerialNumber;
+                                    
+                                    //Setup additiona information
+                                    var additionalInfo = new Object;
+                                    additionalInfo.clonedFromId = recordKey;
+                                    actualModel.additionalInformation[uniqueId] = additionalInfo;
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Handle if number of expected qty and serial number list has different qty
+                    if(actualModel.orderLines[recordKey].SVMXC__Expected_Quantity2__c != expectedSerialNoCount)
+                    {
+                        var currentOrderLine = new Object;
+                        currentOrderLine = JSON.parse( JSON.stringify( actualModel.orderLines[recordKey] ) );
+                        // If received is less than expected, create a entry with blank serial number list and remaining expected qty
+                        if(actualModel.orderLines[recordKey].SVMXC__Expected_Quantity2__c > expectedSerialNoCount)
+                        {
+                            
+                            currentOrderLine.SVMXC__Serial_Number_List__c = null;
+                            currentOrderLine.SVMXC__Serial_Number__c = null;
+                            currentOrderLine.SVMXC__Received__c = false;
+                            currentOrderLine.SVMXC__Service_Order__c = null;
+                            currentOrderLine.SVMXC__Expected_Quantity2__c = actualModel.orderLines[recordKey].SVMXC__Expected_Quantity2__c - expectedSerialNoCount;
+                            currentOrderLine.SVMXC__Actual_Quantity2__c = 0;
+                            if(isFirstItem == true)
+                            {
+                                currentOrderLine.Id = actualModel.orderLines[recordKey].Id;
+                                actualModel.splitedOrderLines[recordKey] = currentOrderLine;
+                            }
+                            else
+                            {
+                                var uniqueId = 'UNIQUEID_' + uniqueCount;
+                                currentOrderLine.Id = uniqueId;
+                                actualModel.splitedOrderLines[uniqueId] = currentOrderLine;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //actualModel.splitedOrderLines[recordKey] = currentOrderLine;
+                }
+            }
+            doSave();
+        }
+        
+        function performHeaderSave()
+        {
+                var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_debugMode", debugMode), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "PROCESSRECEIPT")];
+                var request = new INTF_SFMRequest('', '', valueMap, null);
+                sr.errorHandler = {handler : function(e, me)
+                {
+                    SVMXloader.loaded();
+                    showError('{!$Label.APL003_TAG054}' + me.status + ' :' + me.responseText);
+                    return false;
+                }}
+                sr.responseHandler = {handler : function(e, me)
+                {
+                    var result = sr.__getResponse(me);
+                    for (var j=0; j< result.length; j++)
+                    {
+                        if(result[j].success == 'true')
+                        {
+                            performSerialNumberResolution();
+                        }
+                        else
+                        {
+                            showError(result[j].message);
+                        }
+                    }
+                }}
+                sr.invoke("INTF_APL_PartsOrderClosure_WS", request);
+        }
+        
+        // Core reusable methods
+        function isNotNull(element, attribute) {
+            if(element != null && element[attribute] != null)
+                return true;
+            else
+                return false;
+        }
+        
+        </script>
+    </apex:form>
+</apex:page>

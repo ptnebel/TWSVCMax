@@ -1,0 +1,10 @@
+<apex:page Controller="SVMXC.WORD_OptimaxCall" action="{!SVMX_WSDLCall}" id="page1">
+<apex:form id="form1">
+<apex:pageblock >
+<apex:pageMessages />
+<apex:pageblockbuttons Location="Bottom">
+    <apex:commandButton value="{!DispMethods.TAG140}" action="{!BackToDP}"></apex:commandButton> <!-- DispMethods.TAG140 -->
+</apex:pageblockbuttons> 
+</apex:pageblock>
+</apex:form>
+</apex:page>

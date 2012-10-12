@@ -1,0 +1,114 @@
+<apex:page id="ManageSMDPage" controller="SVMXC.CONF_ManageSubmodules" sidebar="true" showHeader="true" tabStyle="SVMXC__ServiceMax_Settings__c">    
+    <script type="text/javascript">
+      
+              function customSelectChecked( form,value)
+                {   
+                    var i = 0;
+                    for (i = 0; i < form.elements.length; i++) {
+                        if (form.elements[i].name.search('selectedTwo') > 0 && form.elements[i].disabled == false) {
+                            form.elements[i].checked = value;
+                        }
+                    }
+                }    
+                function customSelectAllOrNoneByCheckbox(form,control)
+                {  
+                    customSelectChecked( form,control.checked);
+                }
+
+    </script>   
+    
+    <apex:form id="ManageSMDForm">
+        <apex:pageBlock id="block" title="{!TAG001}" helpTitle="{!TAG003}" helpUrl="{!HLPURL}"  >                  
+            <apex:pageBlockButtons location="top" >
+                <apex:commandButton action="{!BackToHomePage}" value="{!Tag002}" id="backtohomesetup"/>
+            </apex:pageBlockButtons>
+             <apex:actionStatus id="LodingStatus" startText="{!TAG028}" /> 
+              <apex:pageBlockSection columns="2">  
+              
+              <apex:pageBlockSectionItem dataStyleClass="centerTA"   labelStyleClass="centerTA">
+                <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" columnClasses="colspan50" >
+                <apex:outputLabel for="Modulelist" value="{!TAG004}"  styleClass="labelCol" style="margin:0px 5px;"></apex:outputLabel>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                 <apex:selectList value="{!moduleView}" onchange="submoduleBlock()" size="1">                
+                <apex:selectOptions value="{!items}" />
+                <apex:actionFunction action="{!submodule}" name="submoduleBlock" status="LodingStatus" reRender="ManageSMDForm" /> 
+             </apex:selectList>
+                </apex:outputPanel> 
+                
+            </apex:panelGrid>
+    </apex:pageBlockSectionItem>
+
+              
+                                        
+
+             </apex:pageBlocksection>
+        </apex:pageBlock>
+        
+        <!-- Neeraj(Feb-7th-2012): Accessing the value through tags instead of {!$ObjectType.ServiceMax_Processes__c.fields.SubmoduleID__c.Label} -->
+        <apex:pageBlock id="standardsubmodules" rendered="{!NOT(ISNULL(standSubModule ))}" title="{!Tag005}" >
+        <apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" /> 
+             <apex:pageBlockButtons location="top">
+               <apex:commandButton action="{!standardSettings}" value="{!Tag010}"  id="settingsOne"  />
+            </apex:pageBlockButtons>
+            <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" width="100%" border="0" rowClasses="line80,line80" columnClasses="colspan50,colspan50">                  
+            <apex:outputText value="{!TAG027}"  rendered="{!ISNULL(standSubModule)}" />
+            <apex:pageBlockTable value="{!standSubModule}" rendered="{!NOT(ISNULL(standSubModule))}"  var="item"> 
+                    <apex:column >             
+                     <apex:facet name="header">&nbsp;</apex:facet>
+                      <apex:inputField value="{!item.SVMXC__Select__c}" id="selected" /> 
+                </apex:column>                  
+                <apex:column >
+                    <apex:facet name="header" >{!TAG029}</apex:facet>                           
+                    <apex:outputText value="{!item.SVMXC__SubmoduleID__c}"/>                                          
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >{!TAG030}</apex:facet>                              
+                    <apex:outputField value="{!item.SVMXC__Name__c}"/>                                         
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >{!TAG031}</apex:facet>                           
+                    <apex:outputField value="{!item.SVMXC__Description__c}"/>                                          
+                </apex:column>                  
+            </apex:pageBlockTable>                              
+            </apex:panelGrid>   
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!NOT(ISNULL(standSubModule ))}"  id="customsubmodules" mode="edit" title="{!Tag006}" >
+        <apex:pageMessages rendered="{!CustomDisplayBlockLevelMessage}" showDetail="true" />
+        <apex:actionStatus id="LodingStdStatus"  startText="{!TAG028}" />
+        <apex:outputLabel rendered="{!if(IsCustAvail==false,true,false)}" value="{!TAG017}" style="font-size:11px"/>
+
+           <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!AddCustomSubModuleLine}" reRender="ManageSMDForm" value="{!Tag007}" id="theAddLine1"  status="LodingStdStatus"/>
+                <apex:commandButton action="{!Save}" value="{!Tag008}" id="save" rendered="{!DisplayTableColumns}"  status="LodingStdStatus" />
+                <apex:commandButton action="{!RemoveCustomSubmoduleLine}"  value="{!TAG009}" id="delete" rendered="{!DisplayTableColumns}"   reRender="customsubmodules"   status="LodingStdStatus"/>
+                <apex:commandButton action="{!customSettings}" value="{!Tag010}" rendered="{!DisplayTableColumns}"  id="settingsTwo" />                             
+            </apex:pageBlockButtons>
+             <apex:outputText value="{!TAG027}" rendered="{!ISNULL(standSubModule)}" />
+            <apex:pageBlockTable id="customPBT" value="{!CustomSubModule}"   rendered="{!DisplayTableColumns}" var="item">
+                <apex:column style="width:10px">             
+                     <apex:facet name="header"></apex:facet>
+                      <apex:inputField value="{!item.SVMXC__Select__c}" id="selectedTwo" /> 
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >{!TAG029}</apex:facet>                           
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/> 
+                        <apex:inputField value="{!item.SVMXC__SubmoduleID__c}" />
+                    </apex:outputPanel>                                           
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header" >{!TAG030}</apex:facet>
+                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>                              
+                        <apex:inputField value="{!item.SVMXC__Name__c}" />
+                    </apex:outputPanel>                                          
+                </apex:column>
+                <apex:column width="60%">
+                    <apex:facet name="header" >{!TAG031}</apex:facet>                           
+                    <apex:inputField value="{!item.SVMXC__Description__c}" style="width:97%"/> 
+                </apex:column>  
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Route card contains high-level information about a product&apos;s journey through the repair process. Separate route cards are created for inbound (to repair) and outbound (to customer) journeys of a product</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Case_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the originating customer case line</description>
+        <externalId>false</externalId>
+        <label>Case Line</label>
+        <referenceTo>Case_Line__c</referenceTo>
+        <relationshipLabel>Route Cards</relationshipLabel>
+        <relationshipName>Route_Cards</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Case__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the originating customer case</description>
+        <externalId>false</externalId>
+        <label>Case</label>
+        <referenceTo>Case</referenceTo>
+        <relationshipLabel>Route Cards</relationshipLabel>
+        <relationshipName>Route_Cards</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Current_Stop__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Current stop in the route</description>
+        <externalId>false</externalId>
+        <label>Current Stop</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>Route Cards (Current Stop)</relationshipLabel>
+        <relationshipName>Route_Cards1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Customer__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the customer account that initiated the return</description>
+        <externalId>false</externalId>
+        <label>Customer</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Route Cards</relationshipLabel>
+        <relationshipName>Route_Cards</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>First_Stop__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>First (initial) stop in the route</description>
+        <externalId>false</externalId>
+        <label>First Stop</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>Route Cards (First Stop)</relationshipLabel>
+        <relationshipName>Route_Cards2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Last_Stop__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Last stop in the route</description>
+        <externalId>false</externalId>
+        <label>Last Stop</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>Route Cards (Last Stop)</relationshipLabel>
+        <relationshipName>Route_Cards3</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Next_Stop__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Next step in the route</description>
+        <externalId>false</externalId>
+        <label>Next Stop</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>Route Cards</relationshipLabel>
+        <relationshipName>Route_Cards</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>RMA_Line__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the original return order line (RMA Line)</description>
+        <externalId>false</externalId>
+        <label>RMA Line</label>
+        <referenceTo>RMA_Shipment_Line__c</referenceTo>
+        <relationshipLabel>Route Cards</relationshipLabel>
+        <relationshipName>Route_Cards</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>RMA__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the original return order (RMA)</description>
+        <externalId>false</externalId>
+        <label>RMA</label>
+        <referenceTo>RMA_Shipment_Order__c</referenceTo>
+        <relationshipLabel>Route Cards</relationshipLabel>
+        <relationshipName>Route_Cards</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Route_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of route. Inbound indicates product being returned for repair. Outbound indicates product being returned to customer after repair</description>
+        <externalId>false</externalId>
+        <label>Route Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Inbound</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Outbound</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Close</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Supplier__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Reference to the supplier account that may perform the repair</description>
+        <externalId>false</externalId>
+        <label>Supplier</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Route Cards (Supplier)</relationshipLabel>
+        <relationshipName>Route_Cards1</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <label>Route Card</label>
+    <nameField>
+        <displayFormat>{0000000000}</displayFormat>
+        <label>Record Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Route Cards</pluralLabel>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Route_Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>First_Stop__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Current_Stop__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Next_Stop__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Last_Stop__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Status__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Route_Type__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>First_Stop__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Current_Stop__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Next_Stop__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Last_Stop__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Status__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Route_Type__c</searchFilterFields>
+        <searchFilterFields>First_Stop__c</searchFilterFields>
+        <searchFilterFields>Current_Stop__c</searchFilterFields>
+        <searchFilterFields>Next_Stop__c</searchFilterFields>
+        <searchFilterFields>Last_Stop__c</searchFilterFields>
+        <searchFilterFields>Status__c</searchFilterFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

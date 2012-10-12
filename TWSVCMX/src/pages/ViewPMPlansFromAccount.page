@@ -1,0 +1,10 @@
+<apex:page controller="AccountClass"> 
+<apex:form > 
+	<apex:pageBlock title="Preventive Maintenance Plans for {!AccountName}">
+		<apex:pageBlockButtons >
+			<apex:commandButton action="{!Save}" value="Save & Close" rerender="editor" status="Savestatus"></apex:commandButton>
+			<apex:commandButton action="{!Cancel}" value="Cancel" rerender="editor"></apex:commandButton>
+		</apex:pageBlockButtons>		
+	</apex:pageBlock>		
+</apex:form>
+</apex:page>

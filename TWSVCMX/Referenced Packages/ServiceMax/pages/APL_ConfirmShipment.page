@@ -1,0 +1,870 @@
+<apex:page >
+    <apex:form >
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/fullResolution.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/dataTables_2-11-2011.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/jquery.ajaxLoader.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery-1.6.2.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.checkbox.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.dataTables.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.inherit-1.3.2.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Ajax.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_UIParser.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Utils.js')}"/>
+
+        <script type="text/javascript">
+            var __sfdcSessionId = '{!GETSESSIONID()}';
+            var serialselectionholder;
+            var rmadetailholder;
+            $(document).ready(function(){
+                $('input:checkbox:not([safari])').checkbox();
+                $('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
+                $('input:radio').checkbox();
+            });
+            
+            // Constants
+            var processId = '{!JSENCODE($CurrentPage.parameters.SVMX_processId)}';
+            var recordId = '{!JSENCODE($CurrentPage.parameters.SVMX_recordID)}';
+        </script>
+        <script src="/soap/ajax/15.0/connection.js" type="text/javascript"></script>
+        <script src="/soap/ajax/15.0/apex.js" type="text/javascript"></script>
+        <script>
+        function replacer(key, value) {
+            if (typeof value === 'number' && !isFinite(value)) {
+                return String(value);
+            }
+            return value;
+        }
+        var response;
+        SVMXloader.loaderid = 'SVMXloader';
+        var actualModel = new Object();
+        actualModel.orderLinefields = new Object();
+        actualModel.productsearchfields = ({name:{name:"Name"}, productcode:{name:"ProductCode"}});
+        actualModel.orderLines = new Object();
+        actualModel.serialNumbers = new Object();
+        actualModel.mapProductRmaLines = new Object();
+        actualModel.latestUniqueId = 0;
+        actualModel.process = new Object();
+        actualModel.header = new Object();
+        actualModel.processUI = {title: {object:'process', UIid: 'processtitle', field: 'SVMXC__ProcessID__c'}, documentname: {object:'header', UIid: 'documentname', field: 'Name'}, depotname: {object:'header', UIid: 'depotname', field: 'SVMXC__Warehouse__c'},
+                             receivinglocation: {object:'header', UIid: 'receivinglocation', field: 'SVMXC__Source_Street__c'}, orderstatus: {object:'header', UIid: 'orderstatus', field: 'SVMXC__Order_Status__c'}};
+        
+        actualModel.availablePickListValues = new Object();
+        actualModel.defaultDeliveryLocationId;
+        actualModel.batchCount = 100;
+        actualModel.persistentData = new Object();
+        actualModel.syncEvents = new Object();
+        actualModel.oncePushableIds = new Array();
+        
+		var sr = new SOAPRequest({orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"});
+            
+        function populateConfigurationInformation(configurations)
+        {
+            for (var i=0; i< configurations.length; i++)
+            {
+                if(configurations[i].key == "COLUMNINFO")
+                {
+                    //actualModel.orderLinefields = eval(configurations[i].value);
+                }
+                else if(configurations[i].key == "DOCUMENTATTRIBUTE")
+                {
+                	var documentAttribute = configurations[i].valueMap;
+                	if(documentAttribute != null)
+                	for(var l=1; l<= documentAttribute.length; l++)
+                	{
+                		if(documentAttribute[l-1].value == null)
+                			documentAttribute[l-1].value = ''
+                		document.getElementById('docattribute'+l).innerHTML = '<span class="fieldsH">' + documentAttribute[l-1].key + ': </span><span class="valueH">' + documentAttribute[l-1].value + '</span>';
+                	}
+                }
+                else if(configurations[i].key == "AVAILABLELOCATIONS")
+                {
+                	buildLocationValues(configurations[i].valueMap);
+                }
+                else if(configurations[i].key == "DEFAULTLOCATION")
+                {
+	                actualModel.defaultDeliveryLocationId = configurations[i].value.split('~|~', 2)[0];
+                }
+            }
+        }
+        
+        
+        function buildLocationValues(availableLocations)
+        {
+            actualModel.availablePickListValues['SVMXC__Ship_Location__c'] = '<select>';
+        	if(availableLocations && availableLocations != null)
+            {
+            	if(!availableLocations.length)
+            	{
+            		actualModel.availablePickListValues['SVMXC__Ship_Location__c'] += '<option value="' + availableLocations.key + '">' + availableLocations.value + '</option>';
+            	}
+            	else
+	            for(var l=0; l< availableLocations.length; l++)
+	            {
+	                actualModel.availablePickListValues['SVMXC__Ship_Location__c'] += '<option value="' + availableLocations[l].key + '">' + availableLocations[l].value + '</option>';
+	            }
+            }
+            actualModel.availablePickListValues['SVMXC__Ship_Location__c'] += '</select>';
+            //var delivery = document.getElementById('defaultDeliveryLocation');
+            //delivery.innerHTML = actualModel.availablePickListValues['SVMXC__Ship_Location__c'];
+        }
+        
+        function populateUniqueId()
+        {
+            actualModel.latestUniqueId = actualModel.latestUniqueId + 1;
+            return actualModel.latestUniqueId;
+        }
+        
+        function addSerialSelection(serialNumbers)
+        {
+            for(key in serialNumbers)
+            {
+                var expectedCheckBox;
+                var reconcilationOptions;
+                if(serialNumbers[key].isExpected == 'true')
+                {
+                    expectedCheckBox = "<div class='checkbox'><input type='checkbox' checked='checked' disabled='true'/></div> ";
+                    reconcilationOptions = "<select><option value='None'>{!$Label.COMM001_TAG035}</option></select>";
+                }
+                else
+                {
+                    expectedCheckBox = "<div class='checkbox'><input type='checkbox' disabled='true'/></div> ";
+                    reconcilationOptions = "<select><option value='Add'>{!$Label.COMM001_TAG036}</option><option value='Remove'>{!$Label.COMM001_TAG037}</option></select>";
+                }
+                var receivedCheckBox;
+                if(serialNumbers[key].isReceived == 'true')
+                    receivedCheckBox = "<div class='checkbox'><input type='checkbox' checked='checked' disabled='true'/></div> ";
+                else
+                    receivedCheckBox = "<div class='checkbox'><input type='checkbox' disabled='true'/></div> ";
+                serialselectionholder.fnAddData( [
+                    serialNumbers[key].serialNumber, expectedCheckBox, receivedCheckBox,reconcilationOptions
+                ] );
+            }
+        }
+        
+        function addNewProduct(product)
+        {
+            buildLineObjectForNewProduct(buildProductOnlyRecord(product));
+            rmadetailholder.fnAddData( [
+                '', product.ProductCode, product.Name, '', '0', '0', '1', "<select><option value='Add'>{!$Label.COMM001_TAG036}</option><option value='Replace'>{!$Label.COMM001_TAG066}</option></select>", ''
+            ] );
+            clearSerialSelection();
+        }
+        
+        function buildProductOnlyRecord(product)
+        {
+            var record = new Object();
+            record.Id = 'UNIQUEID_' + populateUniqueId();
+            record.SVMXC__Product__r = product;
+            record.SVMXC__Actual_Quantity2__c = 1;
+            return record;
+        }
+        
+        function buildLineObjectForNewProduct(record)
+        {
+            var actualRecord = {};
+            for(key in actualModel.orderLinefields)
+            {
+                if(actualModel.orderLinefields[key].reference && record[actualModel.orderLinefields[key].reference] != null)
+                {
+                    var ref = record[actualModel.orderLinefields[key].reference];
+                    actualRecord[key] = record[actualModel.orderLinefields[key].name];
+                    for(refKey in actualModel.orderLinefields[key].referencefields)
+                    {
+                        actualRecord[actualModel.orderLinefields[key].reference+'.'+actualModel.orderLinefields[key].referencefields[refKey].name] = ref[actualModel.orderLinefields[key].referencefields[refKey].name];
+                    }
+                }
+                else if(record[actualModel.orderLinefields[key].name])
+                {
+                    actualRecord[actualModel.orderLinefields[key].name] = record[actualModel.orderLinefields[key].name];
+                }
+                else if(actualModel.orderLinefields[key].defaultvalue != null && (actualModel.orderLinefields[key].type == 'text' || actualModel.orderLinefields[key].type == 'number'))
+                {
+                    actualRecord[actualModel.orderLinefields[key].name] = actualModel.orderLinefields[key].defaultvalue;
+                }
+            }
+            actualModel.orderLines[record.Id] = actualRecord;
+        }
+
+        rmaRequest = new Object();
+        rmaRequest.SVMX_processId = processId;
+        rmaRequest.SVMX_recordId = recordId;
+        rmaRequest.SVMX_processType = "SHIPCONFIRM";
+        var loadRequest = JSON.stringify(rmaRequest, replacer);
+        
+        function setLocalStorage()
+        {
+            //localStorage.setItem('actualModel', JSON.stringify(actualModel));
+        }
+
+        function buildHeaderUI()
+        {
+            var processUI = actualModel.processUI;
+            for(field in processUI)
+            {
+            	if(actualModel[processUI[field].object][processUI[field].field] != null)
+                	document.getElementById(processUI[field].UIid).innerHTML = actualModel[processUI[field].object][processUI[field].field];
+            }
+        }
+        
+        function clearSerialSelection()
+        {
+            //serialselectionholder.fnClearTable();
+        }
+        
+        function buildSerialNumberUI(rmaLineId)
+        {
+            clearSerialSelection();
+            addSerialSelection(actualModel.serialNumbers[rmaLineId]);
+            radioInitializer();
+        }
+        
+        function radioInitializer()
+        {
+            $('input:checkbox:not([safari])').checkbox();
+            $('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
+            $('input:radio').checkbox();
+        }
+        
+        function onblurProductSelection(elementId)
+        {
+            var item = document.getElementById(elementId);
+            initiateProductReceipt(item.value);
+            if(item.value == '')
+                item.value = '{!$Label.APL002_TAG008}';
+            var itemSerialSelection = document.getElementById('serialnumber');
+            itemSerialSelection.value = '{!$Label.APL002_TAG007}';
+        }
+        
+        // To add new serial number if its new or already added
+        function addNewSerialNumber(lineDetailId, serialNumber)
+        {
+            var availableSerialNumbers = actualModel.serialNumbers[lineDetailId];
+            // Create new serial number object
+            var newSerialNumber = new Object();
+            newSerialNumber.serialNumber = serialNumber;
+            newSerialNumber.isExpected = null;
+            newSerialNumber.isPicked = null;
+            newSerialNumber.isReceived = 'true';
+            newSerialNumber.isShipped = null;
+            newSerialNumber.reconciliationAction = null;
+            if(availableSerialNumbers == null)
+                availableSerialNumbers = new Object;
+            else if(availableSerialNumbers[serialNumber] == null)
+                availableSerialNumbers[serialNumber] = new Object;
+            availableSerialNumbers[serialNumber] = newSerialNumber;
+            actualModel.serialNumbers[lineDetailId] = availableSerialNumbers;
+        }
+        
+        function incrementReceivedQuantity(lineDetailId)
+        {
+            actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c = parseInt(actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c) + 1;
+            // Update the retrieved count
+            var retrievedDiv = document.getElementById('SVMXC__Actual_Quantity2__c_' + lineDetailId);
+            retrievedDiv.innerHTML = actualModel.orderLines[lineDetailId].SVMXC__Actual_Quantity2__c;
+        }
+        
+        // Identify the serial number and do the following
+        //  Set received to true
+        //  Increment the received count ob line
+        function onblurSerialSelection(elementId)
+        {
+            var item = document.getElementById(elementId);
+            //serialselectionholder.fnFilter(item.value, 0);
+            if(item.value != '')
+            {
+                var isAvailable = false;
+                // Check whether requested serial number is equal to 1st element on the serial selection table
+                for (var selectedProductCount = 0; selectedProductCount < actualModel.selectedProduct.length; selectedProductCount++)
+                {
+                    if(actualModel.serialNumbers[actualModel.selectedProduct[selectedProductCount]] != null)
+                    if(actualModel.serialNumbers[actualModel.selectedProduct[selectedProductCount]][item.value] != null)
+                    {
+                        // If serial number is expected to receive
+                        if(actualModel.serialNumbers[actualModel.selectedProduct[selectedProductCount]][item.value].isReceived != 'true')
+                        {
+                            actualModel.serialNumbers[actualModel.selectedProduct[selectedProductCount]][item.value].isReceived = 'true';
+                        }// If serial number slready received
+                        else
+                        {
+                            addNewSerialNumber(actualModel.selectedProduct[selectedProductCount], item.value);
+                        }
+                        // Update the retrieved count
+                        incrementReceivedQuantity(actualModel.selectedProduct[selectedProductCount])
+                        isAvailable = true;
+                        break;
+                    }
+                }
+                // If serial number is not available, add it
+                if(!isAvailable)
+                {
+                    for (var selectedProductCount = 0; selectedProductCount < actualModel.selectedProduct.length; selectedProductCount++)
+                    {
+                        if(actualModel.selectedProduct[selectedProductCount] != null)
+                        {
+                            addNewSerialNumber(actualModel.selectedProduct[selectedProductCount], item.value);
+                            break;
+                        }
+                    }
+                    // Update the retrieved count
+                    incrementReceivedQuantity(actualModel.selectedProduct[selectedProductCount])
+                }
+                var itemProduct = document.getElementById('productcode');
+                initiateProductReceipt(itemProduct.value);
+                
+                // Clear the product and serial number
+                //item.value = 'Enter Serial Number(s) here...';
+                //itemProduct.value = 'Enter Product Code here...';
+                //itemProduct.focus();
+            }
+            else
+            {
+                // Clear the serial number
+                item.value = '{!$Label.APL002_TAG007}';
+            }
+        }
+        
+        function onfocusProductSelection(elementId)
+        {
+            var item = document.getElementById(elementId);
+            if(item.value == '{!$Label.APL002_TAG008}')
+                item.value ='';
+        }
+        
+        function onfocusSerialSelection(elementId)
+        {
+            var item = document.getElementById(elementId);
+            if(item.value == '{!$Label.APL002_TAG007}')
+                item.value ='';
+        }
+        </script>
+        
+<!--         <apex:includeScript value="{!URLFOR($Resource.SVMX_AJAX_Library, 'SVMX_AJAX_Library.js')}"/> -->
+        <div class="container">
+        	<div id="SVMXerrorConsole" class="mainContainer" style="display:none;">
+                <div  class="processContent">
+                    <span id="errorMessage" style="font-weight:bold;color:red"></span>
+                    <span id="showMessage" style="font-weight:bold;color:black"></span>
+                    <div class="closeLink"><a href="#" onclick="clearErrorMessage();hideMessage('FADEOUT');">{!$Label.COMM001_TAG065}</a></div>
+                </div>
+            </div>
+           	<div id="SVMXloader" class="SVMXloader" style="display:none">
+				<span id="SVMXloaderMessage" style="font-weight:bold;color:black">{!$Label.COMM001_TAG041}</span>
+            </div>
+             <div id="onlyCancel" class="mainContainer processContent" style="display:none">
+            	<div class="consolLinks">
+                     <div class="consoleBtnH"> 
+            			<input type="button" class="buttonH" value="{!$Label.APL003_TAG025}" onclick="invokeCancel()"/>
+           			</div>
+       			</div>
+            </div>
+            <div id="SVMXcontentArea" class="mainContainer processContent" style="display:none;">
+            		<div class="consolLinks">
+            			<div class="processtitle"><span id="processtitle"></span><span>: </span><span id="documentname" class="valueH"></span></div>
+            			<div class="consoleBtnH">  
+	                        <input type="button" class="buttonH" value="{!$Label.APL002_TAG032}" onclick="doSave()"/>
+	                        <input type="button" class="buttonH" value="{!$Label.COMM001_TAG040}" onclick="invokeCancel()"/> 
+	<!--                         <input type="button" class="buttonH" value="Custom Links" />  -->
+	<!--                         <input type="button" class="buttonH" value="Countinue Later"/> -->
+	    <!--                     <input type="button" class="buttonH" value="Test Generic Call" onclick="testData()"/> -->
+	    <!--                     <apex:flash id="DC" src="{!$Resource.GenericFlexConnector}" height="200" width="200" flashvars="sessionId={!$Api.Session_ID}&serverURL={!$Api.Partner_Server_URL_90}"></apex:flash> -->
+	                    </div>
+	                    <div class="helpLink"><a href="{!$Label.APL002_HLPURL1}" target="_blank">{!$Label.APL002_TAG025}</a></div>
+	                </div>
+            <div class="mainContainer" style="padding:5px">
+                <div class="processContent" style="padding:5px">
+                    <div class="docDetails">
+                        <ul>
+                            <li><span>{!$Label.APL002_TAG004} </span> <span id="depotname" class="valueH"></span></li>
+                            <li ><span>{!$Label.APL002_TAG005} </span> <span id="receivinglocation" class="valueH"></span></li>
+                            <li class="last"><span class="fieldsH">{!$Label.APL002_TAG046}</span><span id="orderstatus" class="valueH"></span></li>
+                        </ul>                        
+                    </div>
+                    <div class="orderStatus">
+                            <ul>
+                                <li id="docattribute1"></li>
+                                <li id="docattribute2"></li>
+                                <li id="docattribute3"></li>
+                            </ul>
+                    </div>
+                </div>
+                
+                <div class="prdContentTbl">
+<!--                 	<div  style="padding:10px"> -->
+<!-- 	                    <div class="docDetails"> -->
+<!-- 	                        <ul> -->
+<!-- 	                            <li></li> -->
+<!-- 	                        </ul>                         -->
+<!-- 	                    </div> -->
+<!-- 	                    <div class="orderStatus"> -->
+<!-- 	                            <ul> -->
+<!-- 	                                <li><span class="fieldsH"><input type="checkbox">Apply <span id="defaultDeliveryLocation" class="valueH"></span></input></span></li> -->
+<!-- 	                            </ul> -->
+<!-- 	                    </div> -->
+<!--                     </div> -->
+                    <div class="filterFields">
+                        <div class="fieldsContentH">
+                        </div>
+                        <div class="tablesH">
+                            <div id="rmadetails" class="prdDetailsTbl" style="width:100%">
+                                <table width="100%" id="tablermadetails">
+                                </table>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+            </div> 
+        </div>
+        <script type="text/javascript">
+        	var isFirstCall = true;
+        	var sui;
+        	hideMessage('FADEOUT');
+			function showError(message)
+			{
+				var uiComp = document.getElementById('errorMessage');
+				uiComp.innerHTML = message;
+				uiComp = document.getElementById('SVMXerrorConsole');
+				uiComp.style.display = 'block';
+			}
+			function loadData()
+            {
+                //if(localStorage.getItem( "actualModel" ))
+                {
+                    //actualModel = eval('(' + localStorage.getItem( "actualModel" ) + ')');
+                }
+                //else
+                {
+                    loadFromServer();
+                }
+            }
+            
+            //loadData();
+            
+            function loadFromServer()
+            {
+            	//console.log(sforce);
+                var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "SHIPCONFIRM")];
+	            var request = new INTF_SFMRequest('', 'INITIALSYNC', valueMap, null);
+	            sr.errorHandler = {handler : function(e, me)
+				{
+					SVMXloader.loaded();
+					showError('{!$Label.APL002_TAG040}' + me.status + ' :' + me.responseText);
+					return false;
+				}}
+	            sr.responseHandler = {handler : function(e, me)
+	            {
+	            	var result = sr.__getResponse(me);
+	            	for (var j=0; j< result.length; j++)
+					{
+						debugger;
+						if(result[j].success == 'true')
+						{
+							if(result[j].aplOrder != null)
+							{
+								actualModel.process = result[j].aplOrder.svmxProcess;
+								actualModel.header = result[j].aplOrder.orderHdrRecord;
+                                if(isFirstCall == true)
+                                {
+                                 	// Populate the config data from server
+                                	sui = new SVMXUIActualModel({searchFields : actualModel.productsearchfields, isRelatedTable: true, isAdditionalInfoAvailable: true, isGridSearchAllowed: false});
+                                	isFirstCall = false;
+                                }
+                                if(result[j].aplOrder.orderLines != null)
+                                	sui.__buildModel(result[j].aplOrder.orderLines);
+								sui.__populateConfigurationInformation(result[j].valueMap);
+								actualModel.orderLinefields = sui.gridFields;
+								actualModel.serialNumbers = sui.relatedData;
+								actualModel.mapProductRmaLines = sui.mapFilterData;
+								actualModel.orderLines = sui.gridData;
+								actualModel.mapKeyValues = sui.mapKeyValues;
+							}
+							if(actualModel.mapKeyValues != null && actualModel.mapKeyValues['LINEIDS'] != null)
+                            {
+                            	var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "SHIPCONFIRM"), new SVMXMap("SVMX_BATCHIDS", "", null, null, actualModel.mapKeyValues['LINEIDS'])];
+                				var request = new INTF_SFMRequest('', 'BATCHCALL', valueMap, null);
+                				actualModel.mapKeyValues = new Array();
+                    			sui.mapKeyValues = new Array();
+                				sr.invoke("INTF_APL_GetOrder_WS", request);
+                            }
+                            else
+                            {
+                            	postBuildData();
+                            }
+						}
+						else
+	                	{
+	                		SVMXloader.loaded();
+                          	showContainer('onlyCancel');
+                            showError(result[j].message);
+                            break;
+	                	}
+		                /*buildDataTableUI();
+						var uiComp = document.getElementById('SVMXcontentArea');
+						uiComp.style.display = 'block';
+						uiComp = document.getElementById('SVMXerrorConsole');
+               			uiComp.style.display = 'none';*/
+					}
+	            }}
+            	sr.invoke("INTF_APL_GetOrder_WS", request);
+            }
+            
+            function postBuildData()
+            {
+            	SVMXloader.loaded();
+            	var uX = new UIDesigner({UIElement: 'rmadetails', paintFields: sui.gridFields, displayRecords: sui.gridData});
+				uX.__paintGridUI();
+              	
+              	// Populate header details
+              	uX.__paintElementUI({depo: {UIid: 'depotname', field: 'DEPOTNAME'}, receivinglocation: {UIid: 'receivinglocation', field: 'RECEIVINGLOCATION'}}, sui.gridHeaderData);
+				uX.__paintElementUI({title: {UIid: 'processtitle', field: 'SVMXC__ProcessID__c'}}, actualModel.process);
+				uX.__paintElementUI({documentname: {UIid: 'documentname', field: 'Name'}, depotname: {UIid: 'depotname', field: 'SVMXC__Warehouse__c'}, orderstatus: {UIid: 'orderstatus', field: 'SVMXC__Order_Status__c'}}, actualModel.header);
+				buildDataTableUI();
+                showContent();
+								
+            }
+            SVMXloader.action = 'loadData';
+           	SVMXloader.loadWithMessage('{!$Label.APL002_TAG044}');
+            
+            function buildDataTableUI()
+            {
+                rmadetailholder = $('#tablermadetails').dataTable({
+                    "sPaginationType": "full_numbers"
+                });
+                $('#tablermadetails thead>tr>th').unbind('click');
+                var trInstance = $('table#tablermadetails tbody').find('tr');
+                trInstance.click(function(){
+                    trInstance.removeClass('activetr');
+                    var instance = $(this);
+                    instance.addClass('activetr');
+                    buildSerialNumberUI(this.id);
+                });
+                //$("#tablermadetails_filter").append("<div>Apply Filter: </div>");
+                
+				// Code for apply filter
+				var applyTxt = '{!$Label.APL003_TAG016}';
+				var inputTxtVal = $(".dataTables_filter label input:text").attr("value", applyTxt);
+				var inputBoxVal = inputTxtVal.val();
+				
+                $('table#tablermadetails').wrap('<div class="tablewrapper" />');
+				searchInput = $('.dataTables_filter label input:text');
+				searchDefault = inputBoxVal;
+				
+				searchInput.click(function () {
+					if($(this).val() == searchDefault)
+						$(this).val('');
+				});
+				
+				searchInput.blur(function () {
+					if($(this).val() == '')
+						$(this).val(searchDefault);
+				});
+				
+				
+                // Translations for datatable
+		        var txtt = "{!$Label.COMM001_TAG031}";
+                var showingTxt = "{!$Label.COMM001_TAG032}";
+                var toTxt = "-";
+                var ofTxt = "/";
+                var entriesTxt = "{!$Label.COMM001_TAG033}";
+                var noDataTable = "";
+                
+		        $("span#showLang").text(txtt);
+                $("span#showingTxt").text(showingTxt);
+                $("span#toTxt").text(toTxt);
+                $("span#ofTxt").text(ofTxt);
+                $("span#entriesTxt").text(entriesTxt);
+                $("span#entries2").text(entriesTxt);
+                $("span#tablermadetails_first").text("{!$Label.COMM001_TAG024}");
+                $("span#tablermadetails_previous").text("{!$Label.COMM001_TAG026}");
+                $("span#tablermadetails_next").text("{!$Label.COMM001_TAG025}");
+                $("span#tablermadetails_last").text("{!$Label.COMM001_TAG027}");
+                $("span#noMatchingRecords").text("");
+                $("span#noDataTable").text(noDataTable);
+				
+				
+				
+				
+            }
+        </script>
+        <script type="text/javascript">
+		</script>
+        <script>
+        function invokeCancel()
+        {
+        	top.location = "{!JSENCODE($CurrentPage.parameters.SVMX_retURL)}";
+        }
+        function invokeDone()
+        {
+        	if('{!JSENCODE($CurrentPage.parameters.SVMX_NxtStepID)}' != '')
+        	{
+	        	SVMXBGProcessor.nextProcessId = '{!JSENCODE($CurrentPage.parameters.SVMX_NxtStepID)}';
+	        	SVMXBGProcessor.currentRecordId = '{!RIGHT($CurrentPage.parameters.SVMX_retURL, 18)}';
+	        	SVMXBGProcessor.load();
+        	}
+        	else
+        	{
+        		top.location = "{!JSENCODE($CurrentPage.parameters.SVMX_retURL)}";
+        	}	
+        }
+       
+        var isSavedOnce = false;
+        function trySavingOnce()
+        {
+        	isSavedOnce = true;
+        	doSave();
+        }
+        function doSave()
+        {
+            SVMXloader.loadWithMessage('{!$Label.APL002_TAG037}' + '{!$Label.COMM001_TAG042}');
+            var aplHeader = actualModel.header;
+            var aplOrderLines = new Array();
+            var aplOrderLineIds = new Array();
+            var count = 0;
+            var arrRequest = [];
+            var syncEventCount = 0;
+            var totalLineCount = 0;
+            var processingCount = 0;
+            for(recordKey in actualModel.orderLines)
+            {            	
+            	count++;
+            	totalLineCount++;
+            	var serialNumbers = new Array();
+            	var serialNos = actualModel.serialNumbers[recordKey];
+            	for(serialKey in serialNos)
+            	{
+            		serialNumbers.push(serialNos[serialKey]);
+            	}
+            	var orderLine = actualModel.orderLines[recordKey];
+                // If line has some error associated donot add the line
+                if(isSavedOnce == true && SVMXContains(actualModel.oncePushableIds, orderLine.Id) == false)
+                	continue;
+                var orderLineUniqueId = orderLine.Id;
+                aplOrderLineIds.push(orderLineUniqueId);
+                if(orderLine.Id != null && (orderLine.Id).indexOf('UNIQUE') != -1)
+                    orderLine.Id = null;
+                aplOrderLines.push(new APL_OrderLineCollection(serialNumbers, actualModel.orderLines[recordKey], null));
+                if((count == actualModel.batchCount && isSavedOnce == false) || (count == actualModel.batchCount && isSavedOnce == true && aplOrderLines.length > 0) )
+                {
+                	var aplOrder = new APL_Order(aplHeader, null, aplOrderLines, null);
+		            var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "SHIPCONFIRM")];
+		           	var request = new INTF_SFMRequest('EVENT' + syncEventCount, '', valueMap, aplOrder);
+		            arrRequest[arrRequest.length] = {
+                    props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                methodName : "INTF_APL_SaveOrder_WS", data : request , options : {async: false}};
+                    actualModel.syncEvents['EVENT' + syncEventCount] = aplOrderLineIds;
+                	// Reset data
+                	syncEventCount++;
+                	aplOrderLines = new Array();
+                	aplOrderLineIds = new Array();
+                	count = 0;
+                }
+            }
+            // If count is less than the batch, it will not create the request for last partial batch. To solve this we have added this code
+            if((count> 0 && count != actualModel.batchCount  && isSavedOnce == false) || (count> 0 && count != actualModel.batchCount && isSavedOnce == true && aplOrderLines.length > 0))
+            {
+				var aplOrder = new APL_Order(aplHeader, null, aplOrderLines, null);
+				var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "SHIPCONFIRM")];
+				var request = new INTF_SFMRequest('EVENT' + syncEventCount, '', valueMap, aplOrder);
+				arrRequest[arrRequest.length] = {
+				   props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+							   methodName : "INTF_APL_SaveOrder_WS", data : request , options : {async: false}};
+				actualModel.syncEvents['EVENT' + syncEventCount] = aplOrderLineIds;
+				// Reset data
+				syncEventCount++;
+               	aplOrderLines = new Array();
+               	aplOrderLineIds = new Array();
+			}
+            if(arrRequest.length > 0)
+			{
+				processingCount += (count > 0 ) ? count : actualModel.batchCount;
+	            SVMXloader.loadWithMessage('{!$Label.APL002_TAG037}' +'(' + processingCount + ' / ' + totalLineCount + ')...');
+	            actualModel.oncePushableIds = new Array();
+	            
+	            var srSave = new SOAPRequestCollection(arrRequest);
+	            srSave.requestCount = arrRequest.length;
+	            srSave.allSuccess = true;
+	            srSave.errorHandler = {handler : function(me)
+	            {
+	            	SVMXloader.loaded();
+	            	showError('{!$Label.APL002_TAG040}' + me.status + ' :' + me.responseText);
+	                return false;
+	            }}
+	            srSave.responseHandler = {handler : function(me)
+	            {
+	            	var allResponses = srSave.getAllResponses();
+	            	var isAllSuccess = true;
+	                for(var resp in allResponses)
+	                {
+	                	var result = sr.__getResponse(allResponses[resp]);
+	                	for (var j=0; j< result.length; j++)
+	                	{
+	                		if(actualModel.syncEvents[result[j].eventName] == null)
+	                			continue;
+	                		
+	            			SVMXloader.loadWithMessage('{!$Label.APL002_TAG037}'+'(' + processingCount + ' / ' + totalLineCount + ')...');
+	                		srSave.requestCount--;
+	                		processingCount += (actualModel.syncEvents[result[j].eventName].length) ? actualModel.syncEvents[result[j].eventName].length : 1;
+		                    if(result[j].success == 'true')
+		                    {
+		                    	var lstSentIds = actualModel.syncEvents[result[j].eventName];
+		                    	for (var k = 0; k < lstSentIds.length; k++)
+	                    		{
+	                    			delete actualModel.orderLines[lstSentIds[k]];
+		                    	}
+		                    	
+		                    }
+		                    else
+		                    {
+		                    	srSave.allSuccess = false;
+		                    	if(result[j].message != null && result[j].message != '')
+		                    	{
+		                    		actualModel.persistentData[result[j].eventName] = result[j].message;
+		                    	}
+		                    	else if(result[j].errors )
+		                    	{
+		                    		var lstErrors = new Array();
+		                    		if(!result[j].errors.length)
+		                    			lstErrors = [result[j].errors];
+		                    		else
+		                    			lstErrors = result[j].errors;
+		                    		for (var k = 0; k < lstErrors.length; k++)
+		                    		{
+		                    			actualModel.persistentData[lstErrors[k].uniqueId] = lstErrors[k].errorMsg;
+		                    		}
+			                    	var lstSentIds = actualModel.syncEvents[result[j].eventName];
+			                    	for (var k = 0; k < lstSentIds.length; k++)
+		                    		{
+		                    			if(actualModel.persistentData[lstSentIds[k]] == null)
+			                    			actualModel.oncePushableIds.push(lstSentIds[k]);
+			                    	}
+		                    	}
+		                    }
+		                    delete actualModel.syncEvents[result[j].eventName];
+		                    console.log(srSave.requestCount);
+	                    }
+	                }
+	                
+	                if(srSave.requestCount == 0)
+	                {
+	                	if(srSave.allSuccess == true)
+	                	{
+	                		// If there is errors previously occured, update the actual model and local cache as well
+	                		if(isSavedOnce == true)
+	                		{
+	                			setLocalStorage("actualModel"+processId + recordId, actualModel);
+		           			}
+	                		else if(localStorage.getItem("actualModel" + processId + recordId))
+	                		{
+	                			// If there is no errors and if local data exist clear on next sucessful save
+	                    		removeLocalStorage("actualModel" + processId + recordId);
+	                    		//performHeaderSave();
+	                    		performCustomEvent('EVENT_AFTER SHIPMENT', 'SHIPCONFIRM', 'performHeaderSave');
+	                    	}
+	                    	else
+	                    	{
+	                    		//performHeaderSave();
+	                    		performCustomEvent('EVENT_AFTER SHIPMENT', 'SHIPCONFIRM', 'performHeaderSave');
+	                    	}
+	                    }
+	                    else
+	                    {
+	                		if(isSavedOnce == true)
+	                		{
+	                			setLocalStorage("actualModel"+processId + recordId, actualModel);
+	                		}
+	                		else
+	                		{
+	                			if(actualModel.oncePushableIds == null || actualModel.oncePushableIds.length == 0)
+           							setLocalStorage("actualModel"+processId + recordId, actualModel);
+	                    		someFailureOnSave();
+	                    	}
+	                    }
+	                }
+	            }}
+	            window.setTimeout(srSave.invokeAll(),500);
+            }
+            else
+            {
+            	performCustomEvent('EVENT_AFTER SHIPMENT', 'SHIPCONFIRM', 'performHeaderSave');
+            }
+        }
+        function performHeaderSave()
+        {
+        	//console.log(sforce);
+			var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "SHIPCONFIRM")];
+			var request = new INTF_SFMRequest('', '', valueMap, null);
+			sr.errorHandler = {handler : function(e, me)
+			{
+				SVMXloader.loaded();
+				showError('{!$Label.APL002_TAG040}' + me.status + ' :' + me.responseText);
+				return false;
+			}}
+			sr.responseHandler = {handler : function(e, me)
+			{
+				var result = sr.__getResponse(me);
+				for (var j=0; j< result.length; j++)
+				{
+					if(result[j].success == 'true')
+					{
+						//invokeDone();
+						performCustomEvent('EVENT_AFTER CLOSURE', 'SHIPCONFIRM');
+					}
+					else
+					{
+						showError(result[j].message);
+					}
+				}
+			}}
+			sr.invoke("INTF_APL_PartsOrderClosure_WS", request);
+        }
+        
+        function someFailureOnSave()
+        {
+           	SVMXloader.loaded();
+           	if(actualModel.oncePushableIds != null && actualModel.oncePushableIds.length > 0)
+           	{
+        		trySavingOnce();
+        		showError('{!$Label.COMM001_TAG070}');
+        	}
+        	else
+        	{
+        		updateErrorForAllLines();
+        		var errorMsg = '';
+        		for(key in actualModel.persistentData)
+        		{
+        			if(key.indexOf('EVENT') != -1)
+        			{
+        				errorMsg += actualModel.persistentData[key];
+        			}
+        		}
+        		errorMsg = '{!$Label.APL002_TAG001}' + (errorMsg != '') ? '\n' + ':' + errorMsg : '';
+        		showError(errorMsg);
+        	}
+            return false;
+        }
+        
+        function updateErrorForAllLines()
+        {
+        	var pushedKeys = new Object();
+            for(key in actualModel.persistentData)
+            {
+            	var originalKey = key;
+            	if(actualModel.orderLines[key] == null)
+            	{
+            		if(actualModel.additionalInformation != null && actualModel.additionalInformation[key] != null && actualModel.additionalInformation[key].clonedFromId != null)
+            			key = actualModel.additionalInformation[key].clonedFromId;
+            		else
+            			continue;
+            		if(actualModel.persistentData[key] == null)
+            			actualModel.persistentData[key] = actualModel.persistentData[originalKey];
+            	}
+            	if(pushedKeys[key] == null)
+            	{
+	            	pushedKeys[key] = true;
+	            	showErrorPopup(key);
+				}
+            }
+        }
+        </script>
+    </apex:form>
+</apex:page>

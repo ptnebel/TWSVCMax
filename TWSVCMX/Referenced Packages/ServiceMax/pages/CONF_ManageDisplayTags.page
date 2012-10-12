@@ -1,0 +1,94 @@
+<apex:page controller="SVMXC.CONF_ManageDisplayTags" id="page1" tabStyle="SVMXC__ServiceMax_Tags__c">
+ 
+<script type="text/javascript">
+ 
+  function customSelectChecked( form,value)
+    {   
+        var i = 0;
+        for (i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].name.search('selected') > 0 && form.elements[i].disabled == false) {
+                form.elements[i].checked = value;
+            }
+        }
+    }   
+        function customSelectAllOrNoneByCheckbox(form,control)
+    {  customSelectChecked( form,control.checked); }
+    
+  </script>
+
+  <apex:form id="form1">
+  <apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" />
+     <apex:pageBlock title="{!TAG001}" id="pblock1" helpTitle="{!TAG020}" helpUrl="{!HLPURL}">
+     <apex:actionStatus id="LodingStatus"  startText="{!TAG021}"/>
+        <apex:pageBlockButtons id="Pbutton1" Location="Top">
+          <apex:commandButton action="{!BacktoHome}" id="Command1" value="{!TAG002}" id="backtohomesetup"/>
+        </apex:pageBlockButtons>  
+        
+        <apex:pageblockSection columns="2"> 
+         <apex:pageBlockSectionItem >
+         <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" columnClasses="colspan50" >
+        <apex:outputLabel id="label1" value="{!TAG003}" styleClass="labelCol" style="margin:0px 5px;"/>          
+          <apex:outputPanel layout="block" styleClass="requiredInput">
+          <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+             <apex:selectList id="Modulelist" value="{!moduleView}" onchange="Makesubmodule()" size="1" >
+              <apex:selectOptions value="{!Module}"/>
+              <apex:actionFunction action="{!Callsubmodule}" name="Makesubmodule" reRender="form1" status="LodingStatus"/>
+           </apex:selectList>
+           </apex:outputPanel>
+          </apex:panelGrid>
+          </apex:pageBlockSectionItem> 
+       
+         
+         <apex:pageBlockSectionItem > 
+          <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" rowClasses="line" columnClasses="colspan50">
+           <apex:outputLabel id="label2" value="{!TAG004}" styleClass="labelCol" style="margin:0px 5px;"/> 
+            <apex:outputPanel layout="block" styleClass="requiredInput">
+             <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+            <apex:selectList id="Smodulelist" title="Select SubModule" value="{!submoduleView}" size="1" onchange="Maketags()">
+               <apex:selectOptions value="{!SubModule}"/>
+               <apex:actionFunction action="{!Calltags}" name="Maketags" reRender="form1" status="LodingStatus"/>
+            </apex:selectList>
+             </apex:outputPanel>
+          </apex:panelGrid>
+         </apex:pageBlockSectionItem>
+         </apex:pageblockSection>
+         </apex:pageBlock>
+
+
+       <apex:pageBlock title="{!TAG005}" id="pblock2"  rendered="{!DisplayTags}"> 
+       <apex:outputLabel value="{!TAG017}" style="font-size:11px" rendered="{!if(IsStdAvail==false,true,false)}"/>
+           <apex:pageBlockTable value="{!standardtag}" var="sTag" id="ptable1" rendered="{!if(IsStdAvail==true,true,false)}">
+                <apex:column value="{!sTag.name}"/>
+                <apex:column value="{!sTag.SVMXC__Tag_Text__c}"/>    
+           </apex:pageBlockTable>
+       </apex:pageBlock>
+       <apex:pageBlock title="{!TAG006}" id="pblock3"  rendered="{!DisplayTags}">
+       <apex:actionStatus id="LodingStatus1"  startText="{!TAG021}"/>
+       <apex:outputLabel value="{!TAG017}" style="font-size:11px" rendered="{!if(IsCustAvail==false,true,false)}"/>
+
+       <apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" />
+           <apex:PageBlockButtons location="Top">
+                <apex:commandButton action="{!AddTag}" value="{!TAG007}"   reRender="pblock3" status="LodingStatus1"/>
+                <apex:commandButton action="{!Save}" value="{!TAG008}" reRender="pblock3" status="LodingStatus1" rendered="{!if(IsCustAvail==true,true,false)}"/>
+                <apex:commandButton action="{!del}" value="{!TAG009}"  reRender="pblock3" status="LodingStatus1" rendered="{!if(IsCustAvail==true,true,false)}"/>
+                 </apex:PageBlockButtons>
+           <apex:pageblockTable id="ptable2" value="{!customtag}" var="cTag" rendered="{!if(IsCustAvail==true,true,false)}">
+          <apex:column >
+                <apex:facet name="header">
+                  <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['page1:form1'],this);">  
+                  </apex:inputCheckbox>
+                </apex:facet>   
+                <apex:inputField value="{!cTag.SVMXC__Select_Tag__c}" id="selected"/>
+           </apex:column>
+           <apex:column >
+                <apex:facet name="header">{!$ObjectType.SVMXC__ServiceMax_Tags__c.fields.Name.Label}</apex:facet>
+                <apex:inputfield value="{!cTag.name}" style="border-left:3px solid #CC0000;"/>
+           </apex:column>
+           <apex:column >
+                <apex:facet name="header">{!$ObjectType.SVMXC__ServiceMax_Tags__c.fields.SVMXC__Tag_Text__c.Label}</apex:facet>
+                <apex:inputField value="{!cTag.SVMXC__Tag_Text__c}" style="border-left:3px solid #CC0000;"/>
+            </apex:column>
+        </apex:pageblockTable>
+</apex:pageBlock> 
+</apex:form>
+</apex:page>

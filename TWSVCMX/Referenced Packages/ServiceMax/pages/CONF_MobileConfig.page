@@ -1,0 +1,508 @@
+<apex:page controller="SVMXC.CONF_MobileConfig">
+    <apex:form id="SVMX_FORM">
+           
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMX_resources, 'SVMXC_resources/Paging/paging.js')}"/>
+        <style type="text/css">
+            #pageNavPosition {
+                text-align:right
+            }
+            #pageNavPosition span{
+                padding:0 2px;
+                text-decoration:none;
+                cursor:pointer;
+            } 
+            
+            .pg-normal{
+                font-weight: normal;
+                text-decoration: underline;    
+                cursor: pointer;    
+            }
+            .pg-selected {
+                font-weight: bold;        
+                text-decoration: none !important;
+                cursor:default !important;
+                color:#000;  
+            }
+            .activeTab {
+                background-color: #8E9DBE;
+                color:white;
+                background-image:none;
+                font-size:14Px;
+            } 
+            .inactiveTab {
+                background-color: lightGrey;
+                color:black;
+                background-image:none
+            }
+        </style> 
+       
+        <style type="text/css">
+            .dataTables_length {float:right; padding:0 0 6px 0}
+            .dataTables_filter {float:left; padding:0 0 6px 0}
+            #tablermadetails, #tablermadetails2 {clear:both;}
+            .dataTables_info {width:50%; float:left; padding:6px 0 0 0}         
+            .dataTables_paginate {width:50%; float:right; padding:6px 0 0 0; text-align:right}
+            .dataTables_paginate span {padding:0 2px; cursor:pointer}
+            .dataTables_paginate span.paginate_active {font-weight:bold;}
+            .dataTables_wrapper {margin-top: -40px !important;}
+            #tablermadetails2_length {float: right !important; padding: 9px 0 6px !important;}
+            .row_selected {background:#e3f3ff !important; }
+            table.table11 th
+            {
+                font-size:12px !important;
+            }
+            table.table11 td
+            {
+                cursor:pointer !important;
+            }
+        </style>
+        
+        
+        
+        <apex:pageBlock title="{!TAG022}" id="mainBlock"  helpTitle="{!TAG007}" helpUrl="{!HLPURL}" ><!--  -->
+            <apex:outputPanel id="TopPageMsg" >
+            <apex:pageMessages id="pgMsg1" rendered="{!topPagMsg}" />
+            </apex:outputPanel>
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="{!TAG023}" disabled="{!disableSaveCancelBtn}" action="{!save}" reRender="SVMX_FORM" status="SVMX_FirstStatus"/>
+                <apex:commandButton value="{!TAG024}" disabled="{!disableSaveCancelBtn}" action="{!cancel}" reRender="SVMX_FORM" status="SVMX_FirstStatus"/>
+                <apex:commandButton value="{!TAG066}" action="{!GoSetupHome}" />
+            </apex:pageBlockButtons>
+            <apex:actionStatus startText="{!TAG065}" id="SVMX_FirstStatus" />
+            <apex:actionFunction action="{!onSelectProfile}" name="onSelectProfile" reRender="SVMX_FORM" status="SVMX_FirstStatus" />
+            
+            <apex:actionFunction action="{!onSelectConfiguredProfile}" name="onSelectConfiguredProfile" reRender="SVMX_FORM" status="SVMX_FirstStatus" />
+            <apex:panelGrid columns="2" width="100%" style="font-weight:bold;text-align:center;"  >
+                <apex:panelGroup >
+                    <apex:outputLabel style="margin: 6px;"  >{!TAG075}</apex:outputLabel>
+                    <apex:selectList size="1" id="ProfileId" onchange="onSelectProfile()" value="{!selectedProfile}"  >
+                        <apex:selectOptions value="{!profileOptns}" />
+                    </apex:selectList>
+                </apex:panelGroup>
+                <apex:panelGroup >
+                    <apex:outputLabel style="margin: 6px;" rendered="{!NOT(disableSaveCancelBtn)}" >{!TAG074}</apex:outputLabel>
+                    <apex:outputLabel style="color:#A0A0A0;margin: 6px;" rendered="{!disableSaveCancelBtn}" >{!TAG074}</apex:outputLabel>
+                    <apex:selectList size="1" onchange="onSelectConfiguredProfile()" value="{!selectedConfiguredProfile}" disabled="{!disableSaveCancelBtn}">
+                        <apex:selectOptions value="{!configuredProfileOptns}"/>
+                    </apex:selectList>
+                </apex:panelGroup>
+            </apex:panelGrid>
+            <br/>
+            
+            
+            <apex:tabPanel switchType="client" tabClass="activeTab" inactiveTabClass="inactiveTab" rendered="{!NOT(disableSaveCancelBtn)}" id="mainTabPanel" selectedTab="FirstTab">
+            <!--====================== Tab 1 ==================================-->
+                <apex:tab label="{!TAG077}" style="font-Size:12px" id="firsttab" name="FirstTab" >
+                    <apex:pageBlock mode="Edit">
+                        <center style="line-height: 22px; border:1px solid #C0C0C0; background:LightGrey;" id="center1">
+                              <apex:outputText value="{!TAG078}"  style="background-color: LightGrey; font-weight: bold; font-size: 12px; padding: 0; margin: 0px;"/>              
+                        </center>
+                        <br/>
+                        <!-- <apex:pageBlockSection columns="1">
+                            <apex:pageblockSectionItem >
+                                <apex:outputText value="{!TAG078}" style="font-weight:bold;font-size:12px"/>
+                            </apex:pageblockSectionItem>
+                        </apex:pageBlockSection> -->
+                        <apex:actionStatus startText="{!TAG065}" id="SVMX_SecondStatus" />
+                        <apex:outputPanel id="tablePanel">
+
+                        <apex:actionFunction name="searchByObj" action="{!searchByObj}" rerender="tablePanel,TopPageMsg" status="SVMX_SecondStatus"/>
+                        <apex:actionFunction name="searchProcessByType" action="{!searchProcessByType}" rerender="tablePanel,TopPageMsg"  status="SVMX_SecondStatus"/>
+                        
+                        <apex:panelGrid columns="2" width="100%" style="font-weight:bold;text-align:center;font-size:12px;"  >
+                            <apex:panelGroup >
+                                <apex:outputLabel style="margin: 6px;"  >{!TAG086}</apex:outputLabel>
+                                <apex:selectList size="1" onchange="searchByObj()" value="{!searchByObjKey}" >
+                                    <apex:selectOptions value="{!txObj}" />
+                                </apex:selectList>
+                            </apex:panelGroup>
+                            <apex:panelGroup >
+                                <apex:outputLabel style="margin: 6px;" >{!TAG087}</apex:outputLabel>
+                                <apex:selectList size="1" onchange="searchProcessByType()" value="{!searchByTyp}">
+                                    <apex:selectOptions value="{!processType}"/>
+                                </apex:selectList>
+                            </apex:panelGroup>
+                        </apex:panelGrid>
+                            <apex:pageBlockSection columns="1">
+                                <apex:panelGrid id="GridId" columns="1" styleClass="testTable" style="width:100%" >
+                                    <apex:pageBlockTable value="{!selectedLstPrss}" var="processVarible" width="100%" styleClass="testing" id="table11"  >
+                                        <apex:column style="width:5%">
+                                            <apex:commandButton image="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/images/edit.png')}" style="width:13px;height:12px;background:#E2E2E1;text-align:left;" styleClass="inputBtnStyle" reRender="ObjShowTab,TopPageMsg" action="{!onSelectProcess}" status="SVMX_SecondStatus" oncomplete="clickme(this)" title="{!TAG092}" >
+                                                <apex:param name="firstparam" value="{!processVarible.id}"  assignTo="{!selectedProcess}"/>
+                                                
+                                            </apex:commandButton>
+                                        </apex:column>
+                                        <apex:column value="{!processVarible.SVMXC__ProcessID__c}" style="width:30%" >
+                                            <apex:facet name="header" >{!TAG073}</apex:facet>
+                                        </apex:column>
+                                        <apex:column value="{!processVarible.SVMXC__Name__c}"  style="width:40%" ><apex:facet name="header" >{!TAG072}</apex:facet>
+                                        </apex:column>
+                                        <apex:column value="{!processVarible.SVMXC__Purpose__c}"   style="width=25%" >
+                                            <apex:facet name="header" >{!TAG071}</apex:facet>
+                                        </apex:column>
+                                    </apex:pageBlockTable>
+                                    <div id="pageNavPosition"></div>
+                                    
+                                    <script type="text/javascript">
+                                        var xx = '{!$Component.table11}';
+                                        var pager = new Pager('{!$Component.table11}', 10); 
+                                        pager.init(); 
+                                        pager.showPageNav('pager', 'pageNavPosition'); 
+                                        pager.showPage(1);
+                                    </script> 
+                                    
+                                    <apex:actionFunction name="selectprocess" reRender="ObjShowTab,TopPageMsg" status="SVMX_SecondStatus" action="{!onSelectProcess}" >
+                                        <apex:param name="firstparam" value=""  assignTo="{!selectedProcess}"/>
+                                        
+                                    </apex:actionFunction>
+                                   
+                                    <script type="text/javascript">
+                                        function clickme(rowElement)
+                                        {
+                                            rowElement.parentNode.parentNode.style.backgroundColor="#ADDFFF";
+                                            if(verpre.static != null && rowElement != verpre.static)
+                                            {
+                                                verpre.static.style.backgroundColor="";
+                                            }
+                                            verpre.static = rowElement.parentNode.parentNode;
+                                        }    
+                                        function verpre()
+                                        {
+                                            alert(verpre.static);
+                                        }
+                                    </script>
+                                </apex:panelGrid>
+                            </apex:pageBlockSection>
+                                
+                            <apex:pageBlockSection columns="1" id="ObjShowTab">
+                                <apex:pageBlockTable value="{!selectedProcessObjs}" var="objLst"  StyleClass="TnsObj" rendered="{!showTxObj}" style="width=100%" >
+                                    <apex:column value="{!objLst}" ><apex:facet name="header" >{!TAG070}</apex:facet></apex:column>
+                                </apex:pageBlockTable>
+                            </apex:pageBlockSection>
+                        </apex:outputPanel>
+                    </apex:pageBlock>
+                </apex:tab>
+                
+                
+                <!--====================== Download Criteria tab =================================-->
+                <apex:tab label="{!TAG068}" style="font-Size:12px">
+                    <apex:pageBlock mode="edit" id="CriteriaBlock">
+                        <apex:actionStatus startText="{!TAG065}" id="LodingStatus" />
+                        <apex:pageMessages id="ForDeletRow" rendered="{!DeletMsg}" /><!--   rendered="DeletMsg" -->
+                        <apex:pageBlockButtons location="top" >
+                            <apex:commandButton value="{!TAG061}" disabled="{!if ( lstWrapperConfData[WrapperSize - 1].selectedObjName != 'SVMX.None', false, true )}" action="{!addRowDispatch}" reRender="CriteriaBlock,TopPageMsg" status="LodingStatus" style="margin-left: 20%;" />
+                            <apex:commandButton value="{!TAG063}" action="{!delrow}" reRender="CriteriaBlock,TopPageMsg" status="LodingStatus"  onClick="{if(!confirm('{!TAG089}')){return false}}"  />
+                            
+                        
+                        </apex:pageBlockButtons>
+                        
+                         
+                        <center style="line-height: 22px; border:1px solid #C0C0C0; background:LightGrey;" id="center1">
+                              <apex:outputText value="{!TAG088}"  style="background-color: LightGrey; font-weight: bold; font-size: 12px; padding: 0; margin: 0px;"/>              
+                        </center>
+                        <!-- <apex:pageBlockSection columns="1">
+                            <apex:pageblockSectionItem >
+                                <apex:outputText value="{!TAG079}" style="font-weight:bold;font-size:12px"/>
+                            </apex:pageblockSectionItem>
+                        </apex:pageBlockSection> -->
+                        
+                       
+                        <apex:inputHidden value="{!DelIndex}" id="DelIndex"/>  
+                        <apex:pageBlockSection id="CriteriaSection" columns="1">
+                            <apex:pageBlockTable value="{!lstWrapperConfData}" var="ObjWrapperConfData" style="width:100%;vertical-align:middle;" id="ExpTable1" styleClass="RuleForm" >
+                                <apex:column style="text-align:center;vertical-align:middle;" >
+                                    {!Round(ObjWrapperConfData.sequenceNo, 0)}
+                                </apex:column>
+                                <apex:column style="vertical-align:middle;padding-left: 3px;">
+                                    <apex:facet name="header" >{!TAG098}</apex:facet>
+                                    <apex:inputCheckbox value="{!ObjWrapperConfData.IsSelectRow}"/>
+                                </apex:column>
+                                <apex:column style="vertical-align:middle;padding-left: 5px;">
+                                    <apex:facet name="header" >{!TAG069}</apex:facet>
+                                    <apex:outputText value="{!mapAPILabel_Name[ObjWrapperConfData.selectedObjName]}" rendered="{!if(Round(ObjWrapperConfData.sequenceNo, 0) != WrapperSize , true, false) }" />
+                                    <apex:selectList size="1" value="{!ObjWrapperConfData.selectedObjName}" onchange="onSelectObj({!ObjWrapperConfData.sequenceNo})" rendered="{!if(Round(ObjWrapperConfData.sequenceNo, 0) != WrapperSize , false, true) }"  >
+                                        <apex:selectOptions value="{!ObjWrapperConfData.objLstOptns}" />
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="vertical-align:middle;padding-left: 3px;">
+                                    <apex:facet name="header" >{!TAG068}</apex:facet>
+                                    <apex:selectList size="1" value="{!ObjWrapperConfData.selectedProName}" disabled="{!ObjWrapperConfData.renderStngOptn}"  style="width:200px;" onchange="onSelectSetting({!ObjWrapperConfData.sequenceNo})"  >
+                                        <apex:selectOptions value="{!ObjWrapperConfData.proLstOptns}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="vertical-align:middle;padding-left: 3px;">
+                                    <apex:facet name="header" >{!TAG097}</apex:facet>
+                                    <apex:selectList size="1" value="{!ObjWrapperConfData.userAccess}" disabled="{!NOT(ObjWrapperConfData.Dectfld)}">
+                                        <apex:selectOptions value="{!userAccessLstSelOptn}"/>
+                                    </apex:selectList>
+                                </apex:column>
+                                <apex:column style="vertical-align:middle;padding-left:8px;" >
+                                    <apex:facet name="header" >{!TAG067}</apex:facet>
+                                    <apex:commandLink value="{!TAG062} | " action="{!EditFilter}" rendered="{!ObjWrapperConfData.showEditDel}" reRender="CriteriaBlock,TopPageMsg" status="LodingStatus">
+                                        <apex:param name="param3" value="{!ObjWrapperConfData.selectedProName}"  assignTo="{!editFilterId}"   />
+                                        <apex:param name="fourth4" value="{!ObjWrapperConfData.selectedObjName}"  assignTo="{!ObjNameToFilter}"   />
+                                    </apex:commandLink>
+                                    <apex:outputText value="{!TAG062} | " rendered="{!NOT(ObjWrapperConfData.showEditDel)}" style="color:#A0A0A0" />
+                                    <apex:commandLink value="{!TAG061}" rendered="{!NOT(ObjWrapperConfData.renderStngOptn)}" status="LodingStatus" action="{!AddFilter}" reRender="CriteriaBlock,TopPageMsg">  
+                                        <apex:param name="fourth4" value="{!Round(ObjWrapperConfData.sequenceNo, 0)}"  assignTo="{!selectedObjSerial}"   />
+                                        <apex:param name="fourth5" value="{!ObjWrapperConfData.selectedObjName}"  assignTo="{!ObjNameToFilter}"   />
+                                    </apex:commandLink>
+                                    <apex:outputText value="{!TAG061}" rendered="{!ObjWrapperConfData.renderStngOptn}" style="color:#A0A0A0" />
+                                    <!-- <apex:commandLink value="{!TAG063}" rendered="{!ObjWrapperConfData.showEditDel}" action="{!DeleteFilter}" status="LodingStatus" reRender="CriteriaBlock"  onClick="{if(!confirm('{!TAG089}')){return false}}" >
+                                         <apex:param name="param4" value="{!ObjWrapperConfData.selectedObjName}"  assignTo="{!ObjNameToFilter}"   />
+                                        <apex:param name="param5" value="{!ObjWrapperConfData.selectedProName}"  assignTo="{!deleteFilterId}"   />
+                                        <apex:param name="secondparam6" value="{!ObjWrapperConfData.sequenceNo}"  assignTo="{!selectedObjSerial}"   /> 
+                                    </apex:commandLink>
+                                    <apex:outputText value="{!TAG063}" rendered="{!NOT(ObjWrapperConfData.showEditDel)}" style="color:#A0A0A0" /> -->
+                                </apex:column>
+                            </apex:pageBlockTable>
+                            <apex:actionFunction name="onSelectObj" action="{!onSelectObj}" status="LodingStatus" reRender="CriteriaBlock">
+                                <apex:param name="secondparam" value=""  assignTo="{!selectedObjSerial}"   />
+                            </apex:actionFunction> 
+                            <apex:actionFunction name="onSelectSetting" action="{!onSelectSetting}" status="LodingStatus" reRender="CriteriaBlock">
+                                <apex:param name="thirdparam" value=""  assignTo="{!selectedObjSerial}"   />
+                            </apex:actionFunction> 
+                                       
+                                    
+                                    
+                            <apex:actionStatus id="status2" startText="{!TAG065}" style="font-Size:12px"/>
+                            <apex:pageMessages id="exprmessages" rendered="{!ExpMsg}" />
+                            <apex:pageBlockSection title="" collapsible="false" dir="LTR" rendered="{!showExpPopUp}"/>
+                            <apex:pageBlockSection id="tab2pblock1" columns="1" rendered="{!showExpPopUp}">
+                                <apex:outputPanel style="margin-left:38%;">
+                                    <apex:commandButton value="{!TAG023}" action="{!submitExp}" reRender="CriteriaSection,TopPageMsg" status="status2" disabled="{!ExpToShow.namedExpression.SVMXC__IsStandard__c}"/>
+                                    <apex:commandButton style="margin-left: 5px;" value="{!TAG024}" action="{!cancelExp}" reRender="CriteriaSection,TopPageMsg" status="status2"/>
+                                </apex:outputPanel> 
+                                
+                                <apex:pageBlockSection columns="4">
+                                    <apex:pageBlockSectionItem datastyle="width:15%;">
+                                        <apex:outputLabel value="{!TAG025}" style="font-weight:bold;font-size:12px;"/>
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                                            <apex:inputfield id="SFWExprName1" value="{!ExpToShow.namedExpression.SVMXC__Name__c}" style="width:200px;"/>
+                                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                        </apex:outputPanel>
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem datastyle="width:15%;">
+                                        <apex:outputLabel value="{!TAG026}" style="font-weight:bold;font-size:12px;"/>
+                                    </apex:pageBlockSectionItem>
+                                    <apex:pageBlockSectionItem >
+                                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                                            <apex:inputfield id="SFWExprUId1" value="{!ExpToShow.namedExpression.SVMXC__ProcessID__c}" style="width:200px;"/>
+                                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                        </apex:outputPanel>
+                                    </apex:pageBlockSectionItem>
+                                </apex:pageBlockSection>
+                                
+                                
+                                <apex:pageBlockTable id="table1" value="{!ExpToShow.expressionDetails}" var="item" width="100%">
+                                    <apex:column rendered="true" style="font-Size:12px;">
+                                        <apex:outputtext value="{!Round(item.SVMXC__Sequence__c, 0)}"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;">
+                                        <apex:facet name="header">{!TAG027}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Field_Name__c}" size="1" multiselect="false" style="font-Size:12px;" disabled="{!ExpToShow.namedExpression.SVMXC__IsStandard__c}">
+                                            <apex:selectOptions value="{!Hdrfldlist}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px">
+                                        <apex:facet name="header">{!TAG028}</apex:facet>
+                                        <apex:selectList value="{!item.SVMXC__Operator__c}" disabled="{!ExpToShow.namedExpression.SVMXC__IsStandard__c}" size="1" multiselect="false" style="font-Size:12px">
+                                            <apex:selectOptions value="{!OperatorSelectLst}"/>
+                                        </apex:selectList>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px">
+                                        <apex:facet name="header">{!TAG029}</apex:facet>
+                                        <apex:inputText value="{!item.SVMXC__Operand__c}" disabled="{!ExpToShow.namedExpression.SVMXC__IsStandard__c}" style="font-Size:12px"/>
+                                    </apex:column>
+                                    <apex:column style="font-Size:12px;" rendered="{!NOT(ExpToShow.namedExpression.SVMXC__IsStandard__c)}">
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/delete_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="DeleteRow" action="{!HdrDeleteRow}"  onclick="javascript:document.getElementById('{!$Component.DelIndex}').value = {!item.SVMXC__Sequence__c}" id="hdrdeleterow" status="status2" reRender="table1,hdraddrow1" title="{!TAG094}"/>
+                                   
+                                        <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRow}" rendered="{!if((ExpDetailSize == Round(item.SVMXC__Sequence__c, 0)) ,true,false)}" id="hdraddrow" reRender="table1" status="status2" title="{!TAG093}"/>
+                                    </apex:column>
+                                </apex:pageBlockTable>
+                                <apex:outputPanel id="hdraddrow1">
+                                <apex:commandButton image="{!URLFOR($Resource.SVMXC__COMM_Resources3, 'Resources/images/add_exp_img.JPG')}" style="width:20px;height:18px;background:lightblue" value="AddRow" action="{!HdrADDRow}"  id="hdraddrow" reRender="table1,hdraddrow1" rendered="{!if((ExpDetailSize == 0 ) ,true,false)}" status="status2" title="{!TAG093}" />
+                                </apex:outputPanel>
+                                 <apex:pageBlockSection >
+                                    <apex:panelGrid columns="1">
+                                        <apex:outputText value="{!TAG045}"  style="font-Size:12px;font-weight:bold"/> 
+                                        <apex:inputText id="HdrAdvOption" value="{!ExpToShow.namedExpression.SVMXC__Advance_Expression__c}" size="80" disabled="{!ExpToShow.namedExpression.SVMXC__IsStandard__c}"/>
+                                    </apex:panelGrid> 
+                                </apex:pageBlockSection>
+                            </apex:pageBlockSection>
+                            
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                </apex:tab>
+                <!--====================== second tab =================================-->
+                <apex:tab label="{!TAG020}" style="font-Size:12px" id="tab2">
+                    <apex:pageBlock mode="Edit" id="dataSyncBlock">
+                       <center style="line-height: 22px; border:1px solid #C0C0C0; background:LightGrey;" id="center1">
+                              <apex:outputText value="{!TAG006}"  style="background-color: LightGrey; font-weight: bold; font-size: 12px; padding: 0; margin: 0px;"/>              
+                        </center>
+                        
+                        <apex:actionStatus startText="{!TAG065}" id="dataset" />
+                        
+                         <apex:actionFunction name="funDataSyn" action="{!funDataSyn}" rerender="dataSyncBlock,TopPageMsg" status="dataset"/>    
+                        <apex:pageBlockSection columns="2">
+                                
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="{!TAG081}" style="font-weight:bold;font-size:12px;"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputPanel > 
+                                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                                <apex:selectList size="1" id="filterId" onchange="funDataSyn()" value="{!DatasetSynchron}" style="margin-left: 0px;" >
+                                                    <apex:selectOptions value="{!datasetSynchronizationOptns}"  />
+                                                </apex:selectList>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <apex:inputText rendered="{!reminget}" value="{!syncDataEvery}" /> 
+                                                <apex:outputText rendered="{!reminget}" value="{!TAG012}"/>                         
+                                                <!-- <apex:inputText rendered="{!reminget}" value="{!syncDataEvery}"/> -->
+                                        </apex:outputPanel>
+                                    </apex:outputPanel> 
+                            </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                        
+                        <apex:pageblocksection columns="2">
+                            <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="{!TAG084}" style="font-weight:bold;font-size:12px;"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputPanel >
+                                        <!-- <apex:inputText value="{!syncGetEvent}"/>{!TAG015}  -->
+                                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                            <apex:inputText value="{!syncGetEvent}"/> {!TAG015}
+                                        </apex:outputPanel> 
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                        </apex:pageblocksection>
+                        
+                         <apex:pageblocksection columns="2">
+                            <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="{!TAG085}" style="font-weight:bold;font-size:12px;"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputPanel >
+                                        <!-- <apex:inputText value="{!syncRemoveEvent}"/>{!TAG015}  -->
+                                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                            <apex:inputText value="{!syncRemoveEvent}"/> {!TAG015} 
+                                        </apex:outputPanel> 
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                        </apex:pageblocksection>
+                        
+                        
+                        
+                        
+                        <br/>
+                       <!-- <center style="line-height: 22px; border:1px solid #C0C0C0; background:LightGrey;" id="center1">
+                              <apex:outputText value="{!TAG007}"  style="background-color: LightGrey; font-weight: bold; font-size: 12px; padding: 0; margin: 0px;"/>              
+                        </center> -->
+                        
+                        
+                       
+                       
+                       
+                       <center style="line-height: 22px; border:1px solid #C0C0C0; background:LightGrey;" id="center1">
+                              <apex:outputText value="{!TAG021}"  style="background-color: LightGrey; font-weight: bold; font-size: 12px; padding: 0; margin: 0px;"/>              
+                        </center>
+                        
+                        <apex:pageblocksection columns="2">
+                            <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="{!TAG082}" style="font-weight:bold;font-size:12px;"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputPanel >
+                                        <!-- <apex:inputText value="{!freqMasterData}"/>{!TAG012}  -->
+                                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                            <apex:inputText value="{!freqMasterData}"/> {!TAG012}
+                                        </apex:outputPanel> 
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                        </apex:pageblocksection>
+                        
+                         <apex:pageblocksection columns="2"  >
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="{!TAG083}" style="font-weight:bold;font-size:12px;"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:outputPanel >
+                                        <!-- <apex:inputText value="{!freqAppChng}"/>{!TAG012} -->
+                                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                                            <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                            <apex:inputText value="{!freqAppChng}"/> {!TAG012}
+                                        </apex:outputPanel> 
+                                    </apex:outputPanel>
+                                </apex:pageBlockSectionItem>
+                        </apex:pageblocksection>
+                        
+                         <apex:pageblocksection columns="2">
+                            <apex:pageBlockSectionItem >
+                                    <apex:outputLabel value="{!TAG003}" style="font-weight:bold;font-size:12px;"/>
+                                </apex:pageBlockSectionItem>
+                                <apex:pageBlockSectionItem >
+                                    <apex:selectList size="1"  value="{!conflictResol}" style="margin-left: 0px;">
+                                        <apex:selectOptions value="{!conflictResolutionOptns}" />
+                                    </apex:selectlist>
+                                </apex:pageBlockSectionItem>
+                               
+                        </apex:pageblocksection>
+                    </apex:pageBlock>
+                </apex:tab>
+                
+            <!--====================== third tab ==================================-->
+                <apex:tab label="{!TAG021}" style="font-Size:12px">
+                    <apex:pageBlock >
+                       
+                        <center style="line-height: 22px; border:1px solid #C0C0C0; background:LightGrey;" id="center1">
+                              <apex:outputText value="{!TAG009}"  style="background-color: LightGrey; font-weight: bold; font-size: 12px; padding: 0; margin: 0px;"/>              
+                        </center>
+                        <br/>
+                        <apex:pageblockSection >
+                            <apex:pageblockSectionItem >
+                                <apex:outputText style="font-weight:bold;" value="{!TAG004}" />
+                            </apex:pageblockSectionItem>
+                            <apex:pageblockSectionItem >
+                                <apex:outputPanel >
+                                    <apex:panelGrid columns="1" >
+                                        <apex:outputLabel style="font-size:12px;"> 
+                                            <!-- <apex:inputText style="width:50px;"  value="{!chatterThreads}" /> -->
+                                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                                <apex:inputText value="{!chatterThreads}"/>  
+                                            </apex:outputPanel>    
+                                        </apex:outputLabel>   <br/>
+                                    </apex:panelGrid>
+                                </apex:outputPanel>  
+                            </apex:pageblockSectionItem>
+                        </apex:pageblockSection>
+                        <apex:pageblockSection >
+                            <apex:pageblockSectionItem >
+                                <apex:outputText style="font-weight:bold;" value="{!TAG005}" />
+                            </apex:pageblockSectionItem>
+                            <apex:pageblockSectionItem >
+                                <apex:outputPanel >
+                                    <apex:panelGrid columns="1" >
+                                        <apex:outputLabel style="font-size:12px;">
+                                            <!-- <apex:inputText style="width:50px;" value="{!downloadLimitKB}" /> {!TAG018} -->
+                                            <apex:outputPanel layout="block" styleClass="requiredInput">
+                                                <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                                                <apex:inputText value="{!downloadLimitKB}"/> {!TAG018}
+                                            </apex:outputPanel> 
+                                        </apex:outputLabel>
+                                    </apex:panelGrid>
+                                </apex:outputPanel>  
+                            </apex:pageblockSectionItem>
+                        </apex:pageblockSection>
+                    </apex:pageBlock>
+                </apex:tab>
+            </apex:tabPanel>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

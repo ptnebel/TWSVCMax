@@ -1,0 +1,113 @@
+<apex:page title="{!TAG001}" sidebar="true" showHeader="true" action="{!doValidateOMapRec}" controller="SVMXC.CONF_EditObjectMappingDetails"  tabStyle="SVMXC__ServiceMax_Settings__c"> 
+ <apex:form id="form1">
+ <apex:param name="objMapId" value="{!$CurrentPage.parameters.objMapId}"/>
+ <apex:param name="sMode" value="{!$CurrentPage.parameters.sMode}"/>
+ 
+         <apex:pageBlock id="block10" rendered="{!showPageError}" >
+            <apex:pageMessages rendered="{!showPageError}" />
+            <apex:pageBlockButtons location="top"> 
+                <apex:commandButton value="{!TAG003}" action="{!SVMX_doCancel}" />
+            </apex:pageBlockButtons> 
+        </apex:pageBlock>
+    
+
+    <apex:stylesheet value="{!$Resource.SVMXC__SVMX_resources}" />
+         <apex:pageBlock id="block1" title="{!TAG001}" helpTitle="{!TAG004}" helpUrl="{!HLPURL}" rendered="{!NOT(showPageError)}" >
+            <apex:pageMessages rendered="{!NOT(showPageError)}"  showDetail="true" />
+            <apex:pageBlockButtons location="top"> 
+                <apex:commandButton value="{!TAG027}" action="{!SVMX_doSave}" rendered="{!readWrite}"/>
+                <apex:commandButton value="{!TAG002}" action="{!SVMX_doQuickSave}" rendered="{!readWrite}"/>
+                <apex:commandButton value="{!TAG003}" action="{!SVMX_doCancel}" />
+            </apex:pageBlockButtons>
+                       <apex:actionStatus startText="{!TAG028}"  id="statusone" />
+        <apex:pageBlockSection collapsible="false" columns="2">
+
+                <apex:pageBlockSection dir="LTR" columns="1">
+                    <apex:pageBlockSectionItem rendered="{!readWrite}">
+                                <apex:outputText value="{!TAG005}"/>
+                                <apex:outputPanel layout="block" styleClass="requiredInput">
+                                <apex:outputPanel layout="block" styleClass="requiredBlock"/>    
+                                      <apex:inputField value="{!oMaprec.SVMXC__Name__c}"  />
+                                </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!readWrite}">                   
+                                <apex:outputText value="{!TAG006}"/>
+                                    <apex:outputPanel layout="block" styleClass="requiredInput">
+                                <apex:outputPanel layout="block" styleClass="requiredBlock"/>    
+                                      <apex:inputField value="{!oMaprec.SVMXC__MapID__c}"  />
+                                </apex:outputPanel>
+                                                            
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!readWrite}">
+                        <apex:outputText value="{!TAG007}"/>
+                        <apex:inputField style="width:97%" value="{!oMaprec.SVMXC__Description__c}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!readWrite}">
+                         <apex:outputText value="{!TAG024}"/>
+                        <apex:inputField value="{!oMaprec.SVMXC__Active__c}" />
+                    </apex:pageBlockSectionItem>
+                    
+                        <apex:pageBlockSectionItem rendered="{!readOnly}">
+                                <apex:outputText value="{!TAG005}"/>
+                        <apex:outputField value="{!oMaprec.SVMXC__Name__c}"  />
+                </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!readOnly}">
+                        <apex:outputText value="{!TAG006}"/>
+                        <apex:outputField value="{!oMaprec.SVMXC__MapID__c}"  />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!readOnly}">
+                        <apex:outputText value="{!TAG007}"/>
+                        <apex:outputField style="width:97%" value="{!oMaprec.SVMXC__Description__c}" />
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem rendered="{!readOnly}">
+                        <apex:outputText value="{!TAG024}"/>
+                        <apex:outputField value="{!oMaprec.SVMXC__Active__c}" />
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+    
+                <apex:pageBlockSection collapsible="false" dir="LTR" columns="1">
+                    <apex:pageBlockSectionItem dataStyleClass="centerTA" labelStyleClass="centerTA">
+                        <apex:outputLabel for="Des" value="{!TAG008}"> </apex:outputLabel>
+                        <apex:selectList value="{!sourceObj}" onchange="populateFMap()" multiselect="false" size="1" disabled="{!disAllowChangeObj}">
+                                <apex:selectOptions value="{!sourceObjOptions}"/>
+                                <apex:actionFunction action="{!SVMX_populateRT}" name="populateFMap" status="statusone" reRender="form1" />                                 
+                        </apex:selectList>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel for="Des" value="{!TAG009}" > </apex:outputLabel>
+                        <apex:selectList value="{!targetObj}" onchange="populateRT()" multiselect="false" size="1" disabled="{!disAllowChangeObj}">
+                            <apex:selectOptions value="{!targetObjOptions}" />
+                                <apex:actionFunction action="{!SVMX_populateRT}" name="populateRT" status="statusone"  reRender="form1"  />
+                        </apex:selectList>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem id="rtId">                               
+                        <apex:outputLabel for="Des" value="{!TAG010}"> </apex:outputLabel>                
+                        <apex:selectList value="{!targetRT}" multiselect="false" size="1" disabled="{!readOnly}">
+                            <apex:selectOptions value="{!targetRTOptions}"/>
+                        </apex:selectList>                       
+                    </apex:pageBlockSectionItem>                    
+                </apex:pageBlockSection>
+                 
+        </apex:pageBlockSection>
+        <apex:outputText >&nbsp;&nbsp;&nbsp;</apex:outputText>
+      </apex:pageBlock> 
+
+        <apex:pageBlock id="customsubmodulesEdit" mode="edit" title=""  rendered="{!NOT(showPageError)}">
+            <apex:pageBlockTable id="customPBTEdit"   value="{!wrapFldMap}" var="item">
+                <apex:column >
+                    <apex:facet name="header" >{!TAG011}</apex:facet>                           
+                        <apex:outputText value="{!item.targetFldLabel}" />
+                </apex:column>
+                <apex:column >
+                        <apex:facet name="header" >{!TAG014}</apex:facet>
+                                        <apex:selectList value="{!item.sourceFldName}" size="1" onchange="Makesubmodule()" disabled="{!readOnly}" > 
+                                <apex:selectOptions value="{!item.sourceOptions}"/>
+                                </apex:selectList>                
+                        </apex:column>
+                
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        
+</apex:form>
+ 
+  </apex:page>

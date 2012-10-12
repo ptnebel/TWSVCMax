@@ -1,0 +1,97 @@
+<apex:page title="Service Flow" controller="SVMXC.SFM_TDM_Delivery" action="{!DoPageAction}">
+<script type="text/javascript">
+    displayAlert();
+    function displayAlert()
+    { 
+        if({!Not(IsIdExsists)})
+        {
+            alert("{!JSENCODE(IdErrMsg)}");
+            location.href = "/home/home.jsp";
+        }
+        else if({!Not(IsProcessExsists)})
+        {
+            alert("{!JSENCODE(ProcessErrMsg)}");
+            location.href = "/{!JSENCODE(RecordID)}";
+        }
+        else if({!IsProcessExsists} && {!IsError})
+        {
+            alert("{!JSENCODE(ErrorMsg)}");
+            location.href = "/{!JSENCODE(RecordID)}";
+        }
+        else if({!Not(isSFMProces)}) 
+        {
+            alert("{!JSENCODE(ProTypeErr)}");
+            location.href = "/{!JSENCODE(RecordID)}";
+        }
+    }
+</script>   
+    <!--<apex:form id="form1">-->
+        <!--<apex:PageBlock id="block1"  rendered="{! IF( Not(Mode) && Not(IsError),True,False)}">-->
+        <style type="text/css" media="screen">
+            html, body { height:100%; background-color: #ffffff;}
+            body { margin:0; padding:0; }
+        </style>
+        <!--<div id="flashContent">-->
+            <!--<object width="100%" height="{!height}" align="middle" id="test">
+                <param name="wmode" value="window"/>
+                <param name="allowScriptAccess" value="always" />
+                <param name="movie" value="{!URLFOR($Resource.SVMXC__SFM_TDM_Delivery,'bin-debug/SFMDelivery.swf')}" />
+                <param name="quality" value="high" />
+                <param name="bgcolor" value="#ffffff" />
+                <param name="FlashVars" value="sessionID={!MySessionId}&serverURL={!$Api.Partner_Server_URL_90}&SVMX_recordID={!RecordID}&SVMX_processID={!processID}&SVMX_pageID={!PageID}&SVMX_returnURL={!returnURL}&SVMX_NxtStepID={!nxtStepID}&SVMX_userID={!$User.Id}&loadingTag={!loadingTag}&SVMX_processTitle={!processTitle}&SVMX_SearchOperator={!defaultSearchOperator}"/>
+                <embed src="{!URLFOR($Resource.SVMXC__SFM_TDM_Delivery,'bin-debug/SFMDelivery.swf')}" width="100%" height="{!height}" autostart="false" quality="high" bgcolor="#ffffff" FlashVars="sessionID={!MySessionId}&serverURL={!$Api.Partner_Server_URL_90}&SVMX_recordID={!RecordID}&SVMX_processID={!processID}&SVMX_pageID={!PageID}&SVMX_returnURL={!returnURL}&SVMX_NxtStepID={!nxtStepID}&SVMX_userID={!$User.Id}&loadingTag={!loadingTag}&SVMX_processTitle={!processTitle}&SVMX_SearchOperator={!defaultSearchOperator}" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" name="test" wmode="window" />
+             </object>-->
+        <!--</div>-->
+        <apex:flash id="Delivery" src="{!URLFOR($Resource.SVMXC__SFM_TDM_Delivery,'bin-debug/SFMDelivery.swf')}" width="100%" height="{!height}" flashvars="sessionID={!MySessionId}&serverURL={!$Api.Partner_Server_URL_90}&SVMX_recordID={!RecordID}&SVMX_processID={!processID}&SVMX_pageID={!PageID}&SVMX_returnURL={!returnURL}&SVMX_NxtStepID={!nxtStepID}&SVMX_userID={!$User.Id}&loadingTag={!loadingTag}&SVMX_processTitle={!processTitle}&SVMX_SearchOperator={!defaultSearchOperator}"></apex:flash>
+<script type="text/javascript">
+    /*var swf = document.getElementById('SFM_ProcessDelivery');
+    var swf1 = document.getElementById('SFM_ProcessDelivery1');
+    if(swf != null && swf != "")
+        swf.height = screen.height - 130;
+    else if(swf1 != null && swf1 != "")
+        swf1.height = screen.height - 130;
+        
+    window["SFM_ProcessDelivery"] = document.getElementById('SFM_ProcessDelivery');*/
+    
+    function getURL()
+    {
+       // alert(document.URL);
+        return document.URL;
+    }
+    function invokeCancel()
+    {
+         alert("clicked");
+        top.location = "../{!JSENCODE($CurrentPage.parameters.SVMX_recordID)}";
+    }
+    
+    var usrTimeFormat = UserContext.timeFormat;
+    function getTimeFormat()
+    {
+        //alert(UserContext.timeFormat)
+        return UserContext.timeFormat//usrTimeFormat; 
+    }
+    
+    function openPopUp(url)
+    {
+        window.open(url,"_blank","width=800,height=600,0,status=0,scrollbars=1");
+        return false; 
+    }
+    
+    function resetScrollPosition()
+    {
+        window.scrollTo(0,0);
+    }
+</script>   
+<!--</apex:PageBlock>-->
+<!--  </apex:form>
+<apex:form id="form2" rendered="{!If(Mode && Not(IsError),True,False)}">-->
+<apex:pageBlock id="block2" title="{!ProcessTitle}" rendered="{!If(Mode && Not(IsError),True,False)}">
+<apex:pageMessages rendered="{!HdrMsg}"/>
+<apex:outputLink value="../{!JSENCODE($CurrentPage.parameters.SVMX_recordID)}" id="theLink">{!$Label.svmxc__COMM001_TAG040}</apex:outputLink>
+<center>
+<apex:Image value="{!$Resource.SVMXC__Progress}" width="500" height="20" rendered="{!if(Not(HdrMsg),True,False)}"/>
+</center>
+</apex:pageBlock>
+
+<!--</apex:form>-->
+ </apex:page>

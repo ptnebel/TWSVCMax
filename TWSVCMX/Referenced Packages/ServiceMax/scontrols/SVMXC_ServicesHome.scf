@@ -1,0 +1,33 @@
+<!--
+// ServiceMax Release 1.0
+-->
+<html>
+<head>
+<title>ServiceMax Services Home</title>
+<meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />
+<link  href="/sCSS/Theme2/default/elements.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/common.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/common.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/css/assistive.css" media="aural,braille,embossed" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/dStandard.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/{!SUBSTITUTE(SUBSTITUTE($Organization.Id,'<','&lt;'),'>','&gt;')}/{!SUBSTITUTE(SUBSTITUTE($User.Id,'<','&lt;'),'>','&gt;')},'<','&lt;'),'>','&gt;')}/dCustom.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/extended.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/022207/js/functions.js"></script>
+<script  src="/dJS/en/1181680187000/library.js" type="text/javascript"></script>
+<script  type="text/javascript">window.sfdcPage = new GenericSfdcPage();</script><link rel="SHORTCUT ICON" href="https://tapp0.salesforce.com/favicon.ico" />
+<script src="/soap/ajax/14.0/connection.js" type="text/javascript"></script>
+<script type="text/javascript" src="/js/setup.js"></script>
+
+<script language="javascript" type="text/javascript">
+
+
+function setupPage(){
+	window.location = "/" + "{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE($ObjectType.Service__c,'<','&lt;'),'>','&gt;'),'"','&quot;')}/l";
+}
+
+</script>
+</head>
+
+<body onload ="setupPage();" class="custom  customTab1">
+</body>
+</html>

@@ -1,0 +1,219 @@
+<apex:page standardController="Timesheet2__c" extensions="Time_Sheet" action="{!runFull}" sidebar="false">
+<apex:form >	
+	<apex:outputPanel id="timesheet1"> 
+	<apex:pageblock title="Timesheet: {!sheet1.Name}">
+		<apex:pageBlockButtons >
+			<apex:commandButton action="{!Back}" value="Back To Timesheet" /> 
+			<apex:commandButton action="{!SubmitSheet}" value="Submit" rendered="{!sheet1.Status__c!='Submitted'}"/>
+		</apex:pageBlockButtons> 
+		<apex:pageBlockSection >
+			<apex:outputField value="{!sheet1.Technician__c}" />
+			<apex:outputField value="{!sheet1.Status__c}" />
+			<apex:outputField value="{!sheet1.Start_Date__c}" />		
+			<apex:outputText value="" />
+			<apex:outputField value="{!sheet1.End_Date__c}" />
+		</apex:pageBlockSection>
+	</apex:pageblock>
+	</apex:outputPanel>	
+	
+	<apex:pageblock title="Time Entries" >
+		<apex:pageBlockButtons >
+			
+		</apex:pageBlockButtons>
+		<apex:outputPanel id="CurrentTimeEntriesSection">
+		<apex:pageBlockSection title="Current Time Entries  (updates with also update the Calendar Event record)" columns="1">	 <!--  id="CurrentTimeEntriesSection" --> 						
+			<apex:outputText value="There are no current entries." rendered="{!currentEntries.size=0}"/><br/>
+			<apex:outputPanel rendered="{!currentEntries.size>0 }">
+				<apex:commandButton action="{!QuickSaveEntries}" value="Save"/>
+				<apex:commandButton action="{!SaveEntries}" value="Save & Close" />
+				<apex:commandButton action="{!DeleteEntries}" value="Delete"   onClick="{if(!confirm('This will also delete the calendar event(s). Are you sure?')){return false}}"/>
+			</apex:outputPanel> 								
+			<apex:pageBlockTable value="{!ItemEntries}" var="line1" rendered="{!currentEntries.size>0}" > <!-- columnsWidth="50px, 50px, 200px, 75px, 90px, 150px, 150px, 90px " -->
+				<apex:column style="width:35px" rendered="{!sheet1.Status__c!='Submitted'}"> 
+					<apex:facet name="header"><apex:outputText value="Delete"/></apex:facet>
+					<apex:inputCheckbox id="delcheckbox" value="{!line1.DelSelected}"/>
+	           	</apex:column>
+	           	<apex:column style="width:35px" rendered="{!sheet.Status__c!='Submitted'}"> 
+					<apex:facet name="header"><apex:outputText value="Edit"/></apex:facet>
+					<apex:inputCheckbox id="editEntry" value="{!line1.EditSelected}">
+						<apex:actionSupport event="onclick"  rerender="CurrentTimeEntriesSection">							
+							<apex:param name="editlineid" assignTo="{!editlineid}" value="{!line1.entry.id}"/>
+						</apex:actionSupport>						
+					</apex:inputCheckbox> 
+	           	</apex:column>  
+	           	<apex:column style="width:500px"> 
+					<apex:facet name="header"><apex:outputText value="Entry and Calendar Event Name"/></apex:facet>
+					<apex:outputPanel rendered="{!line1.EditSelected==false}"><a href="/{!line1.entry.Work_Order__c}" target="_new" >{!line1.entry.Name}</a></apex:outputPanel>
+					<!-- <apex:outputText style="width:100%" value="{!line1.entry.Name}" rendered="{!line1.EditSelected==false}"/>  -->
+					<apex:inputText style="width:100%" value="{!line1.entry.Name}" rendered="{!line1.EditSelected==true}"/>
+	           	</apex:column>
+	           	<apex:column style="width:60px"> 
+					<apex:facet name="header"><apex:outputText value="Type"/></apex:facet>
+					<apex:inputField value="{!line1.entry.Type__c}" rendered="{!line1.EditSelected==true}"/>
+					<apex:outputField value="{!line1.entry.Type__c}" rendered="{!line1.EditSelected==false}"/>
+	           	</apex:column>
+	           	<apex:column style="width:90px"> 	           		
+					<apex:facet name="header"><apex:outputText value="Start Day"/></apex:facet>					
+					<apex:outputText value="{!line1.StartWeekDay}"/>
+	           	</apex:column>
+	           	<apex:column style="width:220px" > 
+					<apex:facet name="header"><apex:outputText value="Start Date"/></apex:facet>	
+					<apex:outputPanel rendered="{!line1.EditSelected==true}">
+						Date
+						<apex:selectList value="{!line1.StartMonth}" size="1">
+		            		<apex:selectOptions value="{!Months}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!line1.StartDay}" size="1">
+		            		<apex:selectOptions value="{!Days}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!line1.StartYear}" size="1">
+		            		<apex:selectOptions value="{!Years}"/>
+		        		</apex:selectList>
+		        		<br></br>
+		        		Time
+		        		<apex:selectList value="{!line1.StartHour}" size="1">
+		            		<apex:selectOptions value="{!Hours}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!line1.StartMinute}" size="1">
+		            		<apex:selectOptions value="{!Minutes}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!line1.StartAMPM}" size="1">
+		            		<apex:selectOptions value="{!AMPM}"/>
+		        		</apex:selectList>
+					</apex:outputPanel>			
+					
+	           		<c:noCurrentDateLink >
+						<!-- <apex:inputField value="{!line1.entry.Start_Time__c}" rendered="{!line1.EditSelected==true}"/>	-->						
+						<apex:outputField value="{!line1.entry.Start_Time__c}" rendered="{!line1.EditSelected==false}"/>
+					</c:noCurrentDateLink>					
+	           	</apex:column>
+	           	<apex:column style="width:220px"> 
+					<apex:facet name="header"><apex:outputText value="End Date"/></apex:facet>
+					<apex:outputPanel rendered="{!line1.EditSelected==true}">
+						Date
+						<apex:selectList value="{!line1.EndMonth}" size="1">
+		            		<apex:selectOptions value="{!Months}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!line1.EndDay}" size="1">
+		            		<apex:selectOptions value="{!Days}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!line1.EndYear}" size="1">
+		            		<apex:selectOptions value="{!Years}"/>
+		        		</apex:selectList>
+		        		<br></br>
+		        		Time
+		        		<apex:selectList value="{!line1.EndHour}" size="1">
+		            		<apex:selectOptions value="{!Hours}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!line1.EndMinute}" size="1">
+		            		<apex:selectOptions value="{!Minutes}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!line1.EndAMPM}" size="1">
+		            		<apex:selectOptions value="{!AMPM}"/>
+		        		</apex:selectList>
+					</apex:outputPanel>	
+					<c:noCurrentDateLink >	
+						<!-- <apex:inputField value="{!line1.entry.End_Time__c}" rendered="{!line1.EditSelected==true}"/> -->
+						<apex:outputField value="{!line1.entry.End_Time__c}" rendered="{!line1.EditSelected==false}"/>
+					</c:noCurrentDateLink>	
+	           	</apex:column>
+	           	<apex:column > 
+					<apex:facet name="header"><apex:outputText value="Hours"/></apex:facet>
+					<apex:outputField value="{!line1.entry.Hours__c}"/>
+	           	</apex:column>	           			
+			</apex:pageBlockTable>
+			
+			<apex:outputPanel style="align:right">
+				<apex:outputText value="Labor Hours: " style="font-weight:bold"/>
+				<apex:outputText value="{!LaborHours}"/><br/>	
+				<apex:outputText value="Total Hours: " style="font-weight:bold"/>
+				<apex:outputText value="{!totalHours}"/><br/>				
+			</apex:outputPanel>
+		    </apex:pageBlockSection>  
+		</apex:outputPanel>
+		
+		
+		<apex:pageBlockSection title="Create New Time Entries" columns="1" id="NewTimeEntriesSection" rendered="{!sheet.Status__c!='Submitted'}"> 
+			<apex:outputPanel >
+				<apex:commandButton action="{!AddEntriesSize}" value="Add" rerender="NewTimeEntriesSection"/>	
+				<apex:commandButton action="{!SaveNewEntries}" value="Save" rendered="{!NewEntriesSize>0}"/>	
+				<apex:commandButton action="{!DeleteNewEntries}" value="Delete" rendered="{!NewEntriesSize>0}"/> 
+			</apex:outputPanel>			
+			<apex:pageBlockTable value="{!NewEntryItems}" var="e" rendered="{!NewEntriesSize>0}">
+			<!-- 
+				<apex:column >  
+					<apex:commandButton action="{!SubEntriesSize}" value="Delete" rerender="NewTimeEntriesSection"/>
+				</apex:column>
+			-->
+				<apex:column width="10px" > 
+					<apex:facet name="header"><apex:outputText value="Delete"/></apex:facet>
+					<apex:inputCheckbox id="delcheckbox" value="{!e.DelSelected}"/>
+	           	</apex:column>
+	           	<apex:column >  
+					<apex:facet name="header"><apex:outputText value="Name/Description"/></apex:facet>
+					<apex:inputField value="{!e.entry.Name}"/>
+	           	</apex:column>
+	           	<apex:column >  
+					<apex:facet name="header"><apex:outputText value="Type"/></apex:facet>
+					<apex:inputField value="{!e.entry.Type__c}"/>
+	           	</apex:column>
+				<apex:column >  
+					<apex:facet name="header"><apex:outputText value="Start Date & Time"/></apex:facet>
+					<apex:outputPanel >
+						Date
+						<apex:selectList value="{!e.StartMonth}" size="1">
+		            		<apex:selectOptions value="{!Months}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!e.StartDay}" size="1">
+		            		<apex:selectOptions value="{!Days}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!e.StartYear}" size="1">
+		            		<apex:selectOptions value="{!Years}"/>
+		        		</apex:selectList>
+		        		<br></br>
+		        		Time
+		        		<apex:selectList value="{!e.StartHour}" size="1">
+		            		<apex:selectOptions value="{!Hours}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!e.StartMinute}" size="1">
+		            		<apex:selectOptions value="{!Minutes}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!e.StartAMPM}" size="1">
+		            		<apex:selectOptions value="{!AMPM}"/>
+		        		</apex:selectList>
+					</apex:outputPanel>	
+	           	</apex:column>
+	           	<apex:column >  
+					<apex:facet name="header"><apex:outputText value="End Date & Time"/></apex:facet>
+					<apex:outputPanel >
+						Date
+						<apex:selectList value="{!e.EndMonth}" size="1">
+		            		<apex:selectOptions value="{!Months}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!e.EndDay}" size="1">
+		            		<apex:selectOptions value="{!Days}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!e.EndYear}" size="1">
+		            		<apex:selectOptions value="{!Years}"/>
+		        		</apex:selectList>
+		        		<br></br>
+		        		Time
+		        		<apex:selectList value="{!e.EndHour}" size="1">
+		            		<apex:selectOptions value="{!Hours}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!e.EndMinute}" size="1">
+		            		<apex:selectOptions value="{!Minutes}"/>
+		        		</apex:selectList>
+		        		<apex:selectList value="{!e.EndAMPM}" size="1">
+		            		<apex:selectOptions value="{!AMPM}"/>
+		        		</apex:selectList>
+					</apex:outputPanel>	
+	           	</apex:column>
+			</apex:pageBlockTable>
+			<apex:outputText value="There are no new entries." rendered="{!NewEntriesSize=0}"/>	
+		    </apex:pageBlockSection>	 		
+		<!--  <script> twistSection(document.getElementById('{!$Component.NewTimeEntriesSection}').getElementsByTagName('img')[0]) </script>-->
+	</apex:pageblock>
+</apex:form>
+
+</apex:page>

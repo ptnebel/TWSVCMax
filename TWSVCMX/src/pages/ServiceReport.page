@@ -1,0 +1,190 @@
+<apex:page controller="SVMX_PS_ServiceReport" renderAs="pdf" sidebar="false" showHeader="false"> 
+<style>
+    body { margin-top: 1%; margin-right: 0px; margin-bottom: 0px; margin-left: 50px; }
+    .rowHeight {height:50px}
+</style>
+
+<!-- 
+    <apex:pageMessages rendered="false">
+        <apex:pageMessage rendered="false" strength="2" severity="error" title="No Work Order data.">
+        </apex:pageMessage>
+    </apex:pageMessages>
+ -->    
+    <apex:stylesheet value="{!$Resource.SVMXVF_Resources1}" />
+    <apex:variable var="m" value="{!$User.Alias}"/>  
+    <apex:variable value="{!WorkOrder}" var="SVOHeader"/>
+     <head>
+    </head>
+   
+    <apex:panelGrid columns="2" cellpadding="0" columnClasses="colspan30,colspan30" cellspacing="0" styleClass="font10" width="700px" border="0">
+        <apex:panelGroup id="theGroup" styleClass="left">
+             <apex:image url="{!$Resource.ServiceMax_Logo}"/>
+        </apex:panelGroup>
+    </apex:panelGrid>
+ <br/>
+  
+ 
+      <apex:panelGrid cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan30,colspan25,colspan25" 
+            rowClasses="font13,font13,font13,font13,font13,font13,font13,font13,font13" columns="4" width="700px" border="1" style="border-bottom: hidden;">
+            <apex:outputText styleClass="fontbold" value="Work Order Number"/> 
+            <apex:outputText styleClass="font13" value="{!SVOHeader.Name}"/>    
+            <apex:outputText styleClass="fontbold" value="Case Number"/> 
+            <apex:outputText styleClass="font13,rowHeight" value="{!SVOHeader.SVMXC__Case__r.CaseNumber}"/>    
+
+            <apex:outputText styleClass="fontbold" value="Account Name"/>    
+            <apex:outputText styleClass="font13" value="{!SVOHeader.SVMXC__Company__r.Name}{!if(SVOHeader.SVMXC__Company__r.AccountNumber != null,'/','')}{!SVOHeader.SVMXC__Company__r.AccountNumber}"/>  
+            <apex:outputText styleClass="fontbold" value="Contact Name"/> 
+            <apex:outputText styleClass="fontbold" value="{!SVOHeader.SVMXC__Contact__r.Name}"/>
+
+            <apex:outputText styleClass="fontbold" value="Visit Date"/>  
+            <apex:outputText styleClass="font13" value="{0,date,EEEE MM'/'dd'/'yyyy}">     
+                <apex:param value="{!SVOHeader.SVMXC__Scheduled_Date_Time__c}"/>
+            </apex:outputText>
+
+            <apex:outputText styleClass="fontbold" value="Contact Phone"/> 
+            <apex:outputText styleClass="fontbold" value="{!SVOHeader.SVMXC__Contact__r.Phone}"/>
+            
+            <apex:outputText styleClass="fontbold" value="Billing Type"/> 
+            <apex:outputText styleClass="font13" value="{!SVOHeader.SVMXC__Billing_Type__c}"/>
+
+
+
+        </apex:panelGrid>
+    <br/>
+        <apex:panelGrid rowClasses="blackbgcolor" cellpadding="0" cellspacing="0" columns="1" width="700px" border="1" styleClass="left" style="border-bottom: hidden;">
+        <apex:outputText styleClass="fontbold" value="Service Location "/> 
+        </apex:panelGrid>
+        <apex:panelGrid cellpadding="0" cellspacing="0" columnClasses="colspan20,colspan80" rowClasses="font13,font13,font13,font13,font13" columns="2" width="700px" style="border-top: hidden;" border="1" >                
+            <apex:outputText styleClass="fontbold" value="Street"/> 
+          <apex:outputText styleClass="font13" value="{!SVOHeader.SVMXC__Company__r.BillingStreet}"/>                                
+          <apex:outputText styleClass="fontbold" value="City,State,Country"/> 
+          <apex:outputText styleClass="font13" value="{!SVOHeader.SVMXC__Company__r.BillingCity},{!SVOHeader.SVMXC__Company__r.BillingState},{!SVOHeader.SVMXC__Company__r.BillingCountry}"/>    
+          <apex:outputText styleClass="fontbold" value="Zip / Postal Code"/> 
+          <apex:outputText styleClass="font13" value="{!SVOHeader.SVMXC__Company__r.BillingPostalCode}"/>                                   
+        </apex:panelGrid>
+          <br/>
+    <br/>
+    <apex:panelGrid rowClasses="blackbgcolor" cellpadding="0" cellspacing="0" columns="1" width="700px" border="1" styleClass="left" style="border-bottom: hidden;">
+        <apex:outputText styleClass="fontbold" value="Work Details"/> 
+    </apex:panelGrid>
+     <apex:panelGrid columns="4" cellpadding="0" cellspacing="0" border="1" width="700px" rowclasses="font13,font13" columnclasses="colspan20,colspan30,colspan20,colspan30" style="border-bottom: hidden;">  
+         <apex:outputText styleClass="fontbold"  value="Product" />
+         <apex:outputText styleClass="font13"  value="{!SVOHeader.SVMXC__Component__r.SVMXC__Product__r.Name}" />
+         <apex:outputText styleClass="fontbold"  value="Serial-No" />
+         <apex:outputText styleClass="font13" value="{!SVOHeader.SVMXC__Component__r.SVMXC__Serial_Lot_Number__c}" />
+    </apex:panelGrid>
+    
+    <apex:panelGrid columns="2" cellpadding="0" cellspacing="0" border="1" columnClasses="colspan20,colspan80" width="700px" style="border-top: hidden;" >            
+            <apex:outputText styleClass="fontbold" value="Description "/>
+            <apex:outputText styleClass="font13" value="{!SVOHeader.SVMXC__Problem_Description__c}"/>     
+            <apex:outputText styleClass="fontbold" value="Action "/>
+            <apex:outputText styleClass="font13" value=""/>  
+    </apex:panelGrid>
+
+    <br/>
+    
+    <apex:panelGrid rowClasses="blackbgcolor" cellpadding="0" cellspacing="0" columns="1" width="700px" border="1" styleClass="left" style="border-bottom: hidden;">
+        <apex:outputText styleClass="fontbold" value="Parts & Labor Utilization"/> 
+    </apex:panelGrid>
+    
+     <apex:panelGrid columns="7" columnClasses="colspan10,colspan15,colspan20,colspan20,colspan10,colspan10,colspan10" cellpadding="0" cellspacing="0" width="700px" style="border-top: hidden;" border="1">
+         <apex:outputText styleClass="fontbold" value="Activity Type"/>
+         <apex:outputText styleClass="fontbold" value="Product Code"/>
+         <apex:outputText styleClass="fontbold" value="Description"/>
+         <apex:outputText styleClass="fontbold" value="Work Description"/>
+         <apex:outputText styleClass="fontbold" value="Quantity"/>
+         <apex:outputText style="float:right;" styleClass="fontbold" value="Price / Unit"/>
+         <apex:outputText style="float:right;" styleClass="fontbold" value="Line Price"/>
+    </apex:panelGrid> 
+    
+   <apex:repeat value="{!WorkOrderDetail}" var="wodls"> 
+       <apex:panelGrid columns="7" cellpadding="2" cellspacing="0" columnClasses="colspan10,colspan15,colspan20,colspan20,colspan10,colspan10,colspan10" border="1" style="border-top: hidden;" width="700px" >
+                 <apex:outputText value="{!wodls.SVMXC__Line_Type__c}"/>
+                 <apex:outputText value="{!wodls.SVMXC__Product__r.ProductCode}"/>
+                 <apex:outputText value="{!wodls.SVMXC__Product__r.Name}"/>
+                 <apex:outputText value="{!wodls.SVMXC__Work_Description__c}"/>
+                 <apex:outputText value="{!VALUE(TEXT(ROUND(wodls.SVMXC__Actual_Quantity2__c, 2)))}"/>
+                 <apex:outputText styleClass="font13">
+
+                     <apex:outputText style="float:right;" styleClass="font13" value="{0, number, #,#00.00}">
+                         <apex:param value="{!wodls.SVMXC__Actual_Price2__c}"/>
+                     </apex:outputText>
+
+                 </apex:outputText>
+
+                 <apex:outputText styleClass="font13">
+                     <apex:outputText style="float:right;" styleClass="font13" value="{0, number, #,#00.00}">
+                         <apex:param value="{!wodls.SVMXC__Total_Line_Price__c}"/>
+                     </apex:outputText>
+
+                 </apex:outputText>
+
+        </apex:panelGrid>                
+    </apex:repeat> 
+
+    <apex:panelGrid rowClasses="font13" columns="2" cellpadding="0" cellspacing="0" columnClasses="colspan75, colspan25" styleClass="font13NewAlignRight" border="1" width="700px" style="border-top: hidden;" >     
+        <apex:outputText styleClass="fontbold" value="Sub Total of Work Performed "/>
+        <apex:panelGrid cellpadding="0" cellspacing="0" border="0" style="float:right;" >     
+
+                 <apex:outputText styleClass="font12">
+                     <apex:outputText style="float:right;" styleClass="font12" value="{0, number, #,#00.00}">
+                         <apex:param value="{!SVOHeader.SVMXC__Total_Work_Order_Cost__c}"/>
+                      
+                     </apex:outputText>
+
+                 </apex:outputText>
+        </apex:panelGrid> 
+        <apex:outputText styleClass="fontbold" value="* Total Charge Amount "/>
+        <apex:panelGrid cellpadding="0" cellspacing="0" border="0" style="float:right;" >     
+        </apex:panelGrid>
+        
+           
+    </apex:panelGrid>  
+    <br/>
+      
+    <apex:panelGrid rowClasses="blackbgcolor" cellpadding="0" cellspacing="0" columns="1" width="700px" border="1" styleClass="left" style="border-bottom: hidden;">
+        <apex:outputText styleClass="fontbold" value="Work Performed"/> 
+    </apex:panelGrid> 
+      
+    <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="font13"  columnClasses="colspan40" width="700px" border="1">
+        <apex:outputText styleClass="fontbold" value="Details:"/> <br/><br/><br/><br/><br/>
+                    </apex:panelGrid>
+                    
+        <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" width="700px" border="1" columnClasses="colspan50,colspan50" style="border-top: hidden;">
+            <apex:outputText styleClass="fontbold" value="">
+                    <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="font13"  columnClasses="colspan40" width="80%" border="0">
+                        <apex:outputText styleClass="fontbold" value="Date / Name Customer"/> 
+                    </apex:panelGrid>
+
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="1" width="100%" border="0" rowClasses="line">
+                        <apex:outputText styleClass="font13" value="{!CloseDate}"/>
+                        <apex:outputText styleClass="font13" value="{!SVOHeader.SVMXC__Contact__r.Name}"/>
+                        <br/><br/><br/>
+                    </apex:panelGrid>
+            </apex:outputText>
+
+            <apex:outputText styleClass="fontbold" value="">
+                    <apex:panelGrid columns="1" cellpadding="0" cellspacing="0" styleClass="font13"  columnClasses="colspan40" width="80%" border="0">
+                        <apex:outputText styleClass="fontbold" value="Name / Date Engineer"/> 
+                    </apex:panelGrid>
+
+                    <apex:panelGrid cellpadding="0" cellspacing="0" columns="1" width="100%" border="0" rowClasses="line">
+                        <apex:outputText styleClass="font13" value="{!SVOHeader.SVMXC__Group_Member__r.Name}"/>
+                        <apex:outputText styleClass="font13" value="{!CloseDate}"/>
+                        <br/><br/><br/>
+                    </apex:panelGrid>
+            </apex:outputText>
+    
+        </apex:panelGrid>
+    <apex:pageBlock >
+        <apex:outputPanel >
+    </apex:outputPanel>
+     </apex:pageBlock>
+        <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" width="700px" border="0" columnClasses="colspan40,colspan40" style="border-top: hidden;">
+          <apex:outputText styleClass="fontbold" value="* All costs portrayed above are estimates only, final costs will be submitted with formal invoice, as applicable"/> 
+    
+    </apex:panelGrid>
+     
+
+
+</apex:page>

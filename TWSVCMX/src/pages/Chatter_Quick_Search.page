@@ -1,0 +1,15 @@
+<apex:page sidebar="false" controller="ChatterClass" showHeader="false">
+<apex:form >
+	<style type="text/css">
+        body {background: transparent }
+    </style>    
+	<apex:inputText value="{!SearchText}" style="width:130px"/>
+	<apex:commandButton action="{!doSearch}" value="Search" 		
+		oncomplete="parent.parent.location.href='{!stringUrl}'"		
+	/> 
+	<br></br>
+	<!--<apex:outputText value="Do not use symbols (@, #, *)."/>-->
+
+    
+</apex:form>
+</apex:page>

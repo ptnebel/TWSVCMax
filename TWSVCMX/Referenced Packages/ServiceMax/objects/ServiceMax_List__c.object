@@ -1,0 +1,956 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This is a generic object used to manage data entry of multiple records (lines) on ServiceMax  VisualForce pages.</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Action__c</fullName>
+        <deprecated>false</deprecated>
+        <description>List of Actions</description>
+        <externalId>false</externalId>
+        <inlineHelpText>List of Actions</inlineHelpText>
+        <label>Action</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Increase</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Decrease</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Set</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Activate_Contract_Upon_Renewal__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Contract can be activated upon Renewal</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Contract can be activated upon Renewal</inlineHelpText>
+        <label>Activate Contract Upon Renewal</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Activity_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the type of activity performed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates the type of activity performed.</inlineHelpText>
+        <label>Activity Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Calibration</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cleanup</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Installation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Repair</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Additional_Information__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Additional Information</inlineHelpText>
+        <label>Additional Information</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Billable__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag to indicate if the usage/consumption is billable to the customer or not.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag to indicate if the usage/consumption is billable to the customer or not.</inlineHelpText>
+        <label>Billable?</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Chk_Child_Products__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Child Installed Product are to be considered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Child Installed Product are to be considered</inlineHelpText>
+        <label>Child Products</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Chk_Parent_Product__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Parent Installed Product is to be considered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Parent Installed Product is to be considered</inlineHelpText>
+        <label>Parent Product</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Chk_Part_Number__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Part is to be considered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Part is to be considered</inlineHelpText>
+        <label>Part Number</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Chk_Product_Family__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Product Family is to be considered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Product Family is to be considered</inlineHelpText>
+        <label>Product Family</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Chk_Product_Line__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Product Line is to be considered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Product Line is to be considered</inlineHelpText>
+        <label>Product Line</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Chk_Top_Level_Product__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Top-Level Installed Product is to be considered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Top-Level Installed Product is to be considered</inlineHelpText>
+        <label>Top-Level Product</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Close_Line__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag to indicate if the line can be closed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag to indicate if the line can be closed.</inlineHelpText>
+        <label>Close Line</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Close_Request__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag to indicate if the request can be closed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag to indicate if the request can be closed.</inlineHelpText>
+        <label>Close Request</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Consumed_From_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Location from which inventory was consumed. Link to an existing site record in ServiceMax.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Location from which inventory was consumed. Link to an existing site record in ServiceMax.</inlineHelpText>
+        <label>Consumed From Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>ServiceMax List (Consumed From Location)</relationshipLabel>
+        <relationshipName>ServiceMax_List</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Copy_Covered_Locations__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Covered Locations are to be copied.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Covered Locations are to be copied.</inlineHelpText>
+        <label>Copy Covered Locations</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Copy_Covered_Products__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Covered Products are to be copied</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Covered Products are to be copied</inlineHelpText>
+        <label>Copy Covered Products</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Copy_Entitled_Contacts__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Entitled Contacts are to be copied</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Entitled Contacts are to be copied</inlineHelpText>
+        <label>Copy Entitled Contacts</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Copy_Included_Services__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Included Services are to be copied</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Included Services are to be copied</inlineHelpText>
+        <label>Copy Included Services</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Date_Required__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date for Booking Window Start Date Selection</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date when this product is required at the field/target location.</inlineHelpText>
+        <label>Start Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Destination_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Destination Location where this part is requested. Link to an existing site record in ServiceMax.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Destination Location where this part is requested. Link to an existing site record in ServiceMax.</inlineHelpText>
+        <label>Destination Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>ServiceMax List</relationshipLabel>
+        <relationshipName>ServiceMax_List2</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Discount__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Percentage discount to be applied.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Percentage discount to be applied.</inlineHelpText>
+        <label>Discount %</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Disposition__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of action to be taken by receiving department when the product arrives.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of action to be taken by receiving department when the product arrives.</inlineHelpText>
+        <label>Disposition</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Scrap</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Repair</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Salvage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Restock</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>End_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>End Time</inlineHelpText>
+        <label>End Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Estimated_Quantity__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Quantity of part, time or expenses to be used. This is context-sensitive. For example: Quantity for Travel expense might be 500 (miles).</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Quantity of part, time or expenses to be used. This is context-sensitive. For example: Quantity for Travel expense might be 500 (miles).</inlineHelpText>
+        <label>Estimated Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Expected_Quantity__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of products expected.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of products expected.</inlineHelpText>
+        <label>Expected Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Expected_Ship_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date for Booking Window End Date Selection</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the product is expected to be shipped to the customer/field location.</inlineHelpText>
+        <label>End Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Expense_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of expense likely to be incurred, if the line type is Expenses.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Type of expense likely to be incurred, if the line type is Expenses.</inlineHelpText>
+        <label>Expense Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Airfare</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Entertainment</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Food - Breakfast</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Food - Lunch</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Food - Dinner</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Gas</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lodging</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Mileage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Miscellaneous</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Parking</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Parts</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Phone</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rental Car</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Tolls</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Field_API_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Field API Name</inlineHelpText>
+        <label>Field API Name</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Key__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Key</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Line_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Price for Line Item.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Price for Line Item.</inlineHelpText>
+        <label>Line Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Line_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the type of line: Parts, Labor or Expenses.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates the type of line: Parts, Labor or Expenses.</inlineHelpText>
+        <label>Line Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Parts</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Labor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Expenses</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Match_Account__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Account is to be matched</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Account is to be matched</inlineHelpText>
+        <label>Match Account</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Match_Contact__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Contact is to be validated</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Contact is to be validated</inlineHelpText>
+        <label>Match Contact</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Object_API_Name__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Object API Name</inlineHelpText>
+        <label>Object API Name</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Object_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Object Id</inlineHelpText>
+        <label>Object Id</label>
+        <length>30</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Product</inlineHelpText>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>ServiceMax List</relationshipLabel>
+        <relationshipName>ServiceMax_List</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quantity_Serviced__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Quantity Serviced</inlineHelpText>
+        <label>Qty Serviced</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Quantity_Transferred__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Quantity transferred from source to destination location.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Quantity transferred from source to destination location.</inlineHelpText>
+        <label>Qty Transferred</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Received_Quantity__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of units of this product received so far.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of units of this product received so far.</inlineHelpText>
+        <label>Received Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Receiving_Location__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Location where the product is being received. This is a lookup to an existing site record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Location where the product is being received. This is a lookup to an existing site record.</inlineHelpText>
+        <label>Receiving Location</label>
+        <referenceTo>Site__c</referenceTo>
+        <relationshipLabel>ServiceMax List (Receiving Location)</relationshipLabel>
+        <relationshipName>ServiceMax_List3</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Requested_Quantity__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of units of this product requested.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of units of this product requested.</inlineHelpText>
+        <label>Requested Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Required_Quantity__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of units of this product required.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of units of this product required.</inlineHelpText>
+        <label>Required Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Return_Condition__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Condition of the product when received (As expected or otherwise).</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Condition of the product when received (As expected or otherwise).</inlineHelpText>
+        <label>Return Condition</label>
+        <picklist>
+            <picklistValues>
+                <fullName>As Expected</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shipping Damage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Salesforce_Session_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Salesforce Session ID</inlineHelpText>
+        <label>Salesforce Session ID</label>
+        <length>1500</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>2</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Field to bind checkbox in List of SVMX_List records on Visualforce page with controller.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Field to bind checkbox in List of SVMX_List records on Visualforce page with controller.</inlineHelpText>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Sequence__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Sequence</inlineHelpText>
+        <label>Sequence</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Serial_Number__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Installed Product</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to Installed Product</inlineHelpText>
+        <label>Serial Number</label>
+        <referenceTo>Installed_Product__c</referenceTo>
+        <relationshipLabel>ServiceMax List</relationshipLabel>
+        <relationshipName>ServiceMax_List</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Shipped_Quantity__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Actual shipped quantity of product.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Actual shipped quantity of product.</inlineHelpText>
+        <label>Shipped Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Show_Expired_Entitlement__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Expired Entitlements are to be considered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Expired Entitlements are to be considered</inlineHelpText>
+        <label>Show Expired Entitlements</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Show_Future_Entitlements__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if Future Entitlements are to be considered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if Future Entitlements are to be considered</inlineHelpText>
+        <label>Show Future Entitlements</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Source_Location__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Location from where the product  is being transfered. This is a lookup to an existing site record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Location from where the product  is being transfered. This is a lookup to an existing site record.</inlineHelpText>
+        <label>Source Location</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Start_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Start Time</inlineHelpText>
+        <label>Start Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Stock_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Stock Status</inlineHelpText>
+        <label>Stock Status</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Transaction_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Transaction Type</inlineHelpText>
+        <label>Transaction Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Work Order Estimates</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Work Order Requests</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Work Order Usage</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Work Order Products Serviced</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Quote Line</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>RMA Line</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shipment Line</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Sales Order Line</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Parts Request Line</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Inventory Configuration</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Stock Transfer Line</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Unit_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Unit Price for Line Item.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Unit Price for Line Item.</inlineHelpText>
+        <label>Unit Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Used_Quantity__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Internal use only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used Quantity</inlineHelpText>
+        <label>Used Qty</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to User</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Lookup to User</inlineHelpText>
+        <label>User</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>ServiceMax_List</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Value__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Value</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Work_Description__c</fullName>
+        <deprecated>false</deprecated>
+        <description>An assessment of work to be performed or additional details about the line type.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>An assessment of work to be performed or additional details about the line type.</inlineHelpText>
+        <label>Work Description</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <label>ServiceMax List</label>
+    <nameField>
+        <displayFormat>REC-{0000000000}</displayFormat>
+        <label>Record Id</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>ServiceMax List</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

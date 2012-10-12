@@ -1,0 +1,80 @@
+<apex:page title="{!TAG033}" standardcontroller="SVMXC__Service_Order__c" extensions="SVMXC.WORD_CreateWOReqRecLines" sidebar="true" showHeader="true" tabStyle="SVMXC__Service_Order__c"> 
+    
+    <script type="text/javascript">
+    function customSelectChecked( form,value)
+    {   
+        var i = 0;  
+        for (i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].name.search('selected') > 0 && form.elements[i].disabled == false) {
+                form.elements[i].checked = value;
+            }
+        }
+    }    
+    function customSelectAllOrNoneByCheckbox(form,control)
+    {  customSelectChecked( form,control.checked); }
+    
+    </script> 
+    <apex:pageMessages rendered="{!NOT(DisplayBlockLevelMessage)}"    showDetail="true"  />  
+    <apex:form id="Form1" >  
+        <apex:actionFunction action="{!UpdatePrice}" name="updateprice" rerender="PageBlock1" ></apex:actionFunction>   
+        <apex:pageBlock title="{!TAG030} {!SourceWOL.Name}" id="PageBlock1"   mode="edit" helpTitle="{!TAG031}"  helpUrl="{!HLPURL}">   
+                     <apex:actionStatus id="LodingStdStatus"  startText="{!TAG039}" />
+            <apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" />  
+            <apex:pageBlockButtons location="top">   
+                <apex:commandButton action="{!AddRequestReceiptLine}"  reRender="PageBlock1" value="{!TAG032}"  rendered="{!NOT(showWarnings)}" id="theAddLine1" status="LodingStdStatus"/>
+                <apex:commandButton action="{!RmvRequestReceiptLine}" value="{!TAG017}"   reRender="PageBlock1" rendered="{!NOT(showWarnings)}"  id="theDeleteLines1" status="LodingStdStatus"/>
+                <apex:commandButton action="{!ClearWarnings}" value="{!TAG004}" rendered="{!showWarnings}"  id="theContinueButton1" status="LodingStdStatus"/> 
+                <apex:commandButton action="{!UpdateLines}"  value="{!TAG018}"  rendered="{!NOT(showWarnings)}" reRender="PageBlock1" id="theSubmitButton1" status="LodingStdStatus"/>   
+                <apex:commandButton action="{!Cancel}" value="{!TAG005}" id="theCancelButton1" status="LodingStdStatus"/>   
+            <!--    <apex:commandButton action="{!UpdatePrice}" value="{!TAG016}" reRender="PageBlock1" id="theGetPriceButton1"/>   -->
+            </apex:pageBlockButtons>
+
+          <apex:pageBlockTable id="BlockTable1" value="{!NewWORRLine}" var="worrline" width="100%"  rendered="{!DisplayTableColumns}" >
+          
+            <apex:column >             
+                <apex:facet name="header"> 
+                <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox( document.forms['Page1:Form1'],this);">  
+                </apex:inputCheckbox>
+                </apex:facet>                       
+                <apex:inputField value="{!worrline.SVMXC__Select__c}" id="selected" /> 
+            </apex:column>
+            <apex:column >             
+                <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Product__c.Label}</apex:facet>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>                       
+                <apex:inputField value="{!worrline.SVMXC__Product__c}" />
+                </apex:outputPanel>
+            </apex:column>
+            <!-- <apex:column >        
+                <apex:facet name="header">{!TAG028}</apex:facet>                    
+                <apex:inputField value="{!worrline.Use_Price_From_Pricebook__c}"/>
+            </apex:column> -->
+            <apex:column >             
+                <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Requested_Quantity2__c.Label}</apex:facet>
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>   
+                <apex:inputField value="{!worrline.SVMXC__Requested_Quantity2__c}"/>
+                </apex:outputPanel>
+            </apex:column>
+            
+            <!-- <apex:column >             
+                <apex:facet name="header">{!TAG029}</apex:facet>
+                <apex:inputField value="{!worrline.Estimated_Price2__c}"/>
+            </apex:column> -->
+            
+            <apex:column >             
+                <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Date_Requested__c.Label}</apex:facet>
+                <apex:inputField value="{!worrline.SVMXC__Date_Requested__c}"/>
+            </apex:column>
+            <apex:column >             
+                <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__From_Location__c.Label}</apex:facet>
+                <apex:inputField value="{!worrline.SVMXC__From_Location__c}"/>
+            </apex:column>
+            <apex:column >             
+                <apex:facet name="header">{!$ObjectType.SVMXC__Service_Order_Line__c.fields.SVMXC__Requested_Location__c.Label}</apex:facet>
+                <apex:inputField value="{!worrline.SVMXC__Requested_Location__c}"/>
+            </apex:column>
+        </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

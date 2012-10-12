@@ -1,0 +1,66 @@
+<apex:page controller="SVMXC.CONF_ManageServiceFlowWizard" id="page1">
+<apex:form id="form1">
+
+    <apex:pageBlock mode="edit" title="{!TAG030}" id="pblock1" rendered="{!rendersfwSections}" helpTitle="{!TAG033}" helpUrl="{!TAG038}">
+    <apex:pageMessages rendered="{!stdMode}"/>
+    <apex:actionStatus startText="{!TAG032}" id="processing" rendered="{!stdMode}"/>
+        <apex:inputHidden id="GetstdRecIdnField" />
+        <apex:pageBlockButtons > <!-- location="top" -->
+            <apex:commandButton value="{!TAG016}" action="{!StdView}" disabled="{!DisableStandardsfwButtons}" status="processing"/>
+            <apex:commandButton value="{!TAG017}" action="{!StdClone}" disabled="{!DisableStandardsfwButtons}" status="processing"/>
+            <apex:commandButton value="{!TAG018}" action="{!LayoutConfiguration}" disabled="{!DisableStandardsfwButtons}" status="processing"/>
+            <apex:commandButton value="{!TAG019}" action="{!Stdbacktosetuphme}" status="processing"/>
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockTable id="pblocktable" value="{!standardsfwLst}" var="stdRecords">
+                    <apex:column headerValue="{!TAG023}" >
+                        <apex:inputField value="{!stdRecords.SVMXC__Select__c}"/>
+                    </apex:column>
+                    <apex:column headerValue="{!TAG024}" value="{!stdRecords.SVMXC__ProcessID__c}"/>
+                    <apex:column headerValue="{!TAG025}" value="{!stdRecords.SVMXC__Name__c}"/>
+                    <apex:column headerValue="{!TAG026}" value="{!stdRecords.SVMXC__Description__c}"/>
+                    <apex:column headerValue="{!TAG001}" value="{!stdRecords.SVMXC__Source_Object_Name__c}"/>
+                    <apex:column headerValue="{!TAG037}" value="{!stdRecords.SVMXC__Dispatch_Process_Status__c}"/>
+                    <apex:column headerValue="{!TAG039}" value="{!stdRecords.SVMXC__Active__c}"/>
+                    <apex:column headerValue="{!TAG027}" value="{!stdRecords.LastModifiedById}"/><!--LastModifiedBy.Name-->
+                    <apex:column headerValue="{!TAG040}" value="{!stdRecords.LastModifiedDate}"/><!--LastModifiedBy.Date-->
+                </apex:pageBlockTable>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+
+    <apex:pageBlock title="{!TAG031}" id="pblock2" rendered="{!rendersfwSections}" helpTitle="{!TAG033}" helpUrl="{!TAG038}">
+    <apex:pageMessages rendered="{!Not(stdMode)}"/>
+        <apex:inputHidden id="GetcustRecIdnField" />
+        <apex:pageBlockButtons ><!-- location="top" -->
+            <apex:commandButton value="{!TAG020}" action="{!CustomNew}" status="processing"/>
+            <apex:commandButton value="{!TAG021}" action="{!CustomEdit}" disabled="{!DisableCustomsfwButtons}" status="processing"/>
+            <apex:commandButton value="{!TAG017}" action="{!CustomClone}" disabled="{!DisableCustomsfwButtons}" status="processing"/>
+            <apex:commandButton value="{!TAG018}" action="{!LayoutConfiguration}" disabled="{!DisableCustomsfwButtons}" status="processing"/>
+            <!-- To Perform delete action we need the following -->
+            <apex:actionFunction action="{!CustomDelete}" name="confirmdel" status="processing"/>
+            <apex:commandButton value="{!TAG022}" onClick="if(window.confirm('{!TAG014}')) confirmdel();" rerender="form1" disabled="{!DisableCustomsfwButtons}"/>
+        </apex:pageBlockButtons>
+        <apex:actionStatus startText="{!TAG032}" id="processing" rendered="{!Not(stdMode)}"/>
+        <apex:pageBlockSection columns="1">
+            <apex:pageBlockSectionItem >
+                <apex:pageBlockTable id="pblocktable" value="{!customsfwLst}" var="custRecords">
+                    <!--<apex:column headerValue="Select" value="{!stdRecords.IsSelected}"/>-->
+                    <apex:column headerValue="{!TAG023}">
+                        <apex:inputField value="{!custRecords.SVMXC__Select__c}"/>
+                    </apex:column>
+                    <apex:column headerValue="{!TAG024}" value="{!custRecords.SVMXC__ProcessID__c}"/>
+                    <apex:column headerValue="{!TAG025}" value="{!custRecords.SVMXC__Name__c}"/>
+                    <apex:column headerValue="{!TAG026}" value="{!custRecords.SVMXC__Description__c}"/>
+                    <apex:column headerValue="{!TAG001}" value="{!custRecords.SVMXC__Source_Object_Name__c}"/>
+                    <apex:column headerValue="{!TAG037}" value="{!custRecords.SVMXC__Dispatch_Process_Status__c}"/>
+                    <apex:column headerValue="{!TAG039}" value="{!custRecords.SVMXC__Active__c}"/>
+                    <apex:column headerValue="{!TAG027}" value="{!custRecords.LastModifiedById}"/><!-- LastModifiedDate-->
+                    <apex:column headerValue="{!TAG040}" value="{!custRecords.LastModifiedDate}"/>
+                </apex:pageBlockTable>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

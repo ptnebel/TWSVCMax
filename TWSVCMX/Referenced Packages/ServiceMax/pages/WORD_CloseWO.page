@@ -1,0 +1,33 @@
+<apex:page standardController="SVMXC__Service_Order__c" extensions="SVMXC.WORD_CloseWO"  sidebar="true" showHeader="true"  tabStyle="SVMXC__Service_Order__c" id="closewo"> 
+  
+   <apex:stylesheet value="{!URLFOR($Resource.SVMXC__COMM_Resources2, 'SVMXP_Resources/css/SVMXP_resources.css')}" />
+    <apex:form >
+
+        <apex:variable value="{!WOCloseHeader}" var="newWOC"/>
+        <apex:pageBlock id="block" title="{!TAG001} {!newWOC.Name}" helpTitle="{!TAG002}    " helpUrl="{!HLPURL}" >
+    
+        <apex:pageBlockButtons location="top" style="text-align:center;">
+                <apex:commandButton action="{!CloseWorkOrderConfirm}" value="{!TAG003}" id="renewBtid" rendered="{!DisplayClose}"/>
+                <apex:commandButton action="{!CloseWorkOrder}" value="{!TAG004}" id="conactid" rendered="{!DisplayContinue}"/>
+                <apex:commandButton action="{!Cancel}" value="{!TAG005}" id="cancelBtid"/>
+        </apex:pageBlockButtons> 
+        
+        <apex:pageMessages showDetail="true"></apex:pageMessages>
+
+        <apex:pageBlockSection id="Blocksec" collapsible="false" columns="2" rendered="{!showDetailBlock}"> 
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Work_Performed__c}" />
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Special_Instructions__c}" />
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Customer_Failure_Feedback__c}" />
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Corrective_Action__c}" />
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Configuration_Before__c}" /> 
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Configuration_After__c}" /> 
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Failure_Location__c}" /> 
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Symptom__c}" /> 
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Failed_Assembly__c}" /> 
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__Root_Cause__c}" /> 
+            <apex:outputField style="Width:80%" value="{!newWOC.SVMXC__Order_Status__c}" /> 
+            <apex:inputField style="Width:80%" value="{!newWOC.SVMXC__How_Fixed__c}" /> 
+            </apex:pageBlockSection>
+        </apex:pageBlock>  
+    </apex:form>
+</apex:page>

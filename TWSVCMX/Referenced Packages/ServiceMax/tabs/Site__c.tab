@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <description>Site is a unique location and is identified by a name and address. Site information is especially beneficial in service scenarios when accurate information about the physical location of a product is crucial to the timely delivery of service. ServiceMax also uses site to track warehouse and field inventory locations.</description>
+    <mobileReady>false</mobileReady>
+    <motif>Custom24: Building</motif>
+</CustomTab>

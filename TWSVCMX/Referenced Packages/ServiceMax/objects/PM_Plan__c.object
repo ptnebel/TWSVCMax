@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Preventive Maintenance Plans for various customer contracts and automatically initiating execution of such maintenance plans using work orders.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Activity_On_Error__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Create an activity in PM Plan if Error occur in Execution</description>
+        <externalId>false</externalId>
+        <label>Create Activity on Error</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Activity_On_Success__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Create an activity in PM Plan upon successful execution</description>
+        <externalId>false</externalId>
+        <label>Create Activity on Success</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Case_Assign_To_Queue__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Name of the Salesforce queue to assign the PM Case to</description>
+        <externalId>false</externalId>
+        <label>Case Assign To Queue</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Case_Assign_To_User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the Salesforce user to assign the PM Case to</description>
+        <externalId>false</externalId>
+        <label>Case Assign To User</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>PM_Plan_Case_User</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Case_Assign_To__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates if the PM case should be assigned to a user or queue</description>
+        <externalId>false</externalId>
+        <label>Case Assign To</label>
+        <picklist>
+            <picklistValues>
+                <fullName>User</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Queue</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Create_Case__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if Cases should be created with PM work orders</description>
+        <externalId>false</externalId>
+        <label>Create Case</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Create_Parts_Requests__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if Parts Requests should be automatically created when creating PM work orders</description>
+        <externalId>false</externalId>
+        <label>Create Parts Requests</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Create_Work_Order__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates how many days in advance work orders will be created for this PM plan</description>
+        <externalId>false</externalId>
+        <label>Create Work Order</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Description__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Detailed description of the preventive maintenance plan</description>
+        <externalId>false</externalId>
+        <label>Description</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Dispatch_Process__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Dispatch process to route the preventive maintenance plan to</description>
+        <externalId>false</externalId>
+        <label>Dispatch Process</label>
+        <referenceTo>ServiceMax_Processes__c</referenceTo>
+        <relationshipLabel>Preventive Maintenance Plans</relationshipLabel>
+        <relationshipName>PM_Plan</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>End_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>End Date for the preventive maintenance plan</description>
+        <externalId>false</externalId>
+        <label>End Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Error_Email_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Email ID to receive Error Notifications</description>
+        <externalId>false</externalId>
+        <label>Error Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Field_map_for_Case__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Field Mapping Id for creating the case</description>
+        <externalId>false</externalId>
+        <label>Field map to use to create Case</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Field_map_for_wo__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Field mapping id for creating Work Order</description>
+        <externalId>false</externalId>
+        <label>Field map to use to create Work Order</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Frequency_Unit__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Unit of measure for frequency</description>
+        <externalId>false</externalId>
+        <label>Frequency Unit</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Days</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Months</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Years</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Frequency__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Frequency to run the preventive maintenance plan if based on dates</description>
+        <externalId>false</externalId>
+        <label>Frequency</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Last_PM_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which the preventive maintenance plan was last run</description>
+        <externalId>false</externalId>
+        <label>Last PM Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Next_PM_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which the preventive maintenance plan will be run next</description>
+        <externalId>false</externalId>
+        <label>Next PM Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_Cases__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates how Cases will be created for a preventive maintenance plan: One per work order or one per plan</description>
+        <externalId>false</externalId>
+        <label>Number of Cases</label>
+        <picklist>
+            <picklistValues>
+                <fullName>One Per Work Order</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>One Per Plan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Number_of_Failures__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of failures encountered when executing the PM plan. Updated automatically</description>
+        <externalId>false</externalId>
+        <label>Number of Failures</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number_of_Work_orders__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates how Work Orders will be created for a preventive maintenance plan: One per installed product or one per plan</description>
+        <externalId>false</externalId>
+        <label>Number of Work orders</label>
+        <picklist>
+            <picklistValues>
+                <fullName>One Per Product</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>One Per Plan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Processed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if the PM plan has been processed successfully during a run</description>
+        <externalId>false</externalId>
+        <label>Processed</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>SLA_Terms__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>SLA Terms to use when creating Case and work orders as per the PM plan.</description>
+        <externalId>false</externalId>
+        <label>SLA Terms</label>
+        <referenceTo>Service_Level__c</referenceTo>
+        <relationshipLabel>Preventive Maintenance Plans</relationshipLabel>
+        <relationshipName>PM_Plan</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Schedule_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates how the PM plan is scheduled: Using Counters, Using Dates or Using Both</description>
+        <externalId>false</externalId>
+        <label>Schedule Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Time Based</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Counter Based</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Time &amp; Counters</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Checkbox used in ServiceMax screens to manage record selection</description>
+        <externalId>false</externalId>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Service_Contract__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Lookup to Service/Maintenance Contract</description>
+        <externalId>false</externalId>
+        <label>Service/Maintenance Contract</label>
+        <referenceTo>Service_Contract__c</referenceTo>
+        <relationshipLabel>Preventive Maintenance Plans</relationshipLabel>
+        <relationshipName>PM_Plan</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Start date for the preventive maintenance plan</description>
+        <externalId>false</externalId>
+        <label>Start Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Current status of the PM plan</description>
+        <externalId>false</externalId>
+        <label>Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Active</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Suspended</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Canceled</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Expired</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Success_Email_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Email ID to receive Success Notification</description>
+        <externalId>false</externalId>
+        <label>Success Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Task_Template__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the task template to use for the PM work orders. Reference to an existing Task Template in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Task Template</label>
+        <referenceTo>Task_Template__c</referenceTo>
+        <relationshipLabel>Preventive Maintenance Plans</relationshipLabel>
+        <relationshipName>PM_Plan</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Time_and_Counters__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the tie-breaking rule between validity dates and counters for a product.</description>
+        <externalId>false</externalId>
+        <label>Time &amp; Counters</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Which Ever Comes First</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Which Ever Comes Last</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Work_Order_Assign_To_Queue__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Name of the Salesforce queue to assign the PM work order to</description>
+        <externalId>false</externalId>
+        <label>Work Order Assign To Queue</label>
+        <length>100</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Work_Order_Assign_To_User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the Salesforce user to assign the PM work order to</description>
+        <externalId>false</externalId>
+        <label>Work Order Assign To User</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>PM_Plan_WO_User</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Work_Order_Assign_To__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates if the PM work order should be assigned to a user or queue</description>
+        <externalId>false</externalId>
+        <label>Work Order Assign To</label>
+        <picklist>
+            <picklistValues>
+                <fullName>User</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Queue</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Primary  Technician</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Work_Order_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which next work orders will be created for this PM plan. Calculated based on Next PM Date and number of work order days</description>
+        <externalId>false</externalId>
+        <label>Work Order Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <label>Preventive Maintenance Plan</label>
+    <nameField>
+        <label>PM Plan Name</label>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Preventive Maintenance Plans</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

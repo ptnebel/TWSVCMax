@@ -1,0 +1,630 @@
+<apex:page >
+    <apex:form >
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/fullResolution.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/dataTables_2-11-2011.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/jquery.ajaxLoader.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery-1.6.2.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.checkbox.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.dataTables.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.inherit-1.3.2.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Ajax.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_UIParser.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Utils.js')}"/>
+
+        <script type="text/javascript">
+            var __sfdcSessionId = '{!GETSESSIONID()}';
+            var serialselectionholder;
+            var rmadetailholder;
+            $(document).ready(function(){
+                $('input:checkbox:not([safari])').checkbox();
+                $('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
+                $('input:radio').checkbox();
+            });
+            
+            // Constants
+            var processId = '{!JSENCODE($CurrentPage.parameters.SVMX_processId)}';
+            var recordId = '{!JSENCODE($CurrentPage.parameters.SVMX_recordID)}';
+            var isBackgroundMode = false;
+            if('BGMODE' == '{!JSENCODE($CurrentPage.parameters.SVMX_mode)}')
+            	isBackgroundMode = true
+        </script>
+        <script src="/soap/ajax/15.0/connection.js" type="text/javascript"></script>
+        <script src="/soap/ajax/15.0/apex.js" type="text/javascript"></script>
+        <script>
+        function replacer(key, value) {
+            if (typeof value === 'number' && !isFinite(value)) {
+                return String(value);
+            }
+            return value;
+        }
+        var response;
+        SVMXloader.loaderid = 'SVMXloader';
+        var actualModel = new Object();
+        actualModel.orderLinefields = new Object();
+        actualModel.productsearchfields = ({name:{name:"Name"}, productcode:{name:"ProductCode"}});
+        actualModel.orderLines = new Object();
+        actualModel.mapProductRmaLines = new Object();
+        actualModel.latestUniqueId = 0;
+        actualModel.process = new Object();
+        actualModel.header = new Object();
+        actualModel.availablePickListValues = new Object();
+        actualModel.defaultDeliveryLocationId;
+        actualModel.batchCount = 100;
+        actualModel.persistentData = new Object();
+        actualModel.syncEvents = new Object();
+        actualModel.oncePushableIds = new Array();
+		actualModel.unResolvedLines = new Array();
+        actualModel.mapKeyValue = new Array();
+        
+        var sr = new SOAPRequest({orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"});
+        
+        function buildLocationValues(availableLocations)
+        {
+            actualModel.availablePickListValues['SVMXC__Delivery_Location__c'] = '';
+        	if(availableLocations && availableLocations != null)
+            {
+            	if(!availableLocations.length)
+            	{
+            		actualModel.availablePickListValues['SVMXC__Delivery_Location__c'] += '<option value="' + availableLocations.key + '">' + availableLocations.value + '</option>';
+            	}
+            	else
+	            for(var l=0; l< availableLocations.length; l++)
+	            {
+	                actualModel.availablePickListValues['SVMXC__Delivery_Location__c'] += '<option value="' + availableLocations[l].key + '">' + availableLocations[l].value + '</option>';
+	            }
+            }
+        }
+        
+        function onchangeDeliveryLocation(deliveryLocElem)
+        {
+        	var lineId = (deliveryLocElem.id).replace('SVMXC__Delivery_Location__c_', '');
+        	if(actualModel.orderLines[lineId] != null)
+        		actualModel.orderLines[lineId].SVMXC__Delivery_Location__c = deliveryLocElem[deliveryLocElem.selectedIndex].value;
+        }
+        
+        </script>
+        
+<!--         <apex:includeScript value="{!URLFOR($Resource.SVMX_AJAX_Library, 'SVMX_AJAX_Library.js')}"/> -->
+        <div class="container">
+        	<div id="SVMXerrorConsole" class="mainContainer" style="display:none">
+                <div  class="processContent">
+                    <span id="errorMessage" style="font-weight:bold;color:red"></span>
+                    <span id="showMessage" style="font-weight:bold;color:black"></span>
+                    <div class="closeLink"><a href="#" onclick="hideMessage();">{!$Label.COMM001_TAG065}</a></div>
+           		</div>
+           	</div>
+           	 <div id="SVMXloader" class="SVMXloader" style="display:none">
+				<span id="SVMXloaderMessage" style="font-weight:bold;color:black">{!$Label.COMM001_TAG041}</span>
+            </div>
+			<div id="onlyCancel" class="mainContainer processContent" style="display:none">
+            	<div class="consolLinks">
+                     <div class="consoleBtnH"> 
+            			<input type="button" class="buttonH" value="{!$Label.APL003_TAG025}" onclick="invokeCancel()"/>
+           			</div>
+       			</div>
+            </div>
+            <div id="SVMXcontentArea" class="mainContainer processContent" style="display:none">
+            		<div class="processtitle"><span id="processtitle"></span><span>: </span><span id="documentname" class="valueH"></span></div>
+	                <div class="consolLinks">
+	                    <div class="consoleBtnH">  
+	                        <input type="button" class="buttonH" value="{!$Label.APL003_TAG024}" onclick="doSave()"/>
+	                        <input type="button" class="buttonH" value="{!$Label.APL003_TAG025}" onclick="invokeCancel()"/> 
+	<!--                         <input type="button" class="buttonH" value="Custom Links" />  -->
+	<!--                         <input type="button" class="buttonH" value="Countinue Later"/> -->
+	                    </div>
+	                    <div class="helpLink"><a href="{!$Label.APL003_HLPURL1}" target="_blank">{!$Label.COMM001_TAG064}</a></div>
+	                </div>
+            <div class="mainContainer">
+                <div class="processContent">
+                    <div class="docDetails">
+                        <ul>
+                            <li><span>{!$Label.APL003_TAG001} </span> <span id="depotname" class="valueH"></span></li>
+                            <li><span>{!$Label.APL003_TAG002} </span> <span id="receivinglocation" class="valueH"></span></li>
+                            <li class="last"><span class="fieldsH">{!$Label.APL003_TAG014}: </span><span id="orderstatus" class="valueH"></span></li>
+                        </ul>                        
+                    </div>
+                    <div class="orderStatus">
+                            <ul>
+                                <li id="docattribute1"></li>
+                                <li id="docattribute2"></li>
+                                <li id="docattribute3"></li>
+                            </ul>
+                    </div>
+                </div>
+                
+                <div class="prdContentTbl">
+                    <div class="filterFields">
+                        <div class="fieldsContentH">
+<!--                             <div class="switchViewH"> -->
+<!--                                 <div class="switchTxt">{!$Label.COMM001_TAG071} </div>                         -->
+<!--                                     <div class="demoTarget"> -->
+<!--                                         <select id="default-usage-select"> -->
+<!--                                             <option value="00">{!$Label.APL003_TAG007}</option> -->
+<!--                                             <option value="01">Expected</option> -->
+<!--                                             <option value="02">On Hold</option> -->
+<!--                                             <option value="03">For Replacement</option> -->
+<!--                                         </select> -->
+<!--                                         <div class="clr"></div> -->
+<!--                                     </div> -->
+<!--                             </div> -->
+                        </div>
+                        <div class="tablesH">
+                            <div id="rmadetails" class="prdDetailsTbl" style="width:100%">
+                                <table width="100%" id="tablermadetails">
+                                </table>
+                            </div>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+            </div> 
+        </div>
+        <script type="text/javascript">
+			function showError(message)
+			{
+				var uiComp = document.getElementById('errorMessage');
+				uiComp.innerHTML = message;
+				uiComp = document.getElementById('SVMXerrorConsole');
+				uiComp.style.display = 'block';
+			}
+	        var sui;
+	        var isFirstCall = true;
+            function loadData()
+            {
+                debugger;
+                if(localStorage.getItem("actualModel" + processId + recordId))
+                {
+                    actualModel = getLocalStorage("actualModel" + processId + recordId);
+                    
+                    if(confirm("{!$Label.APL002_TAG036}"))loadFromMemory();
+                    else
+                    {
+                    	removeLocalStorage("actualModel" + processId + recordId);
+                    	loadFromServer();
+                    }
+                }
+                else
+                {
+                   loadFromServer();
+                }
+            }
+            
+            function loadFromServer()
+            {
+           		//console.log(sforce);
+	        	var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "DELIVERYONRECEIPT")];
+	            var request = new INTF_SFMRequest('', 'INITIALSYNC', valueMap, null);
+	            sr.errorHandler = {handler : function(e, me)
+	            {
+	            	SVMXloader.loaded();
+	            	showError('{!$Label.APL002_TAG040}' + me.status + ' :' + me.responseText);
+	                return false;
+	            }}
+	            sr.responseHandler = {handler : function(e, me)
+	            {
+	            	var result = sr.__getResponse(me);
+	            	for (var j=0; j< result.length; j++)
+					{
+						debugger;
+						if(result[j].success == 'true')
+						{
+							if(result[j].aplOrder != null)
+							{
+								actualModel.process = result[j].aplOrder.svmxProcess;
+								actualModel.header = result[j].aplOrder.orderHdrRecord;
+                                if(isFirstCall == true)
+                                {
+                                 	// Populate the config data from server
+									sui = new SVMXUIActualModel({searchFields : actualModel.productsearchfields, isRelatedTable: true, isAdditionalInfoAvailable: true, isGridSearchAllowed: false});
+									isFirstCall = false;
+								}	
+								if(result[j].aplOrder.orderLines != null)
+								{
+									sui.__buildModel(result[j].aplOrder.orderLines);
+								}	
+								sui.__populateConfigurationInformation(result[j].valueMap);
+								actualModel.orderLinefields = sui.gridFields;
+								actualModel.serialNumbers = sui.relatedData;
+								actualModel.mapProductRmaLines = sui.mapFilterData;
+								actualModel.orderLines = sui.gridData;
+								actualModel.mapKeyValue = sui.mapKeyValue;
+								actualModel.mapKeyValues = sui.mapKeyValues;
+								if(actualModel.mapKeyValue != null)
+								{
+									if(actualModel.mapKeyValue['DELIVERYTYPE'] == 'AUTOMATIC')
+										isBackgroundMode = true;
+								}
+								if(actualModel.mapKeyValues != null && actualModel.mapKeyValues['LINEIDS'] != null)
+                            	{
+	                            	var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "DELIVERYONRECEIPT"), new SVMXMap("SVMX_BATCHIDS", "", null, null, actualModel.mapKeyValues['LINEIDS'])];
+	                				var request = new INTF_SFMRequest('', 'BATCHCALL', valueMap, null);
+	                				actualModel.mapKeyValues = new Array();
+	                    			sui.mapKeyValues = new Array();
+	                				sr.invoke("INTF_APL_GetOrder_WS", request);
+                            	}
+                            	else
+                            	{
+									if(isBackgroundMode == true)
+									{
+										SVMXloader.loaded();
+										doSave();
+									}
+									else
+                            			postBuildData();
+                            	}
+							}
+						}
+						else
+	                	{
+	                		SVMXloader.loaded();
+	                		showContainer('onlyCancel');
+	                		showError(result[j].message);
+	                		break;
+	                	}
+						uiComp = document.getElementById('SVMXerrorConsole');
+               			uiComp.style.display = 'none';
+					}
+	            }}
+            	sr.invoke("INTF_APL_GetOrder_WS", request);
+            }
+            SVMXloader.action = 'loadData';
+           	SVMXloader.loadWithMessage('{!$Label.APL003_TAG056}' + '{!$Label.COMM001_TAG042}');
+            
+            function postBuildData()
+            {
+            	if(isBackgroundMode == false)
+				{
+					SVMXloader.loaded();
+					var uX = new UIDesigner({UIElement: 'rmadetails', paintFields: sui.gridFields, displayRecords: sui.gridData});
+					uX.__paintGridUI();
+               		// Populate header details
+               		uX.__paintElementUI({depo: {UIid: 'depotname', field: 'DEPOTNAME'}, receivinglocation: {UIid: 'receivinglocation', field: 'RECEIVINGLOCATION'}}, sui.gridHeaderData);
+					uX.__paintElementUI({title: {UIid: 'processtitle', field: 'SVMXC__ProcessID__c'}}, actualModel.process);
+					uX.__paintElementUI({documentname: {UIid: 'documentname', field: 'Name'}, depotname: {UIid: 'depotname', field: 'SVMXC__Warehouse__c'}, orderstatus: {UIid: 'orderstatus', field: 'SVMXC__Order_Status__c'}}, actualModel.header);
+					buildDataTableUI();
+					var uiComp = document.getElementById('SVMXcontentArea');
+					uiComp.style.display = 'block';
+					showContent();
+				}
+            }
+            function buildDataTableUI()
+            {
+                rmadetailholder = $('#tablermadetails').dataTable({
+                    "sPaginationType": "full_numbers",
+                    "bSort": false
+                });
+                $('#tablermadetails thead>tr>th').unbind('click');
+                var trInstance = $('table#tablermadetails tbody').find('tr');
+                trInstance.click(function(){
+                    trInstance.removeClass('activetr');
+                    var instance = $(this);
+                    instance.addClass('activetr');
+                });
+                
+                var txtt = "{!$Label.COMM001_TAG031}";
+                var showingTxt = "{!$Label.COMM001_TAG032}";
+                var toTxt = "-";
+                var ofTxt = "/";
+                var entriesTxt = "{!$Label.COMM001_TAG033}";
+                var noDataTable = "";
+				
+				$("span#showLang").text(txtt);
+				$("span#showingTxt").text(showingTxt);
+				$("span#toTxt").text(toTxt);
+				$("span#ofTxt").text(ofTxt);
+				$("span#entriesTxt").text(entriesTxt);
+				$("span#entries2").text(entriesTxt);
+                $("span#tablermadetails_first").text("{!$Label.COMM001_TAG024}");
+                $("span#tablermadetails_previous").text("{!$Label.COMM001_TAG026}");
+                $("span#tablermadetails_next").text("{!$Label.COMM001_TAG025}");
+                $("span#tablermadetails_last").text("{!$Label.COMM001_TAG027}");
+				$("span#noMatchingRecords").text("");
+				$("span#noDataTable").text(noDataTable);
+				
+				// Code for apply filter
+				var applyTxt = '{!$Label.APL003_TAG016}';
+				var inputTxtVal = $(".dataTables_filter label input:text").attr("value", applyTxt);
+				var inputBoxVal = inputTxtVal.val();
+				
+				
+                $('table#tablermadetails').wrap('<div class="tablewrapper" />');
+				searchInput = $('.dataTables_filter label input:text');
+				searchDefault = inputBoxVal;
+				
+				searchInput.click(function () {
+					if($(this).val() == searchDefault)
+						$(this).val('');
+				});
+				
+				searchInput.blur(function () {
+					if($(this).val() == '')
+						$(this).val(searchDefault);
+				});
+            }
+        
+		// Button Actions
+        function invokeCancel()
+        {
+        	top.location = "{!JSENCODE($CurrentPage.parameters.SVMX_retURL)}";
+        }
+        function invokeDone()
+        {
+        	SVMXloader.loaded();
+        	if('{!JSENCODE($CurrentPage.parameters.SVMX_NxtStepID)}' != '')
+        	{
+	        	SVMXBGProcessor.nextProcessId = '{!JSENCODE($CurrentPage.parameters.SVMX_NxtStepID)}';
+	        	SVMXBGProcessor.currentRecordId = '{!RIGHT($CurrentPage.parameters.SVMX_retURL, 18)}';
+	        	SVMXBGProcessor.load();
+        	}
+        	else
+        	{
+        		top.location = "{!JSENCODE($CurrentPage.parameters.SVMX_retURL)}";
+        	}	
+        }
+        var isSavedOnce = false;
+        function trySavingOnce()
+        {
+        	isSavedOnce = true;
+        	doSave();
+        }
+        
+        function doSave()
+        {
+           	SVMXloader.loadWithMessage('{!$Label.APL002_TAG043}');
+           	var aplHeader = actualModel.header;
+            var aplOrderLines = new Array();
+            var aplOrderLineIds = new Array();
+            var count = 0;
+            var arrRequest = [];
+            var syncEventCount = 0;
+            var totalLineCount = 0;
+            var processingCount = 0;
+            for(recordKey in actualModel.orderLines)
+            {
+               	count++;
+            	totalLineCount++;
+               	var serialNumbers = new Array();
+            	var serialNos = actualModel.serialNumbers[recordKey];
+            	for(serialKey in serialNos)
+            	{
+            		serialNumbers.push(serialNos[serialKey]);
+            	}
+            	var orderLine = actualModel.orderLines[recordKey];
+                // If line has some error associated donot add the line
+                if(isSavedOnce == true && SVMXContains(actualModel.oncePushableIds, orderLine.Id) == false)
+                	continue;
+                var orderLineUniqueId = orderLine.Id;
+                aplOrderLineIds.push(orderLineUniqueId);
+                if(orderLine.Id != null && (orderLine.Id).indexOf('UNIQUE') != -1)
+                    orderLine.Id = null;
+            	if(sui.additionalInformation[recordKey] != null)
+                	aplOrderLines.push(new APL_OrderLineCollection(serialNumbers, actualModel.orderLines[recordKey], null, sui.additionalInformation[recordKey].isEnableSerializedTracking, sui.additionalInformation[recordKey].isProductStockable));
+            	else
+                	aplOrderLines.push(new APL_OrderLineCollection(serialNumbers, actualModel.orderLines[recordKey], null, false, false));
+                if((count == actualModel.batchCount && isSavedOnce == false) || (count == actualModel.batchCount && isSavedOnce == true && aplOrderLines.length > 0) )
+                {
+                	var aplOrder = new APL_Order(aplHeader, null, aplOrderLines, null);
+		            var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "DELIVERYONRECEIPT")];
+		           	var request = new INTF_SFMRequest('EVENT' + syncEventCount, '', valueMap, aplOrder);
+		            arrRequest[arrRequest.length] = {
+                    props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                methodName : "INTF_APL_SaveOrder_WS", data : request , options : {async: false}}; //, batch : {size : count}
+                    actualModel.syncEvents['EVENT' + syncEventCount] = aplOrderLineIds;
+                	// Reset data
+                	syncEventCount++;
+                	aplOrderLines = new Array();
+                	aplOrderLineIds = new Array();
+                	count = 0;
+                }
+            }
+            // If count is less than the batch, it will not create the request for last partial batch. To solve this we have added this code
+            if((count> 0 && count != actualModel.batchCount  && isSavedOnce == false) || (count> 0 && count != actualModel.batchCount && isSavedOnce == true && aplOrderLines.length > 0))
+            {
+				var aplOrder = new APL_Order(aplHeader, null, aplOrderLines, null);
+				var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "DELIVERYONRECEIPT")];
+				var request = new INTF_SFMRequest('EVENT' + syncEventCount, '', valueMap, aplOrder);
+				arrRequest[arrRequest.length] = {
+				   props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+							   methodName : "INTF_APL_SaveOrder_WS", data : request , options : {async: false}}; // batch : {size : count}
+				actualModel.syncEvents['EVENT' + syncEventCount] = aplOrderLineIds;
+				// Reset data
+				syncEventCount++;
+               	aplOrderLines = new Array();
+               	aplOrderLineIds = new Array();
+			}
+            if(arrRequest.length > 0)
+			{
+				processingCount += (count > 0 ) ? count : actualModel.batchCount;
+	            SVMXloader.loadWithMessage('{!$Label.APL003_TAG057}' + '(' + processingCount + ' / ' + totalLineCount + ')...');
+	            actualModel.oncePushableIds = new Array();
+	            //var param = { async :false, params : arrRequest }
+	            
+	            var srSave = new SOAPRequestCollection(arrRequest);
+	            srSave.requestCount = arrRequest.length;
+	            srSave.allSuccess = true;
+	            srSave.errorHandler = {handler : function(me)
+	            {
+	            	SVMXloader.loaded();
+	            	showError('{!$Label.APL002_TAG040}' + me.status + ' :' + me.responseText);
+	                return false;
+	            }}
+	            srSave.responseHandler = {handler : function(me)
+	            {
+	            	var allResponses = srSave.getAllResponses();
+	            	var isAllSuccess = true;
+	                for(var resp in allResponses)
+	                {
+	                	var result = sr.__getResponse(allResponses[resp]);
+	                	for (var j=0; j< result.length; j++)
+	                	{
+	                		// One event can be processed only once, this is to skip already performed actions
+	                		if(actualModel.syncEvents[result[j].eventName] == null)
+	                			continue;
+	                		
+	            			SVMXloader.loadWithMessage('{!$Label.APL003_TAG057}'+'(' + processingCount + ' / ' + totalLineCount + ')...');
+	                		srSave.requestCount--;
+	                		processingCount += (actualModel.syncEvents[result[j].eventName].length) ? actualModel.syncEvents[result[j].eventName].length : 1;
+		                    if(result[j].success == 'true')
+		                    {
+		                    	var lstSentIds = actualModel.syncEvents[result[j].eventName];
+		                    	for (var k = 0; k < lstSentIds.length; k++)
+	                    		{
+	                    			delete actualModel.orderLines[lstSentIds[k]];
+		                    	}
+		                    	
+		                    }
+		                    else
+		                    {
+		                    	srSave.allSuccess = false;
+		                    	if(result[j].message != null && result[j].message != '')
+		                    	{
+		                    		actualModel.persistentData[result[j].eventName] = result[j].message;
+		                    	}
+		                    	// If error occurs add it to persistant data on actual model
+		                    	else if(result[j].errors )
+		                    	{
+		                    		var lstErrors = new Array();
+		                    		if(!result[j].errors.length)
+		                    			lstErrors = [result[j].errors];
+		                    		else
+		                    			lstErrors = result[j].errors;
+		                    		for (var k = 0; k < lstErrors.length; k++)
+		                    		{
+		                    			actualModel.persistentData[lstErrors[k].uniqueId] = lstErrors[k].errorMsg;
+		                    		}
+			                    	var lstSentIds = actualModel.syncEvents[result[j].eventName];
+			                    	for (var k = 0; k < lstSentIds.length; k++)
+		                    		{
+		                    			if(actualModel.persistentData[lstSentIds[k]] == null)
+			                    			actualModel.oncePushableIds.push(lstSentIds[k]);
+			                    	}
+		                    	}
+		                    }
+		                    delete actualModel.syncEvents[result[j].eventName];
+		                    console.log(srSave.requestCount);
+	                    }
+	                }
+	                
+	                if(srSave.requestCount == 0)
+	                {
+	                	if(srSave.allSuccess == true)
+	                	{
+	                		// If there is errors previously occured, update the actual model and local cache as well
+	                		if(isSavedOnce == true)
+	                		{
+	                			setLocalStorage("actualModel"+processId + recordId, actualModel);
+		           			}
+	                		else if(localStorage.getItem("actualModel" + processId + recordId))
+	                		{
+	                			// If there is no errors and if local data exist clear on next sucessful save
+	                    		removeLocalStorage("actualModel" + processId + recordId);
+	                    		performCustomEvent('EVENT_AFTER DELIVERY', 'DELIVERYONRECEIPT', 'performHeaderSave');
+	                    	}
+	                    	else
+	                    	{
+	                    		performCustomEvent('EVENT_AFTER DELIVERY', 'DELIVERYONRECEIPT', 'performHeaderSave');
+	                    	}
+	                    }
+	                    else
+	                    {
+	                		if(isSavedOnce == true)
+	                		{
+	                			setLocalStorage("actualModel"+processId + recordId, actualModel);
+	                		}
+	                		else
+	                		{
+	                			if(actualModel.oncePushableIds == null || actualModel.oncePushableIds.length == 0)
+           							setLocalStorage("actualModel"+processId + recordId, actualModel);
+	                    		someFailureOnSave();
+	                    	}
+	                    }
+	                }
+	            }}
+	            srSave.invokeAll();
+            }
+            else
+            {
+            	invokeDone();
+            }
+        }
+        
+        function performHeaderSave()
+        {
+        	//console.log(sforce);
+			var valueMap = [new SVMXMap("SVMX_processId", processId), new SVMXMap("SVMX_recordId", recordId), new SVMXMap("SVMX_processType", "DELIVERYONRECEIPT")];
+			var request = new INTF_SFMRequest('', '', valueMap, null);
+			sr.errorHandler = {handler : function(e, me)
+			{
+				SVMXloader.loaded();
+				showError('{!$Label.APL002_TAG040}' + me.status + ' :' + me.responseText);
+				return false;
+			}}
+			sr.responseHandler = {handler : function(e, me)
+			{
+				var result = sr.__getResponse(me);
+				for (var j=0; j< result.length; j++)
+				{
+					if(result[j].success == 'true')
+					{
+						invokeDone();
+					}
+					else
+					{
+						showError(result[j].message);
+					}
+				}
+			}}
+			sr.invoke("INTF_APL_PartsOrderClosure_WS", request);
+        }
+        
+        function someFailureOnSave()
+        {
+           	SVMXloader.loaded();
+           	if(actualModel.oncePushableIds != null && actualModel.oncePushableIds.length > 0)
+           	{
+        		trySavingOnce();
+        		showError('{!$Label.COMM001_TAG070}');
+        	}
+        	else
+        	{
+        		updateErrorForAllLines();
+        		var errorMsg = '';
+        		for(key in actualModel.persistentData)
+        		{
+        			if(key.indexOf('EVENT') != -1)
+        			{
+        				errorMsg += actualModel.persistentData[key];
+        			}
+        		}
+        		errorMsg = '{!$Label.APL002_TAG001}' + (errorMsg != '') ? '\n' + ':' + errorMsg : '';
+        		showError(errorMsg);
+        	}
+            return false;
+        }
+        
+        function updateErrorForAllLines()
+        {
+        	var pushedKeys = new Object();
+            for(key in actualModel.persistentData)
+            {
+            	var originalKey = key;
+            	if(actualModel.orderLines[key] == null)
+            	{
+            		if(actualModel.additionalInformation != null && actualModel.additionalInformation[key] != null && actualModel.additionalInformation[key].clonedFromId != null)
+            			key = actualModel.additionalInformation[key].clonedFromId;
+            		else
+            			continue;
+            		if(actualModel.persistentData[key] == null)
+            			actualModel.persistentData[key] = actualModel.persistentData[originalKey];
+            	}
+            	if(pushedKeys[key] == null)
+            	{
+	            	pushedKeys[key] = true;
+	            	showErrorPopup(key);
+				}
+            }
+        }
+        
+        </script>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,901 @@
+<apex:page ID="InitiateReturn" controller="SVMXC.APL_InitiateReturn">
+    <apex:form id="InitiateReturnForm">
+        <script type="text/javascript">
+           var __sfdcSessionId = '{!GETSESSIONID()}';
+        </script>
+        <script src="/soap/ajax/15.0/connection.js" type="text/javascript"></script>
+        <script src="/soap/ajax/15.0/apex.js" type="text/javascript"></script>        
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery-1.6.2.min.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/jquery.inherit-1.3.2.js')}"/>      
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Ajax.js')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_XMLParser.js')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/css/fullResolution.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.SVMXC__SVMXC_resources, 'SVMXC_resources/APL/js/SVMX_Utils.js')}"/>
+        <script type="text/javascript">
+           var dobreak = false;
+           SVMXloader.loaderid = 'SVMXloader';
+            function replacer(key, value)
+            {
+                if (typeof value === 'number' && !isFinite(value)) 
+                {
+                    return String(value);
+                }
+                return value;
+            }
+            
+            function getQuerystring(key, default_)
+            {
+              if (default_==null) default_=""; 
+              key = key.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+              var regex = new RegExp("[\\?&]"+key+"=([^&#]*)");
+              var qs = regex.exec(window.location.href);
+              if(qs == null)
+                return default_;
+              else
+                return qs[1];
+            }
+            
+            function getValuesFromValueMap(key,resReqForInitiateReturn)
+            {
+                for(var intCntValMap = 0 ; intCntValMap < resReqForInitiateReturn.valueMap.length ; intCntValMap++)
+                {
+                    if(resReqForInitiateReturn.valueMap[intCntValMap].key != null && resReqForInitiateReturn.valueMap[intCntValMap].key == key)
+                    {
+                        return resReqForInitiateReturn.valueMap[intCntValMap].values;
+                    }
+                }
+            }
+            
+            function getValueFromValueMap(key,resReqForInitiateReturn)
+            {
+                for(var intCntValMap = 0 ; intCntValMap < resReqForInitiateReturn.valueMap.length ; intCntValMap++)
+                {
+                    if(resReqForInitiateReturn.valueMap[intCntValMap].key != null && resReqForInitiateReturn.valueMap[intCntValMap].key == key)
+                    {
+                        return resReqForInitiateReturn.valueMap[intCntValMap].value;
+                    }
+                }
+            }
+            
+            function getValueFromValueMapSOAP(key,xo)
+            {
+                var allChildElements = xo.getElementsByTagName("valueMap","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                for(var intCntValMap = 0; intCntValMap < allChildElements.length ; intCntValMap++)
+                {
+                   // alert("Value of firstChild"+ xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildElements[intCntValMap])[0].firstChild.nodeValue);
+                    
+                    if(xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildElements[intCntValMap])[0] != null && xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildElements[intCntValMap])[0].firstChild.nodeValue == key)
+                    {                   
+                        return xo.getElementsByTagName("value","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildElements[intCntValMap])[0].firstChild.nodeValue;
+                    }
+                }
+                return null;
+            }
+            
+            function getValuesFromValueMapSOAP(key,xo)
+            {
+                var allChildElements = xo.getElementsByTagName("valueMap","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                for(var intCntValMap = 0; intCntValMap < allChildElements.length ; intCntValMap++)
+                {
+                   // alert("Value of firstChild"+ xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildElements[intCntValMap])[0].firstChild.nodeValue);
+                    
+                    if(xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildElements[intCntValMap])[0] != null && xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildElements[intCntValMap])[0].firstChild.nodeValue == key)
+                    {                   
+                        var allElements = xo.getElementsByTagName("values","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",allChildElements[intCntValMap]);
+                        var arrValues = new Array();
+                        for(var intCnt = 0; intCnt < allElements.length ; intCnt++)
+                        {
+                            var inpEle = allElements[intCnt];
+                            if(inpEle != null && inpEle.firstChild != null && inpEle.firstChild.nodeValue != null)
+                            {
+                                arrValues.push(inpEle.firstChild.nodeValue);
+                            }
+                        }
+                        return arrValues;
+                    }
+                }
+                return null;
+            }
+            
+            function getKeyFromElement(childElements,xo)
+            {
+                var inpEle = xo.getElementsByTagName("key","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",childElements)[0];
+                if(inpEle != null)
+                {
+                    return inpEle.firstChild.nodeValue;
+                }
+            }
+            
+            function getValuesFromElement(childElements,xo)
+            {
+                var arrValues = new Array();
+                var allElements = xo.getElementsByTagName("values","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef",childElements)
+                for(var intCnt = 0; intCnt < allElements.length ; intCnt++)
+                {
+                    var inpEle = allElements[intCnt];
+                    if(inpEle != null && inpEle.firstChild != null && inpEle.firstChild.nodeValue != null)
+                    {
+                        arrValues.push(inpEle.firstChild.nodeValue);
+                    }
+                }
+                return arrValues;
+            }
+            
+            function InvokeCreateRouteCall()
+            {
+                
+            }
+            
+            //Neeraj(March-7th): Cancel method is added to hanldle defect no.- 003673
+            function invokeCancel()
+            {
+                top.location = "{!JSENCODE($CurrentPage.parameters.SVMX_retURL)}";
+            }
+            
+            function APL_InitiateReturnAction()
+            {
+                //variables Declaration
+                var reqForGetInitateReturn = new Object();
+                var execEntitChek = false, execRouteCalc = false;
+                var lstBeforeEntitlement = new Object();
+                var lstBeforeRouting = new Object();
+                var lstBeforeDocGen = new Object();
+                var lstAfterDocGen = new Object();
+                var hdrMapId = new String();                                //added by Vasu
+                var childMapId = new String();                              //added by Vasu
+                var ConsiderLocationFromObject = new String();
+                var ConsiderLocationFrom = new String();
+                var infoToDisplay = new String();
+                var svmx_CaseID = getQuerystring('SVMX_recordId');
+                var svmx_ProcID = getQuerystring('SVMX_processId');
+                
+                //var uiComp = document.getElementById('SVMXerrorConsole');
+                //uiComp.style.display = 'none';
+                //call the initial webservice to whether the Process is configured for the Enitle and Route Calc chek and also get the before and after webservices call.
+                
+                var servReq1 = new SOAPRequest({orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"});   //Added by Neeraj
+                
+                var locProcIdMap = [new SVMXMap("ProcessId",svmx_ProcID),new SVMXMap("CaseId",svmx_CaseID)];
+                var reqForGetInitateReturn = new INTF_SFMRequest(null, null, locProcIdMap, null);
+                SVMXloader.loadWithMessage("{!$Label.svmxc__APL001_TAG013}");
+                infoToDisplay = '';
+                var errorIntRetu = null;
+                //----------------------------------------------------------------------------------------
+                servReq1.responseHandler = {handler : function(e, me)
+                    {
+                        var result = servReq1.__getResponse(me);
+                        if(result[0].success == 'true')
+                        {
+                            for (var j=0; j<= result[0].valueMap.length; j++)
+                            {       
+                                if(result[0].valueMap[j].key == "SVMXC__APL_Perform_Entitlement__c")
+                                {
+                                    execEntitChek = result[0].valueMap[j].value;
+                                }
+                                else if(result[0].valueMap[j].key == "SVMXC__APL_Perform_Route_Calculations__c")
+                                {
+                                    execRouteCalc = result[0].valueMap[j].value;
+                                }
+                                else if(result[0].valueMap[j].key == "HeaderMapId")
+                                {
+                                    hdrMapId = result[0].valueMap[j].value;
+                                }
+                                else if(result[0].valueMap[j].key == "ChildMapId")
+                                {
+                                    childMapId = result[0].valueMap[j].value;
+                                }
+                                else if(result[0].valueMap[j].key == "ConsiderLocationFromObject")
+                                {
+                                    ConsiderLocationFromObject = result[0].valueMap[j].value;
+                                }
+                                else if(result[0].valueMap[j].key == "ConsiderLocationFrom")
+                                {
+                                    ConsiderLocationFrom = result[0].valueMap[j].value;
+                                }else if(result[0].valueMap[j].key == "Before Entitlement")
+                                {
+                                    lstBeforeEntitlement = result[0].valueMap[j].values;
+                                }else if(result[0].valueMap[j].key == "Before Routing Calculation")
+                                {
+                                    lstBeforeRouting = result[0].valueMap[j].values;
+                                }else if(result[0].valueMap[j].key == "Before RMA Generation")
+                                {
+                                    lstBeforeDocGen = result[0].valueMap[j].values;
+                                }else if(result[0].valueMap[j].key == "After RMA Generation")
+                                {
+                                    lstAfterDocGen = result[0].valueMap[j].values;
+                                }
+                            }
+                       }else
+                       {
+                            errorIntRetu = result[0].valueMap.value;
+                       }
+                    }
+                }
+                servReq1.invoke("INTF_APL_GetIntiateReturnProc_WS", reqForGetInitateReturn ,{async : false});
+                
+                if(errorIntRetu != null && errorIntRetu.length > 0)
+                {
+                    SVMXloader.loaded();
+                    showError(errorIntRetu)
+                    showContainer('onlyCancel'); // Adde by Neeraj
+                    return;
+                }
+                
+                //----------------------------------------------------------------------------------------
+                if(execEntitChek == "true")
+                {
+                    SVMXloader.loadWithMessage("{!$Label.svmxc__APL001_TAG014}");
+                    //Get the events if any
+                    CallEvents(lstBeforeEntitlement,svmx_CaseID);
+                    var servReq = new SOAPRequest({orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}); 
+                    
+                    var reqToPefmEntiChek = new Object();
+                    reqToPefmEntiChek.processId = svmx_ProcID;
+                    reqToPefmEntiChek.caseId = svmx_CaseID;
+                    var locCaseProcIdMap = [new SVMXMap("CaseId",svmx_CaseID), new SVMXMap("ProcessId",svmx_ProcID)];
+                    //var reqToPefmEntiChek = new INTF_SFMRequest(null, null, locProcIdMap, null);
+                    var reqToPefmEntiChek = new INTF_SFMRequest(null, null, locCaseProcIdMap, null);
+                    var reqColFrEntiChek = [];
+                    reqColFrEntiChek[reqColFrEntiChek.length] = {
+                                    props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                                methodName : "INTF_APL_PerformEntitlement_WS", data : reqToPefmEntiChek , options : {}};                                                            
+                     var srcFrEntiChek = new SOAPRequestCollection(reqColFrEntiChek);
+                     srcFrEntiChek.responseHandler = {handler : function(entiChek)
+                     {
+                        var resEntiChek = entiChek.target;
+                        var allResEntiChek = resEntiChek.getAllResponses();
+                            
+                        var xoForPefmEntiChek = new XMLObj(allResEntiChek[0], true);
+                        var succForPefmEntiChek = xoForPefmEntiChek.getFirstElementByTagName("success", "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                            
+                        if(succForPefmEntiChek.firstChild.nodeValue == "false")
+                        {                       
+                            SVMXloader.loaded();
+                            showError(getValueFromValueMapSOAP("Error",xoForPefmEntiChek));
+                            showContainer('onlyCancel'); // Adde by Neeraj
+                            return;                        
+                        }else if(succForPefmEntiChek.firstChild.nodeValue == "true")
+                        {   
+                            //SVMXloader.loadWithMessage("Processing Source Updates for Entitlement.....");
+                            doSourceUpdates(xoForPefmEntiChek,svmx_CaseID,svmx_ProcID,"HEADER_UPD_ON_ENTITLEMENT","LINE_UPD_ON_ENTITLEMENT");                                                  
+                        }  
+                     }};        
+                     srcFrEntiChek.invokeAll();                                 
+                }
+                
+                var servReq2 = new SOAPRequest({orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}); 
+                    
+                if(execRouteCalc == "true")
+                {
+                    SVMXloader.loadWithMessage("{!$Label.svmxc__APL001_TAG015}"); 
+                    var caseLinesNotProcessed = [];
+                    //Get the events if any
+                    CallEvents(lstBeforeRouting,svmx_CaseID);
+                    var criteriaMap = [new SVMXMap("ProcessId", svmx_ProcID), new SVMXMap("CaseId", svmx_CaseID)]; // Added by Neeraj.
+                    var reqToGetAccAndProcInfo = new INTF_SFMRequest(null, null, criteriaMap, null); //Neeraj: pass it as an input params.
+                   
+                    var resToGetAccAndProInfo = servReq2.invoke("INTF_APL_GetAccountAndProductInfo_WS", reqToGetAccAndProcInfo, {async : false});
+                    var arrProIdRouteId = new Array();              
+                    var xo = new XMLObj(resToGetAccAndProInfo.responseText, true);
+                    var successAccProInfo = xo.getFirstElementByTagName("success", "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                        
+                    if(successAccProInfo.firstChild.nodeValue == "true")
+                    {
+                        //the response will have key as Accountid
+                        var resAccountProductsMap = xo.getElementsByTagName("valueMap",  "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                        var accId = getKeyFromElement(resAccountProductsMap[0],xo);
+                        var lstAllProductInfo = [];
+                        if(accId != "Case Lines Not Processed")
+                            var lstAllProductInfo = getValuesFromElement(resAccountProductsMap[0],xo);
+                        
+                        if(resAccountProductsMap.length > 1)
+                        {
+                            var notProcessedKey = getKeyFromElement(resAccountProductsMap[1],xo);
+                            caseLinesNotProcessed.push(getValuesFromElement(resAccountProductsMap[1],xo));
+                        }
+                        else if(accId == "Case Lines Not Processed")
+                        {
+                            var notProcessedKey = getKeyFromElement(resAccountProductsMap[0],xo);
+                            caseLinesNotProcessed.push(getValuesFromElement(resAccountProductsMap[0],xo));
+                        }
+                        
+                        var reqCollection = [];
+                        /*if(lstAllProductInfo.length <= 0 && accId == "No Account" && caseLinesNotProcessed == null && caseLinesNotProcessed.length <= 0)
+                        {
+                            SVMXloader.loaded();;
+                            showError("{!$Label.svmxc__APL001_TAG007}");
+                            showContainer('onlyCancel'); // Adde by Neeraj                          
+                            return;
+                        }
+                        else*/ 
+                        if(lstAllProductInfo.length <= 0 && accId != "No Account" && accId != "Case Lines Not Processed")
+                        {
+                            var accProMap = [new SVMXMap("AccountID", accId), new SVMXMap("RouteType", "Inbound"), new SVMXMap("CaseID", svmx_CaseID)];
+                            var reqToRouteInfo = new INTF_SFMRequest(null, null, accProMap, null); 
+                            reqCollection[reqCollection.length] = {
+                                    props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                                methodName : "INTF_APL_GetRouteInfo_WS", data : reqToRouteInfo , options : {}}; 
+                        }
+                        else if(lstAllProductInfo.length > 0 && accId != "Case Lines Not Processed")
+                        {
+                            for(var intCnt = 0; intCnt < lstAllProductInfo.length ; intCnt++)
+                            {
+                                //alert("Product: "+lstAllProductInfo[intCnt]);
+                                //Give the account and product to get the matching route info
+                                if(accId == "No Account")
+                                    var accProMap = [new SVMXMap("ProductID", lstAllProductInfo[intCnt]), new SVMXMap("RouteType", "Inbound"), new SVMXMap("CaseID", svmx_CaseID)];
+                                else
+                                    var accProMap = [new SVMXMap("AccountID", accId), new SVMXMap("ProductID", lstAllProductInfo[intCnt]), new SVMXMap("RouteType", "Inbound"), new SVMXMap("CaseID", svmx_CaseID)];
+                                    
+                                
+                                if(accProMap != null)
+                                {
+                                    var reqToRouteInfo = new INTF_SFMRequest(null, null, accProMap, null);                              
+                                        
+                                    reqCollection[reqCollection.length] = {
+                                        props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                                    methodName : "INTF_APL_GetRouteInfo_WS", data : reqToRouteInfo , options : {}};
+                                }                        
+                            }
+                        } 
+                        
+                        if(reqCollection.length > 0)
+                        {
+                            var src = new SOAPRequestCollection(reqCollection);
+                            src.responseHandler = {handler : function(e)
+                            {
+                                var src = e.target;
+                                var allResponses = src.getAllResponses();
+                                for(var ri in allResponses)
+                                {
+                                    var resp = allResponses[ri];
+                                    var xo = new XMLObj(resp, true);
+                                    var success = xo.getFirstElementByTagName("success", "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                                    
+                                    if(success.firstChild.nodeValue == "true")                          
+                                    {
+                                        var objRouteRespo = new SVMXMap();
+                                        
+                                        if(getValueFromValueMapSOAP("RouteID",xo) != '-1')
+                                        {
+                                            objRouteRespo.key = getValueFromValueMapSOAP("Product2",xo);
+                                            objRouteRespo.value = getValueFromValueMapSOAP("RouteID",xo);
+                                            objRouteRespo.values = getValuesFromValueMapSOAP("RouteID",xo); 
+                                        }else
+                                        {
+                                            objRouteRespo.key = getValueFromValueMapSOAP("Product2",xo);
+                                            objRouteRespo.value = "";
+                                            objRouteRespo.values = getValuesFromValueMapSOAP("RouteID",xo);
+                                        }                                    
+                                        arrProIdRouteId.push(objRouteRespo);
+                                    }else if(success.firstChild.nodeValue == "false")
+                                    {
+                                        infoToDisplay += getValueFromValueMapSOAP("Error",xo);
+                                        SVMXloader.loaded();
+                                        showError(getValueFromValueMapSOAP("Error",xo));
+                                        showContainer('onlyCancel'); // Adde by Neeraj
+                                        return;
+                                    }
+                                }
+                                
+                                //Calculated all the routes for the Account and Product combination
+                                //Now Create the route card for each case line based on the Product
+                               
+                                var reqColFrRo = [];
+                                //alert("ProID to RuleID: "+arrProIdRouteId.length);
+                                for(var intCnt = 0;intCnt < arrProIdRouteId.length; intCnt++)
+                                {
+                                     var proId = arrProIdRouteId[intCnt].key;
+                                     var rouId = arrProIdRouteId[intCnt].value;
+                                     var caseLineIds = arrProIdRouteId[intCnt].values;
+                                     if(caseLineIds != null && caseLineIds.length > 1000)
+                                     {
+                                        var batchSize = 1000; 
+                                        var reqCount = ( caseLineIds.length / batchSize ) + (( caseLineIds.length % batchSize ) == 0 ? 0 : 1);                                  
+                                        for(var br = 0; br < reqCount; br++)
+                                        {
+                                            var brDataStartIndex = br * batchSize;
+                                            var brData = caseLineIds.slice(brDataStartIndex, brDataStartIndex + batchSize)
+                                            if(proId == null)
+                                                var routeMap = [new SVMXMap("CaseLines",null,null,null,brData), new SVMXMap("RouteRuleId", rouId), new SVMXMap("CaseId", svmx_CaseID), new SVMXMap("IsPerformRouteCalc", "true"), new SVMXMap("ProcessId", svmx_ProcID)];
+                                            else
+                                                var routeMap = [new SVMXMap("CaseLines",null,null,null,brData),new SVMXMap("ProductId", proId), new SVMXMap("RouteRuleId", rouId), new SVMXMap("CaseId", svmx_CaseID), new SVMXMap("IsPerformRouteCalc", "true"), new SVMXMap("ProcessId", svmx_ProcID)];
+                                            var reqToCreRouteInfo = new INTF_SFMRequest(null, null, routeMap, null);                                
+                                            reqColFrRo[reqColFrRo.length] = {
+                                                props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                                        methodName : "INTF_APL_CreateRouteForCase_WS", data : reqToCreRouteInfo , options : {}};
+                                        }
+                                     }else
+                                     {
+                                         if(proId == null)
+                                                var routeMap = [new SVMXMap("CaseLines",null,null,null,caseLineIds), new SVMXMap("RouteRuleId", rouId), new SVMXMap("CaseId", svmx_CaseID), new SVMXMap("IsPerformRouteCalc", "true"), new SVMXMap("ProcessId", svmx_ProcID)];
+                                            else
+                                                var routeMap = [new SVMXMap("CaseLines",null,null,null,caseLineIds),new SVMXMap("ProductId", proId), new SVMXMap("RouteRuleId", rouId), new SVMXMap("CaseId", svmx_CaseID), new SVMXMap("IsPerformRouteCalc", "true"), new SVMXMap("ProcessId", svmx_ProcID)];
+                                         var reqToCreRouteInfo = new INTF_SFMRequest(null, null, routeMap, null);                                
+                                         reqColFrRo[reqColFrRo.length] = {
+                                            props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                                        methodName : "INTF_APL_CreateRouteForCase_WS", data : reqToCreRouteInfo , options : {}};                                                            
+                                     }
+                                }
+                                
+                                if(caseLinesNotProcessed != null && caseLinesNotProcessed.length >0)
+                                {
+                                    //alert("Entered for Case Lines not Processed");
+                                    var routeMap = [new SVMXMap("CaseLines",null,null,null,caseLinesNotProcessed), new SVMXMap("RouteRuleId", null), new SVMXMap("CaseId", svmx_CaseID), new SVMXMap("IsPerformRouteCalc", "true"), new SVMXMap("ProcessId", svmx_ProcID)];
+                                        //alert("Route Map: "+ routeMap);
+                                        var reqToCreRouteInfo = new INTF_SFMRequest(null, null, routeMap, null);                                
+                                             reqColFrRo[reqColFrRo.length] = {
+                                                props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                                            methodName : "INTF_APL_CreateRouteForCase_WS", data : reqToCreRouteInfo , options : {}};
+                                }
+                                var srcForRouteId = new SOAPRequestCollection(reqColFrRo);
+                                srcForRouteId.responseHandler   = {handler : function(eFromRoute)
+                                {
+                                    //get the case lines for the source updates
+                                    var srcFromRoutes = eFromRoute.target;
+                                    var allResponsesFromRoutes = srcFromRoutes.getAllResponses();
+                                    var infoToDisplayFrRoute = '';
+                                    var infoToDisplayFrRouteTemp = '';
+                                    for(var riFromRoute in allResponsesFromRoutes)
+                                    {
+                                        var respCaseLines = allResponsesFromRoutes[riFromRoute];
+                                        var xoForCaseLineRes = new XMLObj(respCaseLines, true);
+                                        var successForCaseLine = xoForCaseLineRes.getFirstElementByTagName("success", "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");                                
+                                        if(successForCaseLine.firstChild.nodeValue == "true")                          
+                                        {
+                                            infoToDisplayFrRouteTemp = getValueFromValueMapSOAP("Info",xoForCaseLineRes);
+                                            if(infoToDisplayFrRouteTemp != null)
+                                            {
+                                                infoToDisplayFrRoute += infoToDisplayFrRouteTemp + ', ';
+                                            }
+                                            doSourceUpdates(xoForCaseLineRes,svmx_CaseID,svmx_ProcID,"HEADER_UPD_ON_ROUTE_CALC","LINE_UPD_ON_ROUTE_CALC");
+                                        }
+                                        else if(successForCaseLine.firstChild.nodeValue == "false")
+                                        {
+                                            infoToDisplay += getValueFromValueMapSOAP("Error",xoForCaseLineRes);
+                                            SVMXloader.loaded();
+                                            showError(getValueFromValueMapSOAP("Error",xoForCaseLineRes));
+                                            showContainer('onlyCancel'); // Adde by Neeraj
+                                            return;
+                                        }
+                                    }
+                                    if(infoToDisplayFrRoute.length > 0)
+                                    {
+                                        infoToDisplay += "{!$Label.svmxc__APL001_TAG017}" + infoToDisplayFrRoute.substring(0,infoToDisplayFrRoute.length-2);
+                                    }
+                                    setTimeout(CreateRMADocuments(svmx_CaseID,servReq2,hdrMapId,childMapId,lstBeforeDocGen,lstAfterDocGen,svmx_ProcID,infoToDisplay), 0);
+                                }};
+                                srcForRouteId.invokeAll();
+                                //Create the Routing cord for the given Product and Rule ids  
+                            }};
+                            src.invokeAll();
+                        }
+                        else if(caseLinesNotProcessed != null && caseLinesNotProcessed.length >0)
+                        {
+                            //alert("Entered for Case Lines not Processed");
+                            var reqColFrRo = [];
+                            var routeMap = [new SVMXMap("CaseLines",null,null,null,caseLinesNotProcessed), new SVMXMap("RouteRuleId", null), new SVMXMap("CaseId", svmx_CaseID), new SVMXMap("IsPerformRouteCalc", "true"), new SVMXMap("ProcessId", svmx_ProcID)];
+                            var reqToCreRouteInfo = new INTF_SFMRequest(null, null, routeMap, null);                                
+                            reqColFrRo[reqColFrRo.length] = {
+                               props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                           methodName : "INTF_APL_CreateRouteForCase_WS", data : reqToCreRouteInfo , options : {}};
+                            
+                            var srcForRouteId = new SOAPRequestCollection(reqColFrRo);
+                            srcForRouteId.responseHandler   = {handler : function(eFromRoute)
+                            {
+                                //get the case lines for the source updates
+                                var srcFromRoutes = eFromRoute.target;
+                                var allResponsesFromRoutes = srcFromRoutes.getAllResponses();
+                                var infoToDisplayFrRoute = '';
+                                var infoToDisplayFrRouteTemp = '';
+                                for(var riFromRoute in allResponsesFromRoutes)
+                                {
+                                    var respCaseLines = allResponsesFromRoutes[riFromRoute];
+                                    var xoForCaseLineRes = new XMLObj(respCaseLines, true);
+                                    var successForCaseLine = xoForCaseLineRes.getFirstElementByTagName("success", "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");                                
+                                    if(successForCaseLine.firstChild.nodeValue == "true")                          
+                                    {
+                                        infoToDisplayFrRouteTemp = getValueFromValueMapSOAP("Info",xoForCaseLineRes);
+                                        if(infoToDisplayFrRouteTemp != null)
+                                        {
+                                            infoToDisplayFrRoute += infoToDisplayFrRouteTemp + ', ';
+                                        }
+                                        doSourceUpdates(xoForCaseLineRes,svmx_CaseID,svmx_ProcID,"HEADER_UPD_ON_ROUTE_CALC","LINE_UPD_ON_ROUTE_CALC");
+                                    }
+                                    else if(successForCaseLine.firstChild.nodeValue == "false")
+                                    {
+                                        infoToDisplay += getValueFromValueMapSOAP("Error",xoForCaseLineRes);
+                                        SVMXloader.loaded();
+                                        showError(getValueFromValueMapSOAP("Error",xoForCaseLineRes));
+                                        showContainer('onlyCancel'); // Adde by Neeraj
+                                        return;
+                                    }
+                                }
+                                if(infoToDisplayFrRoute.length > 0)
+                                {
+                                    infoToDisplay += "{!$Label.svmxc__APL001_TAG017}" + infoToDisplayFrRoute.substring(0,infoToDisplayFrRoute.length-2);
+                                }
+                                setTimeout(CreateRMADocuments(svmx_CaseID,servReq2,hdrMapId,childMapId,lstBeforeDocGen,lstAfterDocGen,svmx_ProcID,infoToDisplay), 0);
+                            }};
+                            srcForRouteId.invokeAll();
+                        }
+                        ///
+                    }else if(successAccProInfo.firstChild.nodeValue == "false")
+                    {
+                        infoToDisplay += getValueFromValueMapSOAP("Error",xo);
+                        SVMXloader.loaded();
+                        showError(getValueFromValueMapSOAP("Error",xo));
+                        showContainer('onlyCancel'); // Adde by Neeraj
+                        return;
+                    }
+                }else
+                {
+                     var reqColFrRo = [];
+                     var routeMap = [new SVMXMap("IsPerformRouteCalc", "false"), new SVMXMap("ProcessId", svmx_ProcID), new SVMXMap("CaseId", svmx_CaseID)];
+                     var reqToCreRouteInfo = new INTF_SFMRequest(null, null, routeMap, null);                                
+                     reqColFrRo[reqColFrRo.length] = {
+                        props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                    methodName : "INTF_APL_CreateRouteForCase_WS", data : reqToCreRouteInfo , options : {}};
+                     var srcForRouteId = new SOAPRequestCollection(reqColFrRo);
+                     srcForRouteId.responseHandler   = {handler : function(eFromRoute)
+                     {
+                      // if required handle the response
+                      var srcFromRoutes = eFromRoute.target;
+                      var allResponsesFromRoutes = srcFromRoutes.getAllResponses();
+                      for(var riFromRoute in allResponsesFromRoutes)
+                      {
+                          var respCaseLines = allResponsesFromRoutes[riFromRoute];
+                          var xoForCaseLineRes = new XMLObj(respCaseLines, true);
+                          var successForCaseLine = xoForCaseLineRes.getFirstElementByTagName("success", "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");                                
+                          if(successForCaseLine.firstChild.nodeValue == "true")                          
+                          {
+                            if(getValueFromValueMapSOAP("Info",xoForCaseLineRes) != null)
+                            infoToDisplay += getValueFromValueMapSOAP("Info",xoForCaseLineRes);                              
+                          }else if(successForCaseLine.firstChild.nodeValue == "false")
+                          {
+                            infoToDisplay += getValueFromValueMapSOAP("Error",xoForCaseLineRes);
+                            /*SVMXloader.loaded();
+                            showError(getValueFromValueMapSOAP("Error",xoForCaseLineRes));
+                            return;*/
+                          }
+                      }
+                      setTimeout(CreateRMADocuments(svmx_CaseID,servReq2,hdrMapId,childMapId,lstBeforeDocGen,lstAfterDocGen,svmx_ProcID,infoToDisplay), 0);
+                     }};
+                     srcForRouteId.invokeAll();
+                     //Create the Routing cord for the given Product and Rule ids  
+                }
+            }
+            
+            function CallEvents(lstEventData,svmx_CaseID)
+            {
+                // Event before entitlement
+                var strNameSpace = "";
+                if(lstEventData != undefined && lstEventData.length > 0)
+                {   
+                    if(lstEventData[0] != "-1") strNameSpace = lstEventData[0];
+                    var serReqBefEnti = new SOAPRequest({orgNameSpace: strNameSpace, sessionId : __sfdcSessionId, endPointName: lstEventData[1]});
+                    var locCaseMapBefEnti = [new SVMXMap("CaseId",svmx_CaseID)];
+                    var reqToBefEnti = new INTF_SFMRequest(null, null, locCaseMapBefEnti, null);
+                    var resToSerBefEnti = serReqBefEnti.invoke(lstEventData[2], reqToBefEnti);
+                }
+            }
+             var arrRMAIds = '';
+            function CreateRMADocuments(svmx_CaseID,servReq,hdrMapId,childMapId,lstBeforeDocGen,lstAfterDocGen,svmx_ProcID,infoToDisplay)
+            {
+                //Added by Naveen V -- Calling the WebService before RMA Generation
+                CallEvents(lstBeforeDocGen,svmx_CaseID);
+                
+                //Creating the RMA Documents
+                //Information related to the case lines based on first stop
+                SVMXloader.loadWithMessage("{!$Label.svmxc__APL001_TAG016}");
+                var locCaseMap = [new SVMXMap("CaseId",svmx_CaseID), new SVMXMap("ProcessId", svmx_ProcID)];
+                var reqToGetRMAInfo = new INTF_SFMRequest(null, null, locCaseMap, null);
+                var resToGetRMAInfo = servReq.invoke("INTF_APL_CalculateRMAForCase_WS", reqToGetRMAInfo, {async : false});
+                xo = new XMLObj(resToGetRMAInfo.responseText, true);
+                var succForRMAInfoReq = xo.getFirstElementByTagName("success", "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                
+                //Commented by Naveen V
+                //CallEvents(lstBeforeDocGen,svmx_CaseID);
+                if(succForRMAInfoReq.firstChild.nodeValue == "true")                        
+                {   
+                    //Now Create the RMA based on location and RMA lines for the case lines
+                    //Loop through value map which contains the location as key and values as caseline ids..
+                    //call the service which creates the RMA for the location and there RMA lines
+                    var arrLocCaseLines = new Array();
+                    var resLocCaseLineMap = xo.getElementsByTagName("valueMap",  "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");
+                    var reqCollFrRMA = [];
+                    var reqCollFrRMASorUpd = [];
+                    if(resLocCaseLineMap.length > 0)
+                    {
+                        for(var intCnt = 0; intCnt < resLocCaseLineMap.length ; intCnt++)
+                        {
+                            var currLoca = getKeyFromElement(resLocCaseLineMap[intCnt],xo);
+                            var currLocaValues = getValuesFromElement(resLocCaseLineMap[intCnt],xo);
+                            if(currLoca != null)
+                            {
+                                var locCaseLineMap = [new SVMXMap("CaseID",svmx_CaseID),new SVMXMap("RMADetails",currLoca,null,null,currLocaValues), new SVMXMap("HeaderMapId",hdrMapId), new SVMXMap("LineMapId",childMapId)];
+                                var reqToCreateRMA = new INTF_SFMRequest(null, null, locCaseLineMap, null);
+                                 reqCollFrRMA[reqCollFrRMA.length] = {
+                                    props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                                methodName : "INTF_APL_GenerateRMAforCase_WS", data : reqToCreateRMA , options : {}};
+                                 var locCaseLineMapFrRMA = [new SVMXMap("CaseID",svmx_CaseID), new SVMXMap("ChildRecords",null,null,null,currLocaValues), new SVMXMap("ProcessId",svmx_ProcID), new SVMXMap("HeaderUpdate","HEADER_UPD_ON_RMA_GENERATION"), new SVMXMap("ChildUpdate","LINE_UPD_ON_RMA_GENERATION")];
+                                 var reqToSouUpdaInfoFrRMA = new INTF_SFMRequest(null, null, locCaseLineMapFrRMA, null);  
+                                 reqCollFrRMASorUpd[reqCollFrRMASorUpd.length] = {
+                                    props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                methodName : "INTF_APL_DoReturnSourceUpdates_WS", data : reqToSouUpdaInfoFrRMA , options : {}};
+                            }
+                        }
+                        var srcForRMADoc = new SOAPRequestCollection(reqCollFrRMA);
+                        srcForRMADoc.responseHandler   = {handler : function(e2)
+                        {
+                            var reqCollFrRMALnsCreation = [];                    
+                            var srcRMAs = e2.target;
+                            var allResponsesRMAs = srcRMAs.getAllResponses();
+                            arrRMAIds = '';
+                            for(var riFromRMA in allResponsesRMAs)
+                            {
+                                 var respCurrRMA = allResponsesRMAs[riFromRMA];
+                                 var xoForRMAS = new XMLObj(respCurrRMA, true);
+                                 var successForRMA= xoForRMAS.getFirstElementByTagName("success", "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");                                
+                                 if(successForRMA.firstChild.nodeValue == "true")                          
+                                 {
+                                    arrRMAIds += getValueFromValueMapSOAP("RMAid",xoForRMAS) + ',';
+                                    var arrAllValues = new Array();
+                                    arrAllValues = getValuesFromValueMapSOAP("RMADetails",xoForRMAS);
+                                    //now check whether Values are more than 1000;
+                                    if(arrAllValues.length > 1000)
+                                    {
+                                        var locCreRMALineMap = [ new SVMXMap("LineMapId",childMapId),new SVMXMap("RMAId",getValueFromValueMapSOAP("RMAid",xoForRMAS))];
+                                        var reqToCreateRMALines = new INTF_SFMRequest(null, null, locCreRMALineMap, null);
+                                        reqCollFrRMALnsCreation[reqCollFrRMALnsCreation.length] = {
+                                        props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                                methodName : "INTF_APL_GenerateRMAforCase_WS", data : reqToCreateRMALines , options : {}, batch : { size : 1000 , key : "RMADetails" , values : arrAllValues}};
+                                    }else
+                                    {
+                                        var locCreRMALineMap = [new SVMXMap("RMADetails",null,null,null,arrAllValues), new SVMXMap("LineMapId",childMapId),new SVMXMap("RMAId",getValueFromValueMapSOAP("RMAid",xoForRMAS))];
+                                        var reqToCreateRMALines = new INTF_SFMRequest(null, null, locCreRMALineMap, null);
+                                        reqCollFrRMALnsCreation[reqCollFrRMALnsCreation.length] = {
+                                        props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                                methodName : "INTF_APL_GenerateRMAforCase_WS", data : reqToCreateRMALines , options : {}};
+                                    }
+                                 }else if(successForRMA.firstChild.nodeValue == "false")
+                                 {
+                                    infoToDisplay += getValueFromValueMapSOAP("Error",xoForRMAS);
+                                    SVMXloader.loaded();
+                                    showError(getValueFromValueMapSOAP("Error",xoForRMAS));
+                                    showContainer('onlyCancel'); // Adde by Neeraj
+                                    return;
+                                 }
+                            }
+                            var srcForRMALineDocs = new SOAPRequestCollection(reqCollFrRMALnsCreation);
+                            srcForRMALineDocs.responseHandler   = {handler : function(e3)
+                            {          
+                            
+                                var resRMALines = e3.target;
+                                var allResponsesFromRMALines = resRMALines.getAllResponses();
+                                for(var riFromRMALine in allResponsesFromRMALines)
+                                {
+                                      var respRMALines = allResponsesFromRMALines[riFromRMALine];
+                                      if(respRMALines == undefined) continue;
+                                      if(respRMALines instanceof Array)
+                                      {
+                                      
+                                      }
+                                      else
+                                      {
+                                        var xoForRMALineRes = new XMLObj(respRMALines, true);
+                                        var successForRMALine = xoForRMALineRes.getFirstElementByTagName("success", "http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef");                                
+                                        if(successForRMALine.firstChild.nodeValue == "false")                          
+                                        {
+                                            infoToDisplay += getValueFromValueMapSOAP("Error",xoForRMALineRes); 
+                                            SVMXloader.loaded();
+                                            showError(getValueFromValueMapSOAP("Error",xoForRMALineRes));
+                                            showContainer('onlyCancel'); // Adde by Neeraj
+                                            return;                                         
+                                        }
+                                      }
+                                }        
+                                var srcForRMASouUpdate = new SOAPRequestCollection(reqCollFrRMASorUpd);                
+                                srcForRMASouUpdate.responseHandler   = {handler : function(e1RMA)
+                                {
+                                    //handle the response if required          
+                                }};
+                                srcForRMASouUpdate.invokeAll();
+                                CallEvents(lstAfterDocGen,svmx_CaseID);
+                                SVMXloader.loaded();;
+                                var uiComp = document.getElementById('SVMXerrorConsole');
+                                uiComp.style.display = 'none';
+                                if(infoToDisplay != null && infoToDisplay.length > 0)
+                                {
+                                    uiComp.style.display = 'block';
+                                    showError(infoToDisplay);
+                                    //showContainer('onlyCancel');
+                                }
+                                
+                                //handle the response if required
+                               APL_InitiateReturnAction2(arrRMAIds);
+                           }};
+                           srcForRMALineDocs.invokeAll();
+                        }};
+                        //dobreak = true;                    
+                        srcForRMADoc.invokeAll();
+                    }
+                    else
+                    {
+                        SVMXloader.loaded();
+                        showError("{!$Label.svmxc__APL001_TAG007}");
+                        showContainer('onlyCancel'); // Adde by Neeraj
+                        return;
+                    }                                  
+                }
+                else
+                {
+                    SVMXloader.loaded();;
+                    showError(getValueFromValueMapSOAP("Error",xo));
+                    showContainer('onlyCancel'); // Adde by Neeraj
+                    return;
+                }
+                
+            }
+            
+            function doSourceUpdates(xoForSourceUpdate,svmx_CaseID,svmx_ProcID,headerUpdate,childUpdate)
+            {
+                //Do the source updates
+                var arrValuesE = new Array();
+                var allElementsE = xoForSourceUpdate.getElementsByTagName("values","http://soap.sforce.com/schemas/class/SVMXC/INTF_WebServicesDef")
+                for(var intCntE = 0; intCntE < allElementsE.length ; intCntE++)
+                {
+                    var inpEleE = allElementsE[intCntE];
+                    if(inpEleE != null)
+                    {
+                        arrValuesE.push(inpEleE.firstChild.nodeValue);
+                    }
+                }
+                var locCaseLineMap = [new SVMXMap("CaseID",svmx_CaseID), new SVMXMap("ChildRecords",null,null,null,arrValuesE), new SVMXMap("ProcessId",svmx_ProcID), new SVMXMap("HeaderUpdate",headerUpdate), new SVMXMap("ChildUpdate",childUpdate)];
+                var reqToSouUpdaInfo = new INTF_SFMRequest(null, null, locCaseLineMap, null);                             
+                var reqCollFrESU = [];    
+                reqCollFrESU[reqCollFrESU.length] = {
+                    props : {orgNameSpace: "SVMXC", sessionId : __sfdcSessionId, endPointName: "INTF_WebServicesDef"}, 
+                                methodName : "INTF_APL_DoReturnSourceUpdates_WS", data : reqToSouUpdaInfo , options : {}};                          
+                var srcForEntSouUpdate = new SOAPRequestCollection(reqCollFrESU);
+                
+                srcForEntSouUpdate.responseHandler   = {handler : function(e1)
+                {
+                    //handle the response if required          
+                }};
+                srcForEntSouUpdate.invokeAll();            
+            }
+            
+            function showError(message)
+            {
+                var uiComp = document.getElementById('errorMessage');
+                uiComp.innerHTML = message;
+                uiComp = document.getElementById('SVMXerrorConsole');
+                uiComp.style.display = 'block';
+            }
+                 
+           
+        </script>
+         
+        <script>
+            function customSelectChecked( form,type,value) {  
+                var i = 0;
+                for (i = 0; i < form.elements.length; i++) {
+                    if (form.elements[i].name.search(type) > 0 && form.elements[i].disabled == false) {
+                        form.elements[i].checked = value;
+                    }
+                }
+            }  
+            
+            function customSelectAllOrNoneByCheckbox(form,type,control)
+            {  customSelectChecked( form,type,control.checked); }   
+        
+            
+            function checkSelectAll(form,type) {
+                var isChecked = false;
+                for (i = 1; i < form.elements.length; i++) {
+                        if (form.elements[i].name.search(type) > 0 && form.elements[i].checked == true) {
+                            isChecked = true;
+                        }
+                    }
+                    if(isChecked == true)
+                    return true;
+                    else
+                    return false;                    
+            }
+        </script>
+        
+        <apex:actionStatus id="myStatus" style="font-weight: bold;font-Size:11px; color:#4A4A56"/>
+        <apex:actionFunction name="APL_InitiateReturnAction2" immediate="true" action="{!APL_InitiateReturnAction}" rerender="block1" status="myStatus">
+              <apex:param name="RMAIds" value="" />
+        </apex:actionFunction>
+        <div id="SVMXerrorConsole" class="mainContainer" style="display:none">
+          <div  class="processContent">
+              <span id="errorMessage"></span>
+              <apex:messages />
+          </div>
+        </div>
+        <div id="SVMXloader" class="SVMXloader" style="display:none">
+            <span id="SVMXloaderMessage" style="font-weight:bold;color:black">Processing...</span>
+        </div>
+        
+        <!-- Added by Neeraj to facilitate navigating back to the Case.-->
+        <div id="onlyCancel" class="mainContainer processContent" style="display:none">
+            <div class="consolLinks">
+                 <div class="consoleBtnH"> 
+                    <input type="button" class="buttonH" value="{!$Label.APL003_TAG025}" onclick="invokeCancel()"/>
+                </div>
+            </div>
+        </div>
+        
+        <apex:pageBlock id="block1" helptitle="{!HLPTITLE}" helpurl="{!HLPURL}">
+        <apex:pageBlock mode="edit" title="{!Tag001}" rendered="{!if((lstRMASize == 0 ), false, true)}">
+            <apex:panelGrid columns="1" styleClass="testTable" style="width:100%" >
+                <apex:panelGroup style="align:left;" >
+                    <apex:pageBlockSection dir="LTR" columns="1" collapsible="false" >
+                        <apex:pageBlockSection columns="1" >
+                            <apex:outputPanel style="text-align:left;">
+                                <apex:outputtext value="{!Tag002} " style="font-weight: bold;font-Size:11px; color:#4A4A56"/>
+                                <apex:outputField value=" {!objCase.Account.Name}"  style="width:200px"  id="hdrname"/>  
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>                       
+                    </apex:pageBlockSection>
+                </apex:panelGroup>      
+                <apex:panelGroup style="align:right;" >
+                    <apex:pageBlockSection dir="LTR" columns="1" collapsible="false" >
+                        <apex:pageBlockSection columns="1">
+                            <apex:outputPanel style="text-align:left;">
+                                <apex:outputtext value="{!Tag003} " style="font-weight: bold; font-Size:11px; color:#4A4A56"/> 
+                                 <apex:outputField value=" {!objCase.Account.ShippingState}"  style="width:200px"  id="hdrname1"/>
+                            </apex:outputPanel>
+                        </apex:pageBlockSection>
+                    </apex:pageBlockSection>
+                </apex:panelGroup>      
+            </apex:panelGrid>
+                     
+            <br/>
+            <apex:pageBlock > 
+                <apex:pageBlockSection columns="1"> 
+                    <apex:pageblockTable value="{!lstRMAWrap}" var="RMAWrap">
+                        <apex:column style="Disabled:true">
+                                <apex:facet name="header"> 
+                                <apex:inputCheckbox onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['InitiateReturn:InitiateReturnForm'],'Hide_selected',this);" />
+                                </apex:facet>               
+                                <apex:inputCheckbox id="Rule_selected" value="{!RMAWrap.Sel}" rendered="{!if(RMAWrap.Sel==true,true,false)}"/> 
+                                <apex:inputCheckbox id="Hide_selected" value="{!RMAWrap.Sel}" rendered="{!if(RMAWrap.Sel==false,true,false)}" /> 
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!Tag004}</apex:facet> 
+                            <apex:outputLink value="/{!RMAWrap.objRMA.Id}">  
+                                <apex:outputText value="{!RMAWrap.objRMA.Name}"/> 
+                            </apex:outputLink>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header"> {!Tag005}</apex:facet>
+                            <!--<apex:outputField value="{!RMAWrap.objRMA.Destination_Location__c}"/> -->
+                            {!RMAWrap.objRMA.Destination_Location__r.Name}
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!Tag006}</apex:facet> 
+                            <apex:outputField value="{!RMAWrap.objRMA.SVMXC__Number_of_units_returned__c}"/>
+                        </apex:column>
+                    </apex:pageblockTable>
+                    <br/>
+                    <apex:pageblocksection title="" collapsible="false"/>
+                    <apex:pageBlockSection columns="2">
+                        <apex:pageBlockSectionItem dataStyle="text-align:left; font-weight: bold">  
+                            <apex:commandButton status="processing" value="{!Tag008}" action="{!APL_PrintRMA}" disabled="{!disablePrintRMA}"/> 
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem dataStyle="text-align:right; font-weight: bold">  
+                            <apex:commandButton status="processing" value="{!Tag011}" action="{!APL_GoBack}"/>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageblockSection>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+           
+        </apex:pageBlock>
+     </apex:pageBlock>
+    </apex:form>
+    
+   <script> APL_InitiateReturnAction(); </script>
+</apex:page>

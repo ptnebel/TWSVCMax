@@ -1,0 +1,237 @@
+<apex:page id="ServiceTeam" controller="SVMXC.CONF_ManageViewPermission" >
+    <style type="text/css">
+       .customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+        .disableTab 
+         {
+            background-color : Lightgrey ;
+            color:LightGrey;
+            background-image:none;
+            font-size:1.2em;
+         }
+       .activeTab {background-color: #8599B1; color:white; background-image:none; font-size:14Px} 
+
+       .inactiveTab {background-color: #B0BFD2; color:black;cursor: default; background-image:none}
+    </style>
+     <script type="text/javascript">
+      function customSelectChecked(form,type,value)
+        {  
+            var i = 0;
+            for (i = 0; i < form.elements.length; i++) {
+                if (form.elements[i].name.search(type) > 0 && form.elements[i].disabled == false) {
+                    form.elements[i].checked = value;
+                }
+            }
+        }   
+        function customSelectAllOrNoneByCheckbox(form,type,control)
+        {   
+        customSelectChecked( form,type,control.checked); 
+        }
+      </script> 
+     <apex:form id="ServiceTeam">
+        <apex:pageBlock title="{!TAG001}" id="mainBlock" mode="Edit" helpTitle="{!TAG002}" helpUrl="{!HLPURL}">
+            <apex:pageBlockButtons location="TOP" >
+                <apex:commandButton value="{!TAG003}" action="{!quickSave}" rerender="mainBlock" status="LodingStdStatus" disabled="{!NOT(isLstPrcss)}" />
+                <apex:commandButton value="{!TAG004}" action="{!saveNClose}" rerender="mainBlock" status="LodingStdStatus" disabled="{!NOT(isLstPrcss)}" />
+                <apex:commandButton value="{!TAG005}" action="{!cancel}" rerender="mainBlock" status="LodingStdStatus" />
+            </apex:pageblockButtons>
+            <apex:outputPanel id="topMsg">
+                <apex:pageMessages id="pgMsg1" rendered="{!topComp}" />
+            </apex:outputPanel>
+            <apex:actionStatus id="LodingStdStatus"  startText="{!TAG012}" />
+            <apex:pageBlockSection columns="1" >
+                <apex:pageblockSectionItem dataStyle="text-align:left;margin-left:0px;">
+                    <apex:pageBlockSection columns="1" >
+                        <apex:outputPanel style="text-align:left;width:100px;">
+                            <apex:outputText value="{!TAG006}" style="font-Size:12px;"  />
+                        </apex:outputPanel>
+                    </apex:pageBlockSection>
+                    <apex:pageBlockSection >
+                        <apex:pageblockSectionItem >
+                                <apex:selectList value="{!strSVMX_PrecssId}" size="1" style="width:506px;" onChange="onChangeProcessOptn()" >
+                                    <apex:selectOptions value="{!selPrcssOptn}"   />
+                                </apex:selectList>
+                        </apex:pageblockSectionItem>
+                        <apex:actionFunction name="onChangeProcessOptn" action="{!onChangeProcessOptn}" rerender="mainBlock" status="LodingStdStatus"/>
+                    </apex:pageBlockSection>
+                </apex:pageblockSectionItem>
+            </apex:pageBlockSection>
+            
+            <apex:pageblockSection id="DetailPermission" Title="" collapsible="false" columns="1"  >
+                <apex:tabpanel switchType="client" id="TopPanel" tabClass="activeTab" inactiveTabClass="inactiveTab" disabledTabClass="disableTab" rendered="{!isLstPrcss}" value="{!selectedTab}" >
+                    <!-- Start of TAB1 -- Services Team-->
+                    <apex:tab label="{!TAG017}" name="Team" id="Team" style="font-Size:12px">
+                        
+                        <apex:actionStatus id="status2" startText="{!TAG012}" style="font-Size:12px"/>
+                        <table columns="2" width="100%">
+                        <tr>
+                            <td style="align:left;width:70%">
+                                <apex:pageblock id="TeamBlock" mode="edit">  
+                                <apex:pageBlockButtons Location="Top">
+                                    <apex:CommandButton value="{!TAG019}" action="{!SVMX_AddTeam}" status="status2" reRender="TopPanel,topMsg"/>
+                                    <apex:CommandButton value="{!TAG020}" action="{!SVMX_DeleteTeam}" status="status2" reRender="TopPanel,topMsg" onClick="{if(!confirm('{!TAG022}')){return false}}"/>
+                                </apex:pageBlockButtons>
+                                <apex:outputPanel id="teamComp" >
+                                    <apex:pageMessages rendered="{!teamComp}"  />
+                                </apex:outputPanel>
+                                 <apex:pageblockTable value="{!lstSVMXCfgDtaTeam}" var="Team" id="dataTabTeam">
+                                        <apex:column width="5%" >
+                                            <apex:facet name="header">
+                                                <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['ServiceTeam:ServiceTeam'],'selectedTeam',this);">  
+                                                </apex:inputCheckbox>                                               
+                                            </apex:facet>
+                                            <apex:inputField id="selectedTeam" value="{!Team.SVMXC__Select__c}"/>
+                                        </apex:column>
+                                        <apex:column width="50%" >
+                                            <apex:facet name="header">{!TAG017}</apex:facet>
+                                            <apex:inputField value="{!Team.SVMXC__Service_Group__c}" Style="width: 210px;"/>
+                                        </apex:column>
+                                        <apex:column width="45%" >
+                                            <apex:facet name="header">{!TAG021}</apex:facet>
+                                            <apex:selectList value="{!Team.SVMXC__Access_To__c}" style="font-Size: 12px;width: 140px;" size="1" >
+                                                <apex:selectOptions value="{!selAccssOptn}"   />
+                                            </apex:selectList>
+                                        </apex:column>
+                                </apex:pageblockTable>
+                                </apex:pageblock> 
+                            </td>
+                            <td style="align:right;width:30%">
+                                <apex:pageblock id="TeamSearchBlock" mode="edit" >
+                            
+                                <apex:actionStatus id="status6" startText="{!TAG012}" style="font-Size:12px"/>  
+                                    <apex:panelBar id="PanelBarPr1">
+                                        <apex:panelBarItem label="{!TAG023}" headerClass="inactiveTab" Id="PBItem1">
+                                            <apex:inputText value="{!SearchKeyword}"/>
+                                            <apex:commandButton value="{!TAG024}" action="{!SVMX_GOTeam}" status="status6" reRender="TeamSearchBlock,topMsg,teamComp"/>
+                                        </apex:panelBarItem>
+                                    </apex:panelBar>
+                                        <apex:pageMessages rendered="{!teamCompSrch}" />
+                                    
+                                    <apex:pageblockTable value="{!ServiceTeams}" var="srchTem" >
+                                            <apex:column >
+                                                <apex:facet name="header">
+                                                    <apex:inputCheckbox value="{!CheckAllLines1}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['ServiceTeam:ServiceTeam'],'Searchselected',this);">  
+                                                    </apex:inputCheckbox>   
+                                                </apex:facet>
+                                                <apex:inputField id="Searchselected" value="{!srchTem.SVMXC__Select__c}"/>
+                                            </apex:column>
+                                            <apex:column >
+                                                <apex:facet name="header">{!TAG017}</apex:facet>
+                                                <apex:outputlabel value="{!srchTem.name}"/>
+                                            </apex:column>  
+                                    </apex:pageblockTable>
+                                    <apex:pageBlockButtons id="pbtn3" location="Bottom">
+                                        <apex:CommandButton value="{!TAG025}" action="{!SVMX_AddSelectedTeam}" status="status2" reRender="TeamBlock,topMsg,TeamSearchBlock,teamComp" /> 
+                                        <apex:CommandButton value="{!TAG005}" action="{!SVMX_CencelTeam}" status="status6" reRender="TeamSearchBlock,topMsg,teamComp" /> 
+                                        
+                                    </apex:pageBlockButtons>
+                                </apex:pageblock>
+                            </td>
+                        </tr>
+                        </table>
+                            
+                        <apex:pageBlockSection columns="1" >
+                            <apex:pageBlockSectionItem dataStyle="text-align:right">
+                                <apex:commandButton value="{!TAG032}" rerender="TopPanel,topMsg" action="{!SVMX_BackToTerritory}" status="LodingStdStatus" />
+                            </apex:pageBlockSectionItem>
+                        </apex:pageblockSection>                        
+                    </apex:tab>
+                    
+                    <!-- End of TAB1 -- Services Team-->
+                    
+                    <!-- Start of TAB2 -- Territory-->
+        
+                    <apex:tab label="{!TAG018}" name="Territory" id="Territory" style="font-Size:12px">
+                        
+                        <apex:actionStatus id="TerriStatus1" startText="{!TAG012}" style="font-Size:12px"/>
+                        <table columns="2" width="100%">
+                        <tr>
+                            <td style="align:left;width:70%">
+                                <apex:pageblock id="TerriBlock" mode="edit">  
+                                <apex:pageBlockButtons Location="Top">
+                                    <apex:CommandButton value="{!TAG029}" action="{!SVMX_AddTerritory}" status="TerriStatus1" reRender="TopPanel,topMsg"/>
+                                    <apex:CommandButton value="{!TAG020}" action="{!SVMX_DeleteTerritory}" status="TerriStatus1" reRender="TopPanel,topMsg" onClick="{if(!confirm('{!TAG022}')){return false}}"/>
+                                </apex:pageBlockButtons>
+                                <apex:outputPanel id="teriComp" >
+                                    <apex:pageMessages rendered="{!teriComp}" />
+                                </apex:outputPanel>
+                                 <apex:pageblockTable value="{!lstSVMXCfgDtaTerritory}" var="Territory"  id="dataTabTerritory">
+                                        <apex:column width="5%" >
+                                            <apex:facet name="header">
+                                                <apex:inputCheckbox value="{!CheckAllLines2}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['ServiceTeam:ServiceTeam'],'selectedTerritory',this);">  
+                                                </apex:inputCheckbox>                                               
+                                            </apex:facet>
+                                            <apex:inputField id="selectedTerritory" value="{!Territory.SVMXC__Select__c}"/>
+                                        </apex:column>
+                                        <apex:column width="50%" >
+                                            <apex:facet name="header">{!TAG018}</apex:facet>
+                                            <apex:inputField value="{!Territory.SVMXC__Territory__c}" Style="width: 210px;" />
+                                        </apex:column>
+                                        <apex:column width="45%" >
+                                            <apex:facet name="header">{!TAG021}</apex:facet>
+                                            <apex:selectList value="{!Territory.SVMXC__Access_To__c}" style="font-Size: 12px;width: 140px;" size="1" >
+                                                <apex:selectOptions value="{!selAccssOptn}"   />
+                                            </apex:selectList>
+                                        </apex:column>
+                                </apex:pageblockTable>
+                                </apex:pageblock> 
+                            </td>
+                            <td style="align:right;width:30%">
+                                <apex:pageblock id="TerriSearchBlock" mode="edit" >
+                                <apex:actionStatus id="TerriStatus2" startText="{!TAG012}" style="font-Size:12px"/> 
+                                                                
+                                    <apex:panelBar >
+                                        <apex:panelBarItem label="{!TAG030}" headerClass="inactiveTab">
+                                            <apex:inputText value="{!SearchTerriKeyword}"/>
+                                            <apex:commandButton value="{!TAG024}" action="{!SVMX_GOTerritory}" status="TerriStatus2" reRender="TerriSearchBlock,topMsg,teriComp"/>
+                                        </apex:panelBarItem>
+                                        
+                                    </apex:panelBar>
+                                    <apex:pageMessages rendered="{!teriCompSrch}"/> 
+                                    <apex:pageblockTable value="{!lstTerritory}" var="srchTerri" >
+                                            <apex:column >
+                                                <apex:facet name="header">
+                                                    <apex:inputCheckbox value="{!CheckAllLines3}" onclick="javascript:customSelectAllOrNoneByCheckbox(document.forms['ServiceTeam:ServiceTeam'],'SearchTerriselected',this);">  
+                                                    </apex:inputCheckbox>   
+                                                </apex:facet>
+                                                <apex:inputField id="SearchTerriselected" value="{!srchTerri.SVMXC__Select__c}"/>
+                                            </apex:column>
+                                            <apex:column >
+                                                <apex:facet name="header">{!TAG018}</apex:facet>
+                                                <apex:outputlabel value="{!srchTerri.name}"/>
+                                            </apex:column>  
+                                    </apex:pageblockTable>
+                                    <apex:pageBlockButtons id="pbtn3" location="Bottom">
+                                        <apex:CommandButton value="{!TAG025}" action="{!SVMX_AddSelectedTerritory}" status="TerriStatus1" reRender="TerriBlock,topMsg,TerriSearchBlock,teriComp" /> 
+                                        <apex:CommandButton value="{!TAG005}" action="{!SVMX_CencelTerritory}" status="TerriStatus2" reRender="TerriSearchBlock,topMsg,teriComp" />
+                                    </apex:pageBlockButtons>
+                                </apex:pageblock>
+                            </td>
+                        </tr>
+                        </table>
+                        <apex:pageBlockSection columns="1" >
+                            <apex:pageBlockSectionItem dataStyle="text-align:left">
+                                <apex:commandButton value="{!TAG033}" rerender="TopPanel,topMsg" action="{!SVMX_BackToTeam}" status="LodingStdStatus" />
+                            </apex:pageBlockSectionItem>
+                        </apex:pageblockSection>                        
+                    </apex:tab>
+                    <!-- End of TAB2 -- Territory-->
+                </apex:tabpanel>
+            </apex:pageblockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

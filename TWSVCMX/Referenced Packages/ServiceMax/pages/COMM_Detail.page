@@ -1,0 +1,6 @@
+<apex:page showHeader="false">
+<style>
+input {visibility:hidden;}
+</style>
+  <apex:detail subject="{!$CurrentPage.parameters.pid}" relatedList="true" title="false"/> 
+</apex:page>

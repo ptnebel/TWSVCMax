@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <description>Warranty Template allows organizations to define and standardize their warranty offering and apply it for a range of products automatically. A warranty template can be used to define the type and scope of coverage in a warranty such as parts, labor and expenses, and can then be associated with one or more products. When installed product records are created in ServiceMax, warranty will be calculated automatically based on the pre-defined warranty template associated with the product.</description>
+    <mobileReady>false</mobileReady>
+    <motif>Custom62: Chalkboard</motif>
+</CustomTab>

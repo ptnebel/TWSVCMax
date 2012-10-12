@@ -1,0 +1,182 @@
+<apex:page title="{!TAG001}" Controller="SVMXC.PORD_CreateShipmentFromCase" id="Page1"  showHeader="true"  sidebar="true" tabStyle="SVMXC__RMA_Shipment_Order__c"> 
+
+  <script type="text/javascript">
+  function customSelectChecked( form,value)
+    {   
+        var i = 0;
+        for (i = 0; i < form.elements.length; i++) {
+            if (form.elements[i].name.search('selected') > 0 && form.elements[i].disabled == false) {
+                form.elements[i].checked = value;
+            }
+        }
+    }    
+    function customSelectAllOrNoneByCheckbox(form,control)
+    {  customSelectChecked( form,control.checked); }
+    
+  </script>  
+
+   <apex:pageMessages rendered="{!NOT(DisplayBlockLevelMessage)}"    showDetail="true"  />   
+  <apex:form id="Form1" > <!-- rendered="{!DisplayForm}" -->
+
+<apex:actionFunction action="{!setAddress}" name="setAddress"   status="LoadingStatus" reRender="PageBlock1" /> 
+<apex:actionFunction action="{!setAddressForSourceLoc}" name="setFromAddress" status="LoadingStatus"   reRender="PageBlock1" /> 
+<apex:actionFunction action="{!setAddressForTargetLoc}" name="setToAddress"  status="LoadingStatus"  reRender="PageBlock1" /> 
+
+  <apex:variable value="{!NewRMAShpipmentHeader}" var="rsh"/> 
+
+    
+ <apex:pageBlock title="{!TAG002} {!CaseHeader.Account.Name} " id="PageBlock1"  helpTitle="{!TAG003}"  helpUrl="{!HLPURL}" mode="edit" >   
+  
+        <apex:pageBlockButtons location="top">               
+                             <apex:commandButton action="{!ClearWarnings}" disabled="{!NOT(DisplayForm)}" value="{!TAG024}" rendered="{!showWarnings}"  id="theContinueButton" /> 
+                             <apex:commandButton action="{!AddRMASHPHeader}" value="{!TAG047}"   disabled="{!NOT(DisplayForm)}" rendered="{!NOT(showWarnings)}" id="theShipmentOrder" /> 
+                             <apex:commandButton action="{!Cancel}" value="{!TAG004}" id="theCancelButton" immediate="true"/>
+        </apex:pageBlockButtons>
+           <apex:actionStatus id="LoadingStatus" startText="{!TAG049}"/>        
+        <apex:pageBlockSection > 
+        <apex:pageBlockSectionItem >       
+             <apex:outputLabel style="font:bold;" value="{!TAG052}"/>
+             <apex:selectList value="{!selectedRecordType}"size="1">                
+                <apex:selectOptions value="{!recordTypes}" />
+             </apex:selectList>
+         </apex:pageBlockSectionItem>
+
+        <apex:pageBlockSectionItem > 
+            <apex:outputLabel style="font:bold;" value="{!$ObjectType.SVMXC__RMA_Shipment_Order__c.fields.OwnerId.Label}"/>
+            <apex:inputField style="font:bold;" value="{!rsh.OwnerId}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >       
+            <apex:outputLabel value="{!TAG054}"/>
+            <apex:selectList value="{!selectedLineRecordType}" size="1">                
+                <apex:selectOptions value="{!lineRecordTypes}" />
+            </apex:selectList>
+        </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+     
+
+<apex:pageBlockSection showHeader="false" collapsible="false" columns="2" dir="LTR"> 
+
+ <apex:pageBlockSection collapsible="false"   columns="1" title="{!TAG006}" dir="LTR"/>     
+ <apex:pageBlockSection collapsible="false"   columns="1" title="{!TAG007}" dir="LTR"/> 
+  
+      <apex:pageBlockSectionItem />
+      <!--<apex:outputPanel style="width:90%">-->
+          <apex:pageBlockSectionItem > 
+             <!--<apex:outputLabel styleClass="labelCol"  style="font:bold;" value="{!TAG045}"  /> -->
+             <apex:outputLabel value="{!TAG045}" />
+             <apex:selectList value="{!SelectedAddressType}" onchange="setAddress()" size="1">                
+                <apex:selectOptions value="{!AddressTypes}" />
+             </apex:selectList>
+           </apex:pageBlockSectionItem>      
+        <!--</apex:outputPanel> -->    
+           
+        <apex:inputField id="FLocation1" value="{!rsh.SVMXC__Source_Location__c}"   onblur="setFromAddress()" />   
+        <apex:inputField id="TLocation1"  rendered="{!NOT(DisableSourceAddress)}" value="{!rsh.SVMXC__Destination_Location__c}"   onblur="setToAddress()" />
+        <apex:outputField id="TLocation2"  rendered="{!DisableSourceAddress}"   value="{!rsh.SVMXC__Destination_Location__c}"  />
+            
+        <apex:inputField id="FStreet1"  value="{!rsh.SVMXC__Source_Street__c}" />      
+        <apex:inputField id="TStreet1"    rendered="{!NOT(DisableSourceAddress)}" value="{!rsh.SVMXC__Destination_Street__c}" />    
+        <apex:outputField id="TStreet2"    rendered="{!DisableSourceAddress}"   value="{!rsh.SVMXC__Destination_Street__c}"  />    
+            
+        <apex:inputField id="FCity1" value="{!rsh.SVMXC__Source_City__c}" />
+        <apex:inputField id="TCity1"  rendered="{!NOT(DisableSourceAddress)}" value="{!rsh.SVMXC__Destination_City__c}" />
+        <apex:outputField id="TCity2"  rendered="{!DisableSourceAddress}"   value="{!rsh.SVMXC__Destination_City__c}" />
+     
+        <apex:inputField id="FState1" value="{!rsh.SVMXC__Source_State__c}" /> 
+        <apex:inputField id="TState1"  rendered="{!NOT(DisableSourceAddress)}" value="{!rsh.SVMXC__Destination_State__c}" />
+        <apex:outputField id="TState2"  rendered="{!DisableSourceAddress}"   value="{!rsh.SVMXC__Destination_State__c}" />
+    
+        <apex:inputField id="FPostalCode1" value="{!rsh.SVMXC__Source_Zip__c}" />
+        <apex:inputField id="TPostalCode1"  rendered="{!NOT(DisableSourceAddress)}" value="{!rsh.SVMXC__Destination_Zip__c}" />
+        <apex:outputField id="TPostalCode2"  rendered="{!DisableSourceAddress}"   value="{!rsh.SVMXC__Destination_Zip__c}" />
+    
+        <apex:inputField id="FCountry1" value="{!rsh.SVMXC__Source_Country__c}" />        
+        <apex:inputField id="TCountry1"  rendered="{!NOT(DisableSourceAddress)}" value="{!rsh.SVMXC__Destination_Country__c}" /> 
+        <apex:outputField id="TCountry2"  rendered="{!DisableSourceAddress}"   value="{!rsh.SVMXC__Destination_Country__c}" /> 
+ 
+  
+ 
+</apex:pageBlockSection>
+
+ </apex:pageBlock>     
+ <!-- Block to render Shipment Order from Case or Work Order          -->
+
+    
+ <apex:pageBlock title="{!TAG008}" id="PageBlock2"   mode="edit" >   
+
+        <apex:pageBlockButtons location="top">
+
+
+                            <!--   <apex:commandButton action="{!AddLine}" status="LoadingStatus2" reRender="PageBlock2"  value="{!TAG009}" id="theAddLine1"/> -->
+                            <apex:commandButton action="{!AddLine}" status="LoadingStatus2"  value="{!TAG009}" id="theAddLine1"/>
+                             <apex:commandButton action="{!RemoveLine}" value="{!TAG010}" status="LoadingStatus2"  rendered="{!DisplayTableColumns}" id="theDeleteLines"/>
+                              <apex:commandButton action="{!UpdateLineRecord}" value="{!TAG039}" reRender="PageBlock2"  status="LoadingStatus2"  rendered="{!DisplayTableColumns}"  />   
+                     
+        </apex:pageBlockButtons>
+    
+       <apex:actionStatus id="LoadingStatus2" startText="{!TAG049}"/>  
+  <apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" />   
+       
+         <apex:pageBlockTable id="BlockTable1" value="{!NewRMAShpipmentLines}" var="rshLine" width="100%"  rendered="{!DisplayTableColumns}">
+         
+            <apex:column >             
+                         <apex:facet name="header"> 
+                         
+                          <apex:inputCheckbox value="{!CheckAllLines}" onclick="javascript:customSelectAllOrNoneByCheckbox( document.forms['Page1:Form1'],this);">  
+                          </apex:inputCheckbox>
+                          </apex:facet>                       
+                         
+                          <apex:inputField value="{!rshLine.SVMXC__Select__c}" id="selected" /> 
+            </apex:column>
+         
+         
+            <apex:column >     
+       
+                         <apex:facet name="header">{!$ObjectType.SVMXC__RMA_Shipment_Line__c.fields.SVMXC__Product__c.Label}</apex:facet>
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+
+                          <apex:inputField value="{!rshLine.SVMXC__Product__c}"   />
+                          </apex:outputPanel>
+                        
+            </apex:column>
+            <apex:column >       
+
+                     <apex:facet name="header">{!TAG040}</apex:facet>                    
+                     <apex:inputField value="{!rshLine.SVMXC__Use_Price_From_Pricebook__c}"/>
+            </apex:column>
+
+            <apex:column > 
+
+                         <apex:facet name="header">{!$ObjectType.SVMXC__RMA_Shipment_Line__c.fields.SVMXC__Expected_Quantity2__c.Label}</apex:facet>
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>
+                         <apex:inputField value="{!rshLine.SVMXC__Expected_Quantity2__c}"    />
+                         </apex:outputPanel>
+            </apex:column>
+            
+               <apex:column >   
+
+                         <apex:facet name="header">{!$ObjectType.SVMXC__RMA_Shipment_Line__c.fields.SVMXC__Line_Price2__c.Label}</apex:facet>
+                         <apex:inputField value="{!rshLine.SVMXC__Line_Price2__c}"/>        
+            </apex:column>
+            
+             <apex:column >
+          
+                         <apex:facet name="header">{!$ObjectType.SVMXC__RMA_Shipment_Line__c.fields.SVMXC__Discount_Percentage__c.Label}</apex:facet>
+                         <apex:inputText value="{!rshLine.SVMXC__Discount_Percentage__c}"/>
+            </apex:column>
+          
+               <apex:column >
+        
+                         <apex:facet name="header">{!$ObjectType.SVMXC__RMA_Shipment_Line__c.fields.SVMXC__Expected_Ship_Date__c.Label}</apex:facet>
+                         <apex:inputField value="{!rshLine.SVMXC__Expected_Ship_Date__c}"/>
+            </apex:column>
+ 
+        </apex:pageBlockTable> 
+ 
+   
+ </apex:pageBlock>
+ </apex:form>
+
+</apex:page>

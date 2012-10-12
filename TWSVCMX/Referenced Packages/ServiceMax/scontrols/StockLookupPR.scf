@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Stock Locator</title>
+<link  href="/dCSS/Theme2/default/elements.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/dCSS/Theme2/default/common.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/dCSS/Theme2/default/custom.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/ie7/rlHovers.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/css/assistive.css" media="aural,braille,embossed" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/dStandard.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE($Organization.Id,'<','&lt;'),'>','&gt;'),'"','&quot;')}/{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE($User.Id,'<','&lt;'),'>','&gt;'),'"','&quot;')}/dCustom0.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<link  href="/sCSS/Theme2/default/extended.css" media="handheld,print,projection,screen,tty,tv" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/js/functions.js"></script>
+<script  src="/dJS/en/library.js" type="text/javascript"></script>
+<script src="/soap/ajax/14.0/connection.js" type="text/javascript"></script>
+<script src="/soap/ajax/10.0/apex.js"></script>
+<script type="text/javascript" src="/js/setup.js"></script>
+<script  src="/static/081407/js/picklist.js" type="text/javascript"></script>
+<script type="text/javascript" >
+var MsgList = new Array();
+</script>
+<script type="text/javascript"  src="{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(Scontrol.URL,'<','&lt;'),'>','&gt;'),'"','&quot;')}"  ></script>
+
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;client=gme-servicemaxinc"type="text/javascript"></script>
+</head>
+<body onload="SVMXC_SetupStockLookupPage('{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(Parts_Request_Line__c.Id,'<','&lt;'),'>','&gt;'),'"','&quot;')}', 'PR', '{!SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(User.Id,'<','&lt;'),'>','&gt;'),'"','&quot;')}')"  class="customTab13  listPage" >
+<a name="skiplink"><img src="/s.gif" height='1' width='1' alt="Content Starts Here" class="skiplink"></a>
+
+<div class="bPageTitle">
+<div class="ptBody secondaryPalette">
+	<div style="text-align: center; width: 100%;" class="content"><img src="/s.gif" alt="Service Order"  class="pageTitleIcon">
+	    <div style="font-size: 125%; text-align: left; width: 100%;" class="pageDescription" id="ProdName" name="ProdName"></div>
+	    <br>
+	    <div style="font-size: 125%; text-align: left; width: 100%;" class="pageDescription" id="ReqQty" name="ReqQty"></div>
+	    <br>
+	</div>
+</div>
+
+<div class="bPageBlock secondaryPalette">
+    <form  id="StockLookupPR" name="StockLookupPR" >
+	<div class="pbHeader">
+		<div class="buttons">
+		<input value=" " class="btn" title=" " onclick="return SVMXC_SLKP_ToggleOptions()" id="LAB001" name="LAB001" type="button">&nbsp;
+		</div>
+	</div>
+
+	<div class="pbHeader" id="divOptions" name="divOptions">
+	    <table id="tableOptions" class="list" border="0" cellpadding="20" cellspacing="0">
+		<tr>
+		    <td rowspan="4" style="width: 334px" valign="top">
+			<strong><label id="LAB002" name="LAB002" ></label></strong><br>
+			<div id="userAddress" name="userAddress"></div>
+		    <td colspan="2" style="height: 20px"><strong><label id="LAB021" name="LAB021"></label> </strong></td>
+		</tr>
+		<tr>
+		    <td style="width: 146px">
+			<strong><label id="LAB022" name="LAB022"></label></strong>&nbsp;</td>
+		    <td style="width: 330px">
+			<input id="Radius" name="Radius" value="0" type="text" />
+			<select class="select" id="LAB020" name="LAB020">			    
+			</select>
+		    </td>
+		</tr>
+		<tr>
+		    <td style="width: 146px">
+			<strong><label id="LAB003" name="LAB003" ></label></strong>
+		    </td>
+		    <td style="width: 330px">
+			<select class="select" id="LAB019" name="LAB019">			   
+			</select>
+		    </td>
+		</tr>
+	    </table>
+	</div>
+
+	<div class="pbBody" id="divGrid" name="divGrid">
+	    <div class="pbInnerFooter"><div class="buttons">
+		    <input value="" class="btn" title="" onclick="return SVMXC_SLKP_FindStock();" id="LAB004" name="LAB004" type="button">&nbsp;
+		    <input value="" class="btn" title="" onclick="return SVMXC_SLKP_ToggleResults();" id="LAB005" name="LAB005" type="button">&nbsp;
+		    <input value="" class="btn" title="" onclick="return SVMXC_SLKP_ToggleMap();" id="LAB006" name="LAB006" type="button">&nbsp;
+		    <input value="" class="btn" title="" onclick="return SVMXC_SLKP_RequestStock();" id="LAB007" name="LAB007" type="button">&nbsp;
+		    <input value="" class="btn" title="" id="LAB008" name="LAB008" type="button" onclick="CloseWindow();" >
+	    </div>
+
+	    <div id="divResults" name="divResults">
+		<table id="tableStock" class="list" border="0" cellpadding="0" cellspacing="0">
+		    <tbody id="list_tbody" >
+		    </tbody>
+		</table>
+	    </div>
+	</div>
+	<br>
+	<table id="tableStock" class="list" border="0" cellpadding="5" cellspacing="0">
+	<tr>
+	    <td width="75%"><div class="detailList" id="divMap" name="divMap" style="height:600px;"></div></td>
+	    <td width="25%"><div id="divRoute" style="height:600px;"></div></td>
+	</tr>
+   </form>
+</div>
+
+</body>
+</html>

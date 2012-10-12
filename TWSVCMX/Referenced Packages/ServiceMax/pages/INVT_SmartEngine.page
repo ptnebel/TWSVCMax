@@ -1,0 +1,219 @@
+<apex:page id="page" title="{!PLTAG003}{!TagsUtils.TAG002} {!hdrName}" controller="SVMXC.INVT_SmartEngine"  sidebar="true" showHeader="true" > 
+    <style>
+        .activeTab {background-color: #8599B1 ;
+            margin:8px;
+            color: White;
+            background-image:none;
+            no-repeat;
+            font-size:1.2em;
+        }
+        .inactiveTab {
+            background-color : #B0BFD2 ;
+            color:Black;
+            background-image:none;
+            font-size:1.2em;
+        }
+        .disableTab {
+            background-color : Lightgrey ;
+            color:Black;
+            background-image:none;
+            font-size:1.2em;
+        }
+    </style>
+    
+    <apex:form id="form">
+
+        
+        <apex:pageBlock id="BlockHeader" title="" helpTitle="{!TagsUtils.TAG053}" helpUrl="{!TagsUtils.hlpUrl}" mode="edit">  
+            <apex:inputHidden value="{!DuplicateSerialWarned}"/>
+            <apex:pageMessages rendered="{!NOT(serSelectionMess)}"/>         
+            <script type="text/javascript">
+
+                function saveaction()
+                {
+                   dosave();
+                   document.getElementById('page:form:BlockHeader:pgblockbuttons:doSubmit').disabled=true;
+                   document.getElementById('page:form:BlockHeader:pgblockbuttons:doSubmit').className = 'btnDisabled';
+                }
+                function oncompleteofsubmit(){
+                    if(!{!btnisdisabled} && {!IsSubmitEnabled})
+                    {
+                           document.getElementById('page:form:BlockHeader:pgblockbuttons:doSubmit').className = 'btn';
+                           document.getElementById('page:form:BlockHeader:pgblockbuttons:doSubmit').disabled=false;
+                    }
+                }
+            </script>
+             
+            <apex:pageBlockButtons location="top" id="pgblockbuttons">
+                        <!--<apex:commandButton action="{!SVMX_DoSubmit}" disabled="{!NOT(IsSubmitEnabled)}" value="{!TagsUtils.TAG003}" reRender="block2,BlockHeader" id="doSubmit" status="Status1"/>-->
+                        <!-- Newly added below 1 line to deal with defect no. 1705 24/02/2011 -->
+                        <apex:commandButton value="{!TagsUtils.TAG003}" id="doSubmit" onclick="saveaction()" disabled="{!NOT(IsSubmitEnabled)}" rerender="pgblockbuttons" status="Status1"/>
+                        <apex:commandButton action="{!SVMX_DoCancel}" value="{!TagsUtils.TAG004}" id="doCancel" reRender="block2,BlockHeader" status="Status1"/>
+            </apex:pageBlockButtons>
+           <apex:actionStatus id="Status1"  startText="{!TagsUtils.TAG013}"/>
+           <!-- Newly added below 1 line to deal with defect no. 1705 24/02/2011 -->
+           <apex:actionFunction action="{!SVMX_DoSubmit}" name="dosave" status="Status1" rerender="block2,BlockHeader" oncomplete="oncompleteofsubmit()"/>
+            <apex:panelBar id="PanelBar" rendered="true">
+                <apex:panelBarItem label="{!PLTAG003}{!TagsUtils.TAG002} {!hdrName}" headerClass="inactiveTab" Id="PBItem" expanded="true">  
+                    <apex:pageBlockTable id="HeaderTable" value="{!xLines}" var="xL" >        
+                        <apex:column width="5%" rendered="{!isInventoryEnabled && isLocationInvolved}">       
+                            <apex:facet name="header">{!TagsUtils.TAG014}</apex:facet>
+                            <apex:inputCheckBox value="{!xL.selected}" OnClick="SelectLine();"/>
+                        </apex:column>
+                        <apex:column width="25%">
+                            <apex:facet name="header">{!LineLable}</apex:facet>
+                            <apex:outputText value="{!xL.LineName}"/ >
+                        </apex:column>
+                        <apex:column width="25%">
+                            <apex:facet name="header">{!ProductLable}</apex:facet>
+                            <apex:outputText value="{!xL.prodName}"/ >
+                        </apex:column>
+                        <apex:column width="15%">
+                            <apex:facet name="header">{!OrignalQuantityLable}</apex:facet>    
+                            <apex:outputText value="{!xL.exQty}" />
+                        </apex:column>
+                        <apex:column width="15%" rendered="{!disableUsrToEnterQty}" id="ColumnActualQuantity">      
+                            <apex:facet name="header">{!ActualQuantityProductLable}</apex:facet>    
+                            <apex:inputText id="ActualQuantity" style="width:60px;" value="{!xL.trQty}" required="true" /> 
+                        </apex:column>    
+                        <apex:column width="10%" rendered="{!disableUsrToEnterQty && invProcess.Allow_Partial_Closure}" >       
+                            <apex:facet name="header">{!TagsUtils.TAG009}</apex:facet>
+                            <apex:inputCheckBox value="{!xL.closeLine}"/>
+                        </apex:column>
+                    </apex:pageBlockTable>
+                    <apex:actionFunction name="SelectLine" action="{!Do_SelectLine}" rerender="block2,BlockHeader" status="Status1"/>           
+                </apex:panelBarItem>
+            </apex:panelBar>
+        </apex:pageBlock>  
+        
+        <!-- Block for Serial Selection -->
+        <apex:pageBlock rendered="{!invProcess.Enable_Serial_Selection && isInventoryEnabled}" id="block2"  helpTitle="{!TagsUtils.TAG053}" helpUrl="{!TagsUtils.hlpUrl}" mode="edit">   
+            <apex:actionStatus id="LodingStatus2"  startText="{!TagsUtils.TAG013}" /> 
+            
+            <apex:pageBlockButtons location="both">                
+                <apex:commandButton action="{!SVMX_moveToPrevXLine}"  disabled="{!disablePrev}" value="{!TagsUtils.TAG011}" id="thePrev" reRender="block2,BlockHeader" status="LodingStatus2"/>
+                <apex:commandButton action="{!SVMX_moveToNextXLine}"  disabled="{!disableNxt}" value="{!TagsUtils.TAG012}" id="theNext" reRender="block2,BlockHeader" status="LodingStatus2"/>
+            </apex:pageBlockButtons>
+            <apex:pageMessages rendered="{!serSelectionMess}"/>
+            
+            <apex:pageBlockSection showHeader="false" rendered="{!NOT(showSerialSel) && IsValidxLines}" collapsible="false" dir="LTR" title="" columns="1"> 
+                <!-- Display this when Product is not serialize-->
+                <apex:outputLabel value="">{!TagsUtils.TAG054}</apex:outputLabel> 
+            </apex:pageBlockSection>
+            
+             <apex:panelBar id="PanelBar" rendered="{!showSerialSel && IsValidxLines}">
+                <apex:panelBarItem label="{!TagsUtils.TAG001}" headerClass="inactiveTab" Id="PBItem" expanded="true">            
+                    <apex:panelGrid columns="10" id="theMainGrid" width="100%">                        
+                        <apex:panelGroup id="PnlGrp2">
+                            <apex:outputText value=""><b>{!ProductLable}{!TagsUtils.TAG002}</b>&nbsp;{!selectedXLine.prodName}</apex:outputText>
+                        </apex:panelGroup>                        
+                        <!-- <apex:panelGroup style="float:center;" id="PnlGrp1">             
+                            <center><apex:outputLabel value=""><b>{!OrignalQuantityLable}&nbsp;{!TagsUtils.TAG002}</b>&nbsp;{!selectedXLine.exQty}</apex:outputLabel></center>
+                        </apex:panelGroup> -->
+                        <!-- <apex:panelGroup style="float:right;" id="PnlGrp3">             
+                            <apex:outputLabel value=""><b>{!TagsUtils.TAG050}</b>&nbsp;
+                            <apex:inputCheckBox id="BarCodecheckbox" disabled="{!NOT(invProcess.Enable_Bar_Code_Entry)}" OnClick="SelectBarCodeScanning();" value="{!IsbarCodeScanning}" /></apex:outputLabel>
+                            
+                            <apex:actionFunction name="SelectBarCodeScanning" action="{!Do_SelectBarCodeScanning}" rerender="block2" status="LodingStatus2" />           
+                        </apex:panelGroup>-->
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </apex:panelGrid>      
+               <hr/>
+            <apex:pageBlockSection id="serialSelBlock2" showHeader="false" rendered="{!showSerialSel}" collapsible="false" dir="LTR" title="Serial Selection"   columns="3"> 
+                 <script type="text/javascript">   
+                    // barcode function
+                    function displayunicode(e)
+                    {
+                        //var checkboxvalue = document.getElementById("checkbox").checked 
+                        tab = (e.which) ? e.which : e.keyCode ;
+                        if(tab==9 && {!IsbarCodeScanning} )// process when tab and checkbox is checked
+                        {
+                           addserialnumber();
+                        }
+                    }
+                </script>
+                <center>
+                    <apex:datatable value="{!selectedXLine}" var="ta"  columns="3" >
+                        <apex:column >
+                        <apex:pageBlockSectionItem >                            
+                            <apex:outputLabel rendered="{!isSourcelocationExists}"><b>{!TagsUtils.TAG015}</b>&nbsp;{!ta.FromLocationName}</apex:outputLabel>
+                        </apex:pageBlockSectionItem>
+                        <br/>
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel rendered="{!isSourcelocationExists}"><b>{!TagsUtils.TAG026}</b>&nbsp;{!invProcess.Source_Status}</apex:outputLabel>
+                        </apex:pageBlockSectionItem>
+                        <br/><br/>
+                        
+                            <apex:pageBlockSectionItem >
+                                <apex:selectList value="{!fromSerial}" multiselect="true" size="15" style="width:200px">
+                                    <apex:selectOptions value="{!frmOptions}"/>
+                                </apex:selectList>
+                            </apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                            <br/>
+                            <apex:pageBlockSectionItem >
+                                <apex:outputText value="{!TagsUtils.TAG017}"/>
+                            </apex:pageBlockSectionItem>
+                            <br/>
+                            <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                            
+                            <apex:pageBlockSectionItem >
+                                <apex:inputTextarea value="{!snString}"  style="width:195px;height:111px"   />         
+                            </apex:pageBlockSectionItem>
+           
+                    </apex:column>
+                   <apex:column >  
+                       <apex:outputLabel value="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</apex:outputLabel>
+                    </apex:column>
+               
+                   <apex:column style="align:center">                    
+                       <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>  
+                       <apex:commandButton reRender="block2" action="{!SVMX_moveSerialNumberToTargetList}" value="{!TagsUtils.TAG018}" status="LodingStatus2" disabled="{!disableSerialSel}"  />
+                       <br/><br/>
+                       <apex:commandButton reRender="block2" action="{!SVMX_removeSerialFrmTarget}" value="{!TagsUtils.TAG019}" status="LodingStatus2" disabled="{!disableSerialSel}" />                         
+                   </apex:column>
+                   
+                   <apex:column >
+                           <apex:outputLabel value="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</apex:outputLabel>
+                   </apex:column>
+                   
+                    <apex:column >    
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel rendered="{!isTargetlocationExists}"><b>{!TagsUtils.TAG016}</b>&nbsp;{!ta.ToLocationName}</apex:outputLabel>
+                        </apex:pageBlockSectionItem>
+                        <br/>       
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel rendered="{!isTargetlocationExists}"><b>{!TagsUtils.TAG026}</b>&nbsp;{!invProcess.Target_Status}</apex:outputLabel>
+                        </apex:pageBlockSectionItem>
+                        <br/>
+                        <br/>
+                        <apex:pageBlockSectionItem /> 
+                        <apex:actionFunction name="addserialnumber" action="{!SVMX_addSerialNumberToTargetList}" rerender="block2" status="LodingStatus2" />           
+                        <apex:pageBlockSectionItem >
+                            <apex:inputText value="{!enteredSn}" id="enteredSn" onkeydown="javascript:displayunicode(event);" style="width:150px;"/><!-- onblur="javascript:if({!IsbarCodeScanning}) addserialnumber();" -->
+                            <apex:commandButton id="addbutton" reRender="block2" action="{!SVMX_addSerialNumberToTargetList}" value="{!TagsUtils.TAG062}" disabled="{!disableSerialSel}" status="LodingStatus2"/>                  
+                        </apex:pageBlockSectionItem>
+                        <br/>
+                        <apex:pageBlockSectionItem >
+                            <apex:inputText value="{!quickAddCount}" id="quickAddCount"  style="width:115px;" />
+                            <apex:commandButton reRender="block2" action="{!SVMX_quickAddSerialNumberToTargetList}" value="{!TagsUtils.TAG063}" disabled="{!disableSerialSel}" status="LodingStatus2"/>
+                        </apex:pageBlockSectionItem>
+                        <br/>
+                        <apex:pageBlockSectionItem >
+                            <apex:selectList value="{!toSerial}" multiselect="true"  size="20" style="width:200px">
+                                <apex:selectOptions value="{!toOptions}"/>
+                            </apex:selectList>
+                        </apex:pageBlockSectionItem>
+                    </apex:column> 
+                </apex:datatable>
+            </center> 
+        </apex:pageBlockSection>
+    </apex:panelBarItem>
+</apex:panelBar>  
+       </apex:pageBlock>     
+       <!-- <script type="text/javascript">   
+        document.getElementById('page:form:block2:PanelBar:PBItem:serialSelBlock2:j_id85:0:j_id128:enteredSn').focus();
+       </script> -->
+    </apex:form>
+</apex:page>

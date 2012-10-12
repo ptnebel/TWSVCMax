@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Dispatch_Console_Settings__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Dispatch Console Settings</label>
+        <length>32000</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>FaceTime_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>User&apos;s FaceTime login ID. Used to make FaceTime calls in ServiceMax iPad Client. If this is left blank, user&apos;s phone number and email are used for the call.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Enter this user&apos;s FaceTime login ID if available. This is used to make FaceTime calls in ServiceMax iPad Client. If this is left blank, user&apos;s phone number and email are used for the call.</inlineHelpText>
+        <label>FaceTime ID</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Is_Super_Dispatcher__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag to indicate if user is Super Dispatcher.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag to indicate if user is Super Dispatcher.</inlineHelpText>
+        <label>Is Super Dispatcher?</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Select</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+</CustomObject>

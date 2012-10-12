@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Warranty Template allows organizations to define and standardize their warranty offering and apply it for a range of products automatically. A warranty template can be used to define the type and scope of coverage in a warranty such as parts, labor and expenses, and can then be associated with one or more products. When installed product records are created in ServiceMax, warranty will be calculated automatically based on the pre-defined warranty template associated with the product.</description>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>All_Products_Covered__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if all products involved in the repair will be covered by this warranty. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if all products involved in the repair will be covered by this warranty. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>All Products Covered(DO NOT USE)</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>All_Services_Covered__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if all services performed will be covered by this warranty. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if all services performed will be covered by this warranty. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>All Services Covered(DO NOT USE)</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Coverage_Effective_From2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Specify the date field name from Installed Product object to be considered in warranty creation.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Specify the date field name from Installed Product object to be considered in warranty creation.</inlineHelpText>
+        <label>Coverage Effective From</label>
+        <length>150</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Coverage_Effective_From__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Specify the date field name from Installed Product object to be considered in warranty creation.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Specify the date field name from Installed Product object to be considered in warranty creation.</inlineHelpText>
+        <label>Coverage Effective From(DO NOT USE)</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Ship Date</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Install Date</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Entry Date</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Duration_of_Expenses__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A number indicating the duration of coverage for expenses</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A number indicating the duration of coverage for expenses</inlineHelpText>
+        <label>Duration of Expenses Coverage</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Duration_of_Material_Coverage__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A number indicating the duration of coverage for parts</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A number indicating the duration of coverage for parts</inlineHelpText>
+        <label>Duration of Material Coverage</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Duration_of_Time_Coverage__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A number indicating the duration of coverage for labor</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A number indicating the duration of coverage for labor.</inlineHelpText>
+        <label>Duration of Labor Coverage</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exchange_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of exchange allowed as per the warranty template</description>
+        <externalId>false</externalId>
+        <label>Exchange Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Advance Exchange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Return Exchange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Exclusions__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A free format text to define any exceptions not covered by the standard coverage of the template</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Define any exceptions not covered by the standard coverage of the template</inlineHelpText>
+        <label>Exclusions</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Expenses_Covered__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A number between 1 and 100 indicating the percentage of coverage on expenses</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A number between 1 and 100 indicating the percentage of coverage on expenses</inlineHelpText>
+        <label>Expenses % Covered</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Invoice_Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if an invoice is always raised at the end of service delivery. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if an invoice is always raised at the end of service delivery. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>Invoice Required</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Loaner_Provided__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if customer is given a temporary replacement product when the covered product is under repair. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if customer is given a temporary replacement product when the covered product is under repair. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>Loaner Provided</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Material_Covered__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A number between 1 and 100 indicating the percentage of coverage on parts</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A number between 1 and 100 indicating the percentage of coverage on parts</inlineHelpText>
+        <label>Material % Covered</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Onsite_Repair__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if customer is eligible for onsite repair when entitled by this warranty. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if customer is eligible for onsite repair when entitled by this warranty. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>Onsite Repair</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>RMA_Required__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if an RMA is always required or an RMA is implied when this warranty is used to entitle a customer. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if an RMA is always required or an RMA is implied when this warranty is used to entitle a customer. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>RMA Required</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Shipment_Allowed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if customer shipments are covered by the warranty. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if customer shipments are covered by the warranty. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>Shipment Allowed</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Template_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates if this template is used for warranty calculation or referred in service contracts. When creating warranty for installed products, only templates with type Warranty are considered</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if this template is used for warranty calculation or used as a reference in service contracts. When creating warranty for installed products, only templates with type Warranty are considered</inlineHelpText>
+        <label>Template Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Warranty</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Service Contract</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Time_Covered__c</fullName>
+        <deprecated>false</deprecated>
+        <description>A number between 1 and 100 indicating the percentage of coverage on labor</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A number between 1 and 100 indicating the percentage of coverage on labor</inlineHelpText>
+        <label>Labor % Covered</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Transferable__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if this warranty is transferable to other products under special circumstances. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if this warranty is transferable to other products under special circumstances. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>Transferable</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Unit_of_Time_Expenses__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Combined with duration of coverage, this qualifies the expenses coverage duration in days, weeks, months or years</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Combined with duration of coverage, this qualifies the expenses coverage duration in days, weeks, months or years</inlineHelpText>
+        <label>Unit of Time for Expenses Coverage</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Days</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Weeks</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Months</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Years</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Unit_of_Time_Material__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Combined with duration of coverage, this qualifies the material coverage duration in days, weeks, months or years</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Combined with duration of coverage, this qualifies the material coverage duration in days, weeks, months or years</inlineHelpText>
+        <label>Unit of Time for Material Coverage</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Days</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Weeks</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Months</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Years</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Unit_of_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Combined with duration of coverage, this qualifies the labor coverage duration in days, weeks, months or years</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Combined with duration of coverage, this qualifies the labor coverage duration in days, weeks, months or years</inlineHelpText>
+        <label>Unit of Time for Labor Coverage</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Days</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Weeks</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Months</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Years</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Walk_in_Allowed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicates if the customer is authorized to walk into a service center for service. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicates if the customer is authorized to walk into a service center for service. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>Walk-in Allowed</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <label>Warranty Terms</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Coverage_Effective_From__c</columns>
+        <columns>Time_Covered__c</columns>
+        <columns>Material_Covered__c</columns>
+        <columns>Expenses_Covered__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+        <language>en_US</language>
+    </listViews>
+    <listViews>
+        <fullName>All_Warranty_Terms</fullName>
+        <columns>NAME</columns>
+        <columns>Coverage_Effective_From2__c</columns>
+        <columns>Material_Covered__c</columns>
+        <columns>Time_Covered__c</columns>
+        <columns>Expenses_Covered__c</columns>
+        <columns>UPDATEDBY_USER</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Warranty Terms</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <label>Template Name</label>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Warranty Terms</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>CREATEDBY_USER</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CREATED_DATE</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>CREATEDBY_USER</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>CREATED_DATE</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CREATEDBY_USER</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CREATED_DATE</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>CREATEDBY_USER</searchFilterFields>
+        <searchFilterFields>CREATED_DATE</searchFilterFields>
+        <searchResultsAdditionalFields>CREATEDBY_USER</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CREATED_DATE</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Private</sharingModel>
+    <validationRules>
+        <fullName>Expenses_Duration_UoT_Check</fullName>
+        <active>true</active>
+        <description>If Expenses coverage % is specified, duration and unit of time should be specified too.</description>
+        <errorConditionFormula>AND(NOT ISNULL( Expenses_Covered__c ), OR( ISNULL(  Duration_of_Expenses__c ), ISPICKVAL(  Unit_of_Time_Expenses__c , &quot;&quot;)))</errorConditionFormula>
+        <errorDisplayField>Unit_of_Time_Expenses__c</errorDisplayField>
+        <errorMessage>Please specify the duration and unit of time of Expenses coverage.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Labor_Duration_UoT_Check</fullName>
+        <active>true</active>
+        <description>If Labor coverage % is specified, duration and unit of time should be specified too.</description>
+        <errorConditionFormula>AND(NOT ISNULL( Time_Covered__c ), OR( ISNULL(  Duration_of_Time_Coverage__c ), ISPICKVAL(  Unit_of_Time__c, &quot;&quot;)))</errorConditionFormula>
+        <errorDisplayField>Unit_of_Time__c</errorDisplayField>
+        <errorMessage>Please specify the duration and unit of time of Labor coverage.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Material_Duration_UoT_Check</fullName>
+        <active>true</active>
+        <description>If Material coverage % is specified, duration and unit of time should be specified too.</description>
+        <errorConditionFormula>AND(NOT ISNULL(Material_Covered__c), OR( ISNULL( Duration_of_Material_Coverage__c ), ISPICKVAL( Unit_of_Time_Material__c, &quot;&quot;)))</errorConditionFormula>
+        <errorDisplayField>Unit_of_Time_Material__c</errorDisplayField>
+        <errorMessage>Please specify the duration and unit of time of Material coverage.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Coverage_By_Counters</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Coverage By Counters</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__IPRD_CoverageByCounters_Warranty?PId={!Service_Template__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Warranty_Definition</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Configure Start Date</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>window.open(&quot;/apex/SVMXC__IPRD_WarrantyDefinition?wid={!Service_Template__c.Id}&quot;,&quot;SVMX_Warrenty_definition&quot;,&quot;width=600,height=200&quot;)</url>
+    </webLinks>
+</CustomObject>

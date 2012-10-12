@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>Service Contract documents details of entitlement provided to a customer for products bought. Usually shipped/delivered products are covered for a predefined period through a basic warranty. If customers wish to get coverage for repairs beyond the normal warranty period, they normally purchase extended service contracts. Service contract is interchangeably referred to as a service agreement as well.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>true</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Activation_Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Service/Maintenance Contract Activation Notes</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Service/Maintenance Contract Activation Notes</inlineHelpText>
+        <label>Activation Notes</label>
+        <length>32000</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag indicating if this contract is currently active or not. This flag is checked automatically when you activate a contract</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag indicating if this contract is currently active or not. This flag is checked automatically when you activate a contract</inlineHelpText>
+        <label>Active</label>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>All_Contacts_Covered__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag that indicates if all contacts from this customer are entitled for support. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag that indicates if all contacts from this customer are entitled for support. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>All Contacts Covered</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>All_Products_Covered__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag that indicates if this contract covers all products purchased by this customer.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag that indicates if this contract covers all products purchased by this customer.</inlineHelpText>
+        <label>All Products Covered</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>All_Services_Covered__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag that indicates if the customer is entitled to all types of services offered. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag that indicates if the customer is entitled to all types of services offered. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>All Services Covered</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>All_Sites_Covered__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag that indicates if all customer locations are covered by this contract. This flag does not drive any functionality in ServiceMax and is for informational purposes only</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag that indicates if all customer locations are covered by this contract. This flag does not drive any functionality in ServiceMax and is for informational purposes only</inlineHelpText>
+        <label>All Sites Covered</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Billing_Schedule__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Indicates the frequency of how the customer prefers to be invoiced for the contract amount</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates the frequency of how the customer prefers to be invoiced for the contract amount</inlineHelpText>
+        <label>Billing Schedule</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Annual</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Semi Annual</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Full Upfront</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Business_Hours__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Business Hours</label>
+        <referenceTo>BusinessHours</referenceTo>
+        <relationshipName>Service_Maintenance_Contracts</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Cancelation_Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Service/Maintenance Contract Cancelation Notes</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Service/Maintenance Contract Cancelation Notes</inlineHelpText>
+        <label>Cancelation Notes</label>
+        <length>32000</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Canceled_By__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the salesforce user  that canceled this service contract</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the salesforce user  that canceled this service contract</inlineHelpText>
+        <label>Canceled By</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>R00N70000001hzcwEAA</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Canceled_On__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date/time on which this service contract was canceled</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date/time on which this service contract was canceled</inlineHelpText>
+        <label>Canceled On</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Company__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Customer to whom this service contract is sold. Is a lookup to an existing salesforce account record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Customer to whom this service contract is sold. Is a lookup to an existing salesforce account record</inlineHelpText>
+        <label>Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Service/Maintenance Contracts</relationshipLabel>
+        <relationshipName>R00N70000001hzYIEAY</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Contact__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the contact person from the customer account associated with this contract. Is a lookup to an existing salesforce contact record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the contact person from the customer account associated with this contract. Is a lookup to an existing salesforce contact record</inlineHelpText>
+        <label>Contact</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipName>R00N70000001hzcEEAQ</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Contract_Price2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total price of the service contract before discount</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Total price of the service contract before discount</inlineHelpText>
+        <label>Contract Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Contract_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Total price of the service contract before discount</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Total price of the service contract before discount</inlineHelpText>
+        <label>Contract Price(DO NOT USE)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Default_Group_Member__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Not used</description>
+        <externalId>false</externalId>
+        <label>Default Group Member</label>
+        <referenceTo>Service_Group_Members__c</referenceTo>
+        <relationshipLabel>Service Contracts (Default Group Member)</relationshipLabel>
+        <relationshipName>Service_Contract</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Default_Service_Group__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Not used</description>
+        <externalId>false</externalId>
+        <label>Default Service Group</label>
+        <referenceTo>Service_Group__c</referenceTo>
+        <relationshipLabel>Service Contracts</relationshipLabel>
+        <relationshipName>Service_Contract</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Discount__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Percentage discount to be applied on the contract price</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Percentage discount on the contract price</inlineHelpText>
+        <label>Discount%</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
+        <fullName>Discounted_Price2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Contract Price minus discount. Calculated automatically</description>
+        <externalId>false</externalId>
+        <formula>Contract_Price2__c - (Contract_Price2__c * Discount__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Contract Price minus discount. Calculated automatically</inlineHelpText>
+        <label>Discounted Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Discounted_Price__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Contract Price minus discount. Calculated automatically</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Contract Price minus discount. Calculated automatically</inlineHelpText>
+        <label>Discounted Price(DO NOT USE)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>End_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>End date of the service contract</description>
+        <externalId>false</externalId>
+        <inlineHelpText>End date of the service contract</inlineHelpText>
+        <label>End Date</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>EndpointURL__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Not used</description>
+        <externalId>false</externalId>
+        <formula>$Api.Enterprise_Server_URL_70</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>EndpointURL</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Exchange_Type__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Type of exchange allowed as per the service contract</description>
+        <externalId>false</externalId>
+        <label>Exchange Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Advance Exchange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Return Exchange</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Primary_Technician__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Primary technician for this service contract. Reference to an existing Technician record in ServiceMax</description>
+        <externalId>false</externalId>
+        <label>Primary Technician</label>
+        <referenceTo>Service_Group_Members__c</referenceTo>
+        <relationshipLabel>Service Contracts (Primary Technician)</relationshipLabel>
+        <relationshipName>Service_Contract_Primary_Tech</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Renewal_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Date on which the contract was renewed</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date on which the contract was renewed</inlineHelpText>
+        <label>Renewal Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Renewal_Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Service/Maintenance Contract Renewal Notes</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Service/Maintenance Contract Renewal Notes</inlineHelpText>
+        <label>Renewal Notes</label>
+        <length>32000</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Renewal_Number__c</fullName>
+        <deprecated>false</deprecated>
+        <description>This is incremented automatically when an existing service contract is renewed</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This is incremented automatically when an existing service contract is renewed</inlineHelpText>
+        <label>Renewal Number</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Renewed_From__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>The original service contract from which this contract was renewed. Is populated automatically when a service contract is renewed</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The original service contract from which this contract was renewed. Is populated automatically when a service contract is renewed</inlineHelpText>
+        <label>Renewed From</label>
+        <referenceTo>Service_Contract__c</referenceTo>
+        <relationshipLabel>Renewal History</relationshipLabel>
+        <relationshipName>R00N70000001hzdoEAA</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>SESSION_ID__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Not used</description>
+        <externalId>false</externalId>
+        <formula>$Api.Session_ID</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>SESSION ID</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Sales_Rep__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the internal sales representative responsible for or involved in selling this contract. Is a lookup to a valid salesforce user</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the internal sales representative responsible for or involved in selling this contract. Is a lookup to a valid salesforce user</inlineHelpText>
+        <label>Sales Rep</label>
+        <referenceTo>User</referenceTo>
+        <relationshipName>R00N70000001hzbvEAA</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Field to bind check box in List of Service Contract Line records on Visualforce page with controller.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Field to bind check box in List of Service Contract Line records on Visualforce page with controller.</inlineHelpText>
+        <label>Select</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Service_Contract_Notes__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Free text that shows any exceptions or conditions that apply when entitling the customer based on this contract. Information entered here is displayed on the Case Entitlement when this contract is used.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Define exceptions or conditions that apply when entitling the customer based on this contract. Information entered here is displayed on the Case Entitlement when this contract is used.</inlineHelpText>
+        <label>Service Contract Notes</label>
+        <length>32000</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>6</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Service_Level__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Service level the customer is entitled to by this contract. Is a lookup to an existing service level record</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Service level the customer is entitled to by this contract. Is a lookup to an existing service level record</inlineHelpText>
+        <label>SLA Terms</label>
+        <referenceTo>Service_Level__c</referenceTo>
+        <relationshipLabel>Service/Maintenance Contracts</relationshipLabel>
+        <relationshipName>R00N70000001hzdfEAA</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Start_Date__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Start date of the service contract</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Start date of the service contract</inlineHelpText>
+        <label>Start Date</label>
+        <required>false</required>
+        <trackFeedHistory>true</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Weeks_To_Renewal__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Number of weeks before the contract expires. Calculated automatically</description>
+        <externalId>false</externalId>
+        <formula>(End_Date__c - TODAY()) / 7</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Weeks To Renewal</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <label>Service/Maintenance Contract</label>
+    <listViews>
+        <fullName>Active_Service_Contracts</fullName>
+        <columns>NAME</columns>
+        <columns>Company__c</columns>
+        <columns>Contact__c</columns>
+        <columns>Renewal_Date__c</columns>
+        <columns>Renewal_Number__c</columns>
+        <columns>Start_Date__c</columns>
+        <columns>End_Date__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Active__c</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <label>Active Service Contracts</label>
+        <language>en_US</language>
+    </listViews>
+    <listViews>
+        <fullName>Inactive_Service_Contracts</fullName>
+        <columns>NAME</columns>
+        <columns>Active__c</columns>
+        <columns>Company__c</columns>
+        <columns>Contact__c</columns>
+        <columns>Renewal_Date__c</columns>
+        <columns>Renewal_Number__c</columns>
+        <columns>Start_Date__c</columns>
+        <columns>End_Date__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Active__c</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <label>Inactive Service Contracts</label>
+        <language>en_US</language>
+    </listViews>
+    <nameField>
+        <label>Contract Name/Number</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+    </nameField>
+    <pluralLabel>Service/Maintenance Contracts</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Account_Name__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Service_Level__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Contact__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Primary_Technician__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Start_Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>End_Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Weeks_To_Renewal__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Active__c</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Company__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Contact__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Active__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Renewal_Date__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Renewal_Number__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Start_Date__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>End_Date__c</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Company__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Contact__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Active__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Renewal_Date__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Renewal_Number__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>Start_Date__c</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>End_Date__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Company__c</searchFilterFields>
+        <searchFilterFields>Contact__c</searchFilterFields>
+        <searchFilterFields>Active__c</searchFilterFields>
+        <searchFilterFields>Renewal_Date__c</searchFilterFields>
+        <searchFilterFields>Renewal_Number__c</searchFilterFields>
+        <searchFilterFields>Start_Date__c</searchFilterFields>
+        <searchFilterFields>End_Date__c</searchFilterFields>
+        <searchFilterFields>Contract_Price2__c</searchFilterFields>
+        <searchResultsAdditionalFields>Company__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Contact__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Active__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Renewal_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Renewal_Number__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Start_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>End_Date__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Private</sharingModel>
+    <validationRules>
+        <fullName>Service_Contract_Future_End_Date</fullName>
+        <active>true</active>
+        <description>Service contract end date should be in the future</description>
+        <errorConditionFormula>AND(ISNEW(),  End_Date__c  &lt;  TODAY())</errorConditionFormula>
+        <errorDisplayField>End_Date__c</errorDisplayField>
+        <errorMessage>End date should be a future date.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Service_Contract_Start_End_Date</fullName>
+        <active>true</active>
+        <description>Service contract should have valid start and end dates</description>
+        <errorConditionFormula>End_Date__c  &lt;  Start_Date__c</errorConditionFormula>
+        <errorDisplayField>End_Date__c</errorDisplayField>
+        <errorMessage>End date should be greater or equal to Start date.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Activate_Contract</fullName>
+        <availability>online</availability>
+        <description>Activate service contract</description>
+        <displayType>button</displayType>
+        <height>450</height>
+        <linkType>url</linkType>
+        <masterLabel>Activate Contract</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SCON_Activation?id={!Service_Contract__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Cancel_Contract</fullName>
+        <availability>online</availability>
+        <description>Cancel Service Contract</description>
+        <displayType>button</displayType>
+        <height>250</height>
+        <linkType>url</linkType>
+        <masterLabel>Cancel Contract</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SCON_Cancelation?id={!Service_Contract__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Coverage_By_Counters</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>Coverage By Counters</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__IPRD_CoverageByCounters_SContract?PId={!Service_Contract__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Preventive_Maintenance</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Preventive Maintenance</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__PREV_ManagePMPlans?scid={!Service_Contract__c.Id}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Print_Contract</fullName>
+        <availability>online</availability>
+        <description>Launch mail merge to print service contract details</description>
+        <displayType>button</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Generate Document(s)</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/apex/SVMX_Select_VF_Template?id={!Service_Contract__c.Id}&amp;ObjName=&quot;SVMXC.Service_Contract&quot;</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Renew_Contract</fullName>
+        <availability>online</availability>
+        <description>Renew Service Contract</description>
+        <displayType>button</displayType>
+        <height>450</height>
+        <linkType>url</linkType>
+        <masterLabel>Renew Contract</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <url>/apex/SVMXC__SCON_Renewal?id={!Service_Contract__c.Id}</url>
+    </webLinks>
+</CustomObject>

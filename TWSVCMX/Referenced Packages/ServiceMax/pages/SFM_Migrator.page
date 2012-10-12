@@ -1,0 +1,28 @@
+<apex:page controller="SVMXC.SFM_Migrator" standardStylesheets="false">
+<center>
+<style type="text/css" media="screen">
+    html, body { width:100%;height:100%; background-color: #ffffff;}
+    body { margin:0;  padding:0; }
+</style>
+<!--<apex:flash id="Migrator" src="{!$Resource.SFM_Migrator}" height="580" width="100%" flashvars="sessionId={!$Api.Session_ID}&serverURL={!$Api.Partner_Server_URL_90}&TAG_AUTH_USER={!$Label.CONF019_TAG002}&TAG_LOADING_TAGS={!$Label.CONF019_TAG003}&TAG_WELCOME={!$Label.CONF019_TAG001}&TAG_LOADING_LOADING={!$Label.CONF019_TAG025}&TAG_LOADING_DONE={!$Label.CONF019_TAG027}&SVMX_retURL={!returnURL}"></apex:flash>-->
+<div id="flashContent"> 
+        <object id="Migrator" width="100%" height="600" align="middle" >
+            <param name="wmode" value="transparent"/>
+            <param name="allowScriptAccess" value="sameDomain" />
+            <param name="movie" value="{!URLFOR($Resource.SFM_Migrator)}" />
+            <param name="quality" value="high" />
+            <param name="bgcolor" value="#ffffff" />
+            <param name="FlashVars" value="sessionId={!$Api.Session_ID}&serverURL={!$Api.Partner_Server_URL_90}&TAG_AUTH_USER={!$Label.CONF019_TAG002}&TAG_LOADING_TAGS={!$Label.CONF019_TAG003}&TAG_WELCOME={!$Label.CONF019_TAG001}&TAG_LOADING_LOADING={!$Label.CONF019_TAG025}&TAG_LOADING_DONE={!$Label.CONF019_TAG027}&SVMX_retURL={!returnURL}"/>
+            <embed id="Migrator1" src="{!URLFOR($Resource.SFM_Migrator)}" width="100%" height="600Px" autostart="false" quality="high" bgcolor="#ffffff" FlashVars="sessionId={!$Api.Session_ID}&serverURL={!$Api.Partner_Server_URL_90}&TAG_AUTH_USER={!$Label.CONF019_TAG002}&TAG_LOADING_TAGS={!$Label.CONF019_TAG003}&TAG_WELCOME={!$Label.CONF019_TAG001}&TAG_LOADING_LOADING={!$Label.CONF019_TAG025}&TAG_LOADING_DONE={!$Label.CONF019_TAG027}&SVMX_retURL={!returnURL}" name="main" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" wmode="transparent"/>
+         </object>
+    </div>
+</center>
+<script type="text/javascript">
+    var swf = document.getElementById('Migrator');
+    var swf1 = document.getElementById('Migrator1');
+    if( swf != null && swf != "" )
+        swf.height = screen.height - 130;
+    else if(swf1 != null && swf1 != "")
+        swf1.height = screen.height - 130;
+</script>
+</apex:page>

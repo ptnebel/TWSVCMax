@@ -1,0 +1,19 @@
+<apex:page StandardController="SVMXC__Service_Contract__c" extensions="SVMXC.SCON_Cancelation" sidebar="true" showHeader="true"  tabStyle="SVMXC__Service_Contract__c"> 
+    <apex:stylesheet value="{!$Resource.SVMXC__SVMX_resources}" />
+    <apex:form >
+        <apex:variable value="{!SContractHeader}" var="sch"/>
+            <apex:pageBlock id="block" title="{!TAG001}{!sch.Name}" helpTitle="{!TAG002}" helpUrl="{!HLPURL}">   
+                <apex:pageBlockButtons location="top" style="text-align:center;">
+                    <apex:commandButton action="{!RevokeSContract}" value="{!TAG003}" rendered="{!NOT(showDetailBlock)}" id="CConBtid"/>
+                    <apex:commandButton action="{!Cancel}" value="{!TAG004}" id="cancelBtid"/>
+                </apex:pageBlockButtons> 
+                <apex:pageMessages ></apex:pageMessages>
+                
+                    <apex:pageBlockSection collapsible="false" columns="2" rendered="{!NOT(showDetailBlock)}" >
+                    <apex:pageMessage rendered="{!showUpsellMessage}" severity="info" strength="2" title="{!TAG006}" summary="{!TAG005}"/>
+                    <apex:inputField style="Width:80%" value="{!sch.SVMXC__Cancelation_Notes__c}"> </apex:inputField>
+                </apex:pageBlockSection>
+       </apex:pageBlock> 
+         <!-- <apex:detail relatedList="false" title="false" rendered="{!NOT(showDetailBlock)}"/> -->
+    </apex:form>
+</apex:page>

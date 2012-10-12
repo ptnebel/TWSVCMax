@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <customHelp>SVMXC_LaunchHelp</customHelp>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <deprecated>false</deprecated>
+    <description>This object is used to capture line items of a stock transfer.</description>
+    <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Additional_Information__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Any additional information relevant to this stock transfer line.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Any additional information relevant to this stock transfer line.</inlineHelpText>
+        <label>Additional Information</label>
+        <length>32000</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Posted_To_Inventory__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Indicates if this stock transfer record has been posted to inventory or not. This is set automatically.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Indicates if this stock transfer record has been posted to inventory or not. This is set automatically.</inlineHelpText>
+        <label>Posted To Inventory</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Product__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <deprecated>false</deprecated>
+        <description>Name of the product. This is a lookup to an existing salesforce product record.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the product. This is a lookup to an existing salesforce product record.</inlineHelpText>
+        <label>Product</label>
+        <referenceTo>Product2</referenceTo>
+        <relationshipName>Stock_Transfer_Line</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Quantity_Transferred2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Quantity transferred from source to destination location.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Quantity transferred from source to destination location.</inlineHelpText>
+        <label>Qty Transferred</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Select__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Flag to control selection of a record in data list.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Flag to control selection of a record in data list.</inlineHelpText>
+        <label>Select</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Stock_Transfer__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Reference to the original Stock Transfer transaction that impacted the stock.</description>
+        <externalId>false</externalId>
+        <label>Stock Transfer</label>
+        <referenceTo>Stock_Transfer__c</referenceTo>
+        <relationshipLabel>Stock Transfer Lines</relationshipLabel>
+        <relationshipName>Stock_Transfer_Line</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <trackHistory>false</trackHistory>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Unit_Price2__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Unit Price for Line Item.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Unit Price for Line Item.</inlineHelpText>
+        <label>Unit Price</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackHistory>false</trackHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Use_Price_From_Pricebook__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Leave this box checked if you want the price to be filled automatically from the default price book. If you like to enter a price manually for this part, simply uncheck this box.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Leave this box checked if you want the price to be filled automatically from the default price book. If you like to enter a price manually for this part, simply uncheck this box.</inlineHelpText>
+        <label>Use Price From Pricebook</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <label>Stock Transfer Line</label>
+    <nameField>
+        <displayFormat>SXFRL-{00000000}</displayFormat>
+        <label>Name</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Stock Transfer Lines</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>SVMXC_ValidateQuantityChange</fullName>
+        <active>true</active>
+        <description>Transfer quantity cannot be changed for existing records.</description>
+        <errorConditionFormula>AND (!ISNEW(),  ISCHANGED( Quantity_Transferred2__c))</errorConditionFormula>
+        <errorDisplayField>Quantity_Transferred2__c</errorDisplayField>
+        <errorMessage>Once entered, transfer quantity cannot be changed.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>SVMXC_ValidateTransferQuantity</fullName>
+        <active>true</active>
+        <description>Transfer quantity must be greater than zero.</description>
+        <errorConditionFormula>( Quantity_Transferred2__c &lt;=0)</errorConditionFormula>
+        <errorDisplayField>Quantity_Transferred2__c</errorDisplayField>
+        <errorMessage>Quantity transferred should be greater than zero.</errorMessage>
+    </validationRules>
+</CustomObject>

@@ -1,0 +1,262 @@
+<apex:page controller="SVMX_DrawTechRoute" showheader="false" sidebar="false">
+<head>
+   <script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key={!myKey}" type="text/javascript"></script> 
+    <script type="text/javascript"> 
+    function addLoadEvent(func) {
+       var oldonload = window.onload;
+       if (typeof window.onload != 'function') {
+          window.onload = func;
+       } else {
+          window.onload = function() {
+             oldonload();
+             func();
+            }
+        } 
+     }
+    addLoadEvent(
+    function() {    
+  
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"));  
+        map.setUIToDefault();
+        map.getPane(G_MAP_FLOAT_SHADOW_PANE).style.visibility="hidden";
+        // Create a base icon for all of our markers that specifies the
+        // shadow, icon dimensions, etc.
+        var baseIcon = new GIcon(G_DEFAULT_ICON);        
+        baseIcon.iconAnchor = new GPoint(9, 34);
+        baseIcon.infoWindowAnchor = new GPoint(9, 2);
+        
+        // Creates a marker whose info window displays the letter corresponding
+        // to the given index.
+        function createMarker(point,str) {
+            var markopt=str.split(":");
+            var lbl='arrow';
+            var markmsg='<font size="2"><b>Technician Name:</b><a href="https://'+location.host+'/'+markopt[2]+'" target="_blank">'+markopt[5]+'</a></br>'+
+                        '<b>Service Team:</b><a href="https://'+location.host+'/'+markopt[3]+'" target="_blank">'+markopt[6]+'</a></br>'+
+                        '<b>Phone :</b>'+markopt[4]+'</br>'+
+                        '<b>Address :</b>'+markopt[7]+' ,'+markopt[8]+' ,'+markopt[9]+' ,'+markopt[10]+'</br></font>';
+                        
+            baseIcon.iconSize = new GSize(23, 34);
+            //baseIcon.shadow = "{!URLFOR($Resource.markers,'markers/arrowshadow.png')}";        
+            baseIcon.shadowSize = new GSize(23, 34);
+            if(markopt.length > 11){
+                for(var i=3;i < markopt.length;i++){
+                    if(markopt[i]=='null'){
+                        markopt[i]='';
+                    }
+                }
+                var tt=k+1;
+                lbl=markopt[0]+tt;
+                baseIcon.iconSize = new GSize(27, 27);
+                baseIcon.shadow = "";        
+                baseIcon.shadowSize = new GSize(0, 0);
+                var PrefStart=markopt[5].replace(/;/g,":");
+                var WrkPrfmd=markopt[9].replace(/;/g,":");
+                var SchDate=markopt[10].replace(/;/g,":");
+                var SplIns=markopt[11].replace(/;/g,":");
+                var markmsg='<font size="2"><b>Work Order Number :</b><a href="https://'+location.host+'/'+markopt[3]+'" target="_blank">'+markopt[4]+'</a></br>'+
+                        '<b>Scheduled Date/Time! :</b>'+SchDate+'</br>'+
+                        '<b>Preferred Start Time :</b>'+PrefStart+'</br>'+
+                        '<b>Address Line 1 :</b>'+markopt[6]+'</br>'+
+                        '<b>City :</b>'+markopt[7]+'</br>'+
+                        '<b>Postal Code :</b>'+markopt[8]+'</br>'+                     
+                        '<b>Work Performed :</b>'+WrkPrfmd+'</br>'+                      
+                        '<b>Special Instructions :</b>'+SplIns+'</br></font>';                      
+            }       
+            
+          var letteredIcon = new GIcon(baseIcon);
+          letteredIcon.image = "{!URLFOR($Resource.markers,'markers/"+lbl+".png')}";
+ 
+          // Set up our GMarkerOptions object
+          markerOptions = { icon:letteredIcon };
+          var marker = new GMarker(point, markerOptions);
+ 
+          GEvent.addListener(marker, "click", function() {
+            marker.openInfoWindowHtml(markmsg);
+          });
+          return marker;
+        }
+        function createMarkerUWO(point,str) {
+            var markopt=str.split(":");
+            for(var i=3;i < markopt.length;i++){
+                    if(markopt[i]=='null'){
+                        markopt[i]='';
+                    }
+                }
+                lbl='unassign';
+                baseIcon.iconSize = new GSize(27, 27);
+                baseIcon.shadow = "";        
+                baseIcon.shadowSize = new GSize(0, 0);
+                var PrefStart=markopt[5].replace(/;/g,":");
+                var WrkPrfmd=markopt[9].replace(/;/g,":");
+                var SchDate=markopt[10].replace(/;/g,":");
+                var SplIns=markopt[11].replace(/;/g,":");
+                var markmsg='<font size="2"><b>Work Order Number :</b><a href="https://'+location.host+'/'+markopt[3]+'" target="_blank">'+markopt[4]+'</a></br>'+
+                        '<b>Scheduled Date/Time! :</b>'+SchDate+'</br>'+
+                        '<b>Preferred Start Time :</b>'+PrefStart+'</br>'+
+                        '<b>Address Line 1 :</b>'+markopt[6]+'</br>'+
+                        '<b>City :</b>'+markopt[7]+'</br>'+
+                        '<b>Postal Code :</b>'+markopt[8]+'</br>'+                     
+                        '<b>Work Performed :</b>'+WrkPrfmd+'</br>'+                      
+                        '<b>Special Instructions :</b>'+SplIns+'</br></font>'; 
+          
+          var letteredIcon = new GIcon(baseIcon);
+          letteredIcon.image = "{!URLFOR($Resource.markers,'markers/"+lbl+".png')}";
+ 
+          // Set up our GMarkerOptions object
+          markerOptions = { icon:letteredIcon };
+          var marker1 = new GMarker(point, markerOptions);
+ 
+          GEvent.addListener(marker1, "click", function() {
+            marker1.openInfoWindowHtml(markmsg);
+          });
+          return marker1;
+        }
+        function createMarkerHom(point,str) {
+            var markopt=str.split(":");
+            for(var i=2;i < markopt.length;i++){
+                    if(markopt[i]=='null'){
+                        markopt[i]='';
+                    }
+                }
+                lbl='home';
+                baseIcon.iconSize = new GSize(32, 37);
+                baseIcon.shadow = "";        
+                baseIcon.shadowSize = new GSize(0, 0);
+                var markmsg='<font size="2"><b>Technician Name:</b><a href="https://'+location.host+'/'+markopt[2]+'" target="_blank">'+markopt[5]+'</a></br>'+
+                        '<b>Service Team:</b><a href="https://'+location.host+'/'+markopt[3]+'" target="_blank">'+markopt[6]+'</a></br>'+
+                        '<b>Phone :</b>'+markopt[4]+'</br>'+
+                        '<b>Address :</b>'+markopt[7]+' ,'+markopt[8]+' ,'+markopt[9]+' ,'+markopt[10]+'</br></font>';
+          
+          var letteredIcon = new GIcon(baseIcon);
+          letteredIcon.image = "{!URLFOR($Resource.markers,'markers/"+lbl+".png')}";
+ 
+          // Set up our GMarkerOptions object
+          markerOptions = { icon:letteredIcon };
+          var marker2 = new GMarker(point, markerOptions);
+ 
+          GEvent.addListener(marker2, "click", function() {
+            marker2.openInfoWindowHtml(markmsg);
+          });
+          return marker2;
+        }
+        var colorlist = new Array();
+               colorlist[0]="#000080";
+                colorlist[1]="#00FF00";
+                colorlist[2]="#0000FF";
+                colorlist[3]="#FF00FF";
+                colorlist[4]="#FF0000";
+                colorlist[5]="#000000";
+                colorlist[6]="#0080FF";
+                colorlist[7]="#FF0080";
+                colorlist[8]="#04B4AE";
+                colorlist[9]="#F3F781";
+                colorlist[10]="#F5A9A9";
+                colorlist[11]="#610B0B";
+                colorlist[12]="#04B404";
+                colorlist[13]="#2EFEF7";
+                colorlist[14]="#868A08";
+                colorlist[15]="#58FAAC";
+                colorlist[16]="#101907";
+                colorlist[17]="#190707";
+                colorlist[18]="#070719";
+                colorlist[19]="#0B0B61";    
+        var Allstr='';
+        Allstr='{!MapStr}';    
+        if(Allstr.length<1){
+            window.setTimeout(calUsr,500)
+        }    
+        //document.getElementById("mstr").innerHTML=Allstr;    
+        var arUnagnDTechHome = Allstr.split("~:::::~"); // Split on line break delim   
+        var arHome = arUnagnDTechHome[0].split("~:~"); // Split on line break delim
+        for (var i = 0; i < arHome.length-1; i++) {
+              var arHomeS = arHome[i].split(":"); // Split on line break delim
+              var HomLat=arHomeS[0];
+              var HomLng=arHomeS[1];
+              if(HomLat != 'null' && HomLng != 'null'){
+                var Homlatlng = new GLatLng(HomLat,HomLng);
+                 map.setCenter(new GLatLng(HomLat,HomLng),9);
+                map.addOverlay(createMarkerHom(Homlatlng,arHome[i]));
+              }
+        }
+        
+        var arUnagnDTech = arUnagnDTechHome[1].split("~::::~"); // Split on line break delim   
+        
+        var arUnassWO = arUnagnDTech[0].split("~:~"); // Split on line break delim
+        for (var i = 0; i < arUnassWO.length-1; i++) {
+              var arUnassWOS = arUnassWO[i].split(":"); // Split on line break delim
+              var UnassWOLat=arUnassWOS[1];
+              var UnassWOLng=arUnassWOS[2];
+              if(UnassWOLat != 'null' && UnassWOLng != 'null'){
+                var UnassWOlatlng = new GLatLng(UnassWOLat,UnassWOLng);
+                 map.setCenter(new GLatLng(UnassWOLat,UnassWOLng),9);
+                map.addOverlay(createMarkerUWO(UnassWOlatlng,arUnassWO[i]));
+              }
+        }
+         
+        var arTechWO = arUnagnDTech[1].split("~:::~"); // Split on line break delim
+           for (var i = 0; i < arTechWO.length-1; i++) { 
+           var k=0;
+           var myarr = new Array();
+             var arCols =arTechWO[i].split("~::~");
+             var arTechLatLng=arCols[0].split(":");
+             var TechLat=arTechLatLng[0];
+             var TechLng=arTechLatLng[1];
+             var latlng = new GLatLng(TechLat,TechLng);
+             map.addOverlay(createMarker(latlng,arCols[0]));
+             myarr[k]=new GLatLng(TechLat,TechLng);
+             if((i+1) == Math.round((arTechWO.length-1)/2)){
+                 map.setCenter(new GLatLng(TechLat, TechLng),9);
+             }
+            var arWOLatLng=arCols[1].split("~:~");
+            for (var j = 0; j < arWOLatLng.length-1; j++) { 
+                var WODet=arWOLatLng[j].split(":");
+                 var WOLat=WODet[1];
+                 var WOLng=WODet[2];
+                 if(WOLat != 'null' && WOLng != 'null'){
+                     var latlng1 = new GLatLng(WOLat,WOLng);
+                     map.addOverlay(createMarker(latlng1,arWOLatLng[j])); 
+                     k++;   
+                      myarr[k]=new GLatLng(WOLat,WOLng);  
+                  }                
+              }
+              //myarr[myarr.length]=new GLatLng(TechLat,TechLng);
+              //document.getElementById("mstr").innerHTML=myarr;
+              addWayPs(myarr,i);
+              //var polyline = new GPolyline(myarr, "#ff0000", 1);
+              //map.addOverlay(polyline);
+           }
+           
+           function addWayPs(wps,c) {
+                var l_gdir1 = new GDirections(map);
+                var t_color = colorlist[c];
+                GEvent.addListener(l_gdir1, "load", function() {
+                    var poly = l_gdir1.getPolyline();
+                    poly.color = t_color;
+                    map.addOverlay(poly);                    
+                    poly.setStrokeStyle({color: t_color});  
+                                    
+              }); 
+              GEvent.addListener(l_gdir1, "addoverlay", function()
+                {
+                    var nMarkers = l_gdir1.getNumGeocodes()
+                    for(var i=0; i< nMarkers;i++)
+                    {
+                        var marker = l_gdir1.getMarker(i);
+                        if (!marker.isHidden())
+                        {marker.hide();}
+                    }                    
+                });
+              l_gdir1.loadFromWaypoints(wps, {getPolyline:true} );
+        }
+      }
+    }
+    );
+    </script> 
+ </head> 
+    <apex:form id="frm">
+       <div id="mstr"></div>
+       <div id="map_canvas" style="height: 470px"></div>   
+       <apex:actionFunction name="calUsr" action="{!Redrt}"/>
+    </apex:form>
+</apex:page>

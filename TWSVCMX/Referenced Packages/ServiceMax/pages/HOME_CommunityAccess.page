@@ -1,0 +1,34 @@
+<apex:page showHeader="false" sidebar="false" controller="SVMXC.HOME_CommunityAccess" >
+    <style type="text/css">
+        body {background: transparent }
+        a {color: #1468B6; text-decoration: none;}
+    </style>
+    <script type="text/javascript">
+        if(GSFN == undefined) { var GSFN = {}; }
+            (function(){
+                add_js = function(jsid, url) {
+                    try{
+                        var head = document.getElementsByTagName("head")[0];
+                        script = document.createElement("script");
+                        script.id = jsid; script.type = "text/javascript"; script.src = url;
+                        head.appendChild(script);
+                    }catch(err){}
+                }
+                
+                // load the fastpass coding                 
+                add_js("fastpass_common", "https://getsatisfaction.com/javascripts/fastpass.js");
+                
+                if(window.onload) { var old_load = window.onload; }
+          
+                window.onload = function() {
+                    if(old_load) old_load();
+                    
+                    // trigger the fast pass authentication 
+                    add_js("fastpass", "{!URL}");
+                }
+        })(); 
+    </script>
+    <apex:outputLink value="{!LINKURL}" target="_blank">
+        <apex:outputText value="{!LINKLABEL}"/> 
+    </apex:outputLink>
+</apex:page>

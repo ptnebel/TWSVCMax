@@ -1,0 +1,22 @@
+<apex:page controller="SVMXC.CONF_SeedConfigData" >
+    <apex:pageMessages rendered="true">
+        <apex:pageMessage rendered="true" strength="2" severity="error" title="Error.">
+        </apex:pageMessage>
+    </apex:pageMessages>
+
+    <apex:sectionHeader title="Load Default ServiceMax Configuration Data" />
+
+    <apex:form id="ikey_form">
+    <apex:pageBlock mode="edit" rendered="{!NOT(JobDone)}">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!SeedConfigData}" value="Go!" />
+                <apex:commandButton action="{!BackToHomePage}" value="Not Now"/>
+            </apex:pageBlockButtons>
+
+            <apex:pageBlockSection columns="1">
+            <apex:inputField id="inst_key" value="{!IKeyConfig.SVMXC__Installation_Key__c}" required="true" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    <apex:pageMessage rendered="{!AND(NOT(JobAlreadyDone),JobDone)}" severity="info" strength="2" title="SUCCESS!" summary="Default settings loaded successfully! To configure ServiceMax, navigate to home page and click on ServiceMax Setup link."/>
+</apex:page>

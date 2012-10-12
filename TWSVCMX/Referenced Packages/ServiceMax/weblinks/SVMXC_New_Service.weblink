@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPageWebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <availability>online</availability>
+    <description>Link to create a New Service record</description>
+    <displayType>link</displayType>
+    <linkType>url</linkType>
+    <masterLabel>New Available Service</masterLabel>
+    <openType>replace</openType>
+    <protected>false</protected>
+    <url>/{!$ObjectType.Service__c}/e</url>
+</CustomPageWebLink>

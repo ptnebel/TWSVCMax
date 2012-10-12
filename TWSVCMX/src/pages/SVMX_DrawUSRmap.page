@@ -1,0 +1,70 @@
+<apex:page controller="SVMX_DrawUSRmap" showheader="false" sidebar="false">
+<head>
+   <script src="http://maps.google.com/maps?file=api&v=2&sensor=false&key={!myKey}" type="text/javascript"></script>
+    <script type="text/javascript"> 
+    function addLoadEvent(func) {
+       var oldonload = window.onload;
+       if (typeof window.onload != 'function') {
+          window.onload = func;
+       } else {
+          window.onload = function() {
+             oldonload();
+             func();
+            }
+        } 
+     }
+    addLoadEvent(
+    function() {    
+  
+      if (GBrowserIsCompatible()) {
+        var map = new GMap2(document.getElementById("map_canvas"));  
+        map.setUIToDefault();
+ 
+        // Create a base icon for all of our markers that specifies the
+        // shadow, icon dimensions, etc.
+        var baseIcon = new GIcon(G_DEFAULT_ICON);        
+        baseIcon.iconAnchor = new GPoint(9, 34);
+        baseIcon.infoWindowAnchor = new GPoint(9, 2);
+ 
+        // Creates a marker whose info window displays the letter corresponding
+        // to the given index.
+        function createMarker(point,str) {
+            var markopt=str.split(":");
+            var markmsg='Hello '+markopt[3]+',</br>'+'<b>You are Here !</b>';
+            baseIcon.iconSize = new GSize(32, 32);
+            baseIcon.shadow = "{!URLFOR($Resource.markers,'markers/shadow.png')}";        
+            baseIcon.shadowSize = new GSize(37, 34);
+          var letteredIcon = new GIcon(baseIcon);
+          letteredIcon.image = "{!URLFOR($Resource.markers,'markers/user.png')}";
+ 
+          // Set up our GMarkerOptions object
+          markerOptions = { icon:letteredIcon };
+          var marker = new GMarker(point, markerOptions);
+ 
+          GEvent.addListener(marker, "click", function() {
+            marker.openInfoWindowHtml(markmsg);
+          });
+          return marker;
+        }
+        
+        var Allstr='';
+        Allstr='{!MapStr}';        
+        //document.getElementById("mstr").innerHTML=Allstr;        
+        var arTechWO = Allstr.split(":"); // Split on line break delim
+        var TechLat=arTechWO[0];
+        var TechLng=arTechWO[1];
+        if(TechLat != 'null' && TechLng != 'null'){
+            var latlng = new GLatLng(TechLat,TechLng);
+            map.setCenter(new GLatLng(TechLat, TechLng), 11);
+            map.addOverlay(createMarker(latlng,Allstr));
+        }
+      }
+    }
+    );
+    </script> 
+ </head> 
+    <apex:form id="frm">
+       <div id="mstr"></div>
+       <div id="map_canvas" style="height: 470px"></div>   
+    </apex:form>
+</apex:page>

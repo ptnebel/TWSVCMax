@@ -1,0 +1,45 @@
+<apex:page controller="SVMXC.CONF_ManageFulfillmentProcesses" id="page1">
+    <apex:form id="form1">
+        <apex:pageMessages id="pMsg1"/>
+        <apex:actionStatus id="processing" startText="{!Tag001}"/>
+        <apex:pageBlock id="pblock1" title="{!Tag002}" helptitle="{!HLPTITLE}" helpurl="{!HLPURL}">
+             <apex:pageBlockButtons id="pgBlckBtns2" location="TOP">
+                <apex:commandButton value="{!Tag012}" action="{!newRcvProcess}" id="new"/>
+                <apex:commandButton value="{!Tag013}" action="{!editRcvProcess}" id="edit" disabled="{!DisableCusBtn}"/>
+                <apex:commandButton value="{!Tag004}" action="{!CustmClone}" id="cloneCustm" disabled="{!DisableCusBtn}"/>
+                <apex:actionFunction action="{!delRcvProcess}" name="confirmdel" status="processing"/>
+                <apex:commandButton value="{!Tag014}" onClick="if(window.confirm('{!Tag015}')) confirmdel();" id="delete" disabled="{!DisableCusBtn}" rerender="form1"/>
+                <apex:commandButton value="{!Tag005}" action="{!backToSetupHome}"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection columns="1" id="blck1Sec1">
+                <apex:pageBlockSectionItem >
+                    <apex:pageBlockTable id="blck1Table" value="{!custmProcessLst}" var="Process">
+                        <apex:column >
+                            <apex:facet name="header" >{!Tag006}</apex:facet>
+                            <apex:inputField value="{!Process.SVMXC__Select__c}" id="stdselected"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">{!Tag007}</apex:facet>
+                            <apex:outputText value="{!Process.SVMXC__ProcessID__c}" id="stdName"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header" >{!Tag008}</apex:facet>
+                            <apex:outputText value="{!Process.SVMXC__Name__c}" id="stddesc"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header" >{!Tag009}</apex:facet>
+                            <apex:outputText value="{!Process.SVMXC__Description__c}" id="Processid"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header" >{!Tag010}</apex:facet>
+                            <apex:outputText value="{!Process.LastModifiedBy.Name}" id="stdlstmodifyBy"/>
+                        </apex:column>
+                    </apex:pageBlockTable>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        
+        
+    </apex:form>
+</apex:page>

@@ -1,0 +1,6 @@
+<apex:page standardController="Cycle_Count__c" extensions="CycleCount" action="{!RequestCycleCount}" > 
+	<apex:outputPanel >
+		<b><font color="red"><apex:messages /></font></b>
+	</apex:outputPanel> 		
+	<apex:detail ></apex:detail>  
+</apex:page>

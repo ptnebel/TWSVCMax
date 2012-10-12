@@ -1,0 +1,68 @@
+<apex:page id="disp_setting" sidebar="false" showHeader="false" controller="SVMXC.CONF_POPUP_SettingValues"  tabStyle="SVMXC__ServiceMax_Settings__c"> 
+<apex:stylesheet value="{!$Resource.SVMXC__SVMX_resources}" />
+<apex:form id="disp_setting">    
+    <apex:pageBlock title="{!Tag020}"  helpTitle="{!Tag032}" helpUrl="{!HLPURL}"> 
+    <apex:actionStatus id="LodingStdStatus"  startText="{!TAG034}" />
+                <apex:pageBlockButtons location="top">
+                <apex:commandButton value="{!Tag022}" title="{!Tag022}" action="{!saveSet}" status="LodingStdStatus" reRender="DispSection"/>
+                <apex:commandButton value="{!Tag023}" title="{!Tag023}" action="javascript:self.close()"/>
+                </apex:pageBlockButtons>
+        <apex:pageBlockSection columns="1" id="DispSection">
+        
+       <apex:pageMessages rendered="{!DisplayBlockLevelMessage}" showDetail="true" /> 
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="{!TAG036}" />
+                    <apex:outputField id="Setting_Name" value="{!SMXSettings.SVMXC__Settings_Name__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="{!TAG037}" />
+                    <apex:outputField id="Setting_Description" value="{!SMXSettings.SVMXC__Description__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputText value="{!TAG038}" />
+                    <apex:outputField id="Setting_Type" value="{!SMXSettings.SVMXC__Data_Type__c}"/>
+                </apex:pageBlockSectionItem>
+                
+                    <apex:inputField id="Enter_date" value="{!display_data.SVMXC__Enter_Date__c}" rendered="{!if (SMXSettings.SVMXC__Data_Type__c=='Date',true,false)}"/>
+
+                     <apex:inputField id="Setting_DVal" value="{!SMXSettings.SVMXC__Default_Value__c}" rendered="{!if ((SMXSettings.SVMXC__Data_Type__c=='Picklist'||SMXSettings.SVMXC__Data_Type__c=='Text'||SMXSettings.SVMXC__Data_Type__c=='Number')&&Source=='MS',true,false)}" style="width:40%;"/>
+
+                    <apex:inputField id="Setting_Val" value="{!SMXSettings.SVMXC__Values__c}" rendered="{!if ((SMXSettings.SVMXC__Data_Type__c=='Picklist')&&Source=='MS',true,false)}" style="width:40%;"/>
+
+                     <apex:inputField id="Setting_DispVal" value="{!SMXProfSettings.SVMXC__Display_Value__c}" rendered="{!if ((SMXSettings.SVMXC__Data_Type__c=='Text'||SMXSettings.SVMXC__Data_Type__c=='Number')&&Source!='MS',true,false)}" style="width:40%;"/>
+                    
+                    <apex:pageBlockSectionItem rendered="{!if ((SMXSettings.SVMXC__Data_Type__c=='Boolean'),true,false)}">
+                                <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" columnClasses="colspan50" >
+                                <apex:outputLabel for="Value" value="{!TAG035}" style="font-weight:bold;font-size:11px;color:#333333;float:right;margin:5px 2px;margin-right:20px;"></apex:outputLabel>
+                                <apex:selectRadio style="width:156px" value="{!slctradio}" ><apex:selectOptions value="{!Booleans}"/></apex:selectRadio>
+                                </apex:panelGrid>
+                    </apex:pageBlockSectionItem>
+                    
+                    <apex:pageBlockSectionItem rendered="{!if ((SMXSettings.SVMXC__Data_Type__c=='Picklist')&&Source!='MS',true,false)}">
+                                <apex:panelGrid cellpadding="0" cellspacing="0" columns="2" border="0" columnClasses="colspan50" >
+                                <apex:outputLabel for="Value" value="{!TAG035}" style="font-weight:bold;font-size:11px;color:#333333;float:right;margin:5px 2px;margin-right:20px;"></apex:outputLabel>
+                                <apex:selectList title="Select Options" value="{!SelectedOpt}" size="1" id="Options" multiselect="false" style="width:156px">
+                                <apex:selectOptions value="{!OptionList}" />
+                                </apex:selectList>
+                                </apex:panelGrid>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:outputText value="Please use ~|~ as seperators while adding value." rendered="{!if ((SMXSettings.SVMXC__Data_Type__c=='Picklist')&&Source=='MS',true,false)}"/>
+                    
+                    <apex:inputField id="User" value="{!display_data.SVMXC__User__c}" rendered="{!if (SMXSettings.SVMXC__Data_Type__c=='User',true,false)}"/> 
+                    
+                    <apex:inputField id="Account" value="{!display_lookup.SVMXC__Company__c}" rendered="{!if (SMXSettings.SVMXC__Data_Type__c=='Account',true,false)}"/> 
+
+                    <apex:inputField id="Contact" value="{!display_lookup.SVMXC__Contact__c}" rendered="{!if (SMXSettings.SVMXC__Data_Type__c=='Contact',true,false)}"/> 
+<!--  
+                    <apex:inputField id="ServiceTeam" value="{!display_lookup.SVMXC__Site__c}" rendered="{!if (SMXSettings.Data_Type__c=='Service Team',true,false)}"/> 
+
+                    <apex:inputField id="Technician" value="{!display_lookup.SVMXC__Site__c}" rendered="{!if (SMXSettings.Data_Type__c=='Technician',true,false)}"/> 
+-->
+                    <apex:inputField id="Location" value="{!display_lookup.SVMXC__Site__c}" rendered="{!if (SMXSettings.SVMXC__Data_Type__c=='Location',true,false)}"/> 
+
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:form>
+
+</apex:page>
